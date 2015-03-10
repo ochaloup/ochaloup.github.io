@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1052.3622"
+   height="744.09448"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.5 r10040"
+   sodipodi:docname="jms-transaction-redelivery.svg"
+   inkscape:export-filename="/home/ochaloup/my-testing/ts-presentation/slides/misc/jms-transaction-redelivery.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <defs
+     id="defs4">
+    <marker
+       inkscape:stockid="Arrow2Lend"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow2Lend"
+       style="overflow:visible;">
+      <path
+         id="path4182"
+         style="fill-rule:evenodd;stroke-width:0.62500000;stroke-linejoin:round;"
+         d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+         transform="scale(1.1) rotate(180) translate(1,0)" />
+    </marker>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.3388927"
+     inkscape:cx="433.1938"
+     inkscape:cy="611.03973"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1025"
+     inkscape:window-x="-2"
+     inkscape:window-y="-3"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-308.2677)">
+    <g
+       id="g2991"
+       transform="matrix(0.35825875,0,0,0.35825875,409.28736,151.52819)">
+      <rect
+         y="473.32394"
+         x="202.76152"
+         height="105.71429"
+         width="338.57144"
+         id="rect2985"
+         style="fill:#000000;stroke:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text2987"
+         y="541.0932"
+         x="259.29333"
+         style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#f9f9f9;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans"
+         xml:space="preserve"><tspan
+           y="541.0932"
+           x="259.29333"
+           id="tspan2989"
+           sodipodi:role="line">Transaction</tspan></text>
+    </g>
+    <g
+       id="g3050"
+       transform="matrix(0.35825875,0,0,0.35825875,283.88447,317.27071)">
+      <rect
+         y="179.50505"
+         x="32.142849"
+         height="105.71429"
+         width="155.71429"
+         id="rect2985-7"
+         style="fill:#000000;stroke:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text2987-8"
+         y="246.65907"
+         x="81.933594"
+         style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#f9f9f9;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans"
+         xml:space="preserve"><tspan
+           y="246.65907"
+           x="81.933594"
+           id="tspan2989-9"
+           sodipodi:role="line">No</tspan></text>
+    </g>
+    <g
+       id="g3055"
+       transform="matrix(0.35825875,0,0,0.35825875,628.66515,318.29431)">
+      <rect
+         y="176.64789"
+         x="293.92719"
+         height="105.71429"
+         width="155.71429"
+         id="rect2985-7-9"
+         style="fill:#000000;stroke:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text2987-8-8"
+         y="243.80191"
+         x="340.50504"
+         style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#f9f9f9;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans"
+         xml:space="preserve"><tspan
+           y="243.80191"
+           x="340.50504"
+           id="tspan2989-9-5"
+           sodipodi:role="line">Yes</tspan></text>
+    </g>
+    <g
+       id="g3193"
+       transform="matrix(0.48418869,0,0,0.48418869,-7.6756094,167.25698)">
+      <rect
+         y="671.48645"
+         x="50.357925"
+         height="106.45722"
+         width="340.95081"
+         id="rect2985-3"
+         style="fill:#000000;stroke:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text2987-0"
+         y="713.92706"
+         x="221.07901"
+         style="font-size:29.59662628px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#f9f9f9;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans"
+         xml:space="preserve"><tspan
+           y="713.92706"
+           x="225.79019"
+           id="tspan2989-5"
+           sodipodi:role="line">Auto </tspan><tspan
+           id="tspan3129"
+           y="750.92285"
+           x="221.07901"
+           sodipodi:role="line">Acknowledgement</tspan></text>
+    </g>
+    <g
+       id="g3205"
+       transform="matrix(0.48418869,0,0,0.48418869,320.9926,94.153942)">
+      <rect
+         y="822.46692"
+         x="131.33015"
+         height="106.45722"
+         width="340.95081"
+         id="rect2985-3-7"
+         style="fill:#000000;stroke:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text2987-0-1"
+         y="864.90753"
+         x="302.05124"
+         style="font-size:29.59662628px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#f9f9f9;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans"
+         xml:space="preserve"><tspan
+           id="tspan3129-7"
+           y="864.90753"
+           x="302.05124"
+           sodipodi:role="line">Duplicates Okay</tspan><tspan
+           id="tspan3160"
+           y="901.90332"
+           x="302.05124"
+           sodipodi:role="line">Acknowledgement</tspan></text>
+    </g>
+    <g
+       id="g3199"
+       transform="matrix(0.48418869,0,0,0.48418869,-35.989424,173.58394)">
+      <rect
+         y="658.41931"
+         x="479.40555"
+         height="106.45722"
+         width="340.95081"
+         id="rect2985-3-7-3"
+         style="fill:#000000;stroke:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text2987-0-1-2"
+         y="700.85992"
+         x="650.12665"
+         style="font-size:29.59662628px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#f9f9f9;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans"
+         xml:space="preserve"><tspan
+           id="tspan3160-3"
+           y="700.85992"
+           x="650.12665"
+           sodipodi:role="line">Client</tspan><tspan
+           id="tspan3191"
+           y="737.85571"
+           x="650.12665"
+           sodipodi:role="line">Acknowledgement</tspan></text>
+    </g>
+    <g
+       id="g3307"
+       transform="translate(157.57473,-57.227899)">
+      <rect
+         y="548.11725"
+         x="447.45773"
+         height="51.545383"
+         width="165.08452"
+         id="rect2985-3-7-8"
+         style="fill:#000000;stroke:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text2987-0-1-7"
+         y="568.6665"
+         x="530.11896"
+         style="font-size:14.33035183px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#f9f9f9;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans"
+         xml:space="preserve"><tspan
+           id="tspan3160-35"
+           y="568.6665"
+           x="530.11896"
+           sodipodi:role="line">Transacted</tspan><tspan
+           id="tspan3255"
+           y="586.57947"
+           x="530.11896"
+           sodipodi:role="line">Session</tspan></text>
+    </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 323.08747,90.483696 0,8.551222"
+       id="path3363"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       transform="translate(0,308.2677)" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow2Lend)"
+       d="M 295.39993,106.89468 148.33336,184.11542"
+       id="path3369"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g3050"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g3193"
+       inkscape:connection-end-point="d4"
+       transform="translate(0,308.2677)" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow2Lend)"
+       d="m 316.11083,111.18533 -27.66038,72.93009"
+       id="path3371"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g3050"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g3199"
+       inkscape:connection-end-point="d4"
+       transform="translate(0,308.2677)" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow2Lend)"
+       d="M 481.92845,48.496464 351.18594,84.555793"
+       id="path3379"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g2991"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g3050"
+       inkscape:connection-end-point="d4"
+       transform="translate(0,308.2677)" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow2Lend)"
+       d="M 603.22463,48.496464 733.96714,84.555789"
+       id="path3381"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g2991"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g3055"
+       inkscape:connection-end-point="d4"
+       transform="translate(0,308.2677)" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow2Lend)"
+       d="m 749.74854,111.18533 -45.68989,71.43632"
+       id="path3385"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g3055"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g3307"
+       inkscape:connection-end-point="d4"
+       transform="translate(0,308.2677)" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow2Lend)"
+       d="m 346.44549,111.18533 89.16723,72.93009"
+       id="path3387"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g3050"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g3205"
+       inkscape:connection-end-point="d4"
+       transform="translate(0,308.2677)" />
+    <rect
+       style="fill:#000000;stroke:none"
+       id="rect2985-3-7-8-7"
+       width="192.7193"
+       height="51.545383"
+       x="783.09845"
+       y="488.8317" />
+    <text
+       xml:space="preserve"
+       style="font-size:14.33035183px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#f9f9f9;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans"
+       x="880.47968"
+       y="509.38095"
+       id="text2987-0-1-7-6"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         x="880.47968"
+         y="509.38095"
+         id="tspan3160-35-1">JPA managed transacted</tspan><tspan
+         sodipodi:role="line"
+         x="880.47968"
+         y="527.29388"
+         id="tspan3255-9">Session</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow2Lend)"
+       d="m 781.37928,111.18533 71.5132,69.37867"
+       id="path3057"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g3055"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#rect2985-3-7-8-7"
+       inkscape:connection-end-point="d4"
+       transform="translate(0,308.2677)" />
+  </g>
+</svg>
