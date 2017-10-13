@@ -1,0 +1,156 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>Saga transactions</title><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui" name="viewport"><link href="reveal.js/css/reveal.css" rel="stylesheet"><link rel="stylesheet" href="reveal.js/css/theme/redhat.css" id="theme"><link href="reveal.js/lib/css/zenburn.css" rel="stylesheet"><script>document.write( '<link rel="stylesheet" href="reveal.js/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );</script></head><body><div class="reveal"><div class="slides"><section class="title" data-state="title"><h1>Saga transactions</h1><div class="preamble"><div class="paragraph"><p>Ondra Chaloupka / <a href="mailto:ochaloup@redhat.com">ochaloup@redhat.com</a></p></div></div></section>
+<section><div class="paragraph"><p><span class="image noborder"><img src="./misc/saga/wfly_narayana.png" alt="wfly narayana"></span></p></div>
+<aside class="notes"><div class="ulist"><ul><li><p>Red Hat (<a href="https://developers.redhat.com" class="bare">https://developers.redhat.com</a>)</p></li><li><p>Wild Fly (<a href="http://wildfly.io" class="bare">http://wildfly.io</a>)</p></li><li><p>Naryana (<a href="http://narayana.io" class="bare">http://narayana.io</a>)</p></li></ul></div></aside></section>
+<section id="_saga_transactions"><h2>Saga (transactions)</h2><div class="paragraph"><p><span class="image noborder"><img src="./misc/entertain/wtf-pleasant.jpg" alt="wtf pleasant"></span></p></div>
+<aside class="notes"><div class="ulist"><ul><li><p>Sagas</p></li><li><p>Saga transactions</p></li><li><p>Business Activities</p></li><li><p>Long running actions</p></li></ul></div></aside></section>
+<section id="_an_acid_transaction"><h2>An ACID transaction</h2><div class="ulist"><ul><li><p>One logical unit of work</p><div class="ulist"><ul><li><p>everything or nothing happens</p></li><li><p>usually in regards of a data manipulation</p></li></ul></div></li><li><p>Protecting shared resources from multiple users</p></li><li><p>ACID properties guaranteed</p></li></ul></div></section>
+<section id="_distributed_transaction_2pc"><h2>Distributed transaction: 2PC</h2><div class="paragraph"><p><span class="image noborder"><img src="./misc/saga/2pc.png" alt="2pc" width=".stretch"></span></p></div></section>
+<section id="_acid_transactions_assuming"><h2>ACID transactions: assuming</h2><div class="ulist"><ul><li><p>closely coupled environment</p><div class="ulist"><ul><li><p>harder to scale</p></li><li><p>tight data coupling</p></li></ul></div></li><li><p>short duration</p><div class="ulist"><ul><li><p>locking reduces parallelism</p></li></ul></div></li></ul></div></section>
+<section id="_microservice_architecture_expecting"><h2>Microservice architecture: expecting</h2><div class="ulist"><ul><li><p>loosely coupling</p></li><li><p>scaling</p></li><li><p>long duration for transaction</p></li></ul></div></section>
+<section id="_sagas"><h2>Sagas</h2><div class="ulist"><ul><li><p>Relaxing ACID properties</p></li><li><p>Eventual consistency</p></li><li><p>Saga paper (H. Garcia-Molina, K. Salem;  1987)</p></li></ul></div>
+<aside class="notes"><div class="paragraph"><p>Original paper talks about Saga as a solution for long-lived database transactions.
+We can use it for distributed environment too for not using two phase commit (a.k.a. locks).</p></div>
+<div class="paragraph"><p>A Saga consists of a sequence of operations, each could work with a resource.
+Changes made by the operation on the particular resource are visible to the outer
+world immediately. We can see it as a just group of operations (a.k.a local transactions)
+which are executed one by one group by the Saga.
+A Saga guarantees that either all operations succeed or all the work is undone
+by compensating actions. The compensating actions are not generically provided
+by a coordinator framework, instead, they have undone actions defined in business
+logic by the application programmer.</p></div>
+<div class="paragraph"><p>Other names</p></div>
+<div class="ulist"><ul><li><p>Saga action, Saga transactions</p></li><li><p>Compensating transactions, compensation transaction</p></li><li><p>long running actions, long lived transactions</p></li><li><p><a href="https://www.cs.cornell.edu/andru/cs711/2002fa/reading/sagas.pdf" class="bare">https://www.cs.cornell.edu/andru/cs711/2002fa/reading/sagas.pdf</a> (Princeton University, 1987)</p></li><li><p><a href="http://jbossts.blogspot.cz/2017/06/sagas-and-how-they-differ-from-two.html" class="bare">http://jbossts.blogspot.cz/2017/06/sagas-and-how-they-differ-from-two.html</a></p></li><li><p><a href="http://microservices.io/patterns/data/saga.html" class="bare">http://microservices.io/patterns/data/saga.html</a></p></li><li><p><a href="https://www.youtube.com/watch?v=0UTOLRTwOX0" class="bare">https://www.youtube.com/watch?v=0UTOLRTwOX0</a> (JOTB17, Distributed Sagas: A Protocol for Coordinating Microservices, Caitie McCaffrey)</p></li><li><p><a href="http://docs.oasis-open.org/ws-tx/wstx-wsba-1.1-spec-os/wstx-wsba-1.1-spec-os.html" class="bare">http://docs.oasis-open.org/ws-tx/wstx-wsba-1.1-spec-os/wstx-wsba-1.1-spec-os.html</a> (Web Services Business Activity, 2007)
+*</p></li></ul></div></aside></section>
+<section id="_sagas_2"><h2>Sagas (2)</h2><div class="paragraph"><p><span class="image noborder"><img src="./misc/saga/saga_confirm.png" alt="saga confirm" width=".stretch"></span></p></div>
+<div class="ulist"><ul><li><p>consists of a sequence of autonomous operations, each immediatelly visible to outer world</p></li><li><p>responsibility of failures handling to developer (handlers)</p></li><li><p>transaction manager is responsible for calling handlers</p></li></ul></div></section>
+<section id="_sagas_3"><h2>Sagas (3)</h2><div class="paragraph"><p><span class="image noborder"><img src="./misc/saga/saga_compensate.png" alt="saga compensate" width=".stretch"></span></p></div>
+<div class="ulist"><ul><li><p>compensation handler defined by developer, called by transaction manager</p></li></ul></div>
+<aside class="notes"><div class="paragraph"><p>Standard ACID transaction is expected to be a short amount of work done in short time.
+This expectation is based on the fact that ACID transaction holds resources (locks)
+and prevents other concurrent transaction using the same data to proceed.</p></div>
+<div class="paragraph"><p>What if we want to have long transaction spans request over network (WS, REST)
+combined with insertion to a database.
+What if we consider popular example of reserving a flight, taxi to a hotel and the hotel,
+which we would like to be a single operation in high level point of view - I mean
+when I book a hotel from some date,
+I need to be sure that the flight for that date is booked too and having taxi
+on particular date being prepared for me. Confirmation of the hotel could take "long"
+time and during that time I need to hold reservation for the flight. When booking fails
+I need to cancel the flight reservation too. At this particular example
+it&#8217;s suitable to hold resources (locks) as it could block other reservation to happen.</p></div></aside></section>
+<section><section id="_narayana_lra"><h2>Narayana LRA</h2><div class="listingblock stretch"><div class="content"><pre class="highlight"><code class="java language-java">@Inject
+private AlohaService alohaService;
+
+@Inject
+private LRAClientAPI lraClient;
+
+@GET
+@Path("/hello")
+@LRA(value = LRA.Type.REQUIRED)
+public List&lt;String&gt; hello() {
+    alohaService.aloha(lraClient.getCurrent())
+}
+
+@POST
+@PUT("/complete")
+@Complete
+public Response completeWork(@HeaderParam(LRAClient.LRA_HTTP_HEADER) String lraId) {
+    String txId = LRAClient.getLRAId(lraId);
+    System.out.printf("ActivityController completing %s%n", txId);
+    return Response.ok().build();
+}
+
+@POST
+@Path("/compensate")
+@Compensate
+public Response compensateWork(@HeaderParam(LRAClient.LRA_HTTP_HEADER) String lraId) {
+    String txId = LRAClient.getLRAId(lraId);
+    System.out.printf("ActivityController compensating %s%n", txId);
+    return Response.ok().build();
+}</code></pre></div></div></section><section id="_narayana_lra_2" data-transition="slide"><h2>Narayana LRA</h2><div class="paragraph"><p><span class="image noborder"><img src="./misc/saga/msa_calls.png" alt="msa calls"></span></p></div>
+<div class="ulist"><ul><li><p>LRA: Long Running Actions</p></li><li><p>transaction context over REST</p></li></ul></div>
+<aside class="notes"><div class="ulist"><ul><li><p><a href="https://developer.jboss.org/wiki/CompensatingTransactionsWhenACIDIsTooMuch" class="bare">https://developer.jboss.org/wiki/CompensatingTransactionsWhenACIDIsTooMuch</a> (Narayana: Compensating Transactions: When ACID is too much)</p></li></ul></div></aside></section></section>
+<section><div class="paragraph"><p><span class="image noborder"><img src="./misc/saga/microprofile.jpg" alt="microprofile" width="50%"></span></p></div>
+<div class="ulist"><ul><li><p>Java EE stack for microservices</p></li><li><p><a href="https://github.com/jbosstm/microprofile-sandbox/blob/0009-LRA/proposals/0009-LRA/0009-LRA.md">LRA specification proposal, https://github.com/jbosstm/microprofile-sandbox</a></p></li><li><p><a href="https://groups.google.com/forum/#!msg/microprofile/CJirjFkM9Do/TrApz-fBDQAJ">Microprofile Google group, http://bit.ly/transactions-microprofile</a></p></li></ul></div>
+<aside class="notes"><div class="paragraph"><p>Event driven transactions</p></div>
+<div class="ulist"><ul><li><p><a href="https://docs.axonframework.org/part2/sagas.html" class="bare">https://docs.axonframework.org/part2/sagas.html</a> (Axon: Managing complex business transactions)</p></li><li><p><a href="http://eventuate.io" class="bare">http://eventuate.io</a> (Solving distributed data management problems in a microservice architecture)</p></li><li><p><a href="https://docs.particular.net/nservicebus/sagas" class="bare">https://docs.particular.net/nservicebus/sagas</a> (Particular Software : .NET/Windows, Sagas)</p></li></ul></div>
+<div class="paragraph"><p>Atomicos TCC</p></div>
+<div class="ulist"><ul><li><p><a href="https://www.atomikos.com/Main/DownloadPublications?article=TransactionsForSOA-WhitePaper.pdf" class="bare">https://www.atomikos.com/Main/DownloadPublications?article=TransactionsForSOA-WhitePaper.pdf</a> (Atomicos: Composite	Transactions for SOA)</p></li><li><p><a href="https://www.infoq.com/presentations/Transactions-HTTP-REST" class="bare">https://www.infoq.com/presentations/Transactions-HTTP-REST</a> (Atomicos: Transactions for the REST of Us, presentation)</p></li></ul></div></aside></section>
+<section><div class="paragraph"><p><span class="image noborder"><img src="./misc/entertain/cajk.jpg" alt="cajk" height="300"></span></p></div></section></div></div><script src="reveal.js/lib/js/head.min.js"></script><script src="reveal.js/js/reveal.js"></script><script>// See https://github.com/hakimel/reveal.js#configuration for a full list of configuration options
+Reveal.initialize({
+  // Display controls in the bottom right corner
+  controls: false,
+  // Display a presentation progress bar
+  progress: true,
+  // Display the page number of the current slide
+  slideNumber: false,
+  // Push each slide change to the browser history
+  history: false,
+  // Enable keyboard shortcuts for navigation
+  keyboard: true,
+  // Enable the slide overview mode
+  overview: true,
+  // Vertical centering of slides
+  center: true,
+  // Enables touch navigation on devices with touch input
+  touch: true,
+  // Loop the presentation
+  loop: false,
+  // Change the presentation direction to be RTL
+  rtl: false,
+  // Turns fragments on and off globally
+  fragments: true,
+  // Flags if the presentation is running in an embedded mode,
+  // i.e. contained within a limited portion of the screen
+  embedded: false,
+  // Number of milliseconds between automatically proceeding to the
+  // next slide, disabled when set to 0, this value can be overwritten
+  // by using a data-autoslide attribute on your slides
+  autoSlide: 0,
+  // Stop auto-sliding after user input
+  autoSlideStoppable: true,
+  // Enable slide navigation via mouse wheel
+  mouseWheel: false,
+  // Hides the address bar on mobile devices
+  hideAddressBar: true,
+  // Opens links in an iframe preview overlay
+  previewLinks: false,
+  // Theme (e.g., beige, black, league, night, serif, simple, sky, solarized, white)
+  // NOTE setting the theme in the config no longer works in reveal.js 3.x
+  //theme: Reveal.getQueryHash().theme || 'redhat',
+  // Transition style (e.g., none, fade, slide, convex, concave, zoom)
+  transition: Reveal.getQueryHash().transition || 'fade',
+  // Transition speed (e.g., default, fast, slow)
+  transitionSpeed: 'default',
+  // Transition style for full page slide backgrounds (e.g., none, fade, slide, convex, concave, zoom)
+  backgroundTransition: 'fade',
+  // Number of slides away from the current that are visible
+  viewDistance: 3,
+  // Parallax background image (e.g., "'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg'")
+  parallaxBackgroundImage: '',
+  // Parallax background size in CSS syntax (e.g., "2100px 900px")
+  parallaxBackgroundSize: '',
+
+  // The "normal" size of the presentation, aspect ratio will be preserved
+  // when the presentation is scaled to fit different resolutions. Can be
+  // specified using percentage units.
+  width: 960,
+  height: 700,
+
+  // Factor of the display size that should remain empty around the content
+  margin: 0.1,
+
+  // Bounds for smallest/largest possible scale to apply to content
+  minScale: 0.2,
+  maxScale: 1.5,
+
+  // Optional libraries used to extend on reveal.js
+  dependencies: [
+      { src: 'reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      { src: 'reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      { src: 'reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      { src: 'reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+      { src: 'reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      { src: 'reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+  ]
+});</script></body></html>

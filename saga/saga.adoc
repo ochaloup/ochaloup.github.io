@@ -1,0 +1,214 @@
+:source-highlighter: highlightjs
+:revealjs_theme: redhat
+:revealjs_controls: false
+:revealjs_center: true
+:revealjs_transition: fade
+
+:images: ./misc
+
+
+= Saga transactions
+
+Ondra Chaloupka / ochaloup@redhat.com
+
+== !
+
+image:{images}/saga/wfly_narayana.png[role="noborder"]
+
+[NOTE.speaker]
+--
+* Red Hat (https://developers.redhat.com)
+* Wild Fly (http://wildfly.io)
+* Naryana (http://narayana.io)
+--
+
+== Saga (transactions)
+
+image:{images}/entertain/wtf-pleasant.jpg[role="noborder"]
+
+[NOTE.speaker]
+--
+* Sagas
+* Saga transactions
+* Business Activities
+* Long running actions
+--
+
+
+== An ACID transaction
+
+* One logical unit of work
+** everything or nothing happens
+** usually in regards of a data manipulation
+* Protecting shared resources from multiple users
+* ACID properties guaranteed
+
+
+== Distributed transaction: 2PC
+
+image:{images}/saga/2pc.png[role="noborder", .stretch]
+
+
+== ACID transactions: assuming
+
+* closely coupled environment
+** harder to scale
+** tight data coupling
+* short duration
+** locking reduces parallelism
+
+
+== Microservice architecture: expecting
+
+* loosely coupling
+* scaling
+* long duration for transaction
+
+
+== Sagas
+
+* Relaxing ACID properties
+* Eventual consistency
+* Saga paper (H. Garcia-Molina, K. Salem;  1987)
+
+[NOTE.speaker]
+--
+Original paper talks about Saga as a solution for long-lived database transactions.
+We can use it for distributed environment too for not using two phase commit (a.k.a. locks).
+
+A Saga consists of a sequence of operations, each could work with a resource.
+Changes made by the operation on the particular resource are visible to the outer
+world immediately. We can see it as a just group of operations (a.k.a local transactions)
+which are executed one by one group by the Saga.
+A Saga guarantees that either all operations succeed or all the work is undone
+by compensating actions. The compensating actions are not generically provided
+by a coordinator framework, instead, they have undone actions defined in business
+logic by the application programmer.
+
+Other names
+
+* Saga action, Saga transactions
+* Compensating transactions, compensation transaction
+* long running actions, long lived transactions
+
+* https://www.cs.cornell.edu/andru/cs711/2002fa/reading/sagas.pdf (Princeton University, 1987)
+* http://jbossts.blogspot.cz/2017/06/sagas-and-how-they-differ-from-two.html
+* http://microservices.io/patterns/data/saga.html
+* https://www.youtube.com/watch?v=0UTOLRTwOX0 (JOTB17, Distributed Sagas: A Protocol for Coordinating Microservices, Caitie McCaffrey)
+* http://docs.oasis-open.org/ws-tx/wstx-wsba-1.1-spec-os/wstx-wsba-1.1-spec-os.html (Web Services Business Activity, 2007)
+*
+--
+
+
+== Sagas (2)
+
+image:{images}/saga/saga_confirm.png[role="noborder", .stretch]
+
+* consists of a sequence of autonomous operations, each immediatelly visible to outer world
+* responsibility of failures handling to developer (handlers)
+* transaction manager is responsible for calling handlers
+
+
+== Sagas (3)
+
+image:{images}/saga/saga_compensate.png[role="noborder", .stretch]
+
+* compensation handler defined by developer, called by transaction manager
+
+[NOTE.speaker]
+--
+Standard ACID transaction is expected to be a short amount of work done in short time.
+This expectation is based on the fact that ACID transaction holds resources (locks)
+and prevents other concurrent transaction using the same data to proceed.
+
+What if we want to have long transaction spans request over network (WS, REST)
+combined with insertion to a database.
+What if we consider popular example of reserving a flight, taxi to a hotel and the hotel,
+which we would like to be a single operation in high level point of view - I mean
+when I book a hotel from some date,
+I need to be sure that the flight for that date is booked too and having taxi
+on particular date being prepared for me. Confirmation of the hotel could take "long"
+time and during that time I need to hold reservation for the flight. When booking fails
+I need to cancel the flight reservation too. At this particular example
+it's suitable to hold resources (locks) as it could block other reservation to happen.
+--
+
+
+== Narayana LRA
+
+[source,java,role="stretch"]
+----
+@Inject
+private AlohaService alohaService;
+
+@Inject
+private LRAClientAPI lraClient;
+
+@GET
+@Path("/hello")
+@LRA(value = LRA.Type.REQUIRED)
+public List<String> hello() {
+    alohaService.aloha(lraClient.getCurrent())
+}
+
+@POST
+@PUT("/complete")
+@Complete
+public Response completeWork(@HeaderParam(LRAClient.LRA_HTTP_HEADER) String lraId) {
+    String txId = LRAClient.getLRAId(lraId);
+    System.out.printf("ActivityController completing %s%n", txId);
+    return Response.ok().build();
+}
+
+@POST
+@Path("/compensate")
+@Compensate
+public Response compensateWork(@HeaderParam(LRAClient.LRA_HTTP_HEADER) String lraId) {
+    String txId = LRAClient.getLRAId(lraId);
+    System.out.printf("ActivityController compensating %s%n", txId);
+    return Response.ok().build();
+}
+----
+
+
+[transition=slide, %notitle]
+=== Narayana LRA
+
+image:{images}/saga/msa_calls.png[role="noborder"]
+
+* LRA: Long Running Actions
+* transaction context over REST
+
+[NOTE.speaker]
+--
+* https://developer.jboss.org/wiki/CompensatingTransactionsWhenACIDIsTooMuch (Narayana: Compensating Transactions: When ACID is too much)
+--
+
+== !
+
+image:{images}/saga/microprofile.jpg[role="noborder", 50%]
+
+* Java EE stack for microservices
+* https://github.com/jbosstm/microprofile-sandbox/blob/0009-LRA/proposals/0009-LRA/0009-LRA.md[LRA specification proposal, https://github.com/jbosstm/microprofile-sandbox]
+* https://groups.google.com/forum/#!msg/microprofile/CJirjFkM9Do/TrApz-fBDQAJ[Microprofile Google group, http://bit.ly/transactions-microprofile]
+
+
+[NOTE.speaker]
+--
+
+Event driven transactions
+
+  * https://docs.axonframework.org/part2/sagas.html (Axon: Managing complex business transactions)
+  * http://eventuate.io (Solving distributed data management problems in a microservice architecture)
+  * https://docs.particular.net/nservicebus/sagas (Particular Software : .NET/Windows, Sagas)
+
+Atomicos TCC
+
+  * https://www.atomikos.com/Main/DownloadPublications?article=TransactionsForSOA-WhitePaper.pdf (Atomicos: Composite	Transactions for SOA)
+  * https://www.infoq.com/presentations/Transactions-HTTP-REST (Atomicos: Transactions for the REST of Us, presentation)
+--
+
+
+== !
+
+image:{images}/entertain/cajk.jpg[role="noborder", , height="300"]
