@@ -1,0 +1,2270 @@
+<!DOCTYPE html>
+	<html class="sl-root decks export offline loaded">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<title>Software transaction memory</title>
+
+
+		<link rel="stylesheet" type="text/css" href="lib/offline-v2.css">
+
+		<!-- Team CSS -->
+		<style id="global-css-output" type="text/css">
+			@import url("https://s3.amazonaws.com/static.slid.es/fonts/overpass2/overpass2.css");
+.reveal {
+  
+
+  /*fix icon inversion*/
+
+}
+.reveal svg,
+.reveal text,
+.reveal tspan,
+.reveal svg text {
+  font-family: "Overpass 2", Overpass, sans-serif !important;
+  color: currentcolor;
+  fill: currentcolor;
+}
+.reveal .sl-block {
+  color: #354045;
+  fill: currentcolor;
+}
+.reveal .sl-block svg {
+  color: currentcolor;
+}
+.reveal .has-dark-background,
+.reveal .has-dark-background > .sl-block {
+  color: white;
+  fill: currentcolor;
+}
+.reveal section > .sl-block .redhat-logo .logotext {
+  fill: #000000;
+}
+.reveal .has-dark-background > .sl-block .redhat-logo .logotext {
+  fill: #ffffff;
+}
+.reveal .has-dark-background > .sl-block[data-block-type="image"] {
+  color: #ffffff;
+}
+.reveal [fill="none"] {
+  fill: none !important;
+}
+.reveal [fill="#a30000"] {
+  fill: #aa0000 !important;
+}
+.reveal [fill="#cc2029"],
+.reveal [fill="#cb2027"],
+.reveal [fill="#c00"] {
+  fill: #cc0000 !important;
+}
+.reveal [fill="#fff"] {
+  fill: #ffffff !important;
+}
+.reveal [fill="#6d6e70"] {
+  fill: #6d6e70 !important;
+}
+.reveal [fill="#231f20"] {
+  fill: currentcolor !important;
+}
+.reveal [fill="#efab1f"] {
+  fill: #efab1f !important;
+}
+.reveal [fill="#92d400"] {
+  fill: #92d400 !important;
+}
+.reveal .has-dark-background [fill="#6d6e70"] {
+  fill: #266272 !important;
+}
+.reveal .has-dark-background [fill="#fff"] {
+  fill: #555555 !important;
+}
+.reveal .has-dark-background [fill="#fff"] {
+  fill: #333333 !important;
+}
+.reveal .has-dark-background [stroke="#231f20"] {
+  stroke: currentcolor;
+}
+.reveal [data-inline-svg="true"] img {
+  display: none;
+}
+
+		</style>
+
+		<!-- Theme CSS -->
+		<style id="theme-css-output" type="text/css">
+			@import url(//overpassmonotest-30e2.kxcdn.com/overpass-mono.css);
+.reveal {
+  
+
+  /*
+.sl-block[data-block-type="snippet"],
+.sl-block[data-block-type="image"] 
+{
+text,
+tspan,
+polygon,
+path,
+rect,
+ellipse {
+  fill: currentcolor;
+}
+}
+*/
+
+  /*slide-default*/
+
+  /*Custom Ordered Lists */
+
+  /*helpers*/
+
+  /*fixing left aligned text*/
+
+  /*h1,h2,h3,h4,h5,h6{&::first-letter{margin-left:-.09em;}}*/
+
+  /*icon absolute brute-fix*/
+
+  /*
+.present .icon.stroked path.long{ stroke-width: 2px ;
+-webkit-animation: icon-animation-long 3.5s 1.5s 1;
+-moz-animation:    icon-animation-long 3.5s 1.5s 1;
+animation:         icon-animation-long 3.5s 1.5s 1;
+}*/
+
+  /*
+.present .icon.stroked path.short{
+-webkit-animation: icon-animation-short 3.5s 1.5s 1;
+-moz-animation:    icon-animation-short 3.5s 1.5s 1;
+animation:         icon-animation-short 3.5s 1.5s 1;
+}*/
+
+  /*controls logic*/
+
+  /*animated logos with complex svg segments*/
+
+  /*transitions*/
+
+  /*logos svg files that contain inverted path alternates */
+
+  /* call to action */
+
+  /* tables in snippets.... the devil */
+
+  /* tables in text */
+
+  /*testimonial snippet */
+
+  /*for inverting images*/
+
+  /**/
+
+  /*code blocks*/
+
+  /* round line arrows */
+
+  /*fix icon inversion*/
+
+  /*body:hover .corner svg{transform: translate(30%, 30%)}*/
+
+}
+.reveal.reveal[role="application"] > .backgrounds > .slide-background:not(.stack):first-child,
+.reveal.reveal[role="application"] > .backgrounds > .stack:first-child > .slide-background:first-child,
+.reveal.reveal[role="application"] .slides > .pdf-page:not(.stack):first-child .slide-background,
+.reveal.reveal[role="application"] .slides > .stack:first-child > .pdf-page:first-child .slide-background {
+  background-color: #900;
+  color: #fff;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  background-image: linear-gradient(-45deg, #8e0000 20%, #820000 20%, #990000 85%, #890000 85%);
+  min-height: 100vh;
+}
+.reveal.reveal[role="application"] > .backgrounds > .slide-background:not(.stack):first-child.has-light-background,
+.reveal.reveal[role="application"] > .backgrounds > .stack:first-child > .slide-background:first-child.has-light-background,
+.reveal.reveal[role="application"] .slides > .pdf-page:not(.stack):first-child .slide-background.has-light-background,
+.reveal.reveal[role="application"] .slides > .stack:first-child > .pdf-page:first-child .slide-background.has-light-background {
+  background-image: none;
+}
+.reveal.reveal .slides > .section:first-child,
+.reveal.reveal[role="application"] > .slides > .section:first-child .sl-block {
+  color: #fff;
+}
+.reveal .name {
+  white-space: nowrap;
+}
+.reveal .reveal,
+.reveal .sl-block,
+.reveal .sl-block-content,
+.reveal .sl-block-content div,
+.reveal .sl-block-content p,
+.reveal .sl-block-content h1,
+.reveal .sl-block-content h2,
+.reveal .sl-block-content h3,
+.reveal .sl-block-content h4 {
+  font-family: "Overpass 2", overpass, "Hiragino Kaku Gothic", "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ Pro W3", sans-serif;
+}
+.reveal .future .sl-block-content,
+.reveal .past .sl-block-content {
+  transition: none !important;
+}
+.reveal section,
+.reveal.reveal .has-dark-background,
+.reveal section.background-shade-dark {
+  color: #fff;
+}
+.reveal.reveal .has-dark-background a {
+  color: #eee;
+}
+.reveal.reveal .has-dark-background a:hover {
+  color: #fff;
+}
+.reveal .backgrounds {
+  background: #f3f4f4;
+}
+.reveal .slide-background {
+  background-size: cover;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+}
+.reveal .slide-background.has-light-background {
+  /*background-image: url(//s3.amazonaws.com/media-p.slid.es/uploads/team-32/images/1297460/standard-background.svg);*/
+
+}
+.reveal .backgrounds .paint-it-red {
+  background-color: #c00 !important;
+  -moz-background-blend-mode: multiply;
+  -webkit-background-blend-mode: multiply;
+  -ms-background-blend-mode: multiply;
+  background-blend-mode: multiply;
+}
+.reveal .paint-it-red {
+  color: #fff;
+}
+.reveal .has-dark-background .icon.stroked path,
+.reveal section.background-shade-dark .icon.stroked path,
+.reveal section.light-foreground .icon.stroked path {
+  stroke: #fff !important;
+}
+.reveal .has-dark-background .redhat-product-logotype path,
+.reveal section.background-shade-dark .redhat-product-logotype path,
+.reveal section.light-foreground .redhat-product-logotype path {
+  fill: #ffffff;
+}
+.reveal .has-dark-background text.logotext,
+.reveal section.background-shade-dark text.logotext,
+.reveal section.light-foreground text.logotext,
+.reveal .has-dark-background .logotext text,
+.reveal section.background-shade-dark .logotext text,
+.reveal section.light-foreground .logotext text,
+.reveal .has-dark-background path.logotext,
+.reveal section.background-shade-dark path.logotext,
+.reveal section.light-foreground path.logotext,
+.reveal .has-dark-background path.logotype,
+.reveal section.background-shade-dark path.logotype,
+.reveal section.light-foreground path.logotype,
+.reveal .has-dark-background .logotext path,
+.reveal section.background-shade-dark .logotext path,
+.reveal section.light-foreground .logotext path {
+  fill: #fff !important;
+}
+.reveal .has-dark-background .closing-logo .logotext,
+.reveal section.background-shade-dark .closing-logo .logotext,
+.reveal section.light-foreground .closing-logo .logotext,
+.reveal .has-dark-background .redhat-logo .logotext,
+.reveal section.background-shade-dark .redhat-logo .logotext,
+.reveal section.light-foreground .redhat-logo .logotext {
+  fill: #ffffff !important;
+}
+.reveal .has-light-background .icon.stroked path {
+  stroke: currentcolor;
+}
+.reveal .has-light-background .redhat-logo .logotext {
+  fill: #000000 !important;
+}
+.reveal .sl-block-content ol li {
+  position: relative;
+  padding-bottom: .5em;
+}
+.reveal .sl-block-content ol li > p:first-child {
+  margin: 0;
+}
+.reveal .sl-block-content ol > li::before {
+  margin-left: -2.5em;
+}
+.reveal .sl-block-content > ol > li:before {
+  float: left;
+  text-align: center;
+  box-shadow: inset 0 0 0 .1em;
+  border-radius: 50%;
+}
+.reveal .sl-block-content ol {
+  counter-reset: section;
+  list-style-type: none;
+  margin: 0 0 0 2.5em;
+  display: block;
+}
+.reveal .sl-block-content ol ol {
+  margin-top: .5em;
+}
+.reveal .sl-block-content ol > li:before {
+  font-weight: 400;
+  display: inline-block;
+  width: 1.75em;
+  height: 1.75em;
+  line-height: 1.75em;
+  text-align: center;
+  letter-spacing: 0;
+  font-size: .75em;
+  margin: 0 0.75em 0 -2.5em;
+  counter-increment: section;
+  content: counters(section, ".") " ";
+  white-space: nowrap;
+}
+.reveal .sl-block-content > ol > li ol li:before {
+  opacity: .5;
+  text-align: left;
+  box-shadow: none;
+  letter-spacing: .1em;
+}
+.reveal .sl-block-content > ol > li > ol > li > ol > li:before {
+  width: 4em;
+  left: -3em;
+  font-size: .75em;
+}
+.reveal .has-dark-background .sl-block-content > ol > li:before {
+  color: currentcolor;
+  background-color: rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0 0 0 0.2em rgba(0, 0, 0, 0.2);
+  font-weight: 500;
+  letter-spacing: -0.05em;
+}
+.reveal .sl-block-content > ol ol ol li:before {
+  opacity: 1;
+  font-size: .55em !important;
+  width: 3.5em !important;
+}
+.reveal .sl-block-content > ol ol ol {
+  margin-left: 1.5em !important;
+}
+.reveal .uppercase {
+  text-transform: uppercase;
+}
+.reveal .sl-block[data-block-type="text"] > .initial h1,
+.reveal .sl-block[data-block-type="text"] > .initial h2,
+.reveal .sl-block[data-block-type="text"] > .initial h3 {
+  text-transform: initial;
+}
+.reveal .force-mono text,
+.reveal .force-mono tspan,
+.reveal .force-mono polygon,
+.reveal .force-mono path,
+.reveal .force-mono rect,
+.reveal .force-mono ellipse {
+  fill: currentcolor !important;
+}
+.reveal .force-red .stroked path {
+  stroke: #c00;
+}
+.reveal .force-red,
+.reveal .force-red text,
+.reveal .force-red tspan,
+.reveal .force-red polygon,
+.reveal .force-red path,
+.reveal .force-red rect,
+.reveal .force-red ellipse {
+  color: #c00;
+  fill: currentcolor !important;
+}
+.reveal .force-red .stroked {
+  fill: none;
+  stroke: #cc0000;
+}
+.reveal .background-shade-dark .sl-block {
+  color: #fff;
+}
+.reveal .dark-foreground text.logotext,
+.reveal section.background-shade-light text.logotext,
+.reveal section.dark-foreground text.logotext,
+.reveal .dark-foreground .logotext text,
+.reveal section.background-shade-light .logotext text,
+.reveal section.dark-foreground .logotext text,
+.reveal .dark-foreground path.logotext,
+.reveal section.background-shade-light path.logotext,
+.reveal section.dark-foreground path.logotext,
+.reveal .dark-foreground path.logotype,
+.reveal section.background-shade-light path.logotype,
+.reveal section.dark-foreground path.logotype,
+.reveal .dark-foreground .logotext path,
+.reveal section.background-shade-light .logotext path,
+.reveal section.dark-foreground .logotext path,
+.reveal .dark-foreground .product,
+.reveal section.background-shade-light .product,
+.reveal section.dark-foreground .product {
+  fill: currentcolor !important;
+}
+.reveal .dark-foreground .redhat-logo .logotext,
+.reveal section.background-shade-light .redhat-logo .logotext,
+.reveal section.dark-foreground .redhat-logo .logotext {
+  fill: currentcolor !important;
+}
+.reveal .slide-background.background-shade-dark:after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(40, 40, 40, 0.8);
+}
+.reveal .slide-background.background-shade-light:after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+.reveal .slides section {
+  text-align: left;
+}
+.reveal .slides section h1 {
+  line-height: 1em;
+  font-weight: 700 ;
+  font-size: 3em ;
+}
+.reveal .slides section h2 {
+  font-size: 2em;
+  font-weight: 400 ;
+  line-height: 1.15em;
+}
+.reveal .slides section h3 {
+  font-weight: 700 ;
+  font-size: 1em ;
+  line-height: 1.25em;
+}
+.reveal .slides section p {
+  margin-bottom: .5em;
+}
+.reveal .slides section blockquote {
+  font-style: normal;
+  box-shadow: none;
+}
+.reveal .progress {
+  background-color: transparent;
+}
+.reveal .progress span {
+  background-color: #5e6a71;
+}
+.reveal .absolute-element svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+.reveal .icon.stroked {
+  width: 282px;
+  height: 282px;
+}
+.reveal .icon.stroked.icon-arrow path {
+  stroke-width: 4px !important;
+}
+.reveal .icon.stroked path {
+  fill: none;
+  stroke-width: 1.5px;
+  transition-delay: .5s !important;
+  stroke-dashoffset: 0;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke: currentcolor;
+}
+.reveal .icon.stroked path.long {
+  stroke-dasharray: 420,420;
+  transition: 2.5s all ease;
+}
+.reveal .icon.stroked path.longer {
+  stroke-dasharray: 512,512;
+  transition: 2.5s all ease;
+}
+.reveal .icon.stroked path.short {
+  stroke-dasharray: 90,90;
+  transition: 5s all ease;
+}
+.reveal .icon.stroked path.shortest {
+  stroke-dasharray: 5,5;
+  transition: 2s all ease;
+}
+.reveal .icon.stroked path.round {
+  stroke-linecap: round ;
+  stroke-linejoin: round ;
+}
+.reveal .icon.stroked path.virtual {
+  transition: .5s all ease;
+  stroke-dasharray: 1.1, 3;
+  stroke-linecap: round ;
+}
+.reveal .icon.stroked path.dashed {
+  stroke-dasharray: 3, 3;
+}
+.reveal .icon.stroked path.hand {
+  stroke-linecap: round;
+}
+.reveal .present path.virtual {
+  -webkit-animation: virtual-outline 60s infinite linear;
+  -moz-animation: virtual-outline 60s infinite linear;
+  animation: virtual-outline 60s infinite linear;
+}
+@-webkit-keyframes virtual-outline {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 512;
+  }
+}
+@-moz-keyframes virtual-outline {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 512;
+  }
+}
+@keyframes virtual-outline {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 512;
+  }
+}
+.reveal a {
+  box-shadow: 0 0.066666em;
+}
+.reveal .overview section.present {
+  border: 12px solid white !important;
+  box-shadow: 0 0 0 10px #ffffff, inset 0 0 0 6px rgba(0, 0, 0, 0.2);
+}
+.reveal .rh-pattern {
+  width: 256px;
+  height: 256px;
+}
+.reveal .rh-pattern path {
+  transition: all .5s ease;
+}
+.reveal .future .rh-pattern path {
+  stroke-dasharray: 0, 85 !important;
+}
+.reveal .present .rh-pattern path {
+  stroke-dasharray: 80, 0 !important;
+}
+.reveal div[data-block-type="snippet"] .sl-block-content > svg,
+.reveal div[data-block-type="snippet"] > .sl-block-content > svg,
+.reveal div[data-block-type="snippet"] .icon,
+.reveal div[data-block-type="snippet"] .product {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+}
+.reveal div[data-block-type="snippet"] .sl-block-content > svg:not(:last-child) {
+  position: relative;
+}
+.reveal div[data-block-type="snippet"] .icon {
+  top: -15%;
+  right: -15%;
+  bottom: -15%;
+  left: -15%;
+  width: 130%;
+  height: 130%;
+}
+.reveal div[data-block-type="snippet"] {
+  min-width: 60px !important;
+}
+.reveal div[data-block-type="text"] {
+  font-size: 20px;
+}
+.reveal .triangle-element,
+.reveal .triangle-element * {
+  user-select: none;
+}
+.reveal .has-light-background .closing-logo.logotype path {
+  fill: black !important;
+}
+@-webkit-keyframes closing-animation {
+  0% {
+    -webkit-transform: scale(4) translate(40%);
+    transform: scale(4) translate(40%);
+    opacity: 0;
+  }
+  80% {
+    -webkit-transform: scale(1) translate(30%);
+    transform: scale(1) translate(30%);
+  }
+}
+@-moz-keyframes closing-animation {
+  0% {
+    -webkit-transform: scale(4) translate(40%);
+    transform: scale(4) translate(40%);
+    opacity: 0;
+  }
+  80% {
+    -webkit-transform: scale(1) translate(30%);
+    transform: scale(1) translate(30%);
+  }
+}
+@-o-keyframes closing-animation {
+  0% {
+    -webkit-transform: scale(4) translate(40%);
+    transform: scale(4) translate(40%);
+    opacity: 0;
+  }
+  80% {
+    -webkit-transform: scale(1) translate(30%);
+    transform: scale(1) translate(30%);
+  }
+}
+@keyframes closing-animation {
+  0% {
+    -webkit-transform: scale(4) translate(40%);
+    transform: scale(4) translate(40%);
+    opacity: 0;
+  }
+  80% {
+    -webkit-transform: scale(1) translate(30%);
+    transform: scale(1) translate(30%);
+  }
+}
+.reveal .present .closing-logo.icon {
+  -webkit-animation: closing-animation 1.5s 1;
+  -moz-animation: closing-animation 1.5s 1;
+  -o-animation: closing-animation 1.5s 1;
+  animation: closing-animation 1.5s 1;
+}
+.reveal .present .closing-logo.logotype {
+  -webkit-animation: closing-text-animation 1.8s 1;
+  -moz-animation: closing-text-animation 1.8s 1;
+  -o-animation: closing-text-animation 1.8s 1;
+  animation: closing-text-animation 1.8s 1;
+}
+@-webkit-keyframes closing-text-animation {
+  0% {
+    opacity: 0;
+    -webkit-transform: translate(-10%);
+    transform: translate(-10%);
+  }
+  70% {
+    -webkit-transform: translate(-10%);
+    transform: translate(-10%);
+    opacity: 0;
+  }
+  100% {
+    transform: none;
+    opacity: 1;
+    -webkit-transform: none;
+  }
+}
+@-moz-keyframes closing-text-animation {
+  0% {
+    opacity: 0;
+    -webkit-transform: translate(-10%);
+    transform: translate(-10%);
+  }
+  70% {
+    -webkit-transform: translate(-10%);
+    transform: translate(-10%);
+    opacity: 0;
+  }
+  100% {
+    transform: none;
+    opacity: 1;
+    -webkit-transform: none;
+  }
+}
+@keyframes closing-text-animation {
+  0% {
+    opacity: 0;
+    -webkit-transform: translate(-10%);
+    transform: translate(-10%);
+  }
+  70% {
+    -webkit-transform: translate(-10%);
+    transform: translate(-10%);
+    opacity: 0;
+  }
+  100% {
+    transform: none;
+    opacity: 1;
+    -webkit-transform: none;
+  }
+}
+.reveal .brand-pattern-paths path,
+.reveal .pattern-path {
+  stroke-width: 1;
+  fill: none;
+}
+.reveal .brand-pattern-paths path {
+  fill: none !important;
+}
+.reveal pattern {
+  patterntransform: scale(2) !important;
+}
+.reveal pattern.normal use {
+  stroke: currentcolor;
+  fill: none;
+}
+.reveal pattern.light use {
+  stroke: #fff !important;
+  fill: none;
+}
+.reveal pattern.dark use {
+  stroke: #000 !important;
+  fill: none;
+}
+.reveal .brand-pattern {
+  min-width: 40px;
+  min-height: 40px;
+  position: absolute;
+  top: 0 ;
+  left: 0 ;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+}
+.reveal .brand-pattern path,
+.reveal .brand-pattern rect {
+  width: 100% !important;
+  height: 100%;
+}
+.reveal .brand-pattern.corporate {
+  fill: url(#pattern-corporate);
+}
+.reveal #pattern-corporate-2 use {
+  stroke: #dd0000;
+}
+.reveal #pattern-corporate use {
+  stroke: #cc0000;
+}
+.reveal section,
+.reveal .slide-background {
+  -webkit-backface-visibility: hidden;
+  -ms-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+.reveal .slides > section.transition-slide,
+.reveal .slides > section.transition-slide + section.future,
+.reveal .slides > section.transition-slide + section.present,
+.reveal .backgrounds > .slide-background.transition-slide,
+.reveal .backgrounds > .slide-background.transition-slide + .slide-background.future,
+.reveal .backgrounds > .slide-background.transition-slide + .slide-background.present {
+  transition: all 1s ease  !important;
+}
+.reveal .backgrounds > .slide-background.transition-slide {
+  opacity: 1 ;
+}
+.reveal .backgrounds > .slide-background.transition-slide.past {
+  z-index: 99;
+  -webkit-transform: translate(-100%, 0);
+  -ms-transform: translate(-100%, 0);
+  transform: translate(-100%, 0);
+}
+.reveal .backgrounds > .slide-background.transition-slide.future,
+.reveal .backgrounds > .slide-background.transition-slide.present + .slide-background.future {
+  -webkit-transform: translate(100%, 0);
+  -ms-transform: translate(100%, 0);
+  transform: translate(100%, 0);
+}
+.reveal .slides > section.transition-slide.past {
+  z-index: 99;
+  -webkit-transform: translate(-150%, 0);
+  -ms-transform: translate(-150%, 0);
+  transform: translate(-150%, 0);
+  visibility: hidden;
+}
+.reveal .slides > section.transition-slide.future,
+.reveal .slides > section.transition-slide.future + section {
+  -webkit-transform: translate(150%, 0);
+  -ms-transform: translate(150%, 0);
+  transform: translate(150%, 0);
+  visibility: hidden;
+}
+.reveal .slides > section.transition-slide-up,
+.reveal .slides > section.transition-slide-up + section.future,
+.reveal .slides > section.transition-slide-up + section.present,
+.reveal .backgrounds > .slide-background.transition-slide-up,
+.reveal .backgrounds > .slide-background.transition-slide-up + .slide-background.future .backgrounds > .slide-background.transition-slide-up + .slide-background.present {
+  transition: all 1s ease  !important;
+}
+.reveal .backgrounds > .slide-background.transition-slide-up {
+  opacity: 1 ;
+}
+.reveal .backgrounds > .slide-background.transition-slide-up.past {
+  z-index: 99;
+  -webkit-transform: translate(0, -100%);
+  -ms-transform: translate(0, -100%);
+  transform: translate(0, -100%);
+}
+.reveal .backgrounds > .slide-background.transition-slide-up.future,
+.reveal .backgrounds > .slide-background.transition-slide-up.present + .slide-background.future {
+  -webkit-transform: translate(0, 100%);
+  -ms-transform: translate(0, 100%);
+  transform: translate(0, 100%);
+}
+.reveal .slides > section.transition-slide-up.past {
+  z-index: 99;
+  -webkit-transform: translate(0, -150%);
+  -ms-transform: translate(0, -150%);
+  transform: translate(0, -150%);
+  visibility: hidden;
+}
+.reveal .slides > section.transition-slide-up.future,
+.reveal .slides > section.transition-slide-up.present + section {
+  -webkit-transform: translate(0, 150%);
+  -ms-transform: translate(0, 150%);
+  transform: translate(0, 150%);
+  visibility: hidden;
+}
+.reveal .slides > section.transition-zoom-in,
+.reveal .slides > section.transition-zoom-in + section.future,
+.reveal .slides > section.transition-zoom-in + section.present,
+.reveal .backgrounds > .slide-background.transition-zoom-in,
+.reveal .backgrounds > .slide-background.transition-zoom-in + .slide-background.future .backgrounds > .slide-background.transition-zoom-in + .slide-background.present {
+  -webkit-transition: all 1s ease  !important;
+  -moz-transition: all 1s ease  !important;
+  transition: all 1s ease  !important;
+}
+.reveal .backgrounds > .slide-background.transition-zoom-in.past {
+  opacity: 0 !important;
+  -webkit-transform: scale(1.5);
+  -ms-transform: scale(0.1 0.5);
+  transform: scale(1.5);
+}
+.reveal .backgrounds > .slide-background.transition-zoom-in.future,
+.reveal .backgrounds > .slide-background.transition-zoom-in.present + .slide-background.future {
+  opacity: 0 !important;
+  -webkit-transform: scale(0.01);
+  -ms-transform: scale(0.01);
+  transform: scale(0.01);
+}
+.reveal .past {
+  z-index: -1;
+  opacity: 0 !important;
+}
+.reveal .present + .slide-background.future {
+  z-index: 99;
+}
+.reveal .slides > section.transition-zoom-in.past {
+  z-index: 99;
+  -webkit-transform: scale(1.5);
+  -ms-transform: scale(1.5);
+  transform: scale(1.5);
+  visibility: hidden;
+}
+.reveal .slides > section.transition-zoom-in.future {
+  -webkit-transform: scale(0.1);
+  -ms-transform: scale(0.1);
+  transform: scale(0.1);
+  visibility: hidden;
+}
+@-webkit-keyframes icon-animation-long {
+  0% {
+    stroke-dashoffset: 420;
+    stroke-width: .5px;
+  }
+}
+@-moz-keyframes icon-animation-long {
+  0% {
+    stroke-dashoffset: 420;
+    stroke-width: .5px;
+  }
+}
+@keyframes icon-animation-long {
+  0% {
+    stroke-dashoffset: 420;
+    stroke-width: .5px;
+  }
+}
+@-webkit-keyframes icon-animation-short {
+  0% {
+    stroke-dashoffset: 90;
+  }
+}
+@-moz-keyframes icon-animation-short {
+  0% {
+    stroke-dashoffset: 90;
+  }
+}
+@keyframes icon-animation-short {
+  0% {
+    stroke-dashoffset: 90;
+  }
+}
+.reveal .present .animate.icon.stroked path,
+.reveal .present .animate .icon.stroked path,
+.reveal .fragment .icon.stroked path {
+  animation: 0;
+  -moz-animation: 0;
+  -webkit-animation: 0;
+  display: none;
+}
+.reveal .present .animate.icon.stroked path.long,
+.reveal .present .animate .icon.stroked path.long,
+.reveal .fragment.visible .icon.stroked path.long {
+  display: block;
+  stroke-width: 2px ;
+  -webkit-animation: icon-animation-long 3.5s 0.5s 1;
+  -moz-animation: icon-animation-long 3.5s 0.5s 1;
+  animation: icon-animation-long 3.5s 0.5s 1;
+}
+.reveal .present .animate.icon.stroked path.short,
+.reveal .present .animate .icon.stroked path.short,
+.reveal .fragment.visible .icon.stroked path.short {
+  display: block;
+  -webkit-animation: icon-animation-short 3.5s 0.5s 1 !important;
+  -moz-animation: icon-animation-short 3.5s 0.5s 1 !important;
+  animation: icon-animation-short 3.5s 0.5s 1 !important;
+}
+.reveal .triangle-element {
+  transition: all 0.4s cubic-bezier(0.21, 0.9, 0.55, 1) 5s;
+}
+.reveal.reveal:hover .triangle-element {
+  transition: all 1s cubic-bezier(0.21, 0.9, 0.55, 1.16) 0s !important;
+  top: 100% !important;
+  left: 100% !important;
+  opacity: 0.95;
+}
+.reveal .has-dark-background .only-dark {
+  display: none;
+}
+.reveal .has-light-background .only-light {
+  display: none;
+}
+.reveal .thinner .icon.stroked path {
+  stroke-width: 1px !important;
+}
+.reveal .thinnest .icon.stroked path {
+  stroke-width: 0.05em !important;
+}
+.reveal .thicker .icon.stroked path {
+  stroke-width: 3px !important;
+}
+.reveal .thickest .icon.stroked path {
+  stroke-width: 4px !important;
+}
+.reveal .angle {
+  -ms-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+.reveal .rangle {
+  -ms-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+.reveal .sl-block > .vertical {
+  -ms-transform: rotate(-90deg);
+  -moz-transform: rotate(-90deg);
+  -webkit-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+}
+.reveal .skewed {
+  transition: all 1s cubic-bezier(0.13, 0.81, 0.08, 1);
+  -moz-transform: skew(-45deg, 0);
+  -ms-transform: skew(-45deg, 0);
+  -webkit-transform: skew(-45deg, 0);
+  transform: skew(-45deg, 0);
+}
+.reveal .future .skewed {
+  margin-left: -800%;
+  opacity: 0;
+}
+.reveal .past .skewed {
+  margin-left: 800%;
+  opacity: 0;
+}
+.reveal .item-label,
+.reveal .item-box {
+  letter-spacing: 0em;
+  font-weight: 500;
+}
+.reveal .epic-content-box {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+.reveal .has-dark-background .epic-content-box {
+  box-shadow: inset 0 0 0.51em rgba(0, 0, 0, 0.25), 0 0.05em 0.05em rgba(255, 255, 255, 0.1);
+  background-color: rgba(0, 0, 0, 0.15);
+}
+.reveal .has-light-background .epic-content-box {
+  box-shadow: inset 0 0 0.2em rgba(255, 255, 255, 0.5), 0 0.06666em 0.555em 0 rgba(0, 0, 0, 0.12);
+}
+.reveal .controls {
+  bottom: 1%;
+  right: 1%;
+}
+.reveal .controls button {
+  opacity: 0;
+}
+.reveal .controls button.enabled {
+  opacity: 1;
+}
+.reveal .controls {
+  opacity: 0 !important;
+  transition: opacity .5s ease 4.8s, transform .5s ease 4.8s;
+  transform: scale(0.4);
+}
+.reveal.reveal:hover .controls {
+  transform: scale(1);
+  opacity: 1 !important;
+  transition: opacity .5s ease 0s, transform .5s ease 0s;
+}
+.reveal .backgrounds {
+  transition-property: height;
+  transition-duration: 1s;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+.reveal .complex-logo {
+  min-height: 70px;
+  min-width: 70px;
+  width: 100%;
+}
+.reveal .complex-logo,
+.reveal .complex-logo svg,
+.reveal .complex-logo > div {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.reveal .complex-logo > div.line-icon,
+.reveal .complex-logo svg > div.line-icon,
+.reveal .complex-logo > div > div.line-icon,
+.reveal .complex-logo > div.logomark,
+.reveal .complex-logo svg > div.logomark,
+.reveal .complex-logo > div > div.logomark {
+  transform-origin: 12% 50%;
+}
+.reveal .animated .complex-logo div {
+  transition: all .5s ease;
+}
+.reveal .animated .complex-logo div.line-icon {
+  transition-delay: 2s;
+}
+.reveal .animated .complex-logo div.line-icon path {
+  transition: all 1s ease .52s;
+  stroke-dasharray: 100 ,10;
+}
+.reveal .animated .complex-logo div.event-name {
+  transition-delay: 1s;
+}
+.reveal .animated .complex-logo div.location {
+  transition-delay: 1.4s;
+}
+.reveal .future .animated .complex-logo > div {
+  transition: none;
+}
+.reveal .future .animated .complex-logo > div.line-icon path {
+  stroke-dasharray: 0 ,100;
+  transition: none;
+}
+.reveal .future .animated .complex-logo {
+  /*.line-icon{transform:rotate(30deg); opacity:0;}*/
+
+}
+.reveal .future .animated .complex-logo .logomark {
+  transform: translate(0, -20%);
+}
+.reveal .future .animated .complex-logo .location {
+  transform: translate(0, 0.5em);
+  opacity: 0;
+}
+.reveal .future .animated .complex-logo .event-name {
+  opacity: 0;
+  transform: translate(-0.6em, 0);
+}
+.reveal .lowercase {
+  text-transform: lowercase;
+}
+.reveal .pop-in.fragment {
+  -webkit-transform: scale(0.2);
+  -moz-transform: scale(0.2);
+  -ms-transform: scale(0.2);
+  transform: scale(0.2);
+  -webkit-transition: 2s ease 0.25s;
+  -moz-transition: 2s ease 0.25s;
+  -ms-transition: 2s ease 0.25s;
+  transition: 2s ease 0.25s;
+  -webkit-animation-delay: 0.66s;
+  -moz-animation-delay: 0.66s;
+  -ms-animation-delay: 0.66s;
+  animation-delay: 0.66s;
+}
+.reveal .pop-in.fragment.visible {
+  -webkit-transform: scale(1);
+  -moz-transform: scale(1);
+  -ms-transform: scale(1);
+  transform: scale(1);
+}
+.reveal .pop-in.fragment.current-fragment {
+  color: #c22;
+}
+.reveal .grow-width {
+  -webkit-transition: all 0.5s ease 0.2s;
+  -moz-transition: all 0.5s ease 0.2s;
+  -o-transition: all 0.5s ease 0.2s;
+  -ms-transition: all 0.5s ease 0.2s;
+  transition: all 0.5s ease 0.2s;
+}
+.reveal .future .grow-width {
+  width: 0% !important;
+  -webkit-transition: none;
+  -moz-transition: none;
+  -o-transition: none;
+  -ms-transition: none;
+  transition: none;
+}
+.reveal .stampit {
+  -webkit-transition: all 1s cubic-bezier(0.79, 0.53, 0.46, 1.3) 1s;
+  -moz-transition: all 1s cubic-bezier(0.79, 0.53, 0.46, 1.3) 1s;
+  -ms-transition: all 1s cubic-bezier(0.79, 0.53, 0.46, 1.3) 1s;
+  transition: all 1s cubic-bezier(0.79, 0.53, 0.46, 1.3) 1s;
+}
+.reveal .future .stampit {
+  -webkit-transform: rotate(-12deg) scale(2);
+  -moz-transform: rotate(-12deg) scale(2);
+  -ms-transform: rotate(-12deg) scale(2);
+  transform: rotate(-12deg) scale(2);
+  -webkit-transition: none;
+  -moz-transition: none;
+  -ms-transition: none;
+  transition: none;
+  opacity: 0;
+}
+.reveal .headshot img {
+  border-radius: 50%;
+  border: 4px solid #c00 !important;
+}
+.reveal .condensed {
+  letter-spacing: 0.02em;
+}
+.reveal .condensed li {
+  margin-bottom: 1em ;
+}
+.reveal .has-light-background .sl-block .has-dark-background > svg.redhat-logo .logotext {
+  fill: #ffffff !important;
+}
+.reveal .has-light-background .sl-block .reversed.redhat-logo .logotext,
+.reveal .has-light-background .sl-block .reversed .redhat-logo .logotext,
+.reveal .has-light-background .sl-block .has-dark-background > .redhat-logo .logotext {
+  fill: #ffffff !important;
+}
+.reveal .has-dark-background .sl-block .reversed.redhat-logo .logotext,
+.reveal .has-dark-background .sl-block .reversed .redhat-logo .logotext,
+.reveal .has-dark-background .sl-block .has-light-background > .redhat-logo .logotext {
+  fill: #000000 !important;
+}
+.reveal .has-dark-background .has-light-background .logo .only-dark path,
+.reveal .has-light-background .mono.redhat-logo path {
+  fill: #000000 !important;
+}
+.reveal .has-dark-background .mono.redhat-logo path {
+  fill: #ffffff;
+}
+.reveal .has-dark-background .logo .only-dark {
+  display: block;
+}
+.reveal .has-light-background .logo .only-light {
+  display: block;
+}
+.reveal .has-light-background .logo .only-dark {
+  display: none;
+}
+.reveal .has-dark-background .logo .only-light {
+  display: none;
+}
+.reveal .has-light-background .reversed svg path {
+  fill: #ffffff !important;
+}
+.reveal .has-dark-background .reversed svg path {
+  fill: currentcolor;
+}
+.reveal .has-dark-background .has-light-background .logo .only-light,
+.reveal .has-dark-background .reversed .logo .only-dark {
+  display: block;
+}
+.reveal .has-light-background .has-dark-background .logo .only-dark,
+.reveal .has-light-background .logo .only-light {
+  display: block;
+}
+.reveal .has-light-background .has-dark-background .redhat-logo .only-dark,
+.reveal .has-light-background .redhat-logo .only-light {
+  fill: #ffffff !important;
+}
+.reveal .has-light-background .has-dark-background .logo .only-light,
+.reveal .has-light-background .logo .only-dark,
+.reveal .has-dark-background .has-light-background .logo .only-dark,
+.reveal .has-dark-background .logo .only-light {
+  display: none;
+}
+.reveal .future .fade-up,
+.reveal .future .fade-down,
+.reveal .future .fade-left,
+.reveal .future .fade-right,
+.reveal .future .fade-zoom {
+  -webkit-transition: none;
+  transition: none;
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+.reveal .future .fade-up,
+.reveal .fade-up.fragment {
+  -webkit-transform: translate(0, 2em);
+  -ms-transform: translate(0, 2em);
+  transform: translate(0, 2em);
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+.reveal .future .fade-down,
+.reveal .fade-down.fragment {
+  -webkit-transform: translate(0, -2em);
+  -ms-transform: translate(0, -2em);
+  transform: translate(0, -2em);
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+.reveal .future .fade-left,
+.reveal .fade-left.fragment {
+  -webkit-transform: translate(2em, 0);
+  -ms-transform: translate(2em, 0);
+  transform: translate(2em, 0);
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+.reveal .future .fade-right,
+.reveal .fade-right.fragment {
+  -webkit-transform: translate(-2em, 0);
+  -ms-transform: translate(-2em, 0);
+  transform: translate(-2em, 0);
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+.reveal .future .fade-zoom,
+.reveal .fade-zoom.fragment {
+  -webkit-transform: scale(0.1);
+  -ms-transform: scale(0.1);
+  transform: scale(0.1);
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+.reveal .future .fade-in {
+  transition: none;
+  opacity: 0;
+}
+.reveal .present .fade-in,
+.reveal .present .fade-up,
+.reveal .present .fade-down,
+.reveal .present .fade-left,
+.reveal .present .fade-right,
+.reveal .present .fade-zoom {
+  -webkit-transition: all .5s ease .5s;
+  transition: all .5s ease .5s;
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+.reveal .present .fragment.visible.fade-up,
+.reveal .present .fragment.visible.fade-down,
+.reveal .present .fragment.visible.fade-left,
+.reveal .present .fragment.visible.fade-right,
+.reveal .present .fragment.visible.fade-zoom {
+  -webkit-transform: none ;
+  -ms-transform: none ;
+  transform: none ;
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+.reveal .sl-block {
+  font-family: "Overpass 2", "Hiragino Kaku Gothic", "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ Pro W3", Overpass, sans-serif !important;
+}
+.reveal .has-light-background .icon.stroked {
+  color: currentcolor;
+}
+.reveal .has-dark-background .icon.stroked path {
+  stroke: currentcolor;
+}
+.reveal .has-dark-background .only-light-background {
+  display: none !important;
+}
+.reveal .has-dark-background .only-dark-background {
+  display: block !important;
+}
+.reveal a.call-to-action:hover {
+  background-color: #d00 !important;
+  box-shadow: 0 0.5em 1em rgba(0, 0, 0, 0.05) !important;
+  text-shadow: none !important;
+}
+.reveal .sl-block[data-block-type="snippet"] table {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+.reveal .sl-block[data-block-type="snippet"] table td {
+  border-color: currentcolor !important;
+}
+.reveal .sl-block[data-block-type="snippet"] table td {
+  text-align: inherit !important;
+}
+.reveal .sl-block[data-block-type="text"] table {
+  width: 100%;
+}
+.reveal .sl-block[data-block-type="text"] table td {
+  border-color: currentcolor;
+}
+.reveal .sl-block[data-block-type="text"] table td {
+  text-align: inherit;
+}
+.reveal.reveal .sl-block[data-block-type="image"] .person {
+  border-radius: 50%;
+  position: relative !important;
+  background-color: transparent;
+  height: auto !important;
+}
+.reveal.reveal .sl-block[data-block-type="image"] .person:before {
+  content: "" !important;
+  display: block !important;
+  padding-top: 100% ;
+  position: relative !important ;
+  /* 4:3 aspect ratio */
+
+}
+.reveal.reveal .sl-block[data-block-type="image"] .person > img {
+  position: absolute ;
+  margin: 0 auto !important;
+  left: 0% ;
+  right: 0 ;
+  width: auto !important;
+  top: 0  ;
+  bottom: 0 ;
+}
+.reveal .present .delay-1 {
+  transition-delay: 0.1s;
+}
+.reveal .present .delay-2 {
+  transition-delay: 0.2s;
+}
+.reveal .present .delay-3 {
+  transition-delay: 0.3s;
+}
+.reveal .present .delay-4 {
+  transition-delay: 0.4s;
+}
+.reveal .present .delay-5 {
+  transition-delay: 0.5s;
+}
+.reveal .present .delay-6 {
+  transition-delay: 0.6s;
+}
+.reveal .present .delay-7 {
+  transition-delay: 0.7s;
+}
+.reveal .present .delay-8 {
+  transition-delay: 0.8s;
+}
+.reveal .present .delay-9 {
+  transition-delay: 0.9s;
+}
+.reveal .present .delay-10 {
+  transition-delay: 1s;
+}
+.reveal .present .delay-11 {
+  transition-delay: 1.1s;
+}
+.reveal .present .delay-12 {
+  transition-delay: 1.2s;
+}
+.reveal .present .delay-13 {
+  transition-delay: 1.3s;
+}
+.reveal .present .delay-14 {
+  transition-delay: 1.4s;
+}
+.reveal .present .delay-15 {
+  transition-delay: 1.5s;
+}
+.reveal .present .delay-16 {
+  transition-delay: 1.6s;
+}
+.reveal .present .delay-17 {
+  transition-delay: 1.7s;
+}
+.reveal .present .delay-18 {
+  transition-delay: 1.8s;
+}
+.reveal .present .delay-19 {
+  transition-delay: 1.9s;
+}
+.reveal .present .delay-20 {
+  transition-delay: 2s;
+}
+.reveal .present .delay-21 {
+  transition-delay: 2.1s;
+}
+.reveal .present .delay-22 {
+  transition-delay: 2.2s;
+}
+.reveal .present .delay-23 {
+  transition-delay: 2.3s;
+}
+.reveal .present .delay-24 {
+  transition-delay: 2.4s;
+}
+.reveal .present .delay-25 {
+  transition-delay: 2.5s;
+}
+.reveal .present .delay-26 {
+  transition-delay: 2.6s;
+}
+.reveal .present .delay-27 {
+  transition-delay: 2.7s;
+}
+.reveal .present .delay-28 {
+  transition-delay: 2.8s;
+}
+.reveal .present .delay-29 {
+  transition-delay: 2.9s;
+}
+.reveal .present .delay-30 {
+  transition-delay: 3s;
+}
+.reveal .present .delay-31 {
+  transition-delay: 3.1s;
+}
+.reveal .present .delay-32 {
+  transition-delay: 3.2s;
+}
+.reveal .present .delay-33 {
+  transition-delay: 3.3s;
+}
+.reveal .present .delay-34 {
+  transition-delay: 3.4s;
+}
+.reveal .present .delay-35 {
+  transition-delay: 3.5s;
+}
+.reveal .present .delay-36 {
+  transition-delay: 3.6s;
+}
+.reveal .present .delay-37 {
+  transition-delay: 3.7s;
+}
+.reveal .present .delay-38 {
+  transition-delay: 3.8s;
+}
+.reveal .present .delay-39 {
+  transition-delay: 3.9s;
+}
+.reveal .present .delay-40 {
+  transition-delay: 4s;
+}
+.reveal .light-foreground .sl-block * {
+  color: #fff;
+}
+.reveal .dark-foreground .sl-block * {
+  color: #000;
+}
+.reveal .has-dark-background .invert {
+  color: #000;
+}
+.reveal .has-light-background .invert * {
+  color: #fff ;
+}
+.reveal .has-light-background .invert .only-light-background {
+  display: none ;
+}
+.reveal .has-light-background .invert .only-dark-background {
+  display: block !important;
+}
+.reveal .has-dark-background .invert .only-light-background {
+  display: block !important ;
+}
+.reveal .has-dark-background .invert .only-dark-background {
+  display: none !important;
+}
+.reveal .slide-number {
+  position: absolute !important;
+  opacity: 1;
+  right: 1em;
+  height: 28px;
+  min-width: 28px;
+  bottom: auto;
+  left: auto;
+  text-align: center;
+  font-size: 14px;
+  border-radius: 28px;
+  line-height: 28px;
+  color: white;
+  text-shadow: 0 0.1em 0.5em rgba(0, 0, 0, 0.4);
+  top: 1em;
+  font-family: "Overpass 2", Overpass, sans-serif;
+  font-weight: 500;
+  white-space: nowrap;
+  padding: 4px;
+  box-sizing: content-box;
+}
+.reveal .slide-number-delimiter {
+  margin: 0 1px;
+}
+.reveal.reveal .present.in-3d-appear {
+  transform: translatez(0em) !important;
+  animation: none !important;
+  transition: transform 1s ease !important;
+}
+.reveal.reveal .future.in-3d-appear {
+  transform: translatez(10em) rotateX(21deg) !important;
+  animation: none !important;
+}
+.reveal .no-filter img,
+.reveal .no-filter {
+  filter: none !important;
+  -webkit-filter: none !important;
+}
+.reveal .present .fade-in-slow {
+  transition: all 5s ease;
+}
+.reveal .future .fade-in-slow {
+  transition: none;
+  opacity: 0;
+}
+.reveal .redhat-logo .logotext {
+  fill: #000000 !important;
+}
+.reveal .has-dark-background .redhat-logo .logotext {
+  fill: #ffffff !important;
+}
+.reveal [data-block-type="table"] .sl-block-content {
+  font-size: .75em;
+  background-color: #c00;
+  color: #fff;
+}
+.reveal [data-block-type="table"] td {
+  background-color: #e5e5e5;
+  color: #333;
+  border-color: white;
+}
+.reveal div[data-block-type="table"] th {
+  font-weight: 500;
+}
+.reveal [data-block-type="table"] tr:nth-child(odd) td {
+  background-color: #f5f5f5;
+  color: #333;
+}
+.reveal .has-dark-background > [data-block-type="table"] td {
+  background-color: #131619;
+  color: #fff;
+}
+.reveal .has-dark-background > [data-block-type="table"] tr:nth-child(odd) td {
+  background-color: #232629;
+  color: #fff;
+}
+.reveal [data-block-type="code"],
+.reveal .hljs {
+  background-color: white ;
+  color: rgba(55, 55, 55, 0.85) !important;
+}
+.reveal section .hljs {
+  background-color: white !important;
+}
+.reveal .has-dark-background [data-block-type="code"],
+.reveal .has-dark-background .hljs {
+  background-color: #012736!important ;
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+.reveal [data-block-type="code"] pre {
+  letter-spacing: 0.015em;
+  line-height: 1.5em;
+}
+.reveal .has-light-background[data-block-type="code"] pre,
+.reveal [data-block-type="code"] pre {
+  background-color: white ;
+  color: currentcolor;
+  padding: 1em !important;
+}
+.reveal .has-dark-background [data-block-type="code"] pre {
+  background-color: #012736 ;
+}
+.reveal .hljs,
+.reveal pre,
+.reveal code {
+  font-family: 'Overpass Mono', monospace !important;
+  font-weight: 200 !important;
+}
+.reveal .hljs-literal {
+  color: #ffb612 !important;
+}
+.reveal .hljs-keyword {
+  color: #ffb612;
+  font-weight: 700 !important;
+}
+.reveal .hljs-string {
+  color: #88c639;
+  font-weight: 700;
+}
+.reveal .hljs-comment {
+  color: #94a0a7 !important;
+  font-weight: 400 !important;
+}
+.reveal .hljs-params {
+  color: #028c98 ;
+  font-weight: 700;
+}
+.reveal .hljs-attr {
+  color: #EC7A08 !important;
+}
+.reveal .hljs-tag {
+  color: #7F5FAE !important;
+}
+.reveal .hljs-name {
+  color: #028c98 !important;
+}
+.reveal .hljs-string {
+  color: #7f5fae !important;
+}
+.reveal .hljs-comment {
+  color: rgba(125, 125, 125, 0.65) !important;
+}
+.reveal .hljs-number {
+  color: #4e9fdd !important;
+}
+.reveal .hljs-attribute {
+  color: #ec9e34 !important;
+}
+.reveal .hljs-variable {
+  color: #4e9fdd !important;
+}
+.reveal .hljs-built_in {
+  color: #ee1122!important;
+}
+.reveal .hljs-selector-class {
+  color: #55aab2 !important;
+}
+.reveal [data-line-end-type="line-arrow"] line,
+.reveal [data-line-start-type="line-arrow"] line,
+.reveal [data-line-end-type="line-arrow"] path {
+  stroke-linecap: round;
+  stroke-linejoin: square;
+}
+.reveal div[data-block-type="line"] line[stroke="#000000"],
+.reveal div[data-block-type="line"] path[stroke="#000000"] {
+  stroke: currentcolor;
+}
+.reveal [fill="none"] {
+  fill: none !important;
+}
+.reveal [fill="#a30000"] {
+  fill: #aa0000 !important;
+}
+.reveal [fill="#cc2029"],
+.reveal [fill="#cb2027"],
+.reveal [fill="#c00"] {
+  fill: #cc0000 !important;
+}
+.reveal [fill="#fff"] {
+  fill: #ffffff !important;
+}
+.reveal [fill="#6d6e70"] {
+  fill: #6d6e70 !important;
+}
+.reveal [fill="#231f20"] {
+  fill: currentcolor !important;
+}
+.reveal [fill="#efab1f"] {
+  fill: #efab1f !important;
+}
+.reveal [fill="#92d400"] {
+  fill: #92d400 !important;
+}
+.reveal .has-dark-background [fill="#6d6e70"] {
+  fill: #266272 !important;
+}
+.reveal .has-dark-background [fill="#fff"] {
+  fill: #555555 !important;
+}
+.reveal .has-dark-background [fill="#fff"] {
+  fill: #333333 !important;
+}
+.reveal .has-dark-background [stroke="#231f20"] {
+  stroke: currentcolor;
+}
+.reveal .has-dark-background [fill="#221F1F"],
+.reveal .has-dark-background [fill="#221f1f"],
+.reveal .has-dark-background [fill="#231F20"],
+.reveal .has-dark-background [fill="#010101"] {
+  fill: #ffffff !important;
+}
+.reveal [data-inline-svg="true"] img {
+  display: none;
+}
+.reveal .corner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  z-index: 8;
+}
+.reveal .corner svg {
+  transition: all .75s ease 5s;
+}
+
+		</style>
+
+	</head>
+	<body class="reveal-viewport theme-font-overpass2 theme-color-no-color">
+		<div class="reveal">
+			<div class="slides">
+				<section data-background-color="rgb(156,0,0)" data-background-image="title-textcode/32fa01ef1b64201650bdc7d29ce7c22c.svg" data-id="9ae05ce33d48031687f320748e17052a"><div class="sl-block" data-block-type="text" style="height: auto; width: 915px; left: 45px; top: 278px;" data-block-id="b8aa6101ad99c8b2f3163485ed4d4818"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; text-align: left;" data-has-custom-html="">
+<h1 style="font-size:2.25em">Software Transaction memory</h1>
+
+<h2 style="font-size:1.5em">What is that about</h2>
+
+<h3> </h3>
+
+<h3>OndŘej Chaloupka</h3>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 360px; height: 122.4px; left: 45px; top: 76.5px; min-width: 4px; min-height: 4px;" data-block-id="e638e62bcd9cd08d1c5bfd26859b07c6"><div class="sl-block-content" style="z-index: 11;" data-inline-svg="true">
+<img data-natural-width="500" data-natural-height="170" data-lazy-loaded="" style="" data-src="title-textcode/bfa11a84cdd2fc0f50cb6fb54942bd62.svg"><svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 500 170" height="170" width="500" class="redhat-logo" preserveaspectratio="xMidYMid meet">
+<path class="logotext" d="m 495.6,120.6 c 0,1.8 -1.5,3.3 -3.3,3.3 -1.8,0 -3.3,-1.5 -3.3,-3.3 0,-1.8 1.5,-3.3 3.3,-3.3 1.8,0 3.3,1.5 3.3,3.3 z m -3.3,-4 c -2.2,0 -4,1.8 -4,4 0,2.2 1.8,4 4,4 2.2,0 4,-1.8 4,-4 0,-2.2 -1.8,-4 -4,-4 z m 0,3.8 c 0.6,0 1,-0.1 1,-0.7 0,-0.5 -0.4,-0.6 -0.9,-0.6 l -0.8,0 0,1.3 z m -0.7,2.3 -0.6,0 0,-4.1 1.5,0 c 1,0 1.5,0.3 1.5,1.1 0,0.8 -0.5,1.1 -1.1,1.2 l 1.2,1.8 -0.7,0 -1.1,-1.8 -0.7,0 z m -22.2,-64.92 0,11.91 15.4,0 0,4.34 -15.4,0 0,35.17 c 0,6.9 2.2,11.2 8,11.2 2.8,0 4.7,-0.4 6.1,-0.9 l 0.7,4.2 c -1.8,0.7 -4.2,1.3 -7.5,1.3 -3.9,0 -7.2,-1.3 -9.3,-3.9 -2.5,-2.8 -3.3,-7.4 -3.3,-12.9 l 0,-34.17 -9.1,0 0,-4.34 9.1,0 0,-9.94 z m -21.3,32.06 c 0,-9.67 -3,-21.38 -18.6,-21.38 -4.9,0 -10.9,1.32 -15.8,4.67 l 1.7,3.89 c 3.9,-2.76 8.8,-4.03 13.5,-4.03 12.8,-0.1 13.9,10.59 13.9,15.94 l 0,1.44 c -22,-0.23 -33,7.33 -33,19.73 0,7.3 5,14.9 15.9,14.9 8.6,0 14.6,-4.8 16,-6.9 l 2.3,5.7 4.9,0 c -0.6,-4.2 -0.8,-8.6 -0.8,-12.9 z m -5.3,16.66 c 0,0.9 -0.2,2.1 -0.6,3.2 -1.8,5.3 -7,10.9 -16,10.9 -5.6,0 -10.7,-3.5 -10.7,-11.3 0,-13 15.5,-14.77 27.3,-14.43 z m -42.7,-15.34 0,32.64 -5.3,0 0,-32.05 c 0,-9.74 -3.8,-18.62 -14.9,-18.62 -7.7,0 -14,5.52 -16.3,12.25 -0.6,1.6 -0.8,3.13 -0.8,5.33 l 0,33.09 -5.3,0 0,-71.31 5.3,1.58 0,25.29 0.3,0 c 1.5,-3.01 4.1,-5.92 7.3,-7.8 3.1,-1.91 6.8,-3.1 10.9,-3.1 5.2,0 18.8,2.56 18.8,22.7 z m -68.5,1.09 c 0,-1.09 -0.1,-2.46 -0.3,-3.57 -1.3,-5.26 -5.7,-9.59 -11.8,-9.59 -8.8,0 -13.7,7.76 -13.7,17.81 0,9.9 4.9,17.2 13.5,17.2 5.6,0 10.5,-3.9 11.8,-9.8 0.4,-1.2 0.5,-2.5 0.5,-3.9 z M 202.9,87.1 c 0,-7.23 -0.1,-12.55 -0.4,-17.36 l 11.8,0 0.5,10.26 0.4,0 c 2.7,-7.6 9,-11.48 14.8,-11.48 1.4,0 2.1,0 3.2,0.29 l 0,12.87 c -1.3,-0.25 -2.4,-0.38 -4.1,-0.38 -6.5,0 -11,4.14 -12.2,10.33 -0.3,1.2 -0.4,2.65 -0.4,4.17 l 0,28 -13.7,0 z m 142.3,21.5 c 0,5.6 0.2,11.5 0.5,15.2 l -12.2,0 -0.6,-8.6 -0.3,0 c -3.2,6.1 -9.7,9.8 -17.5,9.8 -12.9,0 -23.1,-11 -23.1,-27.6 -0.1,-18.13 11.2,-28.88 24.2,-28.88 7.4,0 12.7,3.05 15.1,7.04 l 0.3,0 0,-30.48 13.6,3.85 z m -59.3,-8.1 c 0.2,-1.2 0.5,-3.3 0.5,-5.8 0,-11.83 -5.8,-26.28 -23.3,-26.28 -17.4,0 -26.5,14.11 -26.5,28.98 0,16.6 10.3,27.4 27.9,27.4 7.8,0 14.2,-1.4 18.8,-3.4 l -2,-9.4 c -4.1,1.5 -8.6,2.5 -14.9,2.5 -8.7,0 -16.3,-4.3 -16.7,-14.1 z m -36.2,-9.58 c 0.6,-5.54 4.1,-13.17 12.5,-13.17 9.2,0 11.3,8.16 11.3,13.17 z m -83.8,29.68 c 0,1.8 -1.4,3.3 -3.2,3.3 -1.8,0 -3.3,-1.5 -3.3,-3.3 0,-1.8 1.5,-3.3 3.3,-3.3 1.8,0 3.2,1.5 3.2,3.3 z m -3.2,-4 c -2.2,0 -4,1.8 -4,4 0,2.2 1.8,4 4,4 2.2,0 4,-1.8 4,-4 0,-2.2 -1.8,-4 -4,-4 z m 0,3.8 c 0.5,0 1,-0.1 1,-0.7 0,-0.5 -0.5,-0.6 -0.9,-0.6 l -0.9,0 0,1.3 z m -0.8,2.3 -0.6,0 0,-4.1 1.6,0 c 0.9,0 1.4,0.3 1.4,1.1 0,0.8 -0.4,1.1 -1,1.2 l 1.1,1.8 -0.7,0 -1,-1.8 -0.8,0 z"></path>
+<path style="fill:#fff" d="M150.1 125c-3.1-.7-6.3-1.1-9.5-1.1-5.6 0-10.8.8-14.4 2.5-.8.4-.8.9-.6 1.6.4 1.3-.3 2.7-3.9 3.5-5.4 1.2-8.8 6.7-10.7 8.6-2.3 2.1-8.8 3.5-7.8 2.2.8-1 3.7-4.2 5.4-7.6 1.6-3 3-3.9 4.9-6.8.6-.8 2.8-3.8 3.4-6.2.8-2.3.5-5.2.8-6.4.4-1.7 2-5.4 2.1-7.5.1-1.2-4.9 1.7-7.3 1.7-2.4 0-4.8-1.5-6.9-1.6-2.7-.1-4.4 2.1-6.74 1.7-1.37-.2-2.52-1.4-4.9-1.5-3.4-.2-7.57 1.9-15.38 1.6-7.68-.2-14.77-9.7-15.74-11.2-1.13-1.8-2.52-1.8-4.03-.4-1.5 1.4-3.36.3-3.9-.6-1-1.8-3.7-6.92-7.87-8-5.77-1.5-8.7 3.2-8.3 6.9.38 3.8 2.83 4.9 3.96 6.9 1.12 2 1.7 3.3 3.84 4.2 1.5.6 2.07 1.6 1.62 2.8-.4 1.1-1.97 1.3-3 1.4-2.2.1-3.74-.5-4.86-1.2-1.3-.9-2.37-2-3.5-4-1.33-2.2-3.4-3.1-5.83-3.1-1.16 0-2.24.3-3.2.8-3.8 2-8.3 3.1-13.17 3.1H9.1C19.64 138.5 49.14 161 83.88 161c27.73 0 52.13-14.3 66.23-36"></path>
+<path style="fill:#000" d="m 150.1,125 c -2.6,-0.6 -6.3,-1.1 -9.5,-1.1 -5.6,0 -10.7,0.9 -14.4,2.5 -0.5,0.2 -0.7,0.6 -0.7,1.1 0,0.2 0,0.4 0.1,0.5 0.4,1.3 -0.3,2.7 -3.9,3.5 -5.4,1.2 -8.8,6.7 -10.7,8.6 -2.3,2.1 -8.8,3.5 -7.8,2.2 0.8,-1 3.7,-4.2 5.4,-7.6 1.6,-3 3,-3.9 4.9,-6.8 0.6,-0.8 2.8,-3.8 3.4,-6.2 0.8,-2.3 0.5,-5.2 0.8,-6.4 0.4,-1.7 2,-5.4 2.1,-7.5 0.1,-1.2 -4.9,1.7 -7.3,1.7 -2.4,0 -4.8,-1.5 -6.9,-1.6 -2.6,-0.1 -4.3,2.1 -6.74,1.7 -1.36,-0.2 -2.51,-1.4 -4.9,-1.5 -3.41,-0.1 -7.56,1.9 -15.37,1.6 -7.68,-0.2 -14.78,-9.7 -15.75,-11.2 -1.13,-1.8 -2.52,-1.8 -4.03,-0.4 -1.51,1.4 -3.37,0.3 -3.9,-0.6 -1.01,-1.8 -3.7,-6.92 -7.87,-8 -5.77,-1.5 -8.69,3.19 -8.31,6.9 0.38,3.8 2.83,4.9 3.96,6.9 1.14,2 1.72,3.3 3.85,4.2 1.51,0.6 2.07,1.6 1.62,2.8 -0.39,1.1 -1.96,1.3 -3,1.4 -2.2,0.1 -3.74,-0.5 -4.86,-1.2 -1.31,-0.9 -2.37,-2 -3.51,-4 -1.32,-2.2 -3.4,-3.1 -5.82,-3.1 -1.15,0 -2.23,0.3 -3.19,0.8 -3.8,2 -8.31,3.1 -13.18,3.1 l -5.481,0 C 6.45,99.4 5,90.95 5,82.13 5,38.57 40.32,3.26 83.88,3.262 c 43.52,0 78.82,35.31 78.82,78.87 0,15.77 -4.6,30.57 -12.6,42.87 z m -49.2,-7.2 c -1.03,1.2 -1.47,1.6 -2.21,2.2 -1.78,1.4 -3.81,-0.2 -5.11,-1 -2.9,-1.7 -5.23,-0.6 -5.8,0.7 -0.57,1.3 0.1,2.9 1.64,2.7 2.21,-0.3 2.31,0.1 3.9,1.1 2.98,1.9 5.15,0.8 6.26,-0.1 0.92,-0.7 1.42,-1.3 1.92,-2.2 0.9,-1.7 0.2,-3 -0.3,-3.4 -0.1,-0.1 -0.2,-0.1 -0.3,0 z"></path>
+<path style="fill:#c00" d="m 87.26,25.76 c 3.86,-0.47 10.35,-1.28 10.82,1.61 0.18,1.13 -1.98,2.32 -5.13,3.05 -0.34,0.1 -0.33,0.54 0,0.67 1.32,0.38 2.86,0.65 4.49,0.65 5.06,0.12 9.16,-1.71 9.26,-4.07 0.1,-2.36 -4,-4.39 -9.04,-4.49 -0.99,0 -1.98,0 -3.09,0.15 -3.02,0.3 -5.62,1.1 -7.42,1.98 -0.29,0.14 -0.28,0.45 0.11,0.45 z m -9.53,15.06 c 4.35,-0.32 4.79,-1.32 4.66,-2.39 -0.14,-1.25 -2.77,-2.71 -6.67,-2.71 -3.84,0 -6.6,0.46 -8.99,0.56 -2.39,0.1 -4.24,-1.69 -5.1,-2.76 -0.71,-0.88 -2.97,-1.73 -4.2,1.1 -1.24,2.86 1.07,5.93 2.97,6.33 0,0 3.17,5.89 5.57,3.33 1.71,-1.82 2.65,-2.8 11.76,-3.46 z m 43.87,28.83 c 2.9,-1.57 5.5,-3.63 6.8,-8.5 13.4,3.02 21.3,10 19.6,19.43 C 144.2,101.3 110.3,108.3 77.23,98.3 45.75,88.79 18.11,69.8 21.31,58.68 c 1.86,-6.48 12.13,-9.24 25.82,-7.76 -2.08,4.23 -1.92,9.21 7.14,14.75 11.07,6.29 29.79,11.66 34.85,11.14 1.89,-0.2 3.58,-1.13 1.89,-2.27 -1.7,-1.13 -3.21,-3.4 -4.16,-7.36 C 86.33,64.97 85.73,61.89 73.83,59.63 48.31,54.77 49.29,47.55 50.05,43.4 c 0,0 2.26,-10.19 3.21,-13.78 0.94,-3.59 3.38,-11.82 19.82,-8.12 9.5,2.14 14.62,-0.52 17.24,-1.19 7.1,-1.82 14.98,-0.57 19.28,3.9 4.5,4.63 10.7,18.9 13.7,29.57 1.5,5.42 1.1,8.02 0.3,9.85 -0.5,1.25 -0.8,2.05 -2.7,5.22 -0.3,0.56 -0.1,1.17 0.7,0.8 z"></path>
+</svg>
+</div></div></section><section data-id="7b868c4deaf2e46a1ce3a454aee878a3">
+<div class="sl-block" data-block-type="code" style="width: 800px; height: 70px; left: 80px; top: 140px; background: transparent none repeat scroll 0% 0%;" data-block-id="91773f69236c0d2819970b3b5039958a"><div class="sl-block-content show-in-thumb notranslate" style="z-index: 10; border-width: 1px; background: transparent none repeat scroll 0% 0%; font-size: 110%;" data-highlight-theme="tomorrow"><pre><code style="
+">int x = 0, y = 0, z = 0;</code></pre></div></div>
+<div class="sl-block" data-block-type="code" style="width: 194px; height: 280px; left: 80px; top: 280px; background: transparent none repeat scroll 0% 0%;" data-block-id="3ecef5c934c5a665c52945f3307fe1cf"><div class="sl-block-content show-in-thumb notranslate" style="z-index: 11; border-width: 1px; background: transparent none repeat scroll 0% 0%; font-size: 110%;" data-highlight-theme="tomorrow"><pre><code style="
+">void first {
+   x = x + 1;
+}</code></pre></div></div>
+<div class="sl-block" data-block-type="code" style="width: 191px; height: 280px; left: 385px; top: 280px; background: transparent none repeat scroll 0% 0%;" data-block-id="f89507d28ea51946b1f34ab09a4e64c3"><div class="sl-block-content show-in-thumb notranslate" style="z-index: 12; border-width: 1px; background: transparent none repeat scroll 0% 0%; font-size: 110%;" data-highlight-theme="tomorrow"><pre><code style="
+">void second {
+  y = y + 1;
+  x = x + 1;
+}</code></pre></div></div>
+<div class="sl-block" data-block-type="code" style="width: 194px; height: 280px; left: 686px; top: 280px; background: transparent none repeat scroll 0% 0%;" data-block-id="c608018fe0c7b351c5cb657208fe7a70"><div class="sl-block-style" style="z-index: 13;"><div class="sl-block-content show-in-thumb notranslate" style="z-index: 13; border-width: 1px; background: transparent none repeat scroll 0% 0%; font-size: 110%;" data-highlight-theme="tomorrow"><pre><code style="
+">void third {
+  z = z + 1;
+  y = y + 1;
+  x = x + 1;
+}</code></pre></div></div></div>
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 77px; top: 24px; height: auto;" data-block-id="3c07edcdff9c994712fd1e09cc0705da"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Subtitle" style="z-index: 15;" dir="ui"><h2>Running in pararell<br>
+</h2></div></div></section><section data-id="f6818dbd84461d4a34ae1695c9ba349f">
+<div class="sl-block" data-block-type="code" style="width: 800px; height: 70px; left: 80px; top: 140px; background: transparent none repeat scroll 0% 0%;" data-block-id="38afb7ff0ed90513c272cfbf5caaf323"><div class="sl-block-content show-in-thumb notranslate" style="z-index: 10; border-width: 1px; background: transparent none repeat scroll 0% 0%; font-size: 110%;" data-highlight-theme="tomorrow"><pre><code style="
+">int x = 0, y = 0, z = 0;</code></pre></div></div>
+<div class="sl-block" data-block-type="code" style="width: 194px; height: 280px; left: 80px; top: 280px; background: transparent none repeat scroll 0% 0%;" data-block-id="433ac7b6fa3269560782149d902451ab"><div class="sl-block-content show-in-thumb notranslate" style="z-index: 11; border-width: 1px; background: transparent none repeat scroll 0% 0%; font-size: 110%;" data-highlight-theme="tomorrow"><pre><code style="
+">void first {
+   x = x + 1;
+}</code></pre></div></div>
+<div class="sl-block" data-block-type="code" style="width: 191px; height: 280px; left: 385px; top: 280px; background: transparent none repeat scroll 0% 0%;" data-block-id="dc86b8572737449832c5c6fe7e435000"><div class="sl-block-content show-in-thumb notranslate" style="z-index: 12; border-width: 1px; background: transparent none repeat scroll 0% 0%; font-size: 110%;" data-highlight-theme="tomorrow"><pre><code style="
+">void second {
+  y = y + 1;
+  x = x + 1;
+}</code></pre></div></div>
+<div class="sl-block" data-block-type="code" style="width: 194px; height: 280px; left: 686px; top: 280px; background: transparent none repeat scroll 0% 0%;" data-block-id="74fed8ad6655281b8b40d788df96c454"><div class="sl-block-style" style="z-index: 13;"><div class="sl-block-content show-in-thumb notranslate" style="z-index: 13; border-width: 1px; background: transparent none repeat scroll 0% 0%; font-size: 110%;" data-highlight-theme="tomorrow"><pre><code style="
+">void third {
+  z = z + 1;
+  y = y + 1;
+  x = x + 1;
+}</code></pre></div></div></div>
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 77px; top: 24px; height: auto;" data-block-id="8f28447cf8240b48c52dd7a70aec56f1"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Subtitle" style="z-index: 14;" dir="ui"><h2>Running in pararell<br>
+</h2></div></div>
+<div class="sl-block" data-block-type="code" style="width: 800px; height: 70px; left: 80px; top: 595px; background: transparent none repeat scroll 0% 0%;" data-block-id="12e38bab78472e8f551e9d23dbba19e3"><div class="sl-block-content show-in-thumb notranslate" style="z-index: 16; border-width: 1px; background: transparent none repeat scroll 0% 0%; font-size: 110%;" data-highlight-theme="tomorrow"><pre><code style="
+">x == 3, y == 2, z == 1 ???</code></pre></div></div></section><section data-id="8d4f60933e78f6ba5d3499d545e05844">
+<div class="sl-block" data-block-type="code" style="width: 800px; height: 70px; left: 80px; top: 140px; background: transparent none repeat scroll 0% 0%;" data-block-id="2e9296f2910764defd8d2fb61add23bd"><div class="sl-block-content show-in-thumb notranslate" style="z-index: 10; border-width: 1px; background: transparent none repeat scroll 0% 0%; font-size: 110%;" data-highlight-theme="tomorrow"><pre><code style="
+">int x = 0, y = 0, z = 0;</code></pre></div></div>
+<div class="sl-block" data-block-type="code" style="width: 265px; height: 280px; left: 55px; top: 280px; background: transparent none repeat scroll 0% 0%;" data-block-id="269c2519b6cb15b556aa15b7ab6d7feb"><div class="sl-block-content show-in-thumb notranslate" style="z-index: 11; border-width: 1px; background: transparent none repeat scroll 0% 0%; font-size: 110%;" data-highlight-theme="tomorrow"><pre><code style="
+">void first {
+  synchronized(this) {
+    x = x + 1;
+  }
+}</code></pre></div></div>
+<div class="sl-block" data-block-type="code" style="width: 271px; height: 280px; left: 336px; top: 280px; background: transparent none repeat scroll 0% 0%;" data-block-id="d8a90683750a1d2aafda7e85c1010493"><div class="sl-block-content show-in-thumb notranslate" style="z-index: 12; border-width: 1px; background: transparent none repeat scroll 0% 0%; font-size: 110%;" data-highlight-theme="tomorrow"><pre><code style="
+">void second {
+  synchronized(this) {
+    y = y + 1;
+    x = x + 1;
+  }
+}</code></pre></div></div>
+<div class="sl-block" data-block-type="code" style="width: 266px; height: 286px; left: 628px; top: 274px; background: transparent none repeat scroll 0% 0%;" data-block-id="819f130bf1e5ea1dafcfe43d55777571"><div class="sl-block-style" style="z-index: 13;"><div class="sl-block-content show-in-thumb notranslate" style="z-index: 13; border-width: 1px; background: transparent none repeat scroll 0% 0%; font-size: 110%;" data-highlight-theme="tomorrow"><pre><code style="
+">void third {
+  synchronized(this) {
+    z = z + 1;
+    y = y + 1;
+    x = x + 1;
+  }
+}</code></pre></div></div></div>
+<div class="sl-block" data-block-type="code" style="width: 800px; height: 70px; left: 80px; top: 595px; background: transparent none repeat scroll 0% 0%;" data-block-id="5fdeb49290a539bd3756a047398d23fa"><div class="sl-block-content show-in-thumb notranslate" style="z-index: 15; border-width: 1px; background: transparent none repeat scroll 0% 0%; font-size: 110%;" data-highlight-theme="tomorrow"><pre><code style="
+">x == 3, y == 2, z == 1 !</code></pre></div></div></section><section data-id="4871adcb72db529e5f2034cf6d7b57e3">
+<div class="sl-block" data-block-type="code" style="width: 800px; height: 70px; left: 80px; top: 70px; background: transparent none repeat scroll 0% 0%;" data-block-id="0e39d8f6be70efbca17b49c6f1d6f76c"><div class="sl-block-content show-in-thumb notranslate" style="z-index: 10; border-width: 1px; background: transparent none repeat scroll 0% 0%; font-size: 110%;" data-highlight-theme="tomorrow"><pre><code style="
+">txn_int x = 0, y = 0, z = 0;</code></pre></div></div>
+<div class="sl-block" data-block-type="code" style="width: 194px; height: 350px; left: 80px; top: 210px; background: transparent none repeat scroll 0% 0%;" data-block-id="bd43c3fe727d9020f358572d38934a4a"><div class="sl-block-content show-in-thumb notranslate" style="z-index: 12; border-width: 1px; background: transparent none repeat scroll 0% 0%; font-size: 110%;" data-highlight-theme="tomorrow"><pre><code style="
+">void first {
+   atomic {
+     x = x + 1;
+   }
+}</code></pre></div></div>
+<div class="sl-block" data-block-type="code" style="width: 191px; height: 350px; left: 400px; top: 210px; background: transparent none repeat scroll 0% 0%;" data-block-id="27dbc57f063eadc72daab6f0b40b2143"><div class="sl-block-content show-in-thumb notranslate" style="z-index: 13; border-width: 1px; background: transparent none repeat scroll 0% 0%; font-size: 110%;" data-highlight-theme="tomorrow"><pre><code style="
+">void second {
+  atomic {
+    y = y + 1;
+    x = x + 1;
+  }
+}</code></pre></div></div>
+<div class="sl-block" data-block-type="code" style="width: 194px; height: 350px; left: 686px; top: 210px; background: transparent none repeat scroll 0% 0%;" data-block-id="325560e27bed1406b503dc539aae5b4b"><div class="sl-block-content show-in-thumb notranslate" style="z-index: 14; border-width: 1px; background: transparent none repeat scroll 0% 0%; font-size: 110%;" data-highlight-theme="tomorrow"><pre><code style="
+">void third {
+  atomic {
+    z = z + 1;
+    y = y + 1;
+    x = x + 1;
+  }
+}</code></pre></div></div>
+<div class="sl-block" data-block-type="code" style="width: 800px; height: 70px; left: 80px; top: 595px; background: transparent none repeat scroll 0% 0%;" data-block-id="d41abf9617731411b7a9a63e593b1379"><div class="sl-block-content show-in-thumb notranslate" style="z-index: 15; border-width: 1px; background: transparent none repeat scroll 0% 0%; font-size: 110%;" data-highlight-theme="tomorrow"><pre><code style="
+">x == 3, y == 2, z == 1 !!!</code></pre></div></div></section><section data-id="fd52d335765a0071b6e347a65421c3be">
+<div class="sl-block" data-block-type="code" style="width: 800px; height: 525px; left: 80px; top: 105px; background: transparent none repeat scroll 0% 0%;" data-block-id="5e58eb9055699866bcdbce10469b8eec"><div class="sl-block-content show-in-thumb notranslate" style="z-index: 10; border-width: 1px; background: transparent none repeat scroll 0% 0%; font-size: 120%;" data-highlight-theme="tomorrow"><pre><code style="
+">class Account {
+  int balance;
+  synchronized void withdraw(int n) {
+    balance = balance - n; 
+  }
+
+  void deposit(int n) {
+    withdraw(-n);
+  }
+}
+
+class Transfer  {
+  void transfer(Account from, Account to, int amount) {
+    from.withdraw(amount);
+    to.deposit(amount);
+  }
+}</code></pre></div></div>
+<div class="sl-block" data-block-type="text" style="width: 806px; left: 77px; top: 24px; height: auto;" data-block-id="a0179e325f75717d53dd94c250c0b6fe"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Subtitle" style="z-index: 13;">
+<h2>Locks are not composable</h2>
+</div></div></section><section data-id="94a16f7e1a7320d4dc7049672cba05a7">
+<div class="sl-block" data-block-type="code" style="width: 800px; height: 630px; left: 80px; top: 42px; background: transparent none repeat scroll 0% 0%;" data-block-id="95eef99750ba92c39271f8cf1f9ed6bf"><div class="sl-block-content show-in-thumb notranslate" style="z-index: 10; border-width: 1px; background: transparent none repeat scroll 0% 0%; font-size: 120%;" data-highlight-theme="tomorrow"><pre><code style="
+">class Account {
+  int balance;
+  synchronized void withdraw(int n) {
+    balance = balance - n; 
+  }
+
+  void deposit(int n) {
+    withdraw(-n);
+  }
+}
+
+class Transfer  {
+  void transfer(Account from, Account to, int amount) {
+    synchronized(from) {
+      synchronized(to) {
+        from.withdraw(amount);
+        to.deposit(amount);
+      }
+    }
+  }
+}</code></pre></div></div></section><section data-id="7f8155375f4e3e2bb61b4b5840fc5bff">
+<div class="sl-block" data-block-type="code" style="width: 800px; height: 630px; left: 80px; top: 35px; background: transparent none repeat scroll 0% 0%;" data-block-id="a4b97b370cd5421b72d34797aed1e349"><div class="sl-block-content show-in-thumb notranslate" style="z-index: 10; border-width: 1px; background: transparent none repeat scroll 0% 0%; font-size: 120%;" data-highlight-theme="tomorrow"><pre><code style="
+">class Account {
+  txn_int balance;
+  void withdraw(int n) {
+    atomic {
+      balance = balance - n;
+    }
+  }
+
+  void deposit(int n) {
+    withdraw(-n);
+  }
+}
+
+class Transfer  {
+  void transfer(Account from, Account to, int amount) {
+    atomic {
+      from.withdraw(amount);
+      to.deposit(amount);
+    }
+  }
+}</code></pre></div></div></section><section data-id="dfb485d00a350aba296d12c628fbac2e"><div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 140px;" data-block-id="911671bda23f02e70745487d1b74751a"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<h2 style="text-align:left"><strong>Software transaction memory</strong></h2>
+
+<ul>
+	<li><span style="font-size:1.4em"><span style="color:rgba(0, 0, 0, 0.84); text-align:start">A concurrency models which uses shared memory</span></span></li>
+	<li><span style="font-size:1.4em">An alternative to the lock-based synchronization approach</span></li>
+	<li><span style="font-size:1.4em">Grouping memory operations for them running atomically</span></li>
+	<li><span style="font-size:1.4em">Simple interface for developers</span></li>
+	<li><span style="font-size:1.4em">Can be implemented in various but not easy ways</span></li>
+</ul>
+</div></div></section><section data-id="af2533e1636db9b58fe20ec1f466729e"><div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 140px;" data-block-id="8e7b6edd16dad1ab6d5719262a8ef829"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;" dir="ui">
+<h2 style="text-align:left"><strong>Why "transactional" (STM)</strong></h2>
+
+<ul>
+	<li>
+<span style="font-size:1.4em">ACI(D) properties for the program </span>
+
+	<ul>
+		<li><span style="font-size:1.4em">Atomically - either all operations are done or non of them</span></li>
+		<li><span style="font-size:1.4em">Consistency</span></li>
+		<li>
+<span style="font-size:1.4em">Isolation - no influencing each other</span>
+		<ul>
+			<li><span style="font-size:1.4em">serializable - operations appears like processing one after another<br>
+			(even system hardly thrive to process in parallel)</span></li>
+		</ul>
+		</li>
+		<li><span style="font-size:1.4em">D - not usual, Narayana uses transaction log store to provide  it</span></li>
+	</ul>
+	</li>
+</ul>
+</div></div></section><section data-id="15b92cee82a6474d9d398d9cb444fdf2">
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 140px;" data-block-id="dd966a31356a8ca90acaa9e63290e075"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;" dir="ui">
+<h2 style="text-align:left"><strong>HOW IT WORKS</strong></h2>
+</div></div>
+<div class="sl-block" data-block-type="code" style="width: 191px; height: 280px; left: 80px; top: 210px; background: transparent none repeat scroll 0% 0%;" data-block-id="39b263e2472cefef6c655429ae900b6b"><div class="sl-block-content show-in-thumb notranslate" style="z-index: 11; border-width: 1px; background: transparent none repeat scroll 0% 0%; font-size: 110%;" data-highlight-theme="tomorrow"><pre><code style="
+">void second {
+  atomic {
+    y = y + 1;
+    x = x + 1;
+  }
+}</code></pre></div></div>
+<div class="sl-block" data-block-type="shape" style="min-width: 4px; min-height: 4px; width: 158px; height: 81px; left: 120px; top: 512px;" data-block-id="51aa9201f8c78d5afbad8ea16328db2c"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="#000000" data-shape-stretch="true" style="z-index: 12;"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 158 81"><rect width="158" height="81" class="shape-element" fill="#000000"></rect></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 151px; left: 135px; top: 545px;" data-block-id="1ed7218a5de472e71ddbe0405fb30b1c"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13; color: rgb(255, 255, 255);">
+<p>Handle/Proxy</p>
+</div></div>
+<div class="sl-block" data-block-type="shape" style="min-width: 4px; min-height: 4px; width: 330px; height: 81px; left: 390px; top: 512px;" data-block-id="f393483911b25114bd4b5ec46e0cf76f"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="#000000" data-shape-stretch="true" style="z-index: 14;"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 330 81"><rect width="330" height="81" class="shape-element" fill="#000000"></rect></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 117px; left: 425px; top: 538px;" data-block-id="39881f5a9063dd9fdb0bf11ddb3b0c28"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15; color: rgb(255, 255, 255);">
+<p>Memory</p>
+</div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 80px; top: 553px;" data-block-id="84252d08d6d36d61f8a3e70808682b67"><div class="sl-block-content" data-line-x1="-340" data-line-y1="303" data-line-x2="-300" data-line-y2="303" data-line-color="#000000" data-line-start-type="none" data-line-end-type="arrow" style="z-index: 16;" data-line-width="4px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="40" height="1" viewbox="-340 303 40 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-340" y1="303" x2="-306" y2="303"></line><line stroke="#000000" stroke-width="4" x1="-340" y1="303" x2="-306" y2="303"></line><polygon fill="#000000" transform="translate(-306,303) rotate(90)" points="0,-6 6,6 -6,6"></polygon></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 278px; top: 552px;" data-block-id="4f4fc94e5d09603a3fdc58eb3b0dded4"><div class="sl-block-content" data-line-x1="-287" data-line-y1="304" data-line-x2="-175" data-line-y2="303" data-line-color="#000000" data-line-start-type="none" data-line-end-type="arrow" style="z-index: 18;" data-line-width="4px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="112" height="1" viewbox="-287 303 112 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-287" y1="304" x2="-181" y2="303"></line><line stroke="#000000" stroke-width="4" x1="-287" y1="304" x2="-181" y2="303"></line><polygon fill="#000000" transform="translate(-181,303) rotate(89.488)" points="0,-6 6,6 -6,6"></polygon></svg></div></div></section><section data-id="26e9a9f311c3f9ad90f240b3a2f697b9">
+
+<div class="sl-block" data-block-type="code" style="width: 194px; height: 350px; left: 400px; top: 210px; background: transparent none repeat scroll 0% 0%;" data-block-id="c1348debc09e9be0485494022b1f961a"><div class="sl-block-content show-in-thumb notranslate" style="z-index: 10; border-width: 1px; background: transparent none repeat scroll 0% 0%; font-size: 110%;" data-highlight-theme="tomorrow"><pre><code style="
+">void third {
+  atomic {
+    z = z + 1;
+    y = y + 1;
+    x = x + 1;
+  } 
+}</code></pre></div></div>
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 94px;" data-block-id="981ae46ade92070a7d9782f4b2873802"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;" dir="ui">
+<h2 style="text-align:left"><strong>HOW IT WORKS</strong></h2>
+</div></div>
+<div class="sl-block" data-block-type="code" style="width: 191px; height: 350px; left: 80px; top: 210px; background: transparent none repeat scroll 0% 0%;" data-block-id="3e4850139a59ba329c7482b6800ddd30"><div class="sl-block-content show-in-thumb notranslate" style="z-index: 12; border-width: 1px; background: transparent none repeat scroll 0% 0%; font-size: 110%;" data-highlight-theme="tomorrow"><pre><code style="
+">void second {
+  atomic {
+    y = y + 1;
+    x = x + 1;
+  }
+}</code></pre></div></div>
+<div class="sl-block" data-block-type="shape" style="min-width: 4px; min-height: 4px; width: 60px; height: 111px; left: 301px; top: 210px;" data-block-id="78d07f33abf9863944fbcd636d6b36c2"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgb(255, 255, 255)" data-shape-stretch="true" style="z-index: 13;" data-shape-stroke-color="#000000" data-shape-stroke-width="1"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 60 111"><defs><clippath id="shape-mask-1-1538779155408"><rect width="60" height="111"></rect></clippath></defs><rect width="60" height="111" clip-path="url(#shape-mask-1-1538779155408)" class="shape-element" fill="rgb(255, 255, 255)" stroke="#000000" stroke-width="2"></rect></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 301px; top: 233px;" data-block-id="25b5901ac2554bd8391163da7f714c8d"><div class="sl-block-content" data-line-x1="303" data-line-y1="30" data-line-x2="363" data-line-y2="30" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 14;" data-line-width="1px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="60" height="1" viewbox="303 30 60 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="303.5" y1="30.5" x2="363.5" y2="30.5"></line><line stroke="#000000" stroke-width="1" x1="303.5" y1="30.5" x2="363.5" y2="30.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 301px; top: 265px;" data-block-id="d0ae91bd1b68309be161e62815054310"><div class="sl-block-content" data-line-x1="303" data-line-y1="30" data-line-x2="363" data-line-y2="30" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 15;" data-line-width="1px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="60" height="1" viewbox="303 30 60 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="303.5" y1="30.5" x2="363.5" y2="30.5"></line><line stroke="#000000" stroke-width="1" x1="303.5" y1="30.5" x2="363.5" y2="30.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 301px; top: 250px;" data-block-id="6b028dbee860c3e61240df811847442c"><div class="sl-block-content" data-line-x1="303" data-line-y1="30" data-line-x2="363" data-line-y2="30" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 16;" data-line-width="1px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="60" height="1" viewbox="303 30 60 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="303.5" y1="30.5" x2="363.5" y2="30.5"></line><line stroke="#000000" stroke-width="1" x1="303.5" y1="30.5" x2="363.5" y2="30.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 301px; top: 280px;" data-block-id="4d116d2f70c390206e1489e67218f6ca"><div class="sl-block-content" data-line-x1="303" data-line-y1="30" data-line-x2="363" data-line-y2="30" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 17;" data-line-width="1px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="60" height="1" viewbox="303 30 60 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="303.5" y1="30.5" x2="363.5" y2="30.5"></line><line stroke="#000000" stroke-width="1" x1="303.5" y1="30.5" x2="363.5" y2="30.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 301px; top: 300px;" data-block-id="92ac0247d1ef7ba7e5c7ee2e2921ad36"><div class="sl-block-content" data-line-x1="303" data-line-y1="30" data-line-x2="363" data-line-y2="30" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 18;" data-line-width="1px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="60" height="1" viewbox="303 30 60 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="303.5" y1="30.5" x2="363.5" y2="30.5"></line><line stroke="#000000" stroke-width="1" x1="303.5" y1="30.5" x2="363.5" y2="30.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 316px; top: 210px;" data-block-id="e8ad77c8fa8dcba4ec84055bab6a4e54"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 19;">
+<p><span style="font-size:0.7em">x =0</span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 54px; left: 316px; top: 229px;" data-block-id="62875a50cc0f9d866fb62ed161e14b30"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 20;">
+<p><span style="font-size:0.7em">y =0</span></p>
+</div></div>
+<div class="sl-block" data-block-type="shape" style="min-width: 4px; min-height: 4px; width: 60px; height: 111px; left: 92px; top: 420px;" data-block-id="5e988d4881d0307ba2f8dea74e48a1e9"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgb(255, 255, 255)" data-shape-stretch="true" style="z-index: 21;" data-shape-stroke-color="#000000" data-shape-stroke-width="1"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 60 111"><defs><clippath id="shape-mask-2-1538779155443"><rect width="60" height="111"></rect></clippath></defs><rect width="60" height="111" clip-path="url(#shape-mask-2-1538779155443)" class="shape-element" fill="rgb(255, 255, 255)" stroke="#000000" stroke-width="2"></rect></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 92px; top: 443px;" data-block-id="4f7fe758809d2ea14611002fbe27c36e"><div class="sl-block-content" data-line-x1="303" data-line-y1="30" data-line-x2="363" data-line-y2="30" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 22;" data-line-width="1px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="60" height="1" viewbox="303 30 60 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="303.5" y1="30.5" x2="363.5" y2="30.5"></line><line stroke="#000000" stroke-width="1" x1="303.5" y1="30.5" x2="363.5" y2="30.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 92px; top: 475px;" data-block-id="e82168dbf3b542944abadcd9b45b8ca8"><div class="sl-block-content" data-line-x1="303" data-line-y1="30" data-line-x2="363" data-line-y2="30" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 23;" data-line-width="1px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="60" height="1" viewbox="303 30 60 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="303.5" y1="30.5" x2="363.5" y2="30.5"></line><line stroke="#000000" stroke-width="1" x1="303.5" y1="30.5" x2="363.5" y2="30.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 92px; top: 460px;" data-block-id="dd97f6e3615d1d69a5d1ee9a3bff7901"><div class="sl-block-content" data-line-x1="303" data-line-y1="30" data-line-x2="363" data-line-y2="30" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 24;" data-line-width="1px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="60" height="1" viewbox="303 30 60 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="303.5" y1="30.5" x2="363.5" y2="30.5"></line><line stroke="#000000" stroke-width="1" x1="303.5" y1="30.5" x2="363.5" y2="30.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 92px; top: 490px;" data-block-id="055cdf4668e348553951e13c1991c9d4"><div class="sl-block-content" data-line-x1="303" data-line-y1="30" data-line-x2="363" data-line-y2="30" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 25;" data-line-width="1px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="60" height="1" viewbox="303 30 60 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="303.5" y1="30.5" x2="363.5" y2="30.5"></line><line stroke="#000000" stroke-width="1" x1="303.5" y1="30.5" x2="363.5" y2="30.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 92px; top: 510px;" data-block-id="b9a083038d8384d83a40908cd9dcf415"><div class="sl-block-content" data-line-x1="303" data-line-y1="30" data-line-x2="363" data-line-y2="30" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 26;" data-line-width="1px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="60" height="1" viewbox="303 30 60 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="303.5" y1="30.5" x2="363.5" y2="30.5"></line><line stroke="#000000" stroke-width="1" x1="303.5" y1="30.5" x2="363.5" y2="30.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 107px; top: 420px;" data-block-id="d5ff7cc4a6f5071e98316a2cb85b62c3"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 27;">
+<p><span style="font-size:0.7em">y =1</span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 108px; top: 439px;" data-block-id="00df27c1fbd4fbe94474daad453d9583"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 28;">
+<p><span style="font-size:0.7em">x =1</span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 301px; top: 187px;" data-block-id="a45ac550be49875c7929177210d2cd4c"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 29;">
+<p>Memory</p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 90px; left: 93px; top: 390px;" data-block-id="4d0174ef0f69a4ea367091b11274e54f"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 30;" dir="ui">
+<p>Write-set</p>
+</div></div>
+<div class="sl-block" data-block-type="shape" style="min-width: 4px; min-height: 4px; width: 60px; height: 111px; left: 194px; top: 420px;" data-block-id="4327ea29b1bd6f924c1525f22247257e"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgb(255, 255, 255)" data-shape-stretch="true" style="z-index: 31;" data-shape-stroke-color="#000000" data-shape-stroke-width="1"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 60 111"><defs><clippath id="shape-mask-3-1538779155470"><rect width="60" height="111"></rect></clippath></defs><rect width="60" height="111" clip-path="url(#shape-mask-3-1538779155470)" class="shape-element" fill="rgb(255, 255, 255)" stroke="#000000" stroke-width="2"></rect></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 194px; top: 443px;" data-block-id="6f339962344921d01157b0c7d1745f87"><div class="sl-block-content" data-line-x1="303" data-line-y1="30" data-line-x2="363" data-line-y2="30" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 32;" data-line-width="1px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="60" height="1" viewbox="303 30 60 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="303.5" y1="30.5" x2="363.5" y2="30.5"></line><line stroke="#000000" stroke-width="1" x1="303.5" y1="30.5" x2="363.5" y2="30.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 194px; top: 475px;" data-block-id="7c0a2365847a682a17cb6a7dc7904927"><div class="sl-block-content" data-line-x1="303" data-line-y1="30" data-line-x2="363" data-line-y2="30" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 33;" data-line-width="1px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="60" height="1" viewbox="303 30 60 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="303.5" y1="30.5" x2="363.5" y2="30.5"></line><line stroke="#000000" stroke-width="1" x1="303.5" y1="30.5" x2="363.5" y2="30.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 194px; top: 460px;" data-block-id="8c26793aa324d0e928a4cc26656482f3"><div class="sl-block-content" data-line-x1="303" data-line-y1="30" data-line-x2="363" data-line-y2="30" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 34;" data-line-width="1px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="60" height="1" viewbox="303 30 60 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="303.5" y1="30.5" x2="363.5" y2="30.5"></line><line stroke="#000000" stroke-width="1" x1="303.5" y1="30.5" x2="363.5" y2="30.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 194px; top: 490px;" data-block-id="19548c61a26594294209b0c5cf44254d"><div class="sl-block-content" data-line-x1="303" data-line-y1="30" data-line-x2="363" data-line-y2="30" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 35;" data-line-width="1px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="60" height="1" viewbox="303 30 60 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="303.5" y1="30.5" x2="363.5" y2="30.5"></line><line stroke="#000000" stroke-width="1" x1="303.5" y1="30.5" x2="363.5" y2="30.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 194px; top: 510px;" data-block-id="7b3b42a6ada0abb7b1adbfae050c631b"><div class="sl-block-content" data-line-x1="303" data-line-y1="30" data-line-x2="363" data-line-y2="30" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 36;" data-line-width="1px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="60" height="1" viewbox="303 30 60 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="303.5" y1="30.5" x2="363.5" y2="30.5"></line><line stroke="#000000" stroke-width="1" x1="303.5" y1="30.5" x2="363.5" y2="30.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 209px; top: 420px;" data-block-id="6c2153564a9600e12649156d01b53eb7"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 37;">
+<p><span style="font-size:0.7em">read y</span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 54px; left: 209px; top: 439px;" data-block-id="b79dfed1c288e2231bb215d392fc0a75"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 38;">
+<p><span style="font-size:0.7em">read x</span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 91px; left: 191px; top: 390px;" data-block-id="e2b9945fcb1fa94317dc9105ed4e5a36"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 39;">
+<p>Read-set</p>
+</div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 209px; top: 225px;" data-block-id="290b81a046fd9fe96961d28d907b1216"><div class="sl-block-content" data-line-x1="-86" data-line-y1="-25" data-line-x2="-171" data-line-y2="16" data-line-color="#000000" data-line-start-type="none" data-line-end-type="arrow" style="z-index: 40;" data-line-width="1px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="85" height="41" viewbox="-171 -25 85 41"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-85.5" y1="-24.5" x2="-166.5" y2="14.5"></line><line stroke="#000000" stroke-width="1" x1="-85.5" y1="-24.5" x2="-166.5" y2="14.5"></line><polygon fill="#000000" transform="translate(-167,14) rotate(244.25)" points="0,-4 4,4 -4,4"></polygon></svg></div></div></section><section data-id="652a473eb0488a45f3284573fd8cc12b"><div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 24px;" data-block-id="e9dfca414f225741bc642f4f79e9d8a2"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<h1 style="text-align:left">Narayana STM</h1>
+</div></div>
+<div class="sl-block" data-block-type="code" style="width: 800px; height: 490px; left: 80px; top: 140px; background: transparent;" data-block-id="2ea9fa816cee28a72997af66efc95c07"><div class="sl-block-style" style="z-index: 11;"><div class="sl-block-content show-in-thumb notranslate" style="z-index: 11; border-width: 1px; background: transparent none repeat scroll 0% 0%; font-size: 140%;" data-highlight-theme="tomorrow"><pre><code style="
+">public class Container&lt;T&gt; {
+  public enum TYPE { RECOVERABLE, PERSISTENT };
+  public enum MODEL { SHARED, EXCLUSIVE };
+  public Container ();
+  public synchronized T create (T member);
+  public static final Container&lt;?&gt;
+          getContainer (Object proxy);
+}
+</code></pre></div></div></div></section><section data-id="cc7a23b8e8b8cc19ce59fd46a191d49e"><div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 24px;" data-block-id="f26dbe03935f6ab4dd6512c378859467"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<h1 style="text-align:left">Narayana STM</h1>
+</div></div>
+<div class="sl-block" data-block-type="code" style="width: 800px; height: 490px; left: 80px; top: 140px; background: transparent;" data-block-id="71669587ce8f2f635e2556eeab556b40"><div class="sl-block-style" style="z-index: 11;"><div class="sl-block-content show-in-thumb notranslate" style="z-index: 11; border-width: 1px; background: transparent none repeat scroll 0% 0%; font-size: 140%;" data-highlight-theme="tomorrow"><pre><code style="
+">@Transactional
+public interface StockLevel {
+  int get () throws Exception;
+  void set (int value) throws Exception;
+  void decr (int value) throws Exception;
+}
+</code></pre></div></div></div></section><section data-id="81a8baa0f0c72f03db96696461ab0927"><div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 24px;" data-block-id="65d2e6cfdcd93f626eb92ff77064a41e"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<h1 style="text-align:left">Narayana STM</h1>
+</div></div>
+<div class="sl-block" data-block-type="code" style="width: 800px; height: 551px; left: 80px; top: 140px; background: transparent none repeat scroll 0% 0%;" data-block-id="5facb69237a2272b4b101a039ca03d7c"><div class="sl-block-style" style="z-index: 11; transform: rotate(360deg);"><div class="sl-block-content show-in-thumb notranslate" style="z-index: 11; border-width: 1px; background: transparent none repeat scroll 0% 0%; font-size: 140%;" data-highlight-theme="tomorrow"><pre><code style="
+">Container&lt;StockLevel&gt; container = new Container&lt;&gt;();
+StockLevelImpl stock = new StockLevelImpl();
+
+StockLevel stockWrapped = container.create(stock);
+
+// update the STM object inside a transaction
+// or use annotations to define transaction boundaries
+AtomicAction a = new AtomicAction();
+
+a.begin();
+stockWrapped.set(1234);
+a.commit();
+</code></pre></div></div></div></section><section data-id="86930ec41922c1981d4a90c2d781be6f"><div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 24px;" data-block-id="ae3f9f23dd12e1e60754f7717ccc1093"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<h1 style="text-align:left">Narayana STM</h1>
+</div></div>
+<div class="sl-block" data-block-type="code" style="width: 800px; height: 551px; left: 80px; top: 140px; background: transparent none repeat scroll 0% 0%;" data-block-id="2fc1ff974c7240e394cc36ae50b74387"><div class="sl-block-style" style="z-index: 11; transform: rotate(360deg);"><div class="sl-block-content show-in-thumb notranslate" style="z-index: 11; border-width: 1px; background: transparent none repeat scroll 0% 0%; font-size: 140%;" data-highlight-theme="tomorrow"><pre><code style="
+">// Implementations of interface
+// are container managed
+@Transactional
+
+// Container will create
+// a new transaction for each method
+@Nested &amp; @NestedTopLevel
+
+@Optimistic &amp; @Pessimistic
+
+@ReadLock &amp; @WriteLock
+
+@State &amp; @NotState
+
+@TransactionFree
+</code></pre></div></div></div></section><section data-id="70ace2e4ba049aca9b4835b9808f0b6c"><div class="sl-block" data-block-type="text" style="height: auto; width: 826px; left: 80px; top: 140px;" data-block-id="a3fc94bf504aa3d44868f4004b8a2672"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;" dir="ui">
+<h1 style="text-align:left">Resources</h1>
+
+<ul>
+	<li><a href="https://www.youtube.com/watch?v=Ikwj7gxddemLQ" target="_blank">Transactional actors with Eclipse Vert.x</a></li>
+	<li><a href="http://jbossts.blogspot.com/2011/06/stm-arjuna.html" target="_blank">http://jbossts.blogspot.com/2011/06/stm-arjuna.html</a></li>
+	<li>Narayana <a href="https://github.com/jbosstm/quickstart/tree/master/STM" target="_blank">quickstarts</a> and <a href="http://narayana.io//docs/project/index.html#d0e16064" target="_blank">documentation</a>
+</li>
+	<li><a href="http://joeduffyblog.com/2010/01/03/a-brief-retrospective-on-transactional-memory/" target="_blank">A (brief) retrospective on transactional memory</a></li>
+	<li><a href="https://begriffs.com/posts/2016-04-02-software-transactional-memory.html" target="_blank">Software Transactional Memory in Haskel</a></li>
+	<li><a href="https://www.microsoft.com/en-us/research/publication/beautiful-concurrency" target="_blank">Beautiful concurrency</a></li>
+	<li><a href="http://www.jeanlucas.ca/rand/703_STM_Overview.pdf" target="_blank">Software Transaction Memory and Clojure</a></li>
+	<li>Maurice Herlihy — Transactional Memory and Beyond (<a href="https://www.youtube.com/watch?v=S3Fx-7avfs4" target="_blank">part1</a>, <a href="https://www.youtube.com/watch?v=94ieceVxSHs" target="_blank">part2</a>)</li>
+</ul>
+</div></div></section>
+			</div>
+		</div>
+
+		<script>
+			var SLConfig = {"deck": {"id":1341455,"slug":"title-textcode","title":"Software transaction memory","description":"","width":960,"height":700,"visibility":"self","published_at":null,"sanitize_messages":null,"thumbnail_url":"https://s3.amazonaws.com/media-p.slid.es/thumbnails/de7b6ecbe2747de130d7a2f9119e300c/thumb.jpg?1538779483","view_count":0,"user":{"id":313440,"username":"ochaloup","name":"Ondra Chaloupka","description":null,"thumbnail_url":"https://www.gravatar.com/avatar/fe413d477de5d7fc374e766fde3528d6?s=140\u0026d=https%3A%2F%2Fstatic.slid.es%2Fimages%2Fdefault-profile-picture.png","paid":true,"pro":true,"lite":false,"team_id":32,"settings":{"id":142264,"present_controls":true,"present_upsizing":true,"present_pointer":false,"present_notes":true,"default_deck_tag_id":null},"enterprise":true,"membership":{"role":"member","manager":false,"activated":true}},"background_transition":"none","transition":"none","theme_id":176,"theme_font":"overpass2","theme_color":"no-color","auto_slide_interval":0,"comments_enabled":true,"forking_enabled":false,"rolling_links":false,"center":false,"shuffle":null,"should_loop":false,"share_notes":null,"slide_number":null,"slide_count":17,"rtl":false,"version":2,"collaborative":null,"deck_user_editor_limit":1,"data_updated_at":1538780034364,"font_typekit":null,"font_google":null,"notes":{"719eaa5085623527145c164e67cd2683":"credit to http://joeduffyblog.com/2010/01/03/a-brief-retrospective-on-transactional-memory/","94a16f7e1a7320d4dc7049672cba05a7":"https://wiki.sei.cmu.edu/confluence/display/java/LCK07-J.+Avoid+deadlock+by+requesting+and+releasing+locks+in+the+same+order","dfb485d00a350aba296d12c628fbac2e":"other models which are not based on the shared memory but on sending messages (e.g. actors)","26e9a9f311c3f9ad90f240b3a2f697b9":"http://www.jeanlucas.ca/rand/703_STM_Overview.pdf\n\nquoting:\nWhen a transaction is executed it creates a read-set and a write-set. A readset is a list of read instructions made to shared-memory by that transaction, similarly, a write-set is a list of tentative changes that transaction is wishes to make on some shared memory.\nA transaction will be allowed to commit its changes only if its read-set and write-set do not cause any conflicts with another transaction’s read and write sets. When a commit is made by a transaction, its changes will be visible to the rest of the program.","81a8baa0f0c72f03db96696461ab0927":"https://github.com/jbosstm/narayana/blob/master/STM/src/main/java/org/jboss/stm/internal/reflect/InvocationHandler.java#L276"}}};
+
+				SLConfig.theme = {"id":176,"created_at":"2014-05-27T12:38:16.183Z","updated_at":"2018-05-04T07:53:25.097Z","name":"Red Hat Corporate","thumbnail_url":"https://s3.amazonaws.com/media-p.slid.es/thumbnails/66755080be2b0c8c0146bfa70069ef16/thumb.jpg?1525420403","sanitize_messages":null,"slide_template_ids":[56706,56689,28642,36442,27160,26765,26762,56684,56696,56704,56703],"font_typekit":"","font_google":"","width":960,"height":700};
+
+			// Use local fonts
+			SLConfig.fonts_url = 'lib/fonts/';
+		</script>
+
+		<script src="lib/head.min.js"></script>
+		<script src="lib/reveal.min.js"></script>
+		<script src="lib/offline.js"></script>
+
+		<!-- Initialize the presentation -->
+		<script>
+			Reveal.initialize({
+				width: 960,
+				height: 700,
+				margin: 0.05,
+
+				controls: true,
+				progress: true,
+				history: true,
+				mouseWheel: false,
+				showNotes: false,
+				slideNumber: false,
+
+				autoSlide: 0 || 0,
+				autoSlideStoppable: true,
+
+				center: false,
+				shuffle: false,
+				loop: false,
+				rtl: false,
+
+				transition: "none",
+				backgroundTransition: "none",
+
+				dependencies: [
+					{ src: 'lib/reveal-plugins/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'lib/reveal-plugins/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'lib/reveal-plugins/highlight/highlight.js', async: true, callback: function() { hljs.initHighlighting(); hljs.initHighlightingOnLoad(); } },
+					{ src: 'lib/reveal-plugins/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'lib/reveal-plugins/zoom/zoom.js', async: true }
+				]
+			});
+		</script>
+
+		
+  <script id="theme-js-output" type="text/javascript">var themeHTMLOutput = document.getElementById('theme-html-output');
+if( themeHTMLOutput ) {
+    themeHTMLOutput.innerHTML = '<link  rel="stylesheet" href="https://overpassmonotest-30e2.kxcdn.com/overpass-mono.css" />';
+}
+
+// (function() {
+// 
+//   var slidesInitInterval = setInterval( function() {
+//     if( window.SL && window.SL.view ) {
+//       // If we're in the editor, wait for the Blocks controller
+//       // to be initialized
+//       if( SL.editor ) {
+// 
+//         if( SL.editor.controllers && SL.editor.controllers.Blocks && SL.editor.controllers.Blocks.textSaved ) {
+//           SL.editor.controllers.Blocks.textSaved.add( function( element ) {
+//             var html = element.html();
+//             html = html.replace( /(@RedHat | @redhat)/g,                 '@redhat' );
+//             html = html.replace( 'redhat.com',                 'redhat.com' );
+//             html = html.replace( /(Red Hat|red hat|RedHat|Red hat|Redhat|redHat|red Hat)/g,  '<span class="name">Red Hat</span>' );
+//             html = html.replace( /( redhat |redhat )/g,  ' <span class="name">Red Hat</span> ' );
+//             html = html.replace( 'REDHAT',                    '<span class="name">RED HAT</span>' );
+//             html = html.replace( 'redhat<',                    '<span class="name">Red Hat</span><' );
+//             html = html.replace( 'openshift',                 '<span class="name">OpenShift</span>' );
+//             html = html.replace( '<span class="name"><span class="name">Red Hat</span></span>',                    '<span class="name">Red Hat</span>' );
+//             html = html.replace( 'redhat.com',                 'redhat.com' );
+//             html = html.replace( 'REDHAT.COM',                 'REDHAT.COM' );
+//             html = html.replace( '@redhat',                 '@redhat' );
+//             html = html.replace( /(@RedHatNews | @redhatnews)/g,                 '@RedHatNews' );
+//             html = html.replace( /(@RedHat | @redhat)/g,                 '@RedHatInc' );
+//             html = html.replace( /(RHEL-OSP|RHELOSP|Red Hat Enterprise Linux OpenStack Platform)/g,                 'Red Hat OpenStack Platform' );
+//             html = html.replace( /(openstack |openstack|open stack|openStack|Openstack)/g,                 'OpenStack' );
+//             html = html.replace( 'openstack',                    'OpenStack' );
+//             html = html.replace( 'openstack<',                    'OpenStack<' );
+// 
+//             element.html( html );
+//           } );
+// 
+//           clearInterval( slidesInitInterval );
+//         }
+// 
+//       }
+//       else {
+//         clearInterval( slidesInitInterval );
+//       }
+//     }
+//   }, 500 );
+// 
+// })();
+
+
+
+// piwik script
+var _paq = _paq || [];
+_paq.push(["trackPageView"]);
+_paq.push(["enableLinkTracking"]);
+
+(function() {
+var u = (("https:" == document.location.protocol) ? "https" : "http") +
+"://engstats.redhat.com/piwik/";
+_paq.push(["setTrackerUrl", u+"piwik.php"]);
+_paq.push(["setSiteId", "8"]);
+var d=document, g=d.createElement("script"),
+s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
+g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
+})();
+
+
+
+ 
+function sliceString(selector) {
+    var elements = document.getElementsByClassName(selector);
+
+ 
+    for (var h=0; h<elements.length; h++){
+      var string = elements[h].innerText,
+          total = string.length,
+          div = '';
+
+// futile attempt to clean space
+var string = elements[h].innerText.trim();
+     
+      for (var i=0; i<total;  i++) {
+        var letter = string.charAt(i);
+        div+= '<span class="'+letter+'">'+letter+'</span>';
+      }
+      elements[h].innerHTML = div;
+    }        
+}
+sliceString('lettering');
+sliceString('lettering'); //no rogue spaces when fired twice for some reason
+
+
+
+// function sliceString(selector) {
+//    if (!document.querySelector) return;
+//    var string = document.querySelector(selector).innerText,
+//        total = string.length,
+//        html = '';
+//    for (var i=0; i<total; i++) {
+//        var letter = string.charAt(i);
+//        html+= '<span class="'+letter+'">'+letter+'</span>';
+//    }
+//    document.querySelector(selector).innerHTML = html;
+//}
+//sliceString('.lettering');</script>
+
+	</body>
+</html>
