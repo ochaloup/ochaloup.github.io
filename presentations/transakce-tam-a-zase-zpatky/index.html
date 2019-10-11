@@ -1,0 +1,2344 @@
+<!DOCTYPE html>
+	<html class="sl-root decks export offline loaded">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<title> Transakce ...tam a zase zpátky</title>
+
+
+		<link rel="stylesheet" type="text/css" href="lib/offline-v2.css">
+
+		<!-- Team CSS -->
+		<style id="global-css-output" type="text/css">
+			@import url("https://s3.amazonaws.com/static.slid.es/fonts/overpass2/overpass2.css");
+.reveal {
+  
+
+  /*fix icon inversion*/
+
+}
+.reveal svg,
+.reveal text,
+.reveal tspan,
+.reveal svg text {
+  font-family: "Overpass 2", Overpass, sans-serif !important;
+  color: currentcolor;
+  fill: currentcolor;
+}
+.reveal .sl-block {
+  color: #354045;
+  fill: currentcolor;
+}
+.reveal .sl-block svg {
+  color: currentcolor;
+}
+.reveal .has-dark-background,
+.reveal .has-dark-background > .sl-block {
+  color: white;
+  fill: currentcolor;
+}
+.reveal section > .sl-block .redhat-logo .logotext {
+  fill: #000000;
+}
+.reveal .has-dark-background > .sl-block .redhat-logo .logotext {
+  fill: #ffffff;
+}
+.reveal .has-dark-background > .sl-block[data-block-type="image"] {
+  color: #ffffff;
+}
+.reveal [fill="none"] {
+  fill: none !important;
+}
+.reveal [fill="#a30000"] {
+  fill: #aa0000 !important;
+}
+.reveal [fill="#cc2029"],
+.reveal [fill="#cb2027"],
+.reveal [fill="#c00"] {
+  fill: #cc0000 !important;
+}
+.reveal [fill="#fff"] {
+  fill: #ffffff !important;
+}
+.reveal [fill="#6d6e70"] {
+  fill: #6d6e70 !important;
+}
+.reveal [fill="#231f20"] {
+  fill: currentcolor !important;
+}
+.reveal [fill="#efab1f"] {
+  fill: #efab1f !important;
+}
+.reveal [fill="#92d400"] {
+  fill: #92d400 !important;
+}
+.reveal .has-dark-background [fill="#6d6e70"] {
+  fill: #266272 !important;
+}
+.reveal .has-dark-background [fill="#fff"] {
+  fill: #555555 !important;
+}
+.reveal .has-dark-background [fill="#fff"] {
+  fill: #333333 !important;
+}
+.reveal .has-dark-background [stroke="#231f20"] {
+  stroke: currentcolor;
+}
+.reveal [data-inline-svg="true"] img {
+  display: none;
+}
+
+		</style>
+
+		<!-- Theme CSS -->
+		<style id="theme-css-output" type="text/css">
+			@import url(//overpassmonotest-30e2.kxcdn.com/overpass-mono.css);
+.reveal {
+  
+  /* Fonts: */
+  /* Colors: */
+  /* Other: */
+  /*slide-default*/
+  /*Custom Ordered Lists */
+  /*helpers*/
+  /*fixing left aligned text*/
+  /*h1,h2,h3,h4,h5,h6{&::first-letter{margin-left:-.09em;}}*/
+  /*icon absolute brute-fix*/
+  /*
+.present .icon.stroked path.long{ stroke-width: 2px ;
+-webkit-animation: icon-animation-long 3.5s 1.5s 1;
+-moz-animation:    icon-animation-long 3.5s 1.5s 1;
+animation:         icon-animation-long 3.5s 1.5s 1;
+}*/
+  /*
+.present .icon.stroked path.short{
+-webkit-animation: icon-animation-short 3.5s 1.5s 1;
+-moz-animation:    icon-animation-short 3.5s 1.5s 1;
+animation:         icon-animation-short 3.5s 1.5s 1;
+}*/
+  /*controls logic*/
+  /*animated logos with complex svg segments*/
+  /*transitions*/
+  /*logos svg files that contain inverted path alternates */
+  /* call to action */
+  /* tables in snippets.... the devil */
+  /* tables in text */
+  /*testimonial snippet */
+  /*for inverting images*/
+  /**/
+  /*code blocks*/
+  /* round line arrows */
+  /*fix icon inversion*/
+  /*body:hover .corner svg{transform: translate(30%, 30%)}*/
+}
+@font-face {
+  font-family: "Red Hat Display";
+  src: url("https://static.slid.es/clients/redhat/fonts/RedHat_v1_003/RedHatDisplay-Regular.woff") format("woff");
+}
+@font-face {
+  font-family: "Red Hat Display";
+  font-weight: bold;
+  src: url("https://static.slid.es/clients/redhat/fonts/RedHat_v1_003/RedHatDisplay-Bold.woff") format("woff");
+}
+@font-face {
+  font-family: "Red Hat Text";
+  src: url("https://static.slid.es/clients/redhat/fonts/RedHat_v1_003/RedHatText-Regular.woff") format("woff");
+}
+@font-face {
+  font-family: "Red Hat Text";
+  font-weight: bold;
+  font-style: normal;
+  src: url("https://static.slid.es/clients/redhat/fonts/RedHat_v1_003/RedHatText-Bold.woff") format("woff");
+}
+@font-face {
+  font-family: "Red Hat Text";
+  font-weight: normal;
+  font-style: italic;
+  src: url("https://static.slid.es/clients/redhat/fonts/RedHat_v1_003/RedHatText-italic.woff") format("woff");
+}
+.reveal .reveal,
+.reveal .sl-block,
+.reveal .sl-block-content,
+.reveal .sl-block-content div,
+.reveal .sl-block-content p {
+  font-family: "Red Hat Text", "Overpass 2", "Hiragino Kaku Gothic", "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ Pro W3", sans-serif;
+  letter-spacing: normal;
+  line-height: 1.3;
+}
+.reveal .sl-block-content h1,
+.reveal .sl-block-content h2,
+.reveal .sl-block-content h3,
+.reveal .sl-block-content h4 {
+  font-family: "Red Hat Display", "Overpass 2", "Hiragino Kaku Gothic", "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ Pro W3", sans-serif;
+  margin-bottom: 0.3em;
+  letter-spacing: 0.04em;
+  font-weight: normal;
+  text-transform: none;
+}
+.reveal .sl-block {
+  color: #000;
+}
+.reveal.reveal[role="application"] > .backgrounds > .slide-background:not(.stack):first-child,
+.reveal.reveal[role="application"] > .backgrounds > .stack:first-child > .slide-background:first-child,
+.reveal.reveal[role="application"] .slides > .pdf-page:not(.stack):first-child .slide-background,
+.reveal.reveal[role="application"] .slides > .stack:first-child > .pdf-page:first-child .slide-background,
+.reveal.reveal[role="application"] > .backgrounds .intro-slide {
+  background-color: #666;
+  color: #fff;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  background-image: linear-gradient(-45deg, #393939 20%, #555 20%, #333 85%, #222 85%);
+  min-height: 100vh;
+}
+.reveal.reveal[role="application"] > .backgrounds > .slide-background:not(.stack):first-child.has-light-background,
+.reveal.reveal[role="application"] > .backgrounds > .stack:first-child > .slide-background:first-child.has-light-background,
+.reveal.reveal[role="application"] .slides > .pdf-page:not(.stack):first-child .slide-background.has-light-background,
+.reveal.reveal[role="application"] .slides > .stack:first-child > .pdf-page:first-child .slide-background.has-light-background,
+.reveal.reveal[role="application"] > .backgrounds .intro-slide.has-light-background {
+  background-image: none;
+}
+.reveal.reveal .slides > .section:first-child,
+.reveal.reveal[role="application"] > .slides > .section:first-child .sl-block {
+  color: #fff;
+}
+.reveal .name {
+  white-space: nowrap;
+}
+.reveal .future .sl-block-content,
+.reveal .past .sl-block-content {
+  transition: none !important;
+}
+.reveal section,
+.reveal.reveal .has-dark-background,
+.reveal section.background-shade-dark {
+  color: #fff;
+}
+.reveal.reveal .has-dark-background a {
+  color: #eee;
+}
+.reveal.reveal .has-dark-background a:hover {
+  color: #fff;
+}
+.reveal .backgrounds {
+  background: #f3f4f4;
+}
+.reveal .slide-background {
+  background-size: cover;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+}
+.reveal .slide-background.has-light-background {
+  /*background-image: url(//s3.amazonaws.com/media-p.slid.es/uploads/team-32/images/1297460/standard-background.svg);*/
+}
+.reveal .backgrounds .paint-it-red {
+  background-color: #c00 !important;
+  -moz-background-blend-mode: multiply;
+  -webkit-background-blend-mode: multiply;
+  -ms-background-blend-mode: multiply;
+  background-blend-mode: multiply;
+}
+.reveal .paint-it-red {
+  color: #fff;
+}
+.reveal .has-dark-background .icon.stroked path,
+.reveal section.background-shade-dark .icon.stroked path,
+.reveal section.light-foreground .icon.stroked path {
+  stroke: #fff !important;
+}
+.reveal .has-dark-background .redhat-product-logotype path,
+.reveal section.background-shade-dark .redhat-product-logotype path,
+.reveal section.light-foreground .redhat-product-logotype path {
+  fill: #ffffff;
+}
+.reveal .has-dark-background text.logotext,
+.reveal section.background-shade-dark text.logotext,
+.reveal section.light-foreground text.logotext,
+.reveal .has-dark-background .logotext text,
+.reveal section.background-shade-dark .logotext text,
+.reveal section.light-foreground .logotext text,
+.reveal .has-dark-background path.logotext,
+.reveal section.background-shade-dark path.logotext,
+.reveal section.light-foreground path.logotext,
+.reveal .has-dark-background path.logotype,
+.reveal section.background-shade-dark path.logotype,
+.reveal section.light-foreground path.logotype,
+.reveal .has-dark-background .logotext path,
+.reveal section.background-shade-dark .logotext path,
+.reveal section.light-foreground .logotext path {
+  fill: #fff !important;
+}
+.reveal .has-dark-background .closing-logo .logotext,
+.reveal section.background-shade-dark .closing-logo .logotext,
+.reveal section.light-foreground .closing-logo .logotext,
+.reveal .has-dark-background .redhat-logo .logotext,
+.reveal section.background-shade-dark .redhat-logo .logotext,
+.reveal section.light-foreground .redhat-logo .logotext {
+  fill: #ffffff !important;
+}
+.reveal .has-light-background .icon.stroked path {
+  stroke: currentcolor;
+}
+.reveal .has-light-background .redhat-logo .logotext {
+  fill: #000000 !important;
+}
+.reveal .sl-block-content ol li {
+  position: relative;
+  padding-bottom: 0.5em;
+}
+.reveal .sl-block-content ol li > p:first-child {
+  margin: 0;
+}
+.reveal .sl-block-content ol > li::before {
+  margin-left: -2.5em;
+}
+.reveal .sl-block-content > ol > li:before {
+  float: left;
+  text-align: center;
+  box-shadow: inset 0 0 0 0.1em;
+  border-radius: 50%;
+}
+.reveal .sl-block-content ol {
+  counter-reset: section;
+  list-style-type: none;
+  margin: 0 0 0 2.5em;
+  display: block;
+}
+.reveal .sl-block-content ol ol {
+  margin-top: 0.5em;
+}
+.reveal .sl-block-content ol > li:before {
+  font-weight: 400;
+  display: inline-block;
+  width: 1.75em;
+  height: 1.75em;
+  line-height: 1.75em;
+  text-align: center;
+  letter-spacing: 0;
+  font-size: 0.75em;
+  margin: 0 0.75em 0 -2.5em;
+  counter-increment: section;
+  content: counters(section, ".") " ";
+  white-space: nowrap;
+}
+.reveal .sl-block-content > ol > li ol li:before {
+  opacity: 0.5;
+  text-align: left;
+  box-shadow: none;
+  letter-spacing: 0.1em;
+}
+.reveal .sl-block-content > ol > li > ol > li > ol > li:before {
+  width: 4em;
+  left: -3em;
+  font-size: 0.75em;
+}
+.reveal .has-dark-background .sl-block-content > ol > li:before {
+  color: currentcolor;
+  background-color: rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0 0 0 0.2em rgba(0, 0, 0, 0.2);
+  font-weight: 500;
+  letter-spacing: -0.05em;
+}
+.reveal .sl-block-content > ol ol ol li:before {
+  opacity: 1;
+  font-size: 0.55em !important;
+  width: 3.5em !important;
+}
+.reveal .sl-block-content > ol ol ol {
+  margin-left: 1.5em !important;
+}
+.reveal .uppercase {
+  text-transform: uppercase;
+}
+.reveal .sl-block[data-block-type="text"] > .initial h1,
+.reveal .sl-block[data-block-type="text"] > .initial h2,
+.reveal .sl-block[data-block-type="text"] > .initial h3 {
+  text-transform: initial;
+}
+.reveal .force-mono text,
+.reveal .force-mono tspan,
+.reveal .force-mono polygon,
+.reveal .force-mono path,
+.reveal .force-mono rect,
+.reveal .force-mono ellipse {
+  fill: currentcolor !important;
+}
+.reveal .force-red .stroked path {
+  stroke: #c00;
+}
+.reveal .force-red,
+.reveal .force-red text,
+.reveal .force-red tspan,
+.reveal .force-red polygon,
+.reveal .force-red path,
+.reveal .force-red rect,
+.reveal .force-red ellipse {
+  color: #c00;
+  fill: currentcolor !important;
+}
+.reveal .force-red .stroked {
+  fill: none;
+  stroke: #c00;
+}
+.reveal .background-shade-dark .sl-block {
+  color: #fff;
+}
+.reveal .dark-foreground text.logotext,
+.reveal section.background-shade-light text.logotext,
+.reveal section.dark-foreground text.logotext,
+.reveal .dark-foreground .logotext text,
+.reveal section.background-shade-light .logotext text,
+.reveal section.dark-foreground .logotext text,
+.reveal .dark-foreground path.logotext,
+.reveal section.background-shade-light path.logotext,
+.reveal section.dark-foreground path.logotext,
+.reveal .dark-foreground path.logotype,
+.reveal section.background-shade-light path.logotype,
+.reveal section.dark-foreground path.logotype,
+.reveal .dark-foreground .logotext path,
+.reveal section.background-shade-light .logotext path,
+.reveal section.dark-foreground .logotext path,
+.reveal .dark-foreground .product,
+.reveal section.background-shade-light .product,
+.reveal section.dark-foreground .product {
+  fill: currentcolor !important;
+}
+.reveal .dark-foreground .redhat-logo .logotext,
+.reveal section.background-shade-light .redhat-logo .logotext,
+.reveal section.dark-foreground .redhat-logo .logotext {
+  fill: currentcolor !important;
+}
+.reveal .slide-background.background-shade-dark:after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(40, 40, 40, 0.8);
+}
+.reveal .slide-background.background-shade-light:after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+.reveal .slides section {
+  text-align: left;
+}
+.reveal .slides section h1 {
+  line-height: 1em;
+  font-weight: 700 ;
+  font-size: 3em ;
+}
+.reveal .slides section h2 {
+  font-size: 2em;
+  font-weight: 400 ;
+  line-height: 1.15em;
+}
+.reveal .slides section h3 {
+  font-weight: 700 ;
+  font-size: 1em ;
+  line-height: 1.25em;
+}
+.reveal .slides section p {
+  margin-bottom: 0.5em;
+}
+.reveal .slides section blockquote {
+  font-style: normal;
+  box-shadow: none;
+}
+.reveal .progress {
+  background-color: transparent;
+}
+.reveal .progress span {
+  background-color: #5e6a71;
+}
+.reveal .absolute-element svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+.reveal .icon.stroked {
+  width: 282px;
+  height: 282px;
+}
+.reveal .icon.stroked.icon-arrow path {
+  stroke-width: 4px !important;
+}
+.reveal .icon.stroked path {
+  fill: none;
+  stroke-width: 1.5px;
+  transition-delay: 0.5s !important;
+  stroke-dashoffset: 0;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke: currentcolor;
+}
+.reveal .icon.stroked path.long {
+  stroke-dasharray: 420,420;
+  transition: 2.5s all ease;
+}
+.reveal .icon.stroked path.longer {
+  stroke-dasharray: 512,512;
+  transition: 2.5s all ease;
+}
+.reveal .icon.stroked path.short {
+  stroke-dasharray: 90,90;
+  transition: 5s all ease;
+}
+.reveal .icon.stroked path.shortest {
+  stroke-dasharray: 5,5;
+  transition: 2s all ease;
+}
+.reveal .icon.stroked path.round {
+  stroke-linecap: round ;
+  stroke-linejoin: round ;
+}
+.reveal .icon.stroked path.virtual {
+  transition: 0.5s all ease;
+  stroke-dasharray: 1.1, 3;
+  stroke-linecap: round ;
+}
+.reveal .icon.stroked path.dashed {
+  stroke-dasharray: 3, 3;
+}
+.reveal .icon.stroked path.hand {
+  stroke-linecap: round;
+}
+.reveal .present path.virtual {
+  -webkit-animation: virtual-outline 60s infinite linear;
+  -moz-animation: virtual-outline 60s infinite linear;
+  animation: virtual-outline 60s infinite linear;
+}
+@-webkit-keyframes virtual-outline {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 512;
+  }
+}
+@-moz-keyframes virtual-outline {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 512;
+  }
+}
+@keyframes virtual-outline {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 512;
+  }
+}
+.reveal a {
+  box-shadow: 0 0.066666em;
+}
+.reveal .overview section.present {
+  border: 12px solid white !important;
+  box-shadow: 0 0 0 10px white, inset 0 0 0 6px rgba(0, 0, 0, 0.2);
+}
+.reveal .rh-pattern {
+  width: 256px;
+  height: 256px;
+}
+.reveal .rh-pattern path {
+  transition: all 0.5s ease;
+}
+.reveal .future .rh-pattern path {
+  stroke-dasharray: 0, 85 !important;
+}
+.reveal .present .rh-pattern path {
+  stroke-dasharray: 80, 0 !important;
+}
+.reveal div[data-block-type="snippet"] .sl-block-content > svg,
+.reveal div[data-block-type="snippet"] > .sl-block-content > svg,
+.reveal div[data-block-type="snippet"] .icon,
+.reveal div[data-block-type="snippet"] .product {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+}
+.reveal div[data-block-type="snippet"] .sl-block-content > svg:not(:last-child) {
+  position: relative;
+}
+.reveal div[data-block-type="snippet"] .icon {
+  top: -15%;
+  right: -15%;
+  bottom: -15%;
+  left: -15%;
+  width: 130%;
+  height: 130%;
+}
+.reveal div[data-block-type="snippet"] {
+  min-width: 60px !important;
+}
+.reveal div[data-block-type="text"] {
+  font-size: 20px;
+}
+.reveal .triangle-element,
+.reveal .triangle-element * {
+  user-select: none;
+}
+.reveal .has-light-background .closing-logo.logotype path {
+  fill: black !important;
+}
+@-webkit-keyframes closing-animation {
+  0% {
+    -webkit-transform: scale(4) translate(40%);
+    transform: scale(4) translate(40%);
+    opacity: 0;
+  }
+  80% {
+    -webkit-transform: scale(1) translate(30%);
+    transform: scale(1) translate(30%);
+  }
+}
+@-moz-keyframes closing-animation {
+  0% {
+    -webkit-transform: scale(4) translate(40%);
+    transform: scale(4) translate(40%);
+    opacity: 0;
+  }
+  80% {
+    -webkit-transform: scale(1) translate(30%);
+    transform: scale(1) translate(30%);
+  }
+}
+@-o-keyframes closing-animation {
+  0% {
+    -webkit-transform: scale(4) translate(40%);
+    transform: scale(4) translate(40%);
+    opacity: 0;
+  }
+  80% {
+    -webkit-transform: scale(1) translate(30%);
+    transform: scale(1) translate(30%);
+  }
+}
+@keyframes closing-animation {
+  0% {
+    -webkit-transform: scale(4) translate(40%);
+    transform: scale(4) translate(40%);
+    opacity: 0;
+  }
+  80% {
+    -webkit-transform: scale(1) translate(30%);
+    transform: scale(1) translate(30%);
+  }
+}
+.reveal .present .closing-logo.icon {
+  -webkit-animation: closing-animation 1.5s 1;
+  -moz-animation: closing-animation 1.5s 1;
+  -o-animation: closing-animation 1.5s 1;
+  animation: closing-animation 1.5s 1;
+}
+.reveal .present .closing-logo.logotype {
+  -webkit-animation: closing-text-animation 1.8s 1;
+  -moz-animation: closing-text-animation 1.8s 1;
+  -o-animation: closing-text-animation 1.8s 1;
+  animation: closing-text-animation 1.8s 1;
+}
+@-webkit-keyframes closing-text-animation {
+  0% {
+    opacity: 0;
+    -webkit-transform: translate(-10%);
+    transform: translate(-10%);
+  }
+  70% {
+    -webkit-transform: translate(-10%);
+    transform: translate(-10%);
+    opacity: 0;
+  }
+  100% {
+    transform: none;
+    opacity: 1;
+    -webkit-transform: none;
+  }
+}
+@-moz-keyframes closing-text-animation {
+  0% {
+    opacity: 0;
+    -webkit-transform: translate(-10%);
+    transform: translate(-10%);
+  }
+  70% {
+    -webkit-transform: translate(-10%);
+    transform: translate(-10%);
+    opacity: 0;
+  }
+  100% {
+    transform: none;
+    opacity: 1;
+    -webkit-transform: none;
+  }
+}
+@keyframes closing-text-animation {
+  0% {
+    opacity: 0;
+    -webkit-transform: translate(-10%);
+    transform: translate(-10%);
+  }
+  70% {
+    -webkit-transform: translate(-10%);
+    transform: translate(-10%);
+    opacity: 0;
+  }
+  100% {
+    transform: none;
+    opacity: 1;
+    -webkit-transform: none;
+  }
+}
+.reveal .brand-pattern-paths path,
+.reveal .pattern-path {
+  stroke-width: 1;
+  fill: none;
+}
+.reveal .brand-pattern-paths path {
+  fill: none !important;
+}
+.reveal pattern {
+  patterntransform: scale(2) !important;
+}
+.reveal pattern.normal use {
+  stroke: currentcolor;
+  fill: none;
+}
+.reveal pattern.light use {
+  stroke: #fff !important;
+  fill: none;
+}
+.reveal pattern.dark use {
+  stroke: #000 !important;
+  fill: none;
+}
+.reveal .brand-pattern {
+  min-width: 40px;
+  min-height: 40px;
+  position: absolute;
+  top: 0 ;
+  left: 0 ;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+}
+.reveal .brand-pattern path,
+.reveal .brand-pattern rect {
+  width: 100% !important;
+  height: 100%;
+}
+.reveal .brand-pattern.corporate {
+  fill: url(#pattern-corporate);
+}
+.reveal #pattern-corporate-2 use {
+  stroke: #dd0000;
+}
+.reveal #pattern-corporate use {
+  stroke: #cc0000;
+}
+.reveal section,
+.reveal .slide-background {
+  -webkit-backface-visibility: hidden;
+  -ms-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+.reveal .slides > section.transition-slide,
+.reveal .slides > section.transition-slide + section.future,
+.reveal .slides > section.transition-slide + section.present,
+.reveal .backgrounds > .slide-background.transition-slide,
+.reveal .backgrounds > .slide-background.transition-slide + .slide-background.future,
+.reveal .backgrounds > .slide-background.transition-slide + .slide-background.present {
+  transition: all 1s ease  !important;
+}
+.reveal .backgrounds > .slide-background.transition-slide {
+  opacity: 1 ;
+}
+.reveal .backgrounds > .slide-background.transition-slide.past {
+  z-index: 99;
+  -webkit-transform: translate(-100%, 0);
+  -ms-transform: translate(-100%, 0);
+  transform: translate(-100%, 0);
+}
+.reveal .backgrounds > .slide-background.transition-slide.future,
+.reveal .backgrounds > .slide-background.transition-slide.present + .slide-background.future {
+  -webkit-transform: translate(100%, 0);
+  -ms-transform: translate(100%, 0);
+  transform: translate(100%, 0);
+}
+.reveal .slides > section.transition-slide.past {
+  z-index: 99;
+  -webkit-transform: translate(-150%, 0);
+  -ms-transform: translate(-150%, 0);
+  transform: translate(-150%, 0);
+  visibility: hidden;
+}
+.reveal .slides > section.transition-slide.future,
+.reveal .slides > section.transition-slide.future + section {
+  -webkit-transform: translate(150%, 0);
+  -ms-transform: translate(150%, 0);
+  transform: translate(150%, 0);
+  visibility: hidden;
+}
+.reveal .slides > section.transition-slide-up,
+.reveal .slides > section.transition-slide-up + section.future,
+.reveal .slides > section.transition-slide-up + section.present,
+.reveal .backgrounds > .slide-background.transition-slide-up,
+.reveal .backgrounds > .slide-background.transition-slide-up + .slide-background.future .backgrounds > .slide-background.transition-slide-up + .slide-background.present {
+  transition: all 1s ease  !important;
+}
+.reveal .backgrounds > .slide-background.transition-slide-up {
+  opacity: 1 ;
+}
+.reveal .backgrounds > .slide-background.transition-slide-up.past {
+  z-index: 99;
+  -webkit-transform: translate(0, -100%);
+  -ms-transform: translate(0, -100%);
+  transform: translate(0, -100%);
+}
+.reveal .backgrounds > .slide-background.transition-slide-up.future,
+.reveal .backgrounds > .slide-background.transition-slide-up.present + .slide-background.future {
+  -webkit-transform: translate(0, 100%);
+  -ms-transform: translate(0, 100%);
+  transform: translate(0, 100%);
+}
+.reveal .slides > section.transition-slide-up.past {
+  z-index: 99;
+  -webkit-transform: translate(0, -150%);
+  -ms-transform: translate(0, -150%);
+  transform: translate(0, -150%);
+  visibility: hidden;
+}
+.reveal .slides > section.transition-slide-up.future,
+.reveal .slides > section.transition-slide-up.present + section {
+  -webkit-transform: translate(0, 150%);
+  -ms-transform: translate(0, 150%);
+  transform: translate(0, 150%);
+  visibility: hidden;
+}
+.reveal .slides > section.transition-zoom-in,
+.reveal .slides > section.transition-zoom-in + section.future,
+.reveal .slides > section.transition-zoom-in + section.present,
+.reveal .backgrounds > .slide-background.transition-zoom-in,
+.reveal .backgrounds > .slide-background.transition-zoom-in + .slide-background.future .backgrounds > .slide-background.transition-zoom-in + .slide-background.present {
+  -webkit-transition: all 1s ease  !important;
+  -moz-transition: all 1s ease  !important;
+  transition: all 1s ease  !important;
+}
+.reveal .backgrounds > .slide-background.transition-zoom-in.past {
+  opacity: 0 !important;
+  -webkit-transform: scale(1.5);
+  -ms-transform: scale(0.1 0.5);
+  transform: scale(1.5);
+}
+.reveal .backgrounds > .slide-background.transition-zoom-in.future,
+.reveal .backgrounds > .slide-background.transition-zoom-in.present + .slide-background.future {
+  opacity: 0 !important;
+  -webkit-transform: scale(0.01);
+  -ms-transform: scale(0.01);
+  transform: scale(0.01);
+}
+.reveal .past {
+  z-index: -1;
+  opacity: 0 !important;
+}
+.reveal .present + .slide-background.future {
+  z-index: 99;
+}
+.reveal .slides > section.transition-zoom-in.past {
+  z-index: 99;
+  -webkit-transform: scale(1.5);
+  -ms-transform: scale(1.5);
+  transform: scale(1.5);
+  visibility: hidden;
+}
+.reveal .slides > section.transition-zoom-in.future {
+  -webkit-transform: scale(0.1);
+  -ms-transform: scale(0.1);
+  transform: scale(0.1);
+  visibility: hidden;
+}
+@-webkit-keyframes icon-animation-long {
+  0% {
+    stroke-dashoffset: 420;
+    stroke-width: 0.5px;
+  }
+}
+@-moz-keyframes icon-animation-long {
+  0% {
+    stroke-dashoffset: 420;
+    stroke-width: 0.5px;
+  }
+}
+@keyframes icon-animation-long {
+  0% {
+    stroke-dashoffset: 420;
+    stroke-width: 0.5px;
+  }
+}
+@-webkit-keyframes icon-animation-short {
+  0% {
+    stroke-dashoffset: 90;
+  }
+}
+@-moz-keyframes icon-animation-short {
+  0% {
+    stroke-dashoffset: 90;
+  }
+}
+@keyframes icon-animation-short {
+  0% {
+    stroke-dashoffset: 90;
+  }
+}
+.reveal .present .animate.icon.stroked path,
+.reveal .present .animate .icon.stroked path,
+.reveal .fragment .icon.stroked path {
+  animation: 0;
+  -moz-animation: 0;
+  -webkit-animation: 0;
+  display: none;
+}
+.reveal .present .animate.icon.stroked path.long,
+.reveal .present .animate .icon.stroked path.long,
+.reveal .fragment.visible .icon.stroked path.long {
+  display: block;
+  stroke-width: 2px ;
+  -webkit-animation: icon-animation-long 3.5s 0.5s 1;
+  -moz-animation: icon-animation-long 3.5s 0.5s 1;
+  animation: icon-animation-long 3.5s 0.5s 1;
+}
+.reveal .present .animate.icon.stroked path.short,
+.reveal .present .animate .icon.stroked path.short,
+.reveal .fragment.visible .icon.stroked path.short {
+  display: block;
+  -webkit-animation: icon-animation-short 3.5s 0.5s 1 !important;
+  -moz-animation: icon-animation-short 3.5s 0.5s 1 !important;
+  animation: icon-animation-short 3.5s 0.5s 1 !important;
+}
+.reveal .triangle-element {
+  transition: all 0.4s cubic-bezier(0.21, 0.9, 0.55, 1) 5s;
+}
+.reveal.reveal:hover .triangle-element {
+  transition: all 1s cubic-bezier(0.21, 0.9, 0.55, 1.16) 0s !important;
+  top: 100% !important;
+  left: 100% !important;
+  opacity: 0.95;
+}
+.reveal .has-dark-background .only-dark {
+  display: none;
+}
+.reveal .has-light-background .only-light {
+  display: none;
+}
+.reveal .thinner .icon.stroked path {
+  stroke-width: 1px !important;
+}
+.reveal .thinnest .icon.stroked path {
+  stroke-width: 0.05em !important;
+}
+.reveal .thicker .icon.stroked path {
+  stroke-width: 3px !important;
+}
+.reveal .thickest .icon.stroked path {
+  stroke-width: 4px !important;
+}
+.reveal .angle {
+  -ms-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+.reveal .rangle {
+  -ms-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+.reveal .sl-block > .vertical {
+  -ms-transform: rotate(-90deg);
+  -moz-transform: rotate(-90deg);
+  -webkit-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+}
+.reveal .skewed {
+  transition: all 1s cubic-bezier(0.13, 0.81, 0.08, 1);
+  -moz-transform: skew(-45deg, 0);
+  -ms-transform: skew(-45deg, 0);
+  -webkit-transform: skew(-45deg, 0);
+  transform: skew(-45deg, 0);
+}
+.reveal .future .skewed {
+  margin-left: -800%;
+  opacity: 0;
+}
+.reveal .past .skewed {
+  margin-left: 800%;
+  opacity: 0;
+}
+.reveal .item-label,
+.reveal .item-box {
+  letter-spacing: 0em;
+  font-weight: 500;
+}
+.reveal .epic-content-box {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+.reveal .has-dark-background .epic-content-box {
+  box-shadow: inset 0 0 0.51em rgba(0, 0, 0, 0.25), 0 0.05em 0.05em rgba(255, 255, 255, 0.1);
+  background-color: rgba(0, 0, 0, 0.15);
+}
+.reveal .has-light-background .epic-content-box {
+  box-shadow: inset 0 0 0.2em rgba(255, 255, 255, 0.5), 0 0.06666em 0.555em 0 rgba(0, 0, 0, 0.12);
+}
+.reveal .controls {
+  bottom: 1%;
+  right: 1%;
+}
+.reveal .controls button {
+  opacity: 0;
+}
+.reveal .controls button.enabled {
+  opacity: 1;
+}
+.reveal .controls {
+  opacity: 0 !important;
+  transition: opacity 0.5s ease 4.8s, transform 0.5s ease 4.8s;
+  transform: scale(0.4);
+}
+.reveal.reveal:hover .controls {
+  transform: scale(1);
+  opacity: 1 !important;
+  transition: opacity 0.5s ease 0s, transform 0.5s ease 0s;
+}
+.reveal .backgrounds {
+  transition-property: height;
+  transition-duration: 1s;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+.reveal .complex-logo {
+  min-height: 70px;
+  min-width: 70px;
+  width: 100%;
+}
+.reveal .complex-logo,
+.reveal .complex-logo svg,
+.reveal .complex-logo > div {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.reveal .complex-logo > div.line-icon,
+.reveal .complex-logo svg > div.line-icon,
+.reveal .complex-logo > div > div.line-icon,
+.reveal .complex-logo > div.logomark,
+.reveal .complex-logo svg > div.logomark,
+.reveal .complex-logo > div > div.logomark {
+  transform-origin: 12% 50%;
+}
+.reveal .animated .complex-logo div {
+  transition: all 0.5s ease;
+}
+.reveal .animated .complex-logo div.line-icon {
+  transition-delay: 2s;
+}
+.reveal .animated .complex-logo div.line-icon path {
+  transition: all 1s ease 0.52s;
+  stroke-dasharray: 100 ,10;
+}
+.reveal .animated .complex-logo div.event-name {
+  transition-delay: 1s;
+}
+.reveal .animated .complex-logo div.location {
+  transition-delay: 1.4s;
+}
+.reveal .future .animated .complex-logo > div {
+  transition: none;
+}
+.reveal .future .animated .complex-logo > div.line-icon path {
+  stroke-dasharray: 0 ,100;
+  transition: none;
+}
+.reveal .future .animated .complex-logo {
+  /*.line-icon{transform:rotate(30deg); opacity:0;}*/
+}
+.reveal .future .animated .complex-logo .logomark {
+  transform: translate(0, -20%);
+}
+.reveal .future .animated .complex-logo .location {
+  transform: translate(0, 0.5em);
+  opacity: 0;
+}
+.reveal .future .animated .complex-logo .event-name {
+  opacity: 0;
+  transform: translate(-0.6em, 0);
+}
+.reveal .lowercase {
+  text-transform: lowercase;
+}
+.reveal .pop-in.fragment {
+  -webkit-transform: scale(0.2);
+  -moz-transform: scale(0.2);
+  -ms-transform: scale(0.2);
+  transform: scale(0.2);
+  -webkit-transition: 2s ease 0.25s;
+  -moz-transition: 2s ease 0.25s;
+  -ms-transition: 2s ease 0.25s;
+  transition: 2s ease 0.25s;
+  -webkit-animation-delay: 0.66s;
+  -moz-animation-delay: 0.66s;
+  -ms-animation-delay: 0.66s;
+  animation-delay: 0.66s;
+}
+.reveal .pop-in.fragment.visible {
+  -webkit-transform: scale(1);
+  -moz-transform: scale(1);
+  -ms-transform: scale(1);
+  transform: scale(1);
+}
+.reveal .pop-in.fragment.current-fragment {
+  color: #c22;
+}
+.reveal .grow-width {
+  -webkit-transition: all 0.5s ease 0.2s;
+  -moz-transition: all 0.5s ease 0.2s;
+  -o-transition: all 0.5s ease 0.2s;
+  -ms-transition: all 0.5s ease 0.2s;
+  transition: all 0.5s ease 0.2s;
+}
+.reveal .future .grow-width {
+  width: 0% !important;
+  -webkit-transition: none;
+  -moz-transition: none;
+  -o-transition: none;
+  -ms-transition: none;
+  transition: none;
+}
+.reveal .stampit {
+  -webkit-transition: all 1s cubic-bezier(0.79, 0.53, 0.46, 1.3) 1s;
+  -moz-transition: all 1s cubic-bezier(0.79, 0.53, 0.46, 1.3) 1s;
+  -ms-transition: all 1s cubic-bezier(0.79, 0.53, 0.46, 1.3) 1s;
+  transition: all 1s cubic-bezier(0.79, 0.53, 0.46, 1.3) 1s;
+}
+.reveal .future .stampit {
+  -webkit-transform: rotate(-12deg) scale(2);
+  -moz-transform: rotate(-12deg) scale(2);
+  -ms-transform: rotate(-12deg) scale(2);
+  transform: rotate(-12deg) scale(2);
+  -webkit-transition: none;
+  -moz-transition: none;
+  -ms-transition: none;
+  transition: none;
+  opacity: 0;
+}
+.reveal .headshot img {
+  border-radius: 50%;
+  border: 4px solid #c00 !important;
+}
+.reveal .condensed {
+  letter-spacing: 0.02em;
+}
+.reveal .condensed li {
+  margin-bottom: 1em ;
+}
+.reveal .has-light-background .sl-block .has-dark-background > svg.redhat-logo .logotext {
+  fill: #ffffff !important;
+}
+.reveal .has-light-background .sl-block .reversed.redhat-logo .logotext,
+.reveal .has-light-background .sl-block .reversed .redhat-logo .logotext,
+.reveal .has-light-background .sl-block .has-dark-background > .redhat-logo .logotext {
+  fill: #ffffff !important;
+}
+.reveal .has-dark-background .sl-block .reversed.redhat-logo .logotext,
+.reveal .has-dark-background .sl-block .reversed .redhat-logo .logotext,
+.reveal .has-dark-background .sl-block .has-light-background > .redhat-logo .logotext {
+  fill: #000000 !important;
+}
+.reveal .has-dark-background .has-light-background .logo .only-dark path,
+.reveal .has-light-background .mono.redhat-logo path {
+  fill: #000000 !important;
+}
+.reveal .has-dark-background .mono.redhat-logo path {
+  fill: #ffffff;
+}
+.reveal .has-dark-background .logo .only-dark {
+  display: block;
+}
+.reveal .has-light-background .logo .only-light {
+  display: block;
+}
+.reveal .has-light-background .logo .only-dark {
+  display: none;
+}
+.reveal .has-dark-background .logo .only-light {
+  display: none;
+}
+.reveal .has-light-background .reversed svg path {
+  fill: #ffffff !important;
+}
+.reveal .has-dark-background .reversed svg path {
+  fill: currentcolor;
+}
+.reveal .has-dark-background .has-light-background .logo .only-light,
+.reveal .has-dark-background .reversed .logo .only-dark {
+  display: block;
+}
+.reveal .has-light-background .has-dark-background .logo .only-dark,
+.reveal .has-light-background .logo .only-light {
+  display: block;
+}
+.reveal .has-light-background .has-dark-background .redhat-logo .only-dark,
+.reveal .has-light-background .redhat-logo .only-light {
+  fill: #ffffff !important;
+}
+.reveal .has-light-background .has-dark-background .logo .only-light,
+.reveal .has-light-background .logo .only-dark,
+.reveal .has-dark-background .has-light-background .logo .only-dark,
+.reveal .has-dark-background .logo .only-light {
+  display: none;
+}
+.reveal .future .fade-up,
+.reveal .future .fade-down,
+.reveal .future .fade-left,
+.reveal .future .fade-right,
+.reveal .future .fade-zoom {
+  -webkit-transition: none;
+  transition: none;
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+.reveal .future .fade-up,
+.reveal .fade-up.fragment {
+  -webkit-transform: translate(0, 2em);
+  -ms-transform: translate(0, 2em);
+  transform: translate(0, 2em);
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+.reveal .future .fade-down,
+.reveal .fade-down.fragment {
+  -webkit-transform: translate(0, -2em);
+  -ms-transform: translate(0, -2em);
+  transform: translate(0, -2em);
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+.reveal .future .fade-left,
+.reveal .fade-left.fragment {
+  -webkit-transform: translate(2em, 0);
+  -ms-transform: translate(2em, 0);
+  transform: translate(2em, 0);
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+.reveal .future .fade-right,
+.reveal .fade-right.fragment {
+  -webkit-transform: translate(-2em, 0);
+  -ms-transform: translate(-2em, 0);
+  transform: translate(-2em, 0);
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+.reveal .future .fade-zoom,
+.reveal .fade-zoom.fragment {
+  -webkit-transform: scale(0.1);
+  -ms-transform: scale(0.1);
+  transform: scale(0.1);
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+.reveal .future .fade-in {
+  transition: none;
+  opacity: 0;
+}
+.reveal .present .fade-in,
+.reveal .present .fade-up,
+.reveal .present .fade-down,
+.reveal .present .fade-left,
+.reveal .present .fade-right,
+.reveal .present .fade-zoom {
+  -webkit-transition: all 0.5s ease 0.5s;
+  transition: all 0.5s ease 0.5s;
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+.reveal .present .fragment.visible.fade-up,
+.reveal .present .fragment.visible.fade-down,
+.reveal .present .fragment.visible.fade-left,
+.reveal .present .fragment.visible.fade-right,
+.reveal .present .fragment.visible.fade-zoom {
+  -webkit-transform: none ;
+  -ms-transform: none ;
+  transform: none ;
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+.reveal .has-light-background .icon.stroked {
+  color: currentcolor;
+}
+.reveal .has-dark-background .icon.stroked path {
+  stroke: currentcolor;
+}
+.reveal .has-dark-background .only-light-background {
+  display: none !important;
+}
+.reveal .has-dark-background .only-dark-background {
+  display: block !important;
+}
+.reveal a.call-to-action:hover {
+  background-color: #d00 !important;
+  box-shadow: 0 0.5em 1em rgba(0, 0, 0, 0.05) !important;
+  text-shadow: none !important;
+}
+.reveal .sl-block[data-block-type="snippet"] table {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+.reveal .sl-block[data-block-type="snippet"] table td {
+  border-color: currentcolor !important;
+}
+.reveal .sl-block[data-block-type="snippet"] table td {
+  text-align: inherit !important;
+}
+.reveal .sl-block[data-block-type="text"] table {
+  width: 100%;
+}
+.reveal .sl-block[data-block-type="text"] table td {
+  border-color: currentcolor;
+}
+.reveal .sl-block[data-block-type="text"] table td {
+  text-align: inherit;
+}
+.reveal.reveal .sl-block[data-block-type="image"] .person {
+  border-radius: 50%;
+  position: relative !important;
+  background-color: transparent;
+  height: auto !important;
+}
+.reveal.reveal .sl-block[data-block-type="image"] .person:before {
+  content: "" !important;
+  display: block !important;
+  padding-top: 100% ;
+  position: relative !important ;
+  /* 4:3 aspect ratio */
+}
+.reveal.reveal .sl-block[data-block-type="image"] .person > img {
+  position: absolute ;
+  margin: 0 auto !important;
+  left: 0% ;
+  right: 0 ;
+  width: auto !important;
+  top: 0  ;
+  bottom: 0 ;
+}
+.reveal .present .delay-1 {
+  transition-delay: 0.1s;
+}
+.reveal .present .delay-2 {
+  transition-delay: 0.2s;
+}
+.reveal .present .delay-3 {
+  transition-delay: 0.3s;
+}
+.reveal .present .delay-4 {
+  transition-delay: 0.4s;
+}
+.reveal .present .delay-5 {
+  transition-delay: 0.5s;
+}
+.reveal .present .delay-6 {
+  transition-delay: 0.6s;
+}
+.reveal .present .delay-7 {
+  transition-delay: 0.7s;
+}
+.reveal .present .delay-8 {
+  transition-delay: 0.8s;
+}
+.reveal .present .delay-9 {
+  transition-delay: 0.9s;
+}
+.reveal .present .delay-10 {
+  transition-delay: 1s;
+}
+.reveal .present .delay-11 {
+  transition-delay: 1.1s;
+}
+.reveal .present .delay-12 {
+  transition-delay: 1.2s;
+}
+.reveal .present .delay-13 {
+  transition-delay: 1.3s;
+}
+.reveal .present .delay-14 {
+  transition-delay: 1.4s;
+}
+.reveal .present .delay-15 {
+  transition-delay: 1.5s;
+}
+.reveal .present .delay-16 {
+  transition-delay: 1.6s;
+}
+.reveal .present .delay-17 {
+  transition-delay: 1.7s;
+}
+.reveal .present .delay-18 {
+  transition-delay: 1.8s;
+}
+.reveal .present .delay-19 {
+  transition-delay: 1.9s;
+}
+.reveal .present .delay-20 {
+  transition-delay: 2s;
+}
+.reveal .present .delay-21 {
+  transition-delay: 2.1s;
+}
+.reveal .present .delay-22 {
+  transition-delay: 2.2s;
+}
+.reveal .present .delay-23 {
+  transition-delay: 2.3s;
+}
+.reveal .present .delay-24 {
+  transition-delay: 2.4s;
+}
+.reveal .present .delay-25 {
+  transition-delay: 2.5s;
+}
+.reveal .present .delay-26 {
+  transition-delay: 2.6s;
+}
+.reveal .present .delay-27 {
+  transition-delay: 2.7s;
+}
+.reveal .present .delay-28 {
+  transition-delay: 2.8s;
+}
+.reveal .present .delay-29 {
+  transition-delay: 2.9s;
+}
+.reveal .present .delay-30 {
+  transition-delay: 3s;
+}
+.reveal .present .delay-31 {
+  transition-delay: 3.1s;
+}
+.reveal .present .delay-32 {
+  transition-delay: 3.2s;
+}
+.reveal .present .delay-33 {
+  transition-delay: 3.3s;
+}
+.reveal .present .delay-34 {
+  transition-delay: 3.4s;
+}
+.reveal .present .delay-35 {
+  transition-delay: 3.5s;
+}
+.reveal .present .delay-36 {
+  transition-delay: 3.6s;
+}
+.reveal .present .delay-37 {
+  transition-delay: 3.7s;
+}
+.reveal .present .delay-38 {
+  transition-delay: 3.8s;
+}
+.reveal .present .delay-39 {
+  transition-delay: 3.9s;
+}
+.reveal .present .delay-40 {
+  transition-delay: 4s;
+}
+.reveal .light-foreground .sl-block * {
+  color: #fff;
+}
+.reveal .dark-foreground .sl-block * {
+  color: #000;
+}
+.reveal .has-dark-background .invert {
+  color: #000;
+}
+.reveal .has-light-background .invert * {
+  color: #fff;
+}
+.reveal .has-light-background .invert .only-light-background {
+  display: none ;
+}
+.reveal .has-light-background .invert .only-dark-background {
+  display: block !important;
+}
+.reveal .has-dark-background .invert .only-light-background {
+  display: block !important ;
+}
+.reveal .has-dark-background .invert .only-dark-background {
+  display: none !important;
+}
+.reveal .slide-number {
+  position: absolute !important;
+  opacity: 1;
+  right: 1em;
+  height: 28px;
+  min-width: 28px;
+  bottom: auto;
+  left: auto;
+  text-align: center;
+  font-size: 14px;
+  border-radius: 28px;
+  line-height: 28px;
+  color: white;
+  text-shadow: 0 0.1em 0.5em rgba(0, 0, 0, 0.4);
+  top: 1em;
+  font-family: "Red Hat Text", "Overpass 2", sans-serif;
+  font-weight: 500;
+  white-space: nowrap;
+  padding: 4px;
+  box-sizing: content-box;
+}
+.reveal .slide-number-delimiter {
+  margin: 0 1px;
+}
+html:not([data-mode="arrange"]) .reveal .present.in-3d-appear {
+  transform: translatez(0em) !important;
+  animation: none !important;
+  transition: transform 1s ease !important;
+}
+html:not([data-mode="arrange"]) .reveal .future.in-3d-appear {
+  transform: translatez(10em) rotateX(21deg) !important;
+  animation: none !important;
+}
+.reveal .no-filter img,
+.reveal .no-filter {
+  filter: none !important;
+  -webkit-filter: none !important;
+}
+.reveal .present .fade-in-slow {
+  transition: all 5s ease;
+}
+.reveal .future .fade-in-slow {
+  transition: none;
+  opacity: 0;
+}
+.reveal .redhat-logo .logotext {
+  fill: #000 !important;
+}
+.reveal .has-dark-background .redhat-logo .logotext {
+  fill: #fff !important;
+}
+.reveal [data-block-type="table"] .sl-block-content {
+  font-size: 0.75em;
+  background-color: #c00;
+  color: #fff;
+}
+.reveal [data-block-type="table"] td {
+  background-color: #e5e5e5;
+  color: #333;
+  border-color: white;
+}
+.reveal div[data-block-type="table"] th {
+  font-weight: 500;
+}
+.reveal [data-block-type="table"] tr:nth-child(odd) td {
+  background-color: #f5f5f5;
+  color: #333;
+}
+.reveal .has-dark-background > [data-block-type="table"] td {
+  background-color: #131619;
+  color: #fff;
+}
+.reveal .has-dark-background > [data-block-type="table"] tr:nth-child(odd) td {
+  background-color: #232629;
+  color: #fff;
+}
+.reveal [data-block-type="code"],
+.reveal .hljs {
+  background-color: white ;
+  color: rgba(55, 55, 55, 0.85) !important;
+}
+.reveal section .hljs {
+  background-color: white !important;
+}
+.reveal .has-dark-background [data-block-type="code"],
+.reveal .has-dark-background .hljs {
+  background-color: #012736 !important;
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+.reveal [data-block-type="code"] pre {
+  letter-spacing: 0.015em;
+  line-height: 1.5em;
+}
+.reveal .has-light-background[data-block-type="code"] pre,
+.reveal [data-block-type="code"] pre {
+  background-color: white ;
+  color: currentcolor;
+  padding: 1em !important;
+}
+.reveal .has-dark-background [data-block-type="code"] pre {
+  background-color: #012736;
+}
+.reveal .hljs,
+.reveal pre,
+.reveal code {
+  font-family: 'Overpass Mono', monospace !important;
+  font-weight: 200 !important;
+}
+.reveal .hljs-literal {
+  color: #ffb612 !important;
+}
+.reveal .hljs-keyword {
+  color: #ffb612;
+  font-weight: 700 !important;
+}
+.reveal .hljs-string {
+  color: #88c639;
+  font-weight: 700;
+}
+.reveal .hljs-comment {
+  color: #94a0a7 !important;
+  font-weight: 400 !important;
+}
+.reveal .hljs-params {
+  color: #028c98;
+  font-weight: 700;
+}
+.reveal .hljs-attr {
+  color: #EC7A08 !important;
+}
+.reveal .hljs-tag {
+  color: #7F5FAE !important;
+}
+.reveal .hljs-name {
+  color: #028c98 !important;
+}
+.reveal .hljs-string {
+  color: #7f5fae !important;
+}
+.reveal .hljs-comment {
+  color: rgba(125, 125, 125, 0.65) !important;
+}
+.reveal .hljs-number {
+  color: #4e9fdd !important;
+}
+.reveal .hljs-attribute {
+  color: #ec9e34 !important;
+}
+.reveal .hljs-variable {
+  color: #4e9fdd !important;
+}
+.reveal .hljs-built_in {
+  color: #ee1122 !important;
+}
+.reveal .hljs-selector-class {
+  color: #55aab2 !important;
+}
+.reveal [data-line-end-type="line-arrow"] line,
+.reveal [data-line-start-type="line-arrow"] line,
+.reveal [data-line-end-type="line-arrow"] path {
+  stroke-linecap: round;
+  stroke-linejoin: square;
+}
+.reveal div[data-block-type="line"] line[stroke="#000000"],
+.reveal div[data-block-type="line"] path[stroke="#000000"] {
+  stroke: currentcolor;
+}
+.reveal [fill="none"] {
+  fill: none !important;
+}
+.reveal [fill="#a30000"] {
+  fill: #a00 !important;
+}
+.reveal [fill="#cc2029"],
+.reveal [fill="#cb2027"],
+.reveal [fill="#c00"] {
+  fill: #c00 !important;
+}
+.reveal [fill="#fff"] {
+  fill: #fff !important;
+}
+.reveal [fill="#6d6e70"] {
+  fill: #6d6e70 !important;
+}
+.reveal [fill="#231f20"] {
+  fill: currentcolor !important;
+}
+.reveal [fill="#efab1f"] {
+  fill: #efab1f !important;
+}
+.reveal [fill="#92d400"] {
+  fill: #92d400 !important;
+}
+.reveal .has-dark-background [fill="#6d6e70"] {
+  fill: #266272 !important;
+}
+.reveal .has-dark-background [fill="#fff"] {
+  fill: #555 !important;
+}
+.reveal .has-dark-background [fill="#fff"] {
+  fill: #333 !important;
+}
+.reveal .has-dark-background [stroke="#231f20"] {
+  stroke: currentcolor;
+}
+.reveal .has-dark-background [fill="#221F1F"],
+.reveal .has-dark-background [fill="#221f1f"],
+.reveal .has-dark-background [fill="#231F20"],
+.reveal .has-dark-background [fill="#010101"] {
+  fill: white !important;
+}
+.reveal [data-inline-svg="true"] img {
+  display: none;
+}
+.reveal .corner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  z-index: 8;
+}
+.reveal .corner svg {
+  transition: all 0.75s ease 5s;
+}
+
+		</style>
+
+	</head>
+	<body class="reveal-viewport theme-font-overpass2 theme-color-no-color">
+		<div class="reveal">
+			<div class="slides">
+				<section data-background-color="rgb(156,0,0)" data-background-image="transakce-tam-a-zase-zptky/32fa01ef1b64201650bdc7d29ce7c22c.svg" data-id="f2ea2eccbc0606a72f50fcedc384a867"><div class="sl-block" data-block-type="text" style="height: auto; width: 915px; left: 45px; top: 280px;" data-block-id="e02047f8d4555838c85c00c1dea5d5b9"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; text-align: left;" data-has-custom-html="">
+<h1 style="font-size:2.25em">Transakce ...tam a zase zpátky</h1>
+
+<h2 style="font-size:1.5em"> </h2>
+
+<h3> </h3>
+
+<h3>Ondřej Chaloupka</h3>
+
+<p>jOpenSpace 2019</p>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 360px; height: 122.4px; left: 45px; top: 76.5px; min-width: 4px; min-height: 4px;" data-block-id="06c85d519057a788acae00cbd9ce7779"><div class="sl-block-content" style="z-index: 11;" data-inline-svg="true">
+<img data-natural-width="500" data-natural-height="170" data-lazy-loaded="" style="" data-src="transakce-tam-a-zase-zptky/bfa11a84cdd2fc0f50cb6fb54942bd62.svg"><svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 613 145" height="170" width="500" class="redhat-logo"><path class="logohat" style="fill:#fff;" d="M127.47,83.49c12.51,0,30.61-2.58,30.61-17.46a14,14,0,0,0-.31-3.42l-7.45-32.36c-1.72-7.12-3.23-10.35-15.73-16.6C124.89,8.69,103.76.5,97.51.5,91.69.5,90,8,83.06,8c-6.68,0-11.64-5.6-17.89-5.6-6,0-9.91,4.09-12.93,12.5,0,0-8.41,23.72-9.49,27.16A6.43,6.43,0,0,0,42.53,44c0,9.22,36.3,39.45,84.94,39.45M160,72.07c1.73,8.19,1.73,9.05,1.73,10.13,0,14-15.74,21.77-36.43,21.77C78.54,104,37.58,76.6,37.58,58.49a18.45,18.45,0,0,1,1.51-7.33C22.27,52,.5,55,.5,74.22c0,31.48,74.59,70.28,133.65,70.28,45.28,0,56.7-20.48,56.7-36.65,0-12.72-11-27.16-30.83-35.78"></path><path class="logotext" style="fill:#fff;" d="M579.74,92.8c0,11.89,7.15,17.67,20.19,17.67a52.11,52.11,0,0,0,11.89-1.68V95a24.84,24.84,0,0,1-7.68,1.16c-5.37,0-7.36-1.68-7.36-6.73V68.3h15.56V54.1H596.78v-18l-17,3.68V54.1H568.49V68.3h11.25Zm-53,.32c0-3.68,3.69-5.47,9.26-5.47a43.12,43.12,0,0,1,10.1,1.26v7.15a21.51,21.51,0,0,1-10.63,2.63c-5.46,0-8.73-2.1-8.73-5.57m5.2,17.56c6,0,10.84-1.26,15.36-4.31v3.37h16.82V74.08c0-13.56-9.14-21-24.39-21-8.52,0-16.94,2-26,6.1l6.1,12.52c6.52-2.74,12-4.42,16.83-4.42,7,0,10.62,2.73,10.62,8.31v2.73a49.53,49.53,0,0,0-12.62-1.58c-14.31,0-22.93,6-22.93,16.73,0,9.78,7.78,17.24,20.19,17.24m-92.44-.94h18.09V80.92h30.29v28.82H506V36.12H487.93V64.41H457.64V36.12H439.55ZM370.62,81.87c0-8,6.31-14.1,14.62-14.1A17.22,17.22,0,0,1,397,72.09V91.54A16.36,16.36,0,0,1,385.24,96c-8.2,0-14.62-6.1-14.62-14.09m26.61,27.87h16.83V32.44l-17,3.68V57.05a28.3,28.3,0,0,0-14.2-3.68c-16.19,0-28.92,12.51-28.92,28.5a28.25,28.25,0,0,0,28.4,28.6,25.12,25.12,0,0,0,14.93-4.83ZM320,67c5.36,0,9.88,3.47,11.67,8.83H308.47C310.15,70.3,314.36,67,320,67M291.33,82c0,16.2,13.25,28.82,30.28,28.82,9.36,0,16.2-2.53,23.25-8.42l-11.26-10c-2.63,2.74-6.52,4.21-11.14,4.21a14.39,14.39,0,0,1-13.68-8.83h39.65V83.55c0-17.67-11.88-30.39-28.08-30.39a28.57,28.57,0,0,0-29,28.81M262,51.58c6,0,9.36,3.78,9.36,8.31S268,68.2,262,68.2H244.11V51.58Zm-36,58.16h18.09V82.92h13.77l13.89,26.82H292l-16.2-29.45a22.27,22.27,0,0,0,13.88-20.72c0-13.25-10.41-23.45-26-23.45H226Z"></path></svg>
+</div></div></section><section data-background-color="#820000" data-id="86104b16f85d978d6d123f3de892bfec"><div class="sl-block" data-block-type="text" style="width: 806px; left: 77px; top: 238px; height: auto;" data-block-id="ab75030dbfc23498cc029cca2d9b95ba"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 10;">
+<h1>Jsou transakce zlo?</h1>
+</div></div></section><section data-background-color="#ffffff" data-id="c0576ca0f4afb664e70d9c0f15e8f13b"><div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 94px;" data-block-id="df8d977119649be8a9a2b0a3cbe4a532"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; font-size: 78%;">
+<h1>Databáze</h1>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 612px; left: 80px; top: 630px;" data-block-id="a6dc4e11f85d752094be764a26f034ba"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;">
+<p><span style="font-size:0.7em"><a href="https://www.root.cz/clanky/historie-relacnich-databazi/" target="_blank">https://www.root.cz/clanky/historie-relacnich-databazi</a></span></p>
+</div></div>
+<div class="sl-block" data-block-type="line" data-block-id="9a3548ac60ad4f56650f24424e153215" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 112px; top: 276px;"><div class="sl-block-content" data-line-x1="-251" data-line-y1="111" data-line-x2="426" data-line-y2="112" data-line-color="#000000" data-line-start-type="none" data-line-end-type="line-arrow" style="z-index: 12;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="677" height="1" viewbox="-251 111 677 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-250.5" y1="111.5" x2="424.5" y2="112.5"></line><line stroke="#000000" stroke-width="3" x1="-250.5" y1="111.5" x2="424.5" y2="112.5"></line><path style="fill: rgba(0,0,0,0);" stroke="#000000" stroke-width="3" transform="translate(424,112) rotate(90.085)" d="M 6.75 6.75 L 0 0 L -6.75 6.75"></path></svg></div></div>
+<div class="sl-block" data-block-type="line" data-block-id="539fc09bfe92118905f49af7eac2a6f7" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 122px; top: 257px;"><div class="sl-block-content" data-line-x1="200" data-line-y1="39" data-line-x2="200" data-line-y2="0" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 13;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="39" viewbox="200 0 1 39"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line><line stroke="#000000" stroke-width="3" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 204px; top: 258px;" data-block-id="76016d4c2d189293533b33ad8d02a1e1"><div class="sl-block-content" data-line-x1="200" data-line-y1="39" data-line-x2="200" data-line-y2="0" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 14;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="39" viewbox="200 0 1 39"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line><line stroke="#000000" stroke-width="3" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="text" data-block-id="729f6e9f642762aa44e5085c4b08edfb" style="height: auto; min-width: 30px; min-height: 30px; width: 47px; left: 182px; top: 311px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15; text-align: center;">
+<p>1983<br>
+<span>ACID</span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" data-block-id="7e630d3c7905ee8dbf93d507c967fe17" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 80px; top: 428px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 16; font-size: 120%;">
+<ul>
+	<li><span><span>Principles of Transaction-Oriented Database Recovery, Andreas Reuter and Theo Härde, 1983</span></span></li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 90px; left: 80px; top: 311px;" data-block-id="942cdde764cd19b68358ae392a7e4de2"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 18; text-align: center;">
+<p><span>1980*<br>
+relační databáze</span></p>
+</div></div>
+
+</section><section data-background-color="#ffffff" data-id="43fbff5efc8bcb0ad0c896abca7287c6"><div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 94px;" data-block-id="22518accbccb83fbb75c20d813a5bfc2"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; font-size: 78%;">
+<h1>Transakce jsou...</h1>
+</div></div>
+
+
+
+
+
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 233px;" data-block-id="3d898cfb63e9b53bdcf7f98c8f6e9a0c"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12; font-size: 78%;">
+<h1>abstrakce pro jednoduchou práci s daty</h1>
+</div></div></section><section data-background-color="#ffffff" data-id="b6777bf1f11252ebd08648986e9ebd61">
+
+<div class="sl-block" data-block-type="text" data-block-id="e89e631fde775db96d21dc7bad74cf13" style="height: auto; min-width: 30px; min-height: 30px; width: 709px; left: 126px; top: 155px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; font-size: 300%;">
+<p><span style="font-size:5.0em">ACID</span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" data-block-id="6ec6b4acf81097176d39f20349339010" style="height: auto; min-width: 30px; min-height: 30px; width: 140px; left: 90px; top: 114px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;">
+<p><span style="font-size:1.6em">Atomicity</span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 189px; left: 354px; top: 560px;" data-block-id="c416bd66dd6365ed14f1404506ae25eb"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;">
+<p><span style="font-size:1.6em">Consistency</span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 189px; left: 493px; top: 94px;" data-block-id="2a70f2736d4d948f099b56c0352d638b"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14;">
+<p><span style="font-size:1.6em">Isolation</span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 189px; left: 720px; top: 571px;" data-block-id="97b3314cc08d0379f4f6c3355e7801da"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15;">
+<p><span style="font-size:1.6em">Durability</span></p>
+</div></div>
+<div class="sl-block" data-block-type="line" data-block-id="03a4d90607f1d672b5f520ac66fe06b0" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 175px; top: 180px;"><div class="sl-block-content" data-line-x1="-169" data-line-y1="-19" data-line-x2="-198" data-line-y2="-63" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 16;"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="29" height="44" viewbox="-198 -63 29 44"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-169" y1="-19" x2="-198" y2="-63"></line><line stroke="#000000" stroke-width="2" x1="-169" y1="-19" x2="-198" y2="-63"></line></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 560px; top: 164px;" data-block-id="f63434685b68364fd47b9aba932c8a76"><div class="sl-block-content" data-line-x1="-169" data-line-y1="-19" data-line-x2="-181" data-line-y2="-79" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 17;"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="12" height="60" viewbox="-181 -79 12 60"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-169" y1="-19" x2="-181" y2="-79"></line><line stroke="#000000" stroke-width="2" x1="-169" y1="-19" x2="-181" y2="-79"></line></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 443px; top: 485px;" data-block-id="f781edfac0e761ed835e0251646b6392"><div class="sl-block-content" data-line-x1="-181" data-line-y1="-19" data-line-x2="-181" data-line-y2="-79" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 18;"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="60" viewbox="-181 -79 1 60"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-181" y1="-19" x2="-181" y2="-79"></line><line stroke="#000000" stroke-width="2" x1="-181" y1="-19" x2="-181" y2="-79"></line></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 728px; top: 490px;" data-block-id="19618b193622a49f96fa741476b982e8"><div class="sl-block-content" data-line-x1="-161" data-line-y1="-24" data-line-x2="-181" data-line-y2="-79" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 19;"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="20" height="55" viewbox="-181 -79 20 55"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-161" y1="-24" x2="-181" y2="-79"></line><line stroke="#000000" stroke-width="2" x1="-161" y1="-24" x2="-181" y2="-79"></line></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 612px; left: 80px; top: 630px;" data-block-id="057ea091f2330a2af1cc2576019055de"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 20;">
+<p><span style="font-size:0.7em"><a href="https://www.youtube.com/watch?v=5ZjhNTM8XU8" target="_blank">Transactions: myths, surprises and opportunities" by Martin Kleppmann</a></span></p>
+</div></div></section><section data-background-color="#ffffff" data-id="0b553f7e7738960b1a1c39e7a0688205">
+
+<div class="sl-block" data-block-type="text" data-block-id="9826514f3663eda86b62ac01c1715563" style="height: auto; min-width: 30px; min-height: 30px; width: 834px; left: 80px; top: 70px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;">
+<p><span style="font-size:1.6em">Atomicity == vrácení dat do původního stavu</span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 754px; left: 126px; top: 155px;" data-block-id="3a79485c44ef10a7caf74b36d4ef42e1"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13; font-size: 300%;">
+<p><span style="font-size:5.0em"><span style="color:#cc0000">A</span>CID</span></p>
+</div></div></section><section data-background-color="#ffffff" data-id="725c33d082c8011a624e027d4dd92218">
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 808px; left: 127px; top: 155px;" data-block-id="f2f103c6fae5a808b40bff9c4c9ffccb">
+<div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; font-size: 300%;" dir="ui">
+<p><span style="font-size:5.0em">A<span style="color:#cc0000">C</span>I<span style="color:#cc0000">D</span></span></p>
+</div>
+<grammarly-extension class="_1KJtL" style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 10;"><div data-grammarly-part="highlights" class="u_fNK" style="position: absolute; top: 0px; left: 0px;"><div style="box-sizing: content-box; top: 0px; left: 0px; width: 607.107px; height: 667.903px; position: relative; pointer-events: none; overflow: hidden; border: 0px; border-radius: 0px; padding: 0px; margin: 0px;"><div style="position: absolute; top: 0px; left: 0px;">
+<div style="height: 1802px; width: 2629px;"></div>
+<div style="position: absolute; top: 0px; left: 0px; height: 1802px; width: 2629px;"></div>
+</div></div></div>
+<div data-grammarly-part="button" class="u_fNK" style="position: absolute; top: 0px; left: 0px;"><div style="box-sizing: content-box; top: 0px; left: 0px; width: 607.107px; height: 667.903px; position: relative; pointer-events: none; overflow: hidden; border: 0px; border-radius: 0px; padding: 0px; margin: 0px;"><div style="position: absolute; transform: translate(-100%, -100%); top: 663.903px; left: 603.107px; width: auto; height: auto; pointer-events: all;"><div style="display: flex; flex-direction: row;">
+<div style="position: relative;"></div>
+<div class="_3-ITD"><div class="_5WizN aN9_b _1QzSN"><div class="_3YmQx"><div title="Protected by Grammarly" class="_3QdKe"> </div></div></div></div>
+</div></div></div></div></grammarly-extension>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 600px; left: 80px; top: 70px;" data-block-id="f5ac6771951d382018397aa6e8fb7713"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;">
+<p><span style="font-size:1.6em">Consistency == data jsou konzistentní</span></p>
+
+<p><span style="font-size:1.6em">Durability == data jsou bezpečně uloženy</span></p>
+</div></div></section><section data-background-color="#ffffff" data-id="27a9c953b11b6df93a3941e6d58ed1f2">
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 709px; left: 127px; top: 155px;" data-block-id="6666eca3139fde4c0284beaf29bf51bc"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; font-size: 300%;">
+<p><span style="font-size:5.0em">AC<span style="color:#cc0000">I</span>D</span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 746px; left: 80px; top: 70px;" data-block-id="cc6ba69ad4e263632ad0c89fa7d9d2fd"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;">
+<p><span style="font-size:1.6em">Isolation == data je možné zpracovávat paralelně</span></p>
+
+<p> </p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 230px; left: 560px; top: 594px;" data-block-id="7cce4985c3eaa49a5831d3a3756bcbbc"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;">
+<p><strong><span style="font-size:1.4em">Serializability !</span></strong></p>
+</div></div></section><section data-background-color="#ffffff" data-id="2ff43d9490ff7f17d6127023e5448cfa"><div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 94px;" data-block-id="aaec0e7aac8d0b060513555462682d9f"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; font-size: 78%;">
+<h1>Lock-based</h1>
+</div></div>
+
+
+<div class="sl-block" data-block-type="table" style="height: auto; min-width: 120px; min-height: 30px; width: 640px; left: 160px; top: 223px;" data-block-id="7aef8fad89b8532c68373e26c226a56e"><div class="sl-block-content" style="z-index: 12; background-color: rgb(214, 241, 250); color: rgb(0, 26, 43);" data-table-border-color="rgb(7, 185, 228)" data-table-border-width="2px" data-table-has-header="true"><table><tbody>
+<tr>
+<th style="border-color: rgb(7, 185, 228); width: 66px; border-width: 2px;">ID</th>
+<th style="border-color: rgb(7, 185, 228); border-width: 2px; width: 301px;">Jméno</th>
+<th style="border-color: rgb(7, 185, 228); border-width: 2px;">Příjmení</th>
+</tr>
+<tr>
+<td style="border-color: rgb(7, 185, 228); width: 66px; border-width: 2px;">1</td>
+<td style="border-color: rgb(7, 185, 228); border-width: 2px; width: 301px;">Zdeněk</td>
+<td style="border-color: rgb(7, 185, 228); border-width: 2px;">Henek</td>
+</tr>
+<tr>
+<td style="border-color: rgb(7, 185, 228); width: 66px; border-width: 2px;">2</td>
+<td style="border-color: rgb(7, 185, 228); border-width: 2px; width: 301px;">Jan</td>
+<td style="border-color: rgb(7, 185, 228); border-width: 2px;">Novotný</td>
+</tr>
+</tbody></table></div></div>
+<div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 40px; height: 50px; left: 109px; top: 258px;" data-block-id="8c5d96789d28c9e91eb22141879a4276"><div class="sl-block-content" style="z-index: 13;" data-inline-svg="true">
+<img style="" data-natural-width="84" data-natural-height="105" data-lazy-loaded="" data-src="transakce-tam-a-zase-zptky/7ede75e2678a4cb4f264917c99effbde.svg"><svg width="84.475" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 84.474669 105.254669" height="105.25" preserveaspectratio="xMidYMid meet">
+ <path d="m42.238 8c-14.66 0-26.586 11.926-26.586 26.586v13.874c-4.09 0.277-6.382 0.523-6.433 0.527a1.37 1.37 0 0 0 -1.219 1.361v43.828c0 0.695 0.52 1.277 1.207 1.363 0.152 0.016 15.012 1.715 33.031 1.715 18.016 0 32.875-1.7 33.024-1.715a1.37 1.37 0 0 0 1.215 -1.363v-43.824a1.373 1.373 0 0 0 -1.223 -1.36c-0.055-0.008-2.344-0.254-6.43-0.531v-13.879c0-14.652-11.93-26.582-26.586-26.582zm0 2.738c13.149 0 23.848 10.696 23.848 23.848v13.703c-2.742-0.164-5.48-0.293-8.223-0.394v-13.31c0-8.616-7.008-15.628-15.625-15.628s-15.628 7.012-15.628 15.629v13.309a370.06 370.06 0 0 0 -8.218 0.394v-13.707c0-13.145 10.699-23.844 23.847-23.844zm0 10.953c7.106 0 12.887 5.79 12.887 12.895v13.223a410.73 410.73 0 0 0 -12.887 -0.196c-4.734 0-9.039 0.075-12.886 0.196v-13.223c0-7.106 5.777-12.895 12.886-12.895zm0 28.657c4.735 0 9.043 0.078 12.887 0.199 3.656 0.101 7.309 0.266 10.96 0.484 0.99 0.059 1.9 0.121 2.74 0.172 2.21 0.156 3.882 0.297 4.913 0.39v41.357h-0.004c-3.875 0.395-16.593 1.57-31.496 1.57-14.906 0-27.625-1.175-31.5-1.57v-41.356c1.028-0.094 2.7-0.235 4.914-0.39 0.836-0.056 1.75-0.114 2.739-0.18 3.652-0.212 7.304-0.372 10.96-0.477 4.294-0.133 8.59-0.2 12.887-0.2zm-12.175 6.449c-0.567 0-1.024 0.46-1.024 1.027 0 0.27 0.11 0.504 0.27 0.688 0.191 0.203 0.453 0.343 0.753 0.343h38.848a1.026 1.026 0 1 0 0 -2.055h-0.086v-0.003zm-14.782 0.348a0.678 0.678 0 0 0 -0.629 0.328 0.689 0.689 0 0 0 0.629 1.04l8.196-0.001a0.687 0.687 0 0 0 0 -1.371h-8.197zm14.781 6.96a1.025 1.025 0 1 0 0 2.051h38.848c0.57 0 1.028-0.457 1.028-1.027 0-0.567-0.458-1.024-1.028-1.024zm-14.78 0.344a0.683 0.683 0 0 0 -0.688 0.68c0 0.379 0.304 0.687 0.687 0.687h8.196a0.689 0.689 0 0 0 0.687 -0.687 0.725 0.725 0 0 0 -0.117 -0.356 0.674 0.674 0 0 0 -0.57 -0.324zm14.78 6.957c-0.566 0-1.027 0.461-1.027 1.028 0 0.57 0.461 1.027 1.027 1.027h38.848c0.274 0.004 0.535-0.106 0.73-0.297a1.031 1.031 0 0 0 -0.73 -1.758zm-14.78 0.344a0.689 0.689 0 0 0 -0.63 1.043 0.685 0.685 0 0 0 0.63 0.328h8.195a0.685 0.685 0 1 0 0 -1.371zm14.78 6.96a1.027 1.027 0 1 0 0 2.055h38.848c0.274 0 0.535-0.105 0.727-0.3 0.195-0.192 0.3-0.453 0.3-0.727 0-0.27-0.105-0.531-0.3-0.726a1.025 1.025 0 0 0 -0.727 -0.297h-38.847zm-14.78 0.34a0.689 0.689 0 0 0 0 1.376h8.195a0.683 0.683 0 0 0 0.683 -0.688 0.682 0.682 0 0 0 -0.683 -0.683h-8.197zm14.78 6.966c-0.566 0-1.023 0.46-1.023 1.027 0 0.566 0.461 1.031 1.023 1.031h38.848a1.03 1.03 0 1 0 0 -2.058zm-14.78 0.343a0.685 0.685 0 0 0 -0.63 1.04 0.689 0.689 0 0 0 0.63 0.331h8.195a0.689 0.689 0 0 0 0.628 -1.043 0.685 0.685 0 0 0 -0.628 -0.328z"></path>
+</svg>
+</div></div></section><section data-background-color="#ffffff" data-id="0546eca72f8004c53b8f5d0e11c4386c"><div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 94px;" data-block-id="2685b0590c8637507d1d644f35687de0"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; font-size: 78%;">
+<h1>Lock-based for serializability</h1>
+</div></div>
+
+
+<div class="sl-block" data-block-type="table" style="height: auto; width: 640px; left: 160px; top: 223px;" data-block-id="4f3f7bbaa0bab95605cdb106af053fe3"><div class="sl-block-content" style="z-index: 12; background-color: rgb(214, 241, 250); color: rgb(0, 26, 43);" data-table-border-color="rgb(7, 185, 228)" data-table-border-width="2px" data-table-has-header="true"><table><tbody>
+<tr>
+<th style="border-color: rgb(7, 185, 228); width: 66px; border-width: 2px;">ID</th>
+<th style="border-color: rgb(7, 185, 228); border-width: 2px; width: 301px;">Jméno</th>
+<th style="border-color: rgb(7, 185, 228); border-width: 2px;">Příjmení</th>
+</tr>
+<tr>
+<td style="border-color: rgb(7, 185, 228); width: 66px; border-width: 2px;">1</td>
+<td style="border-color: rgb(7, 185, 228); border-width: 2px; width: 301px;">Zdeněk</td>
+<td style="border-color: rgb(7, 185, 228); border-width: 2px;">Henek</td>
+</tr>
+<tr>
+<td style="border-color: rgb(7, 185, 228); width: 66px; border-width: 2px;">2</td>
+<td style="border-color: rgb(7, 185, 228); border-width: 2px; width: 301px;">Jan</td>
+<td style="border-color: rgb(7, 185, 228); border-width: 2px;">Novotný</td>
+</tr>
+</tbody></table></div></div>
+<div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 321px; height: 401px; left: 300px; top: 141px;" data-block-id="0bde0b3c5f0085ca7507d1fe5a8a5642"><div class="sl-block-content" style="z-index: 13;" data-inline-svg="true">
+<img style="" data-natural-width="84" data-natural-height="105" data-lazy-loaded="" data-src="transakce-tam-a-zase-zptky/7ede75e2678a4cb4f264917c99effbde.svg"><svg width="84.475" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 84.474669 105.254669" height="105.25" preserveaspectratio="xMidYMid meet">
+ <path d="m42.238 8c-14.66 0-26.586 11.926-26.586 26.586v13.874c-4.09 0.277-6.382 0.523-6.433 0.527a1.37 1.37 0 0 0 -1.219 1.361v43.828c0 0.695 0.52 1.277 1.207 1.363 0.152 0.016 15.012 1.715 33.031 1.715 18.016 0 32.875-1.7 33.024-1.715a1.37 1.37 0 0 0 1.215 -1.363v-43.824a1.373 1.373 0 0 0 -1.223 -1.36c-0.055-0.008-2.344-0.254-6.43-0.531v-13.879c0-14.652-11.93-26.582-26.586-26.582zm0 2.738c13.149 0 23.848 10.696 23.848 23.848v13.703c-2.742-0.164-5.48-0.293-8.223-0.394v-13.31c0-8.616-7.008-15.628-15.625-15.628s-15.628 7.012-15.628 15.629v13.309a370.06 370.06 0 0 0 -8.218 0.394v-13.707c0-13.145 10.699-23.844 23.847-23.844zm0 10.953c7.106 0 12.887 5.79 12.887 12.895v13.223a410.73 410.73 0 0 0 -12.887 -0.196c-4.734 0-9.039 0.075-12.886 0.196v-13.223c0-7.106 5.777-12.895 12.886-12.895zm0 28.657c4.735 0 9.043 0.078 12.887 0.199 3.656 0.101 7.309 0.266 10.96 0.484 0.99 0.059 1.9 0.121 2.74 0.172 2.21 0.156 3.882 0.297 4.913 0.39v41.357h-0.004c-3.875 0.395-16.593 1.57-31.496 1.57-14.906 0-27.625-1.175-31.5-1.57v-41.356c1.028-0.094 2.7-0.235 4.914-0.39 0.836-0.056 1.75-0.114 2.739-0.18 3.652-0.212 7.304-0.372 10.96-0.477 4.294-0.133 8.59-0.2 12.887-0.2zm-12.175 6.449c-0.567 0-1.024 0.46-1.024 1.027 0 0.27 0.11 0.504 0.27 0.688 0.191 0.203 0.453 0.343 0.753 0.343h38.848a1.026 1.026 0 1 0 0 -2.055h-0.086v-0.003zm-14.782 0.348a0.678 0.678 0 0 0 -0.629 0.328 0.689 0.689 0 0 0 0.629 1.04l8.196-0.001a0.687 0.687 0 0 0 0 -1.371h-8.197zm14.781 6.96a1.025 1.025 0 1 0 0 2.051h38.848c0.57 0 1.028-0.457 1.028-1.027 0-0.567-0.458-1.024-1.028-1.024zm-14.78 0.344a0.683 0.683 0 0 0 -0.688 0.68c0 0.379 0.304 0.687 0.687 0.687h8.196a0.689 0.689 0 0 0 0.687 -0.687 0.725 0.725 0 0 0 -0.117 -0.356 0.674 0.674 0 0 0 -0.57 -0.324zm14.78 6.957c-0.566 0-1.027 0.461-1.027 1.028 0 0.57 0.461 1.027 1.027 1.027h38.848c0.274 0.004 0.535-0.106 0.73-0.297a1.031 1.031 0 0 0 -0.73 -1.758zm-14.78 0.344a0.689 0.689 0 0 0 -0.63 1.043 0.685 0.685 0 0 0 0.63 0.328h8.195a0.685 0.685 0 1 0 0 -1.371zm14.78 6.96a1.027 1.027 0 1 0 0 2.055h38.848c0.274 0 0.535-0.105 0.727-0.3 0.195-0.192 0.3-0.453 0.3-0.727 0-0.27-0.105-0.531-0.3-0.726a1.025 1.025 0 0 0 -0.727 -0.297h-38.847zm-14.78 0.34a0.689 0.689 0 0 0 0 1.376h8.195a0.683 0.683 0 0 0 0.683 -0.688 0.682 0.682 0 0 0 -0.683 -0.683h-8.197zm14.78 6.966c-0.566 0-1.023 0.46-1.023 1.027 0 0.566 0.461 1.031 1.023 1.031h38.848a1.03 1.03 0 1 0 0 -2.058zm-14.78 0.343a0.685 0.685 0 0 0 -0.63 1.04 0.689 0.689 0 0 0 0.63 0.331h8.195a0.689 0.689 0 0 0 0.628 -1.043 0.685 0.685 0 0 0 -0.628 -0.328z"></path>
+</svg>
+</div></div></section><section data-background-color="#ffffff" data-id="27061de9c8954537b67fd9d30044c044"><div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 94px;" data-block-id="1262c9973292b292bc21f690a4aba5b5"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; font-size: 78%;">
+<h1>Lock-based isolation levels</h1>
+</div></div>
+
+
+<div class="sl-block" data-block-type="table" style="height: auto; min-width: 200px; min-height: 30px; width: 800px; left: 80px; top: 210px;" data-block-id="f60db1530e48a89324b2d3839ad216d6"><div class="sl-block-content" data-table-rows="5" data-table-cols="5" style="z-index: 11;"><table><tbody>
+<tr>
+<th>Isolation level </th>
+<th>Dirty reads </th>
+<th>Lost updates </th>
+<th>Non-repeatable reads </th>
+<th>Phantoms</th>
+</tr>
+<tr>
+<td>Read Uncommitted </td>
+<td>may occur </td>
+<td>may occur </td>
+<td>may occur </td>
+<td>may occur</td>
+</tr>
+<tr>
+<td>Read Committed </td>
+<td>don't occur </td>
+<td>may occur </td>
+<td>may occur </td>
+<td>may occur</td>
+</tr>
+<tr>
+<td>Repeatable Read </td>
+<td>don't occur </td>
+<td>don't occur </td>
+<td>don't occur </td>
+<td>may occur</td>
+</tr>
+<tr>
+<td>Serializable </td>
+<td>don't occur </td>
+<td>don't occur </td>
+<td>don't occur </td>
+<td>don't occur </td>
+</tr>
+</tbody></table></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 612px; left: 80px; top: 630px;" data-block-id="66fc44b5edf15a7afd5b41fe241ce26d"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;">
+<p><a href="https://en.wikipedia.org/wiki/Isolation_(database_systems)" target="_blank"><span style="font-size:0.7em">https://en.wikipedia.org/wiki/Isolation_(database_systems)</span></a></p>
+</div></div></section><section data-background-color="#ffffff" data-id="35add8bd81791df63c5c68aff29d7e56"><div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 94px;" data-block-id="7e9472f1998d62bf2e0cd4454dbbd647"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; font-size: 78%;">
+<h1>Databáze a transakce</h1>
+</div></div>
+
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 112px; top: 276px;" data-block-id="21b20977a50b5dfbfcc8d4943f0e157b"><div class="sl-block-content" data-line-x1="-251" data-line-y1="111" data-line-x2="426" data-line-y2="112" data-line-color="#000000" data-line-start-type="none" data-line-end-type="line-arrow" style="z-index: 12;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="677" height="1" viewbox="-251 111 677 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-250.5" y1="111.5" x2="424.5" y2="112.5"></line><line stroke="#000000" stroke-width="3" x1="-250.5" y1="111.5" x2="424.5" y2="112.5"></line><path style="fill: rgba(0,0,0,0);" stroke="#000000" stroke-width="3" transform="translate(424,112) rotate(90.085)" d="M 6.75 6.75 L 0 0 L -6.75 6.75"></path></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 122px; top: 257px;" data-block-id="b31e18eebc8c15b93dbba155854a3427"><div class="sl-block-content" data-line-x1="200" data-line-y1="39" data-line-x2="200" data-line-y2="0" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 13;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="39" viewbox="200 0 1 39"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line><line stroke="#000000" stroke-width="3" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 204px; top: 258px;" data-block-id="2e50797d07d38dd92721cc5441b4f5e4"><div class="sl-block-content" data-line-x1="200" data-line-y1="39" data-line-x2="200" data-line-y2="0" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 14;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="39" viewbox="200 0 1 39"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line><line stroke="#000000" stroke-width="3" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 47px; left: 182px; top: 311px;" data-block-id="829a614a06f7c9f29a6f7b506c641e7e"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15; text-align: center;">
+<p>1983<br>
+<span>ACID</span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 600px; left: 80px; top: 428px;" data-block-id="5151325a7bf92c02f5a4a7deb2c7310f"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 16; font-size: 120%;">
+<ul>
+	<li><span><span>First version of ANSI SQL was in 1987</span></span></li>
+	<li>A Critique of ANSI SQL Isolation Levels, Hal Berenson,  Phil Bernstein 1995</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 93px; left: 76px; top: 311px;" data-block-id="b36237eb3974b2ce079a454ce02a3658"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 17; text-align: center;">
+<p><span>1980*<br>
+relační databáze</span></p>
+</div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 306px; top: 258px;" data-block-id="0f146a57420f8f83da35977d7c1d60e4"><div class="sl-block-content" data-line-x1="200" data-line-y1="39" data-line-x2="200" data-line-y2="0" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 18;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="39" viewbox="200 0 1 39"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line><line stroke="#000000" stroke-width="3" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 92px; left: 260px; top: 311px;" data-block-id="6c0f7abaaab9133e55adf4de83ac16a9"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 20; text-align: center;">
+<p>1992<br>
+<span>ANSI SQL</span></p>
+</div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 412px; top: 259px;" data-block-id="3455f9fb28bb88d32faeb2e33573fa3e"><div class="sl-block-content" data-line-x1="200" data-line-y1="39" data-line-x2="200" data-line-y2="0" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 22;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="39" viewbox="200 0 1 39"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line><line stroke="#000000" stroke-width="3" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 92px; left: 366px; top: 312px;" data-block-id="ab4984e21955b2de55f8032f96018c76"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 23; text-align: center;">
+<p>1995<br>
+<span>Critique on ACID</span></p>
+</div></div></section><section data-background-color="#ffffff" data-id="ce1e60d63239237e6b16da89eb2cb10d"><div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 94px;" data-block-id="bc4a921a1bcab4ae1ab7c9e03e77d7c6"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; font-size: 78%;">
+<h1>Lock-based vs. MVCC</h1>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 744px; left: 80px; top: 662px;" data-block-id="0a170b5b6d5563faae652e33e6ecae09"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;">
+<p><span style="font-size:0.7em"><a href="https://medium.com/@FranckPachot/mvcc-in-oracle-vs-postgres-and-a-little-no-bloat-beauty-e3a04d6a8bd2" target="_blank">https://medium.com/@FranckPachot/mvcc-in-oracle-vs-postgres-and-a-little-no-bloat-beauty-e3a04d6a8bd2</a></span></p>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 767px; height: 246px; left: 97px; top: 161px; min-width: 4px; min-height: 4px;" data-block-id="ade3e047c9c0673cf4fcfb5f22e11e47"><div class="sl-block-content" style="z-index: 12;"><img style="" data-natural-width="2500" data-natural-height="802" data-lazy-loaded="" data-src="transakce-tam-a-zase-zptky/8394122f98d62c81ec2f88b2968de472.png"></div></div>
+<div class="sl-block" data-block-type="image" style="width: 767px; height: 242px; left: 103px; top: 407px; min-width: 4px; min-height: 4px;" data-block-id="57694c81529951c96c5cc12ab92caecc"><div class="sl-block-content" style="z-index: 13;"><img style="" data-natural-width="1814" data-natural-height="573" data-lazy-loaded="" data-src="transakce-tam-a-zase-zptky/a646211bfeaf9852a9ea9828f24ed9d5.png"></div></div></section><section data-background-color="#ffffff" data-id="0db4b474c645446392cbcae90c578ead"><div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 94px;" data-block-id="770da13c9adc0e8b12a3e4f05bf2b05f"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; font-size: 78%;">
+<h1>CAP a distribuované databáze</h1>
+</div></div>
+
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 112px; top: 276px;" data-block-id="a1c8c74a0b7c5fdcb88cf78abbed837c"><div class="sl-block-content" data-line-x1="-251" data-line-y1="111" data-line-x2="426" data-line-y2="112" data-line-color="#000000" data-line-start-type="none" data-line-end-type="line-arrow" style="z-index: 12;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="677" height="1" viewbox="-251 111 677 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-250.5" y1="111.5" x2="424.5" y2="112.5"></line><line stroke="#000000" stroke-width="3" x1="-250.5" y1="111.5" x2="424.5" y2="112.5"></line><path style="fill: rgba(0,0,0,0);" stroke="#000000" stroke-width="3" transform="translate(424,112) rotate(90.085)" d="M 6.75 6.75 L 0 0 L -6.75 6.75"></path></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 122px; top: 257px;" data-block-id="4ab2c9969f63eb20850a89223a4d735c"><div class="sl-block-content" data-line-x1="200" data-line-y1="39" data-line-x2="200" data-line-y2="0" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 13;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="39" viewbox="200 0 1 39"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line><line stroke="#000000" stroke-width="3" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 204px; top: 258px;" data-block-id="906164f721e0403f524b8213aaec7b59"><div class="sl-block-content" data-line-x1="200" data-line-y1="39" data-line-x2="200" data-line-y2="0" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 14;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="39" viewbox="200 0 1 39"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line><line stroke="#000000" stroke-width="3" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 47px; left: 182px; top: 311px;" data-block-id="1d5881b194f4de5a3a9963d9ee463f8a"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15; text-align: center;">
+<p>1983<br>
+<span>ACID</span></p>
+</div></div>
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 87px; left: 79px; top: 312px;" data-block-id="cdb6c3c8d7ee1a9eda83e125445e1bbb"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 16; text-align: center;">
+<p><span>1980*<br>
+relační databáze</span></p>
+</div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 306px; top: 258px;" data-block-id="50eefad44f201d61b124c205813be6f9"><div class="sl-block-content" data-line-x1="200" data-line-y1="39" data-line-x2="200" data-line-y2="0" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 17;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="39" viewbox="200 0 1 39"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line><line stroke="#000000" stroke-width="3" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 92px; left: 260px; top: 311px;" data-block-id="7c680a0ad8bc308721505eb3ae87a558"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 18; text-align: center;">
+<p>1992<br>
+<span>ANSI SQL</span></p>
+</div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 412px; top: 259px;" data-block-id="bf887f389ebeba9d39be15bea53761a4"><div class="sl-block-content" data-line-x1="200" data-line-y1="39" data-line-x2="200" data-line-y2="0" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 19;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="39" viewbox="200 0 1 39"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line><line stroke="#000000" stroke-width="3" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 92px; left: 366px; top: 312px;" data-block-id="6117bc5591f07c91ad5bea9ba727840b"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 20; text-align: center;">
+<p>1995<br>
+<span>Critique on ACID</span></p>
+</div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 514px; top: 258px;" data-block-id="4717f3757859402cc5f7ea6415dc2645"><div class="sl-block-content" data-line-x1="200" data-line-y1="39" data-line-x2="200" data-line-y2="0" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 21;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="39" viewbox="200 0 1 39"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line><line stroke="#000000" stroke-width="3" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 92px; left: 468px; top: 311px;" data-block-id="283d2305d94e49d99dec1b0da27d4756"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 22; text-align: center;">
+<p>2000<br>
+<span>CAP</span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 600px; left: 80px; top: 428px;" data-block-id="fc863c4fd0146cd4692b274931c04b98"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 23; font-size: 120%;">
+<ul>
+	<li>Brewer’s CAP Theorem, 2000</li>
+	<li>
+<a href="http://research.microsoft.com/users/lamport/pubs/pubs.html#lamport-paxos" target="_blank">The Part-Time Parliament</a>, Leslie Lamport, 1998</li>
+	<li>
+<a href="https://lamport.azurewebsites.net/pubs/paxos-simple.pdf" target="_blank">Paxos Made Simple</a>, Leslie Lamport, 2001</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 594px; top: 257px;" data-block-id="fbe198956f95044b111149036018d18f"><div class="sl-block-content" data-line-x1="200" data-line-y1="39" data-line-x2="200" data-line-y2="0" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 26;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="39" viewbox="200 0 1 39"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line><line stroke="#000000" stroke-width="3" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 92px; left: 548px; top: 310px;" data-block-id="2716898d61b56d9e236546cf5d3dd369"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 27; text-align: center;">
+<p>2001<br>
+<span>Paxos simple</span></p>
+</div></div></section><section data-background-color="#ffffff" data-id="626633e724a24ac4d8f28385deabd2e4"><div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 94px;" data-block-id="04f266e7f075765ef327b0253add1481"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; font-size: 78%;">
+<h1>CAP theorem</h1>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 744px; left: 80px; top: 662px;" data-block-id="acc241cf8dc7eb32402f0d610749f47f"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;">
+<p><span style="font-size:0.7em"><a href="https://towardsdatascience.com/cap-theorem-and-distributed-database-management-systems-5c2be977950e" target="_blank">https://towardsdatascience.com/cap-theorem-and-distributed-database-management-systems-5c2be977950e</a></span></p>
+</div></div>
+
+<div class="sl-block" data-block-type="image" style="width: 512px; height: 401px; left: 194px; top: 148px; min-width: 4px; min-height: 4px;" data-block-id="4f89a035bdba21cf66ac19fa22ad1f11"><div class="sl-block-content" style="z-index: 13;"><img style="" data-natural-width="444" data-natural-height="348" data-lazy-loaded="" data-src="transakce-tam-a-zase-zptky/e8c23cd3fef64b4d342562335ecdb6b9.jpeg"></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 80px; top: 576px;" data-block-id="297b76b0c0c3ab53af5d9ce74ea2b371"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14;">
+<p><strong><span style="font-size:1.4em">CAP Consistency != ACID consistency</span></strong></p>
+</div></div></section><section data-background-color="#ffffff" data-id="cd82247eeaaf89b9d56ff1dc2930ff31"><div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 94px;" data-block-id="3e61542efb245ac28871a497c55061a9"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; font-size: 78%;">
+<h1>Availability over Consistency</h1>
+</div></div>
+
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 112px; top: 276px;" data-block-id="a533300bed224dcb0a5f01e8afa42d13"><div class="sl-block-content" data-line-x1="-251" data-line-y1="111" data-line-x2="426" data-line-y2="112" data-line-color="#000000" data-line-start-type="none" data-line-end-type="line-arrow" style="z-index: 12;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="677" height="1" viewbox="-251 111 677 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-250.5" y1="111.5" x2="424.5" y2="112.5"></line><line stroke="#000000" stroke-width="3" x1="-250.5" y1="111.5" x2="424.5" y2="112.5"></line><path style="fill: rgba(0,0,0,0);" stroke="#000000" stroke-width="3" transform="translate(424,112) rotate(90.085)" d="M 6.75 6.75 L 0 0 L -6.75 6.75"></path></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 122px; top: 257px;" data-block-id="d162883e852f062ac346103cff3ac217"><div class="sl-block-content" data-line-x1="200" data-line-y1="39" data-line-x2="200" data-line-y2="0" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 13;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="39" viewbox="200 0 1 39"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line><line stroke="#000000" stroke-width="3" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 204px; top: 258px;" data-block-id="6d01c21de5989f6907ef1acc4962ef9e"><div class="sl-block-content" data-line-x1="200" data-line-y1="39" data-line-x2="200" data-line-y2="0" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 14;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="39" viewbox="200 0 1 39"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line><line stroke="#000000" stroke-width="3" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 47px; left: 182px; top: 311px;" data-block-id="e561651ed461260658098c17d38fd893"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15; text-align: center;">
+<p>1983<br>
+<span>ACID</span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 600px; left: 80px; top: 428px;" data-block-id="03e407bd8d638140e1450bc527f6c649"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 16; font-size: 120%;">
+<ul>
+	<li>
+<a href="https://www.allthingsdistributed.com/files/amazon-dynamo-sosp2007.pdf" target="_blank">Amazon's dynamo paper</a>, Amazon, 2007</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 90px; left: 78px; top: 310px;" data-block-id="ef3c13a36dc893a8758bb9a2e20a6750"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 17; text-align: center;">
+<p><span>1980*<br>
+relační databáze</span></p>
+</div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 306px; top: 258px;" data-block-id="df6ec5ec3dc5b00838d809ba7f05e6dd"><div class="sl-block-content" data-line-x1="200" data-line-y1="39" data-line-x2="200" data-line-y2="0" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 18;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="39" viewbox="200 0 1 39"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line><line stroke="#000000" stroke-width="3" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 92px; left: 260px; top: 311px;" data-block-id="d1e23886cd2ef221f83d37d6cccd2fce"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 19; text-align: center;">
+<p>1992<br>
+<span>ANSI SQL</span></p>
+</div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 412px; top: 259px;" data-block-id="65a44a5395b4d8e340f595cdc59c8a94"><div class="sl-block-content" data-line-x1="200" data-line-y1="39" data-line-x2="200" data-line-y2="0" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 20;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="39" viewbox="200 0 1 39"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line><line stroke="#000000" stroke-width="3" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 92px; left: 366px; top: 312px;" data-block-id="fc053b61b17b66608e653345886f147e"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 21; text-align: center;">
+<p>1995<br>
+<span>Critique on ACID</span></p>
+</div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 514px; top: 258px;" data-block-id="5027ba1489dc502150b25134c23e52a0"><div class="sl-block-content" data-line-x1="200" data-line-y1="39" data-line-x2="200" data-line-y2="0" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 22;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="39" viewbox="200 0 1 39"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line><line stroke="#000000" stroke-width="3" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 92px; left: 468px; top: 311px;" data-block-id="d829b5f2b73ca96afe6fc3a5147fe89b"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 23; text-align: center;">
+<p>2000<br>
+<span>CAP</span></p>
+</div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 594px; top: 257px;" data-block-id="29eeef202cb8393802d9464b893aee9a"><div class="sl-block-content" data-line-x1="200" data-line-y1="39" data-line-x2="200" data-line-y2="0" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 24;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="39" viewbox="200 0 1 39"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line><line stroke="#000000" stroke-width="3" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 92px; left: 548px; top: 310px;" data-block-id="bea7c707aecea81fcf52b3a2f5935b5f"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 25; text-align: center;">
+<p>2001<br>
+<span>Paxos simple</span></p>
+</div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 686px; top: 257px;" data-block-id="7e6592b6c6fea70328f82c63a40a68bf"><div class="sl-block-content" data-line-x1="200" data-line-y1="39" data-line-x2="200" data-line-y2="0" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 26;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="39" viewbox="200 0 1 39"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line><line stroke="#000000" stroke-width="3" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 92px; left: 640px; top: 310px;" data-block-id="689efcf911048592ba69b7f576f54469"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 27; text-align: center;">
+<p>2007<br>
+<span>Dynamo paper</span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 154px;" data-block-id="5161afb4089d6232e6d98d0f57f1b653"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 28; font-size: 78%;">
+<h2>NoSQL era</h2>
+</div></div></section><section data-background-color="#ffffff" data-id="3595122bb8b8359d2728e7ca71598735"><div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 94px;" data-block-id="db5d9747f1f1918fbec62184c609be43"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; font-size: 78%;">
+<h1>Consistency strikes back</h1>
+</div></div>
+
+
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 630px; left: 80px; top: 444px;" data-block-id="8259c73f656d4ca2af164af1552025f8"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; font-size: 120%;">
+<ul>
+	<li>
+<a href="https://hal.inria.fr/inria-00609399v1/document" target="_blank">CRDT: Conflict-free replicated data types</a>, Shapiro, 2011</li>
+	<li>
+<a href="https://static.googleusercontent.com/media/research.google.com/en//archive/spanner-osdi2012.pdf" target="_blank">Spanner</a>, Google, 2012</li>
+	<li>
+<a href="http://cs.yale.edu/homes/thomson/publications/calvin-sigmod12.pdf" target="_blank">Calvin</a>, A. Thomson, D. Abadi 2012</li>
+	<li>
+<a href="https://jepsen.io/analyses" target="_blank">Jepsen.io analyses</a>, Kyle Kingsbury</li>
+</ul>
+</div></div>
+
+
+
+
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 868px; top: 259px;" data-block-id="1c3d3de808000f911b9e9cb4caf7b4ad"><div class="sl-block-content" data-line-x1="200" data-line-y1="39" data-line-x2="200" data-line-y2="0" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 16;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="39" viewbox="200 0 1 39"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line><line stroke="#000000" stroke-width="3" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 92px; left: 822px; top: 312px;" data-block-id="c866fc687baca2c160270c4729d942e9"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 17; text-align: center;">
+<p>2012<br>
+Spanner</p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 154px;" data-block-id="9e40c232fb07c79adac6ed6c7d8cd0c7"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 19; font-size: 78%;">
+<h2>NewSQL era</h2>
+</div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 772px; top: 259px;" data-block-id="9473c5424a5427d7509aba1508856c8f"><div class="sl-block-content" data-line-x1="200" data-line-y1="39" data-line-x2="200" data-line-y2="0" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 21;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="39" viewbox="200 0 1 39"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line><line stroke="#000000" stroke-width="3" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 92px; left: 726px; top: 312px;" data-block-id="56dc4d861f779088fde06551e90ffbe1"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 23; text-align: center;">
+<p>2011<br>
+CRDT</p>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 285px; height: 223px; left: 655px; top: 477px; min-width: 4px; min-height: 4px;" data-block-id="07d29d47470e1ec9b7060ec9c84f6b4b"><div class="sl-block-content" style="z-index: 25;"><img style="" data-natural-width="444" data-natural-height="348" data-lazy-loaded="" data-src="transakce-tam-a-zase-zptky/e8c23cd3fef64b4d342562335ecdb6b9.jpeg"></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 112px; top: 276px;" data-block-id="3c1e7ec2dbf2c987435ac6ad43d679f5"><div class="sl-block-content" data-line-x1="-251" data-line-y1="111" data-line-x2="551" data-line-y2="111" data-line-color="#000000" data-line-start-type="none" data-line-end-type="line-arrow" style="z-index: 33;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="802" height="1" viewbox="-251 111 802 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-250.5" y1="111.5" x2="549.5" y2="111.5"></line><line stroke="#000000" stroke-width="3" x1="-250.5" y1="111.5" x2="549.5" y2="111.5"></line><path style="fill: rgba(0,0,0,0);" stroke="#000000" stroke-width="3" transform="translate(549,111) rotate(90)" d="M 6.75 6.75 L 0 0 L -6.75 6.75"></path></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 122px; top: 257px;" data-block-id="c55ee4c4d6149318c92040d3686ac480"><div class="sl-block-content" data-line-x1="200" data-line-y1="39" data-line-x2="200" data-line-y2="0" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 34;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="39" viewbox="200 0 1 39"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line><line stroke="#000000" stroke-width="3" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 204px; top: 258px;" data-block-id="e12cf96a31cad2059490f9b7a05ae80c"><div class="sl-block-content" data-line-x1="200" data-line-y1="39" data-line-x2="200" data-line-y2="0" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 35;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="39" viewbox="200 0 1 39"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line><line stroke="#000000" stroke-width="3" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 47px; left: 182px; top: 311px;" data-block-id="274149076399ac67514359077f891b0c"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 36; text-align: center;">
+<p>1983<br>
+<span>ACID</span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 90px; left: 78px; top: 310px;" data-block-id="c88e9f2bcf6f6a4b42b27ca5a830f268"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 37; text-align: center;">
+<p><span>1980*<br>
+relační databáze</span></p>
+</div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 306px; top: 258px;" data-block-id="609b23eef7e5fba523d0372a95a9c3ce"><div class="sl-block-content" data-line-x1="200" data-line-y1="39" data-line-x2="200" data-line-y2="0" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 38;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="39" viewbox="200 0 1 39"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line><line stroke="#000000" stroke-width="3" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 92px; left: 260px; top: 311px;" data-block-id="171e5b0f29e6f0d218c0a3daf8fa9231"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 39; text-align: center;">
+<p>1992<br>
+<span>ANSI SQL</span></p>
+</div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 412px; top: 259px;" data-block-id="0afbaadedac384f4ed4653d0a1489981"><div class="sl-block-content" data-line-x1="200" data-line-y1="39" data-line-x2="200" data-line-y2="0" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 40;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="39" viewbox="200 0 1 39"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line><line stroke="#000000" stroke-width="3" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 92px; left: 366px; top: 312px;" data-block-id="ef93eeac10474c51f6062b8a91ac297e"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 41; text-align: center;">
+<p>1995<br>
+<span>Critique on ACID</span></p>
+</div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 514px; top: 258px;" data-block-id="055bad04fd2a404ec24c5a2394c5e83a"><div class="sl-block-content" data-line-x1="200" data-line-y1="39" data-line-x2="200" data-line-y2="0" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 42;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="39" viewbox="200 0 1 39"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line><line stroke="#000000" stroke-width="3" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 92px; left: 468px; top: 311px;" data-block-id="1decec4d75aa3ff76e4908e2e30d9e81"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 43; text-align: center;">
+<p>2000<br>
+<span>CAP</span></p>
+</div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 594px; top: 257px;" data-block-id="91a4e71be774496780c05bffdea6bd66"><div class="sl-block-content" data-line-x1="200" data-line-y1="39" data-line-x2="200" data-line-y2="0" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 44;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="39" viewbox="200 0 1 39"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line><line stroke="#000000" stroke-width="3" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 92px; left: 548px; top: 310px;" data-block-id="8a1c665dedf4ec9396f444bd3c010539"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 45; text-align: center;">
+<p>2001<br>
+<span>Paxos simple</span></p>
+</div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 686px; top: 257px;" data-block-id="75a9de9a7e0e665d0c9254c28fce749d"><div class="sl-block-content" data-line-x1="200" data-line-y1="39" data-line-x2="200" data-line-y2="0" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 46;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="39" viewbox="200 0 1 39"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line><line stroke="#000000" stroke-width="3" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 92px; left: 640px; top: 310px;" data-block-id="76174d945f427f5744f595d87689e8d2"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 47; text-align: center;">
+<p>2007<br>
+<span>Dynamo paper</span></p>
+</div></div></section><section data-background-color="#ffffff" data-id="a1217e8302f79463fb27959a7dedf84a"><div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 94px;" data-block-id="522c55936f9e4c05b9344fee51032e01"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; font-size: 78%;">
+<h1>NoSQL to NewSQL</h1>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 744px; left: 80px; top: 630px;" data-block-id="3ea7b68a922f049fbe293e094a78f38e"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; font-size: 120%;">
+<p><span style="font-size:0.5em"><a href="https://medium.com/rabiprasadpadhy/google-spanner-a-newsql-journey-or-beginning-of-the-end-of-the-nosql-era-3785be8e5c38" target="_blank">https://medium.com/rabiprasadpadhy/google-spanner-a-newsql-journey-or-beginning-of-the-end-of-the-nosql-era-3785be8e5c38</a></span></p>
+</div></div>
+
+<div class="sl-block" data-block-type="image" style="width: 772px; height: 420px; left: 94px; top: 179px; min-width: 4px; min-height: 4px;" data-block-id="12cc4a651b0b9a9f73c7da0ca0398b83"><div class="sl-block-content" style="z-index: 12;"><img style="" data-natural-width="752" data-natural-height="409" data-lazy-loaded="" data-src="transakce-tam-a-zase-zptky/963da5130aea42f5a51e3f8f7ecc3c28.jpg"></div></div></section><section data-background-color="#ffffff" data-id="96d080c7db35634fd137035db57173aa"><div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 94px;" data-block-id="cea669a05144e652f6b899eed08dc824"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; font-size: 78%;">
+<h1>A co aplikace?</h1>
+</div></div>
+
+
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 112px; top: 276px;" data-block-id="aab8ef42b60ad99fe9984364ee92d4b0"><div class="sl-block-content" data-line-x1="-251" data-line-y1="111" data-line-x2="551" data-line-y2="111" data-line-color="#000000" data-line-start-type="none" data-line-end-type="line-arrow" style="z-index: 12;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="802" height="1" viewbox="-251 111 802 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-250.5" y1="111.5" x2="549.5" y2="111.5"></line><line stroke="#000000" stroke-width="3" x1="-250.5" y1="111.5" x2="549.5" y2="111.5"></line><path style="fill: rgba(0,0,0,0);" stroke="#000000" stroke-width="3" transform="translate(549,111) rotate(90)" d="M 6.75 6.75 L 0 0 L -6.75 6.75"></path></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 122px; top: 257px;" data-block-id="19142d5b9f92fd703f33f0535be2fa36"><div class="sl-block-content" data-line-x1="200" data-line-y1="39" data-line-x2="200" data-line-y2="0" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 13;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="39" viewbox="200 0 1 39"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line><line stroke="#000000" stroke-width="3" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 529px; top: 258px;" data-block-id="a808bd6b30a4267f1e7ae00187c2055c"><div class="sl-block-content" data-line-x1="200" data-line-y1="39" data-line-x2="200" data-line-y2="0" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 14;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="39" viewbox="200 0 1 39"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line><line stroke="#000000" stroke-width="3" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 120px; left: 469px; top: 311px;" data-block-id="161015e7b77b7012d336dacb8daff822"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15; text-align: center;">
+<p>2011<br>
+<span>Microservices</span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 90px; left: 78px; top: 310px;" data-block-id="ef35f635fa1674e057556c1528291cc8"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 16; text-align: center;">
+<p><span>1991<br>
+XA spec</span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 600px; left: 80px; top: 428px;" data-block-id="b238154668d4466976b8c26a0a32ed3f"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 17; font-size: 120%;">
+<ul>
+	<li>
+<a href="https://pubs.opengroup.org/onlinepubs/009680699/toc.pdf" target="_blank">XA specification</a>, 1991</li>
+	<li>
+<a href="https://queue.acm.org/detail.cfm?id=1394128" target="_blank">BASE, an ACID alternative</a>, Ebay, 2008</li>
+	<li>
+<a href="http://highscalability.com/blog/2013/5/1/myth-eric-brewer-on-why-banks-are-base-not-acid-availability.html" target="_blank">Why banks are BASE</a>, 2013</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 399px; top: 258px;" data-block-id="2cd9be625acd200d1572fc69dfb3ffd2"><div class="sl-block-content" data-line-x1="200" data-line-y1="39" data-line-x2="200" data-line-y2="0" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 18;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="39" viewbox="200 0 1 39"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line><line stroke="#000000" stroke-width="3" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 90px; left: 355px; top: 311px;" data-block-id="70217f62a2bd52288e5b718c2f64789c"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 19; text-align: center;">
+<p><span>2008<br>
+BASE</span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 781px; left: 78px; top: 599px;" data-block-id="9255139473281602e291853380d51930"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 20;">
+<p><em><span style="font-size:1.2em">"Dva největší problémy při programování jsou <strong>invalidace cache</strong>, pojmenování věcí a chyby o jedničku."</span></em></p>
+</div></div></section><section data-id="69d6cda48c3b270683dced34eeca2437"><div class="sl-block" data-block-type="image" style="width: 960px; height: 540px; left: 0px; top: 20px; min-width: 4px; min-height: 4px;" data-block-id="5aa25a571976f733439a16d88c63671b"><div class="sl-block-content" style="z-index: 10;"><img style="" data-natural-width="1733" data-natural-height="974" data-lazy-loaded="" data-src="transakce-tam-a-zase-zptky/98f6cbe5df522c905816bc6487bbea47.png"></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 600px; left: 80px; top: 636px;" data-block-id="055d868ba91542aa830cfe3f9b716d88"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;">
+<p><span style="font-size:0.7em"><a href="https://martin.kleppmann.com/2015/09/26/transactions-at-strange-loop.html" target="_blank">Martin Kleppmann: Transactions: myths, surprises and opportunities</a></span></p>
+</div></div></section><section data-background-color="#ffffff" data-id="444a64b9a919e78d4610edb4eb020636"><div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 94px;" data-block-id="e22ba9f11d32714d127e7f3d25576614"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; font-size: 78%;">
+<h1>?</h1>
+</div></div>
+
+
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 112px; top: 276px;" data-block-id="f5ffc59076044eb894f93df9c462ab56"><div class="sl-block-content" data-line-x1="-251" data-line-y1="111" data-line-x2="551" data-line-y2="111" data-line-color="#000000" data-line-start-type="none" data-line-end-type="line-arrow" style="z-index: 11;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="802" height="1" viewbox="-251 111 802 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-250.5" y1="111.5" x2="549.5" y2="111.5"></line><line stroke="#000000" stroke-width="3" x1="-250.5" y1="111.5" x2="549.5" y2="111.5"></line><path style="fill: rgba(0,0,0,0);" stroke="#000000" stroke-width="3" transform="translate(549,111) rotate(90)" d="M 6.75 6.75 L 0 0 L -6.75 6.75"></path></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 122px; top: 257px;" data-block-id="d1319be9b8b6d56b2f8629d794b9c874"><div class="sl-block-content" data-line-x1="200" data-line-y1="39" data-line-x2="200" data-line-y2="0" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 12;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="39" viewbox="200 0 1 39"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line><line stroke="#000000" stroke-width="3" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 529px; top: 258px;" data-block-id="58bb5e6d5877447b3fedbc73e1d38d7e"><div class="sl-block-content" data-line-x1="200" data-line-y1="39" data-line-x2="200" data-line-y2="0" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 13;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="39" viewbox="200 0 1 39"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line><line stroke="#000000" stroke-width="3" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 120px; left: 469px; top: 311px;" data-block-id="0dbd385f8d94f0660b9c20a1d1b335fb"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15; text-align: center;">
+<p>2011<br>
+<span>Microservices</span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 90px; left: 78px; top: 310px;" data-block-id="6c754e58fcbf488590d3e38586ac3f03"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 16; text-align: center;">
+<p><span>1991<br>
+XA spec</span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 707px; left: 80px; top: 420px;" data-block-id="2da29510ccf3530f951713d03592d39a"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 17; font-size: 120%;">
+<ul>
+	<li>
+<a href="https://www.cs.cornell.edu/andru/cs711/2002fa/reading/sagas.pdf" target="_blank">Saga</a> pattern/comensation transactions</li>
+	<li><a href="https://downloads.ctfassets.net/oxjq45e8ilak/4SsM2jbOGGA5zJoPlaTZex/4deee4d1c9bc1f8931db80818a314440/100525_918432061_Denis_Rystsov_The_cost_of_distributed_transactions_between_arbitrary_databases.pdf" target="_blank">Protocols for "client-side" distributed transactions</a></li>
+	<li>Event-sourcing message based approach (<a href="https://www.confluent.io/blog/transactions-apache-kafka/" target="_blank">Kafka</a> and friends)</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 399px; top: 258px;" data-block-id="79037e5bc1e544b12318d87a365668bd"><div class="sl-block-content" data-line-x1="200" data-line-y1="39" data-line-x2="200" data-line-y2="0" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 18;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="39" viewbox="200 0 1 39"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line><line stroke="#000000" stroke-width="3" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 90px; left: 355px; top: 311px;" data-block-id="53d7f5562d6b0eab3e021abff5fab159"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 19; text-align: center;">
+<p><span>2008<br>
+BASE</span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 120px; left: 720px; top: 304px;" data-block-id="d6144096a808efebf24d54c4092458f5"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 20; text-align: center;">
+<p>2019<br>
+<span>?</span></p>
+</div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 780px; top: 258px;" data-block-id="9ccad8be966e1fee5fce8e9e6fbf8606"><div class="sl-block-content" data-line-x1="200" data-line-y1="39" data-line-x2="200" data-line-y2="0" data-line-color="#000000" data-line-start-type="none" data-line-end-type="none" style="z-index: 21;" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="39" viewbox="200 0 1 39"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line><line stroke="#000000" stroke-width="3" x1="200.5" y1="39.5" x2="200.5" y2="0.5"></line></svg></div></div></section><section data-id="b462d1dee102acdc98411074e616ba65" data-background-image="transakce-tam-a-zase-zptky/bb2f395966c14a792972cee64373c48a.svg" data-background-color="rgb(244,244,244)"><div class="sl-block" data-block-type="text" style="height: auto; width: 600px; left: 168px; top: 301px;" data-block-id="a371c64b292f9a3953fbfea07825298b"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; text-align: center; padding: 25px; border-style: solid; border-width: 2px; font-size: 168%;">
+<p>DÍKY ZA POZORNOST</p>
+</div></div></section><section data-background-color="rgb(244,244,244)" data-background-image="transakce-tam-a-zase-zptky/bb2f395966c14a792972cee64373c48a.svg" data-id="e296bb7f513229a58393157407da81c8"><div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 960px; height: 398px; left: 0px; top: 92px;" data-block-id="b85d089c9ddbd7d02c649be64f835bb1"><div class="sl-block-content" style="z-index: 11;"><img style="" data-natural-width="1607" data-natural-height="666" data-src="transakce-tam-a-zase-zptky/5e0ca6b8cd0ab6298360c504641a9bdc.png"></div></div></section>
+			</div>
+		</div>
+
+		<script>
+			var SLConfig = {"deck": {"id":1620718,"slug":"transakce-tam-a-zase-zptky","title":" Transakce ...tam a zase zpátky","description":"","width":960,"height":700,"visibility":"self","published_at":null,"sanitize_messages":null,"thumbnail_url":"https://s3.amazonaws.com/media-p.slid.es/thumbnails/d5141b9ad82bd0ba09fb8d82625607d9/thumb.jpg?1570785622","view_count":0,"user":{"id":313440,"username":"ochaloup","name":"Ondra Chaloupka","description":null,"thumbnail_url":"https://www.gravatar.com/avatar/fe413d477de5d7fc374e766fde3528d6?s=140\u0026d=https%3A%2F%2Fstatic.slid.es%2Fimages%2Fdefault-profile-picture.png","paid":true,"pro":true,"lite":false,"team_id":32,"settings":{"id":142264,"present_controls":true,"present_upsizing":true,"present_pointer":false,"present_notes":true,"default_deck_tag_id":null},"enterprise":true,"membership":{"role":"member","manager":false,"activated":true}},"background_transition":"none","transition":"none","theme_id":2184,"theme_font":"overpass2","theme_color":"no-color","auto_slide_interval":0,"comments_enabled":true,"forking_enabled":false,"rolling_links":false,"center":false,"shuffle":false,"should_loop":false,"share_notes":false,"slide_number":false,"slide_count":23,"rtl":false,"version":2,"collaborative":null,"deck_user_editor_limit":null,"data_updated_at":1570787942948,"font_typekit":null,"font_google":null,"time_limit":null,"upsizing_enabled":true,"notes":{"04791e540f9558a8afbf5aa04f3eec27":"","e44ccdd923b373d43440a0ea513babb6":"","86104b16f85d978d6d123f3de892bfec":"","f2ea2eccbc0606a72f50fcedc384a867":"","69d6cda48c3b270683dced34eeca2437":"","c0576ca0f4afb664e70d9c0f15e8f13b":"","2ff43d9490ff7f17d6127023e5448cfa":"","b6777bf1f11252ebd08648986e9ebd61":"","3c28705aff28e106cfb24b2ecd7f59c6":"","0b553f7e7738960b1a1c39e7a0688205":"","725c33d082c8011a624e027d4dd92218":"","27a9c953b11b6df93a3941e6d58ed1f2":"","43fbff5efc8bcb0ad0c896abca7287c6":"","ce1e60d63239237e6b16da89eb2cb10d":"https://vladmihalcea.com/a-beginners-guide-to-read-and-write-skew-phenomena/","35add8bd81791df63c5c68aff29d7e56":"","0546eca72f8004c53b8f5d0e11c4386c":"","27061de9c8954537b67fd9d30044c044":"","88633e98b56a10f39533851ac98bfb3c":"","0db4b474c645446392cbcae90c578ead":"","cd82247eeaaf89b9d56ff1dc2930ff31":"","626633e724a24ac4d8f28385deabd2e4":"","3595122bb8b8359d2728e7ca71598735":"","592a20556cac8a73d1976ccfcce62d47":"","418dc2d8727689545647369ddce80b31":"","a1217e8302f79463fb27959a7dedf84a":"","010af83a6b976a59630de4c56d324ded":"","96d080c7db35634fd137035db57173aa":"","444a64b9a919e78d4610edb4eb020636":"","b462d1dee102acdc98411074e616ba65":"","88877c1191fd63dbc55610247c5df626":"","e296bb7f513229a58393157407da81c8":""}}};
+
+				SLConfig.theme = {"id":2184,"created_at":"2019-04-25T14:28:52.891Z","updated_at":"2019-08-27T05:53:25.953Z","name":"Red Hat Corporate","thumbnail_url":"https://s3.amazonaws.com/media-p.slid.es/thumbnails/e3baed96f5cc1002d965e29140676112/thumb.jpg?1566885203","sanitize_messages":null,"slide_template_ids":[26762,26765],"font_typekit":"","font_google":"","width":960,"height":700};
+
+			// Use local fonts
+			SLConfig.fonts_url = 'lib/fonts/';
+		</script>
+
+		<script src="lib/reveal.min.js"></script>
+		<script src="lib/offline.js"></script>
+
+		<!-- Initialize the presentation -->
+		<script>
+			Reveal.initialize({
+				width: 960,
+				height: 700,
+				margin: 0.05,
+				
+
+				hash: true,
+				controls: true,
+				progress: true,
+				mouseWheel: false,
+				showNotes: false,
+				slideNumber: false,
+
+				autoSlide: 0,
+				autoSlideStoppable: true,
+
+				center: false,
+				shuffle: false,
+				loop: false,
+				rtl: false,
+
+				transition: "none",
+				backgroundTransition: "none",
+
+				highlight: {
+					escapeHTML: false
+				},
+
+				dependencies: [
+					{ src: 'lib/reveal-plugins/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'lib/reveal-plugins/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'lib/reveal-plugins/highlight/highlight.js' },
+					{ src: 'lib/reveal-plugins/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'lib/reveal-plugins/zoom/zoom.js', async: true }
+				]
+			});
+		</script>
+
+		
+  <script id="theme-js-output" type="text/javascript">// piwik script
+var _paq = _paq || [];
+_paq.push(["trackPageView"]);
+_paq.push(["enableLinkTracking"]);
+
+/*
+window.addEventListener('load', function() {
+var u = (("https:" == document.location.protocol) ? "https" : "http") +
+"://engstats.redhat.com/piwik/";
+_paq.push(["setTrackerUrl", u+"piwik.php"]);
+_paq.push(["setSiteId", "8"]);
+var d=document, g=d.createElement("script"),
+s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
+g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
+});
+*/
+
+
+
+ 
+function sliceString(selector) {
+    var elements = document.getElementsByClassName(selector);
+
+ 
+    for (var h=0; h<elements.length; h++){
+      var string = elements[h].innerText,
+          total = string.length,
+          div = '';
+
+// futile attempt to clean space
+var string = elements[h].innerText.trim();
+     
+      for (var i=0; i<total;  i++) {
+        var letter = string.charAt(i);
+        div+= '<span class="'+letter+'">'+letter+'</span>';
+      }
+      elements[h].innerHTML = div;
+    }        
+}
+sliceString('lettering');
+sliceString('lettering'); //no rogue spaces when fired twice for some reason
+</script>
+
+	</body>
+</html>
