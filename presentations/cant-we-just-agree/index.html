@@ -1,0 +1,2618 @@
+<!DOCTYPE html>
+	<html class="sl-root decks export offline loaded">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<title>Consensus FI MUNI</title>
+
+
+		<link rel="stylesheet" type="text/css" href="lib/offline-v2.css">
+
+		<!-- Team CSS -->
+		<style id="global-css-output" type="text/css">
+			@import url("https://s3.amazonaws.com/static.slid.es/fonts/overpass2/overpass2.css");
+.reveal {
+  
+
+  /*fix icon inversion*/
+
+}
+.reveal svg,
+.reveal text,
+.reveal tspan,
+.reveal svg text {
+  font-family: "Overpass 2", Overpass, sans-serif !important;
+  color: currentcolor;
+  fill: currentcolor;
+}
+.reveal .sl-block {
+  color: #354045;
+  fill: currentcolor;
+}
+.reveal .sl-block svg {
+  color: currentcolor;
+}
+.reveal .has-dark-background,
+.reveal .has-dark-background > .sl-block {
+  color: white;
+  fill: currentcolor;
+}
+.reveal section > .sl-block .redhat-logo .logotext {
+  fill: #000000;
+}
+.reveal .has-dark-background > .sl-block .redhat-logo .logotext {
+  fill: #ffffff;
+}
+.reveal .has-dark-background > .sl-block[data-block-type="image"] {
+  color: #ffffff;
+}
+.reveal [fill="none"] {
+  fill: none !important;
+}
+.reveal [fill="#a30000"] {
+  fill: #aa0000 !important;
+}
+.reveal [fill="#cc2029"],
+.reveal [fill="#cb2027"],
+.reveal [fill="#c00"] {
+  fill: #cc0000 !important;
+}
+.reveal [fill="#fff"] {
+  fill: #ffffff !important;
+}
+.reveal [fill="#6d6e70"] {
+  fill: #6d6e70 !important;
+}
+.reveal [fill="#231f20"] {
+  fill: currentcolor !important;
+}
+.reveal [fill="#efab1f"] {
+  fill: #efab1f !important;
+}
+.reveal [fill="#92d400"] {
+  fill: #92d400 !important;
+}
+.reveal .has-dark-background [fill="#6d6e70"] {
+  fill: #266272 !important;
+}
+.reveal .has-dark-background [fill="#fff"] {
+  fill: #555555 !important;
+}
+.reveal .has-dark-background [fill="#fff"] {
+  fill: #333333 !important;
+}
+.reveal .has-dark-background [stroke="#231f20"] {
+  stroke: currentcolor;
+}
+.reveal [data-inline-svg="true"] img {
+  display: none;
+}
+
+		</style>
+
+		<!-- Theme CSS -->
+		<style id="theme-css-output" type="text/css">
+			@import url(//overpassmonotest-30e2.kxcdn.com/overpass-mono.css);
+.reveal {
+  
+  /*
+.sl-block[data-block-type="snippet"],
+.sl-block[data-block-type="image"] 
+{
+text,
+tspan,
+polygon,
+path,
+rect,
+ellipse {
+  fill: currentcolor;
+}
+}
+*/
+  /*slide-default*/
+  /*Custom Ordered Lists */
+  /*helpers*/
+  /*fixing left aligned text*/
+  /*h1,h2,h3,h4,h5,h6{&::first-letter{margin-left:-.09em;}}*/
+  /*icon absolute brute-fix*/
+  /*
+.present .icon.stroked path.long{ stroke-width: 2px ;
+-webkit-animation: icon-animation-long 3.5s 1.5s 1;
+-moz-animation:    icon-animation-long 3.5s 1.5s 1;
+animation:         icon-animation-long 3.5s 1.5s 1;
+}*/
+  /*
+.present .icon.stroked path.short{
+-webkit-animation: icon-animation-short 3.5s 1.5s 1;
+-moz-animation:    icon-animation-short 3.5s 1.5s 1;
+animation:         icon-animation-short 3.5s 1.5s 1;
+}*/
+  /*controls logic*/
+  /*animated logos with complex svg segments*/
+  /*transitions*/
+  /*logos svg files that contain inverted path alternates */
+  /* call to action */
+  /* tables in snippets.... the devil */
+  /* tables in text */
+  /*testimonial snippet */
+  /*for inverting images*/
+  /**/
+  /*code blocks*/
+  /* round line arrows */
+  /*fix icon inversion*/
+  /*body:hover .corner svg{transform: translate(30%, 30%)}*/
+}
+.reveal.reveal[role="application"] > .backgrounds > .slide-background:not(.stack):first-child,
+.reveal.reveal[role="application"] > .backgrounds > .stack:first-child > .slide-background:first-child,
+.reveal.reveal[role="application"] .slides > .pdf-page:not(.stack):first-child .slide-background,
+.reveal.reveal[role="application"] .slides > .stack:first-child > .pdf-page:first-child .slide-background {
+  background-color: #900;
+  color: #fff;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  background-image: linear-gradient(-45deg, #8e0000 20%, #820000 20%, #990000 85%, #890000 85%);
+  min-height: 100vh;
+}
+.reveal.reveal[role="application"] > .backgrounds > .slide-background:not(.stack):first-child.has-light-background,
+.reveal.reveal[role="application"] > .backgrounds > .stack:first-child > .slide-background:first-child.has-light-background,
+.reveal.reveal[role="application"] .slides > .pdf-page:not(.stack):first-child .slide-background.has-light-background,
+.reveal.reveal[role="application"] .slides > .stack:first-child > .pdf-page:first-child .slide-background.has-light-background {
+  background-image: none;
+}
+.reveal.reveal .slides > .section:first-child,
+.reveal.reveal[role="application"] > .slides > .section:first-child .sl-block {
+  color: #fff;
+}
+.reveal .name {
+  white-space: nowrap;
+}
+.reveal .reveal,
+.reveal .sl-block,
+.reveal .sl-block-content,
+.reveal .sl-block-content div,
+.reveal .sl-block-content p,
+.reveal .sl-block-content h1,
+.reveal .sl-block-content h2,
+.reveal .sl-block-content h3,
+.reveal .sl-block-content h4 {
+  font-family: "Overpass 2", overpass, "Hiragino Kaku Gothic", "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ Pro W3", sans-serif;
+}
+.reveal .future .sl-block-content,
+.reveal .past .sl-block-content {
+  transition: none !important;
+}
+.reveal section,
+.reveal.reveal .has-dark-background,
+.reveal section.background-shade-dark {
+  color: #fff;
+}
+.reveal.reveal .has-dark-background a {
+  color: #eee;
+}
+.reveal.reveal .has-dark-background a:hover {
+  color: #fff;
+}
+.reveal .backgrounds {
+  background: #f3f4f4;
+}
+.reveal .slide-background {
+  background-size: cover;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+}
+.reveal .slide-background.has-light-background {
+  /*background-image: url(//s3.amazonaws.com/media-p.slid.es/uploads/team-32/images/1297460/standard-background.svg);*/
+}
+.reveal .backgrounds .paint-it-red {
+  background-color: #c00 !important;
+  -moz-background-blend-mode: multiply;
+  -webkit-background-blend-mode: multiply;
+  -ms-background-blend-mode: multiply;
+  background-blend-mode: multiply;
+}
+.reveal .paint-it-red {
+  color: #fff;
+}
+.reveal .has-dark-background .icon.stroked path,
+.reveal section.background-shade-dark .icon.stroked path,
+.reveal section.light-foreground .icon.stroked path {
+  stroke: #fff !important;
+}
+.reveal .has-dark-background .redhat-product-logotype path,
+.reveal section.background-shade-dark .redhat-product-logotype path,
+.reveal section.light-foreground .redhat-product-logotype path {
+  fill: #ffffff;
+}
+.reveal .has-dark-background text.logotext,
+.reveal section.background-shade-dark text.logotext,
+.reveal section.light-foreground text.logotext,
+.reveal .has-dark-background .logotext text,
+.reveal section.background-shade-dark .logotext text,
+.reveal section.light-foreground .logotext text,
+.reveal .has-dark-background path.logotext,
+.reveal section.background-shade-dark path.logotext,
+.reveal section.light-foreground path.logotext,
+.reveal .has-dark-background path.logotype,
+.reveal section.background-shade-dark path.logotype,
+.reveal section.light-foreground path.logotype,
+.reveal .has-dark-background .logotext path,
+.reveal section.background-shade-dark .logotext path,
+.reveal section.light-foreground .logotext path {
+  fill: #fff !important;
+}
+.reveal .has-dark-background .closing-logo .logotext,
+.reveal section.background-shade-dark .closing-logo .logotext,
+.reveal section.light-foreground .closing-logo .logotext,
+.reveal .has-dark-background .redhat-logo .logotext,
+.reveal section.background-shade-dark .redhat-logo .logotext,
+.reveal section.light-foreground .redhat-logo .logotext {
+  fill: #ffffff !important;
+}
+.reveal .has-light-background .icon.stroked path {
+  stroke: currentcolor;
+}
+.reveal .has-light-background .redhat-logo .logotext,
+.reveal .has-light-background .redhat-logo .logohat {
+  fill: #000000 !important;
+}
+.reveal .sl-block-content ol li {
+  position: relative;
+  padding-bottom: 0.5em;
+}
+.reveal .sl-block-content ol li > p:first-child {
+  margin: 0;
+}
+.reveal .sl-block-content ol > li::before {
+  margin-left: -2.5em;
+}
+.reveal .sl-block-content > ol > li:before {
+  float: left;
+  text-align: center;
+  box-shadow: inset 0 0 0 0.1em;
+  border-radius: 50%;
+}
+.reveal .sl-block-content ol {
+  counter-reset: section;
+  list-style-type: none;
+  margin: 0 0 0 2.5em;
+  display: block;
+}
+.reveal .sl-block-content ol ol {
+  margin-top: 0.5em;
+}
+.reveal .sl-block-content ol > li:before {
+  font-weight: 400;
+  display: inline-block;
+  width: 1.75em;
+  height: 1.75em;
+  line-height: 1.75em;
+  text-align: center;
+  letter-spacing: 0;
+  font-size: 0.75em;
+  margin: 0 0.75em 0 -2.5em;
+  counter-increment: section;
+  content: counters(section, ".") " ";
+  white-space: nowrap;
+}
+.reveal .sl-block-content > ol > li ol li:before {
+  opacity: 0.5;
+  text-align: left;
+  box-shadow: none;
+  letter-spacing: 0.1em;
+}
+.reveal .sl-block-content > ol > li > ol > li > ol > li:before {
+  width: 4em;
+  left: -3em;
+  font-size: 0.75em;
+}
+.reveal .has-dark-background .sl-block-content > ol > li:before {
+  color: currentcolor;
+  background-color: rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0 0 0 0.2em rgba(0, 0, 0, 0.2);
+  font-weight: 500;
+  letter-spacing: -0.05em;
+}
+.reveal .sl-block-content > ol ol ol li:before {
+  opacity: 1;
+  font-size: 0.55em !important;
+  width: 3.5em !important;
+}
+.reveal .sl-block-content > ol ol ol {
+  margin-left: 1.5em !important;
+}
+.reveal .uppercase {
+  text-transform: uppercase;
+}
+.reveal .sl-block[data-block-type="text"] > .initial h1,
+.reveal .sl-block[data-block-type="text"] > .initial h2,
+.reveal .sl-block[data-block-type="text"] > .initial h3 {
+  text-transform: initial;
+}
+.reveal .force-mono text,
+.reveal .force-mono tspan,
+.reveal .force-mono polygon,
+.reveal .force-mono path,
+.reveal .force-mono rect,
+.reveal .force-mono ellipse {
+  fill: currentcolor !important;
+}
+.reveal .force-red .stroked path {
+  stroke: #c00;
+}
+.reveal .force-red,
+.reveal .force-red text,
+.reveal .force-red tspan,
+.reveal .force-red polygon,
+.reveal .force-red path,
+.reveal .force-red rect,
+.reveal .force-red ellipse {
+  color: #c00;
+  fill: currentcolor !important;
+}
+.reveal .force-red .stroked {
+  fill: none;
+  stroke: #c00;
+}
+.reveal .background-shade-dark .sl-block {
+  color: #fff;
+}
+.reveal .dark-foreground text.logotext,
+.reveal section.background-shade-light text.logotext,
+.reveal section.dark-foreground text.logotext,
+.reveal .dark-foreground .logotext text,
+.reveal section.background-shade-light .logotext text,
+.reveal section.dark-foreground .logotext text,
+.reveal .dark-foreground path.logotext,
+.reveal section.background-shade-light path.logotext,
+.reveal section.dark-foreground path.logotext,
+.reveal .dark-foreground path.logotype,
+.reveal section.background-shade-light path.logotype,
+.reveal section.dark-foreground path.logotype,
+.reveal .dark-foreground .logotext path,
+.reveal section.background-shade-light .logotext path,
+.reveal section.dark-foreground .logotext path,
+.reveal .dark-foreground .product,
+.reveal section.background-shade-light .product,
+.reveal section.dark-foreground .product {
+  fill: currentcolor !important;
+}
+.reveal .dark-foreground .redhat-logo .logotext,
+.reveal section.background-shade-light .redhat-logo .logotext,
+.reveal section.dark-foreground .redhat-logo .logotext {
+  fill: currentcolor !important;
+}
+.reveal .slide-background.background-shade-dark:after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(40, 40, 40, 0.8);
+}
+.reveal .slide-background.background-shade-light:after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+.reveal .slides section {
+  text-align: left;
+}
+.reveal .slides section h1 {
+  line-height: 1em;
+  font-weight: 700 ;
+  font-size: 3em ;
+}
+.reveal .slides section h2 {
+  font-size: 2em;
+  font-weight: 400 ;
+  line-height: 1.15em;
+}
+.reveal .slides section h3 {
+  font-weight: 700 ;
+  font-size: 1em ;
+  line-height: 1.25em;
+}
+.reveal .slides section p {
+  margin-bottom: 0.5em;
+}
+.reveal .slides section blockquote {
+  font-style: normal;
+  box-shadow: none;
+}
+.reveal .progress {
+  background-color: transparent;
+}
+.reveal .progress span {
+  background-color: #5e6a71;
+}
+.reveal .absolute-element svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+.reveal .icon.stroked {
+  width: 282px;
+  height: 282px;
+}
+.reveal .icon.stroked.icon-arrow path {
+  stroke-width: 4px !important;
+}
+.reveal .icon.stroked path {
+  fill: none;
+  stroke-width: 1.5px;
+  transition-delay: 0.5s !important;
+  stroke-dashoffset: 0;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke: currentcolor;
+}
+.reveal .icon.stroked path.long {
+  stroke-dasharray: 420,420;
+  transition: 2.5s all ease;
+}
+.reveal .icon.stroked path.longer {
+  stroke-dasharray: 512,512;
+  transition: 2.5s all ease;
+}
+.reveal .icon.stroked path.short {
+  stroke-dasharray: 90,90;
+  transition: 5s all ease;
+}
+.reveal .icon.stroked path.shortest {
+  stroke-dasharray: 5,5;
+  transition: 2s all ease;
+}
+.reveal .icon.stroked path.round {
+  stroke-linecap: round ;
+  stroke-linejoin: round ;
+}
+.reveal .icon.stroked path.virtual {
+  transition: 0.5s all ease;
+  stroke-dasharray: 1.1, 3;
+  stroke-linecap: round ;
+}
+.reveal .icon.stroked path.dashed {
+  stroke-dasharray: 3, 3;
+}
+.reveal .icon.stroked path.hand {
+  stroke-linecap: round;
+}
+.reveal .present path.virtual {
+  -webkit-animation: virtual-outline 60s infinite linear;
+  -moz-animation: virtual-outline 60s infinite linear;
+  animation: virtual-outline 60s infinite linear;
+}
+@-webkit-keyframes virtual-outline {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 512;
+  }
+}
+@-moz-keyframes virtual-outline {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 512;
+  }
+}
+@keyframes virtual-outline {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 512;
+  }
+}
+.reveal a {
+  box-shadow: 0 0.066666em;
+}
+.reveal .overview section.present {
+  border: 12px solid white !important;
+  box-shadow: 0 0 0 10px white, inset 0 0 0 6px rgba(0, 0, 0, 0.2);
+}
+.reveal .rh-pattern {
+  width: 256px;
+  height: 256px;
+}
+.reveal .rh-pattern path {
+  transition: all 0.5s ease;
+}
+.reveal .future .rh-pattern path {
+  stroke-dasharray: 0, 85 !important;
+}
+.reveal .present .rh-pattern path {
+  stroke-dasharray: 80, 0 !important;
+}
+.reveal div[data-block-type="snippet"] .sl-block-content > svg,
+.reveal div[data-block-type="snippet"] > .sl-block-content > svg,
+.reveal div[data-block-type="snippet"] .icon,
+.reveal div[data-block-type="snippet"] .product {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+}
+.reveal div[data-block-type="snippet"] .sl-block-content > svg:not(:last-child) {
+  position: relative;
+}
+.reveal div[data-block-type="snippet"] .icon {
+  top: -15%;
+  right: -15%;
+  bottom: -15%;
+  left: -15%;
+  width: 130%;
+  height: 130%;
+}
+.reveal div[data-block-type="snippet"] {
+  min-width: 60px !important;
+}
+.reveal div[data-block-type="text"] {
+  font-size: 20px;
+}
+.reveal .triangle-element,
+.reveal .triangle-element * {
+  user-select: none;
+}
+.reveal .has-light-background .closing-logo.logotype path {
+  fill: black !important;
+}
+@-webkit-keyframes closing-animation {
+  0% {
+    -webkit-transform: scale(4) translate(40%);
+    transform: scale(4) translate(40%);
+    opacity: 0;
+  }
+  80% {
+    -webkit-transform: scale(1) translate(30%);
+    transform: scale(1) translate(30%);
+  }
+}
+@-moz-keyframes closing-animation {
+  0% {
+    -webkit-transform: scale(4) translate(40%);
+    transform: scale(4) translate(40%);
+    opacity: 0;
+  }
+  80% {
+    -webkit-transform: scale(1) translate(30%);
+    transform: scale(1) translate(30%);
+  }
+}
+@-o-keyframes closing-animation {
+  0% {
+    -webkit-transform: scale(4) translate(40%);
+    transform: scale(4) translate(40%);
+    opacity: 0;
+  }
+  80% {
+    -webkit-transform: scale(1) translate(30%);
+    transform: scale(1) translate(30%);
+  }
+}
+@keyframes closing-animation {
+  0% {
+    -webkit-transform: scale(4) translate(40%);
+    transform: scale(4) translate(40%);
+    opacity: 0;
+  }
+  80% {
+    -webkit-transform: scale(1) translate(30%);
+    transform: scale(1) translate(30%);
+  }
+}
+.reveal .present .closing-logo.icon {
+  -webkit-animation: closing-animation 1.5s 1;
+  -moz-animation: closing-animation 1.5s 1;
+  -o-animation: closing-animation 1.5s 1;
+  animation: closing-animation 1.5s 1;
+}
+.reveal .present .closing-logo.logotype {
+  -webkit-animation: closing-text-animation 1.8s 1;
+  -moz-animation: closing-text-animation 1.8s 1;
+  -o-animation: closing-text-animation 1.8s 1;
+  animation: closing-text-animation 1.8s 1;
+}
+@-webkit-keyframes closing-text-animation {
+  0% {
+    opacity: 0;
+    -webkit-transform: translate(-10%);
+    transform: translate(-10%);
+  }
+  70% {
+    -webkit-transform: translate(-10%);
+    transform: translate(-10%);
+    opacity: 0;
+  }
+  100% {
+    transform: none;
+    opacity: 1;
+    -webkit-transform: none;
+  }
+}
+@-moz-keyframes closing-text-animation {
+  0% {
+    opacity: 0;
+    -webkit-transform: translate(-10%);
+    transform: translate(-10%);
+  }
+  70% {
+    -webkit-transform: translate(-10%);
+    transform: translate(-10%);
+    opacity: 0;
+  }
+  100% {
+    transform: none;
+    opacity: 1;
+    -webkit-transform: none;
+  }
+}
+@keyframes closing-text-animation {
+  0% {
+    opacity: 0;
+    -webkit-transform: translate(-10%);
+    transform: translate(-10%);
+  }
+  70% {
+    -webkit-transform: translate(-10%);
+    transform: translate(-10%);
+    opacity: 0;
+  }
+  100% {
+    transform: none;
+    opacity: 1;
+    -webkit-transform: none;
+  }
+}
+.reveal .brand-pattern-paths path,
+.reveal .pattern-path {
+  stroke-width: 1;
+  fill: none;
+}
+.reveal .brand-pattern-paths path {
+  fill: none !important;
+}
+.reveal pattern {
+  patterntransform: scale(2) !important;
+}
+.reveal pattern.normal use {
+  stroke: currentcolor;
+  fill: none;
+}
+.reveal pattern.light use {
+  stroke: #fff !important;
+  fill: none;
+}
+.reveal pattern.dark use {
+  stroke: #000 !important;
+  fill: none;
+}
+.reveal .brand-pattern {
+  min-width: 40px;
+  min-height: 40px;
+  position: absolute;
+  top: 0 ;
+  left: 0 ;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+}
+.reveal .brand-pattern path,
+.reveal .brand-pattern rect {
+  width: 100% !important;
+  height: 100%;
+}
+.reveal .brand-pattern.corporate {
+  fill: url(#pattern-corporate);
+}
+.reveal #pattern-corporate-2 use {
+  stroke: #dd0000;
+}
+.reveal #pattern-corporate use {
+  stroke: #cc0000;
+}
+.reveal section,
+.reveal .slide-background {
+  -webkit-backface-visibility: hidden;
+  -ms-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+.reveal .slides > section.transition-slide,
+.reveal .slides > section.transition-slide + section.future,
+.reveal .slides > section.transition-slide + section.present,
+.reveal .backgrounds > .slide-background.transition-slide,
+.reveal .backgrounds > .slide-background.transition-slide + .slide-background.future,
+.reveal .backgrounds > .slide-background.transition-slide + .slide-background.present {
+  transition: all 1s ease  !important;
+}
+.reveal .backgrounds > .slide-background.transition-slide {
+  opacity: 1 ;
+}
+.reveal .backgrounds > .slide-background.transition-slide.past {
+  z-index: 99;
+  -webkit-transform: translate(-100%, 0);
+  -ms-transform: translate(-100%, 0);
+  transform: translate(-100%, 0);
+}
+.reveal .backgrounds > .slide-background.transition-slide.future,
+.reveal .backgrounds > .slide-background.transition-slide.present + .slide-background.future {
+  -webkit-transform: translate(100%, 0);
+  -ms-transform: translate(100%, 0);
+  transform: translate(100%, 0);
+}
+.reveal .slides > section.transition-slide.past {
+  z-index: 99;
+  -webkit-transform: translate(-150%, 0);
+  -ms-transform: translate(-150%, 0);
+  transform: translate(-150%, 0);
+  visibility: hidden;
+}
+.reveal .slides > section.transition-slide.future,
+.reveal .slides > section.transition-slide.future + section {
+  -webkit-transform: translate(150%, 0);
+  -ms-transform: translate(150%, 0);
+  transform: translate(150%, 0);
+  visibility: hidden;
+}
+.reveal .slides > section.transition-slide-up,
+.reveal .slides > section.transition-slide-up + section.future,
+.reveal .slides > section.transition-slide-up + section.present,
+.reveal .backgrounds > .slide-background.transition-slide-up,
+.reveal .backgrounds > .slide-background.transition-slide-up + .slide-background.future .backgrounds > .slide-background.transition-slide-up + .slide-background.present {
+  transition: all 1s ease  !important;
+}
+.reveal .backgrounds > .slide-background.transition-slide-up {
+  opacity: 1 ;
+}
+.reveal .backgrounds > .slide-background.transition-slide-up.past {
+  z-index: 99;
+  -webkit-transform: translate(0, -100%);
+  -ms-transform: translate(0, -100%);
+  transform: translate(0, -100%);
+}
+.reveal .backgrounds > .slide-background.transition-slide-up.future,
+.reveal .backgrounds > .slide-background.transition-slide-up.present + .slide-background.future {
+  -webkit-transform: translate(0, 100%);
+  -ms-transform: translate(0, 100%);
+  transform: translate(0, 100%);
+}
+.reveal .slides > section.transition-slide-up.past {
+  z-index: 99;
+  -webkit-transform: translate(0, -150%);
+  -ms-transform: translate(0, -150%);
+  transform: translate(0, -150%);
+  visibility: hidden;
+}
+.reveal .slides > section.transition-slide-up.future,
+.reveal .slides > section.transition-slide-up.present + section {
+  -webkit-transform: translate(0, 150%);
+  -ms-transform: translate(0, 150%);
+  transform: translate(0, 150%);
+  visibility: hidden;
+}
+.reveal .slides > section.transition-zoom-in,
+.reveal .slides > section.transition-zoom-in + section.future,
+.reveal .slides > section.transition-zoom-in + section.present,
+.reveal .backgrounds > .slide-background.transition-zoom-in,
+.reveal .backgrounds > .slide-background.transition-zoom-in + .slide-background.future .backgrounds > .slide-background.transition-zoom-in + .slide-background.present {
+  -webkit-transition: all 1s ease  !important;
+  -moz-transition: all 1s ease  !important;
+  transition: all 1s ease  !important;
+}
+.reveal .backgrounds > .slide-background.transition-zoom-in.past {
+  opacity: 0 !important;
+  -webkit-transform: scale(1.5);
+  -ms-transform: scale(0.1 0.5);
+  transform: scale(1.5);
+}
+.reveal .backgrounds > .slide-background.transition-zoom-in.future,
+.reveal .backgrounds > .slide-background.transition-zoom-in.present + .slide-background.future {
+  opacity: 0 !important;
+  -webkit-transform: scale(0.01);
+  -ms-transform: scale(0.01);
+  transform: scale(0.01);
+}
+.reveal .past {
+  z-index: -1;
+  opacity: 0 !important;
+}
+.reveal .present + .slide-background.future {
+  z-index: 99;
+}
+.reveal .slides > section.transition-zoom-in.past {
+  z-index: 99;
+  -webkit-transform: scale(1.5);
+  -ms-transform: scale(1.5);
+  transform: scale(1.5);
+  visibility: hidden;
+}
+.reveal .slides > section.transition-zoom-in.future {
+  -webkit-transform: scale(0.1);
+  -ms-transform: scale(0.1);
+  transform: scale(0.1);
+  visibility: hidden;
+}
+@-webkit-keyframes icon-animation-long {
+  0% {
+    stroke-dashoffset: 420;
+    stroke-width: 0.5px;
+  }
+}
+@-moz-keyframes icon-animation-long {
+  0% {
+    stroke-dashoffset: 420;
+    stroke-width: 0.5px;
+  }
+}
+@keyframes icon-animation-long {
+  0% {
+    stroke-dashoffset: 420;
+    stroke-width: 0.5px;
+  }
+}
+@-webkit-keyframes icon-animation-short {
+  0% {
+    stroke-dashoffset: 90;
+  }
+}
+@-moz-keyframes icon-animation-short {
+  0% {
+    stroke-dashoffset: 90;
+  }
+}
+@keyframes icon-animation-short {
+  0% {
+    stroke-dashoffset: 90;
+  }
+}
+.reveal .present .animate.icon.stroked path,
+.reveal .present .animate .icon.stroked path,
+.reveal .fragment .icon.stroked path {
+  animation: 0;
+  -moz-animation: 0;
+  -webkit-animation: 0;
+  display: none;
+}
+.reveal .present .animate.icon.stroked path.long,
+.reveal .present .animate .icon.stroked path.long,
+.reveal .fragment.visible .icon.stroked path.long {
+  display: block;
+  stroke-width: 2px ;
+  -webkit-animation: icon-animation-long 3.5s 0.5s 1;
+  -moz-animation: icon-animation-long 3.5s 0.5s 1;
+  animation: icon-animation-long 3.5s 0.5s 1;
+}
+.reveal .present .animate.icon.stroked path.short,
+.reveal .present .animate .icon.stroked path.short,
+.reveal .fragment.visible .icon.stroked path.short {
+  display: block;
+  -webkit-animation: icon-animation-short 3.5s 0.5s 1 !important;
+  -moz-animation: icon-animation-short 3.5s 0.5s 1 !important;
+  animation: icon-animation-short 3.5s 0.5s 1 !important;
+}
+.reveal .triangle-element {
+  transition: all 0.4s cubic-bezier(0.21, 0.9, 0.55, 1) 5s;
+}
+.reveal.reveal:hover .triangle-element {
+  transition: all 1s cubic-bezier(0.21, 0.9, 0.55, 1.16) 0s !important;
+  top: 100% !important;
+  left: 100% !important;
+  opacity: 0.95;
+}
+.reveal .has-dark-background .only-dark {
+  display: none;
+}
+.reveal .has-light-background .only-light {
+  display: none;
+}
+.reveal .thinner .icon.stroked path {
+  stroke-width: 1px !important;
+}
+.reveal .thinnest .icon.stroked path {
+  stroke-width: 0.05em !important;
+}
+.reveal .thicker .icon.stroked path {
+  stroke-width: 3px !important;
+}
+.reveal .thickest .icon.stroked path {
+  stroke-width: 4px !important;
+}
+.reveal .angle {
+  -ms-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+.reveal .rangle {
+  -ms-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+.reveal .sl-block > .vertical {
+  -ms-transform: rotate(-90deg);
+  -moz-transform: rotate(-90deg);
+  -webkit-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+}
+.reveal .skewed {
+  transition: all 1s cubic-bezier(0.13, 0.81, 0.08, 1);
+  -moz-transform: skew(-45deg, 0);
+  -ms-transform: skew(-45deg, 0);
+  -webkit-transform: skew(-45deg, 0);
+  transform: skew(-45deg, 0);
+}
+.reveal .future .skewed {
+  margin-left: -800%;
+  opacity: 0;
+}
+.reveal .past .skewed {
+  margin-left: 800%;
+  opacity: 0;
+}
+.reveal .item-label,
+.reveal .item-box {
+  letter-spacing: 0em;
+  font-weight: 500;
+}
+.reveal .epic-content-box {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+.reveal .has-dark-background .epic-content-box {
+  box-shadow: inset 0 0 0.51em rgba(0, 0, 0, 0.25), 0 0.05em 0.05em rgba(255, 255, 255, 0.1);
+  background-color: rgba(0, 0, 0, 0.15);
+}
+.reveal .has-light-background .epic-content-box {
+  box-shadow: inset 0 0 0.2em rgba(255, 255, 255, 0.5), 0 0.06666em 0.555em 0 rgba(0, 0, 0, 0.12);
+}
+.reveal .controls {
+  bottom: 1%;
+  right: 1%;
+}
+.reveal .controls button {
+  opacity: 0;
+}
+.reveal .controls button.enabled {
+  opacity: 1;
+}
+.reveal .controls {
+  opacity: 0 !important;
+  transition: opacity 0.5s ease 4.8s, transform 0.5s ease 4.8s;
+  transform: scale(0.4);
+}
+.reveal.reveal:hover .controls {
+  transform: scale(1);
+  opacity: 1 !important;
+  transition: opacity 0.5s ease 0s, transform 0.5s ease 0s;
+}
+.reveal .backgrounds {
+  transition-property: height;
+  transition-duration: 1s;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+.reveal .complex-logo {
+  min-height: 70px;
+  min-width: 70px;
+  width: 100%;
+}
+.reveal .complex-logo,
+.reveal .complex-logo svg,
+.reveal .complex-logo > div {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.reveal .complex-logo > div.line-icon,
+.reveal .complex-logo svg > div.line-icon,
+.reveal .complex-logo > div > div.line-icon,
+.reveal .complex-logo > div.logomark,
+.reveal .complex-logo svg > div.logomark,
+.reveal .complex-logo > div > div.logomark {
+  transform-origin: 12% 50%;
+}
+.reveal .animated .complex-logo div {
+  transition: all 0.5s ease;
+}
+.reveal .animated .complex-logo div.line-icon {
+  transition-delay: 2s;
+}
+.reveal .animated .complex-logo div.line-icon path {
+  transition: all 1s ease 0.52s;
+  stroke-dasharray: 100 ,10;
+}
+.reveal .animated .complex-logo div.event-name {
+  transition-delay: 1s;
+}
+.reveal .animated .complex-logo div.location {
+  transition-delay: 1.4s;
+}
+.reveal .future .animated .complex-logo > div {
+  transition: none;
+}
+.reveal .future .animated .complex-logo > div.line-icon path {
+  stroke-dasharray: 0 ,100;
+  transition: none;
+}
+.reveal .future .animated .complex-logo {
+  /*.line-icon{transform:rotate(30deg); opacity:0;}*/
+}
+.reveal .future .animated .complex-logo .logomark {
+  transform: translate(0, -20%);
+}
+.reveal .future .animated .complex-logo .location {
+  transform: translate(0, 0.5em);
+  opacity: 0;
+}
+.reveal .future .animated .complex-logo .event-name {
+  opacity: 0;
+  transform: translate(-0.6em, 0);
+}
+.reveal .lowercase {
+  text-transform: lowercase;
+}
+.reveal .pop-in.fragment {
+  -webkit-transform: scale(0.2);
+  -moz-transform: scale(0.2);
+  -ms-transform: scale(0.2);
+  transform: scale(0.2);
+  -webkit-transition: 2s ease 0.25s;
+  -moz-transition: 2s ease 0.25s;
+  -ms-transition: 2s ease 0.25s;
+  transition: 2s ease 0.25s;
+  -webkit-animation-delay: 0.66s;
+  -moz-animation-delay: 0.66s;
+  -ms-animation-delay: 0.66s;
+  animation-delay: 0.66s;
+}
+.reveal .pop-in.fragment.visible {
+  -webkit-transform: scale(1);
+  -moz-transform: scale(1);
+  -ms-transform: scale(1);
+  transform: scale(1);
+}
+.reveal .pop-in.fragment.current-fragment {
+  color: #c22;
+}
+.reveal .grow-width {
+  -webkit-transition: all 0.5s ease 0.2s;
+  -moz-transition: all 0.5s ease 0.2s;
+  -o-transition: all 0.5s ease 0.2s;
+  -ms-transition: all 0.5s ease 0.2s;
+  transition: all 0.5s ease 0.2s;
+}
+.reveal .future .grow-width {
+  width: 0% !important;
+  -webkit-transition: none;
+  -moz-transition: none;
+  -o-transition: none;
+  -ms-transition: none;
+  transition: none;
+}
+.reveal .stampit {
+  -webkit-transition: all 1s cubic-bezier(0.79, 0.53, 0.46, 1.3) 1s;
+  -moz-transition: all 1s cubic-bezier(0.79, 0.53, 0.46, 1.3) 1s;
+  -ms-transition: all 1s cubic-bezier(0.79, 0.53, 0.46, 1.3) 1s;
+  transition: all 1s cubic-bezier(0.79, 0.53, 0.46, 1.3) 1s;
+}
+.reveal .future .stampit {
+  -webkit-transform: rotate(-12deg) scale(2);
+  -moz-transform: rotate(-12deg) scale(2);
+  -ms-transform: rotate(-12deg) scale(2);
+  transform: rotate(-12deg) scale(2);
+  -webkit-transition: none;
+  -moz-transition: none;
+  -ms-transition: none;
+  transition: none;
+  opacity: 0;
+}
+.reveal .headshot img {
+  border-radius: 50%;
+  border: 4px solid #c00 !important;
+}
+.reveal .condensed {
+  letter-spacing: 0.02em;
+}
+.reveal .condensed li {
+  margin-bottom: 1em ;
+}
+.reveal .has-light-background .sl-block .has-dark-background > svg.redhat-logo .logotext {
+  fill: #ffffff !important;
+}
+.reveal .has-light-background .sl-block .reversed.redhat-logo .logotext,
+.reveal .has-light-background .sl-block .reversed .redhat-logo .logotext,
+.reveal .has-light-background .sl-block .has-dark-background > .redhat-logo .logotext {
+  fill: #ffffff !important;
+}
+.reveal .has-dark-background .sl-block .reversed.redhat-logo .logotext,
+.reveal .has-dark-background .sl-block .reversed .redhat-logo .logotext,
+.reveal .has-dark-background .sl-block .has-light-background > .redhat-logo .logotext {
+  fill: #000000 !important;
+}
+.reveal .has-dark-background .has-light-background .logo .only-dark path,
+.reveal .has-light-background .mono.redhat-logo path {
+  fill: #000000 !important;
+}
+.reveal .has-dark-background .mono.redhat-logo path {
+  fill: #ffffff;
+}
+.reveal .has-dark-background .logo .only-dark {
+  display: block;
+}
+.reveal .has-light-background .logo .only-light {
+  display: block;
+}
+.reveal .has-light-background .logo .only-dark {
+  display: none;
+}
+.reveal .has-dark-background .logo .only-light {
+  display: none;
+}
+.reveal .has-light-background .reversed svg path {
+  fill: #ffffff !important;
+}
+.reveal .has-dark-background .reversed svg path {
+  fill: currentcolor;
+}
+.reveal .has-dark-background .has-light-background .logo .only-light,
+.reveal .has-dark-background .reversed .logo .only-dark {
+  display: block;
+}
+.reveal .has-light-background .has-dark-background .logo .only-dark,
+.reveal .has-light-background .logo .only-light {
+  display: block;
+}
+.reveal .has-light-background .has-dark-background .redhat-logo .only-dark,
+.reveal .has-light-background .redhat-logo .only-light {
+  fill: #ffffff !important;
+}
+.reveal .has-light-background .has-dark-background .logo .only-light,
+.reveal .has-light-background .logo .only-dark,
+.reveal .has-dark-background .has-light-background .logo .only-dark,
+.reveal .has-dark-background .logo .only-light {
+  display: none;
+}
+.reveal .future .fade-up,
+.reveal .future .fade-down,
+.reveal .future .fade-left,
+.reveal .future .fade-right,
+.reveal .future .fade-zoom {
+  -webkit-transition: none;
+  transition: none;
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+.reveal .future .fade-up,
+.reveal .fade-up.fragment {
+  -webkit-transform: translate(0, 2em);
+  -ms-transform: translate(0, 2em);
+  transform: translate(0, 2em);
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+.reveal .future .fade-down,
+.reveal .fade-down.fragment {
+  -webkit-transform: translate(0, -2em);
+  -ms-transform: translate(0, -2em);
+  transform: translate(0, -2em);
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+.reveal .future .fade-left,
+.reveal .fade-left.fragment {
+  -webkit-transform: translate(2em, 0);
+  -ms-transform: translate(2em, 0);
+  transform: translate(2em, 0);
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+.reveal .future .fade-right,
+.reveal .fade-right.fragment {
+  -webkit-transform: translate(-2em, 0);
+  -ms-transform: translate(-2em, 0);
+  transform: translate(-2em, 0);
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+.reveal .future .fade-zoom,
+.reveal .fade-zoom.fragment {
+  -webkit-transform: scale(0.1);
+  -ms-transform: scale(0.1);
+  transform: scale(0.1);
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+.reveal .future .fade-in {
+  transition: none;
+  opacity: 0;
+}
+.reveal .present .fade-in,
+.reveal .present .fade-up,
+.reveal .present .fade-down,
+.reveal .present .fade-left,
+.reveal .present .fade-right,
+.reveal .present .fade-zoom {
+  -webkit-transition: all 0.5s ease 0.5s;
+  transition: all 0.5s ease 0.5s;
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+.reveal .present .fragment.visible.fade-up,
+.reveal .present .fragment.visible.fade-down,
+.reveal .present .fragment.visible.fade-left,
+.reveal .present .fragment.visible.fade-right,
+.reveal .present .fragment.visible.fade-zoom {
+  -webkit-transform: none ;
+  -ms-transform: none ;
+  transform: none ;
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+.reveal .sl-block {
+  font-family: "Overpass 2", "Hiragino Kaku Gothic", "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ Pro W3", Overpass, sans-serif !important;
+}
+.reveal .has-light-background .icon.stroked {
+  color: currentcolor;
+}
+.reveal .has-dark-background .icon.stroked path {
+  stroke: currentcolor;
+}
+.reveal .has-dark-background .only-light-background {
+  display: none !important;
+}
+.reveal .has-dark-background .only-dark-background {
+  display: block !important;
+}
+.reveal a.call-to-action:hover {
+  background-color: #d00 !important;
+  box-shadow: 0 0.5em 1em rgba(0, 0, 0, 0.05) !important;
+  text-shadow: none !important;
+}
+.reveal .sl-block[data-block-type="snippet"] table {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+.reveal .sl-block[data-block-type="snippet"] table td {
+  border-color: currentcolor !important;
+}
+.reveal .sl-block[data-block-type="snippet"] table td {
+  text-align: inherit !important;
+}
+.reveal .sl-block[data-block-type="text"] table {
+  width: 100%;
+}
+.reveal .sl-block[data-block-type="text"] table td {
+  border-color: currentcolor;
+}
+.reveal .sl-block[data-block-type="text"] table td {
+  text-align: inherit;
+}
+.reveal.reveal .sl-block[data-block-type="image"] .person {
+  border-radius: 50%;
+  position: relative !important;
+  background-color: transparent;
+  height: auto !important;
+}
+.reveal.reveal .sl-block[data-block-type="image"] .person:before {
+  content: "" !important;
+  display: block !important;
+  padding-top: 100% ;
+  position: relative !important ;
+  /* 4:3 aspect ratio */
+}
+.reveal.reveal .sl-block[data-block-type="image"] .person > img {
+  position: absolute ;
+  margin: 0 auto !important;
+  left: 0% ;
+  right: 0 ;
+  width: auto !important;
+  top: 0  ;
+  bottom: 0 ;
+}
+.reveal .present .delay-1 {
+  transition-delay: 0.1s;
+}
+.reveal .present .delay-2 {
+  transition-delay: 0.2s;
+}
+.reveal .present .delay-3 {
+  transition-delay: 0.3s;
+}
+.reveal .present .delay-4 {
+  transition-delay: 0.4s;
+}
+.reveal .present .delay-5 {
+  transition-delay: 0.5s;
+}
+.reveal .present .delay-6 {
+  transition-delay: 0.6s;
+}
+.reveal .present .delay-7 {
+  transition-delay: 0.7s;
+}
+.reveal .present .delay-8 {
+  transition-delay: 0.8s;
+}
+.reveal .present .delay-9 {
+  transition-delay: 0.9s;
+}
+.reveal .present .delay-10 {
+  transition-delay: 1s;
+}
+.reveal .present .delay-11 {
+  transition-delay: 1.1s;
+}
+.reveal .present .delay-12 {
+  transition-delay: 1.2s;
+}
+.reveal .present .delay-13 {
+  transition-delay: 1.3s;
+}
+.reveal .present .delay-14 {
+  transition-delay: 1.4s;
+}
+.reveal .present .delay-15 {
+  transition-delay: 1.5s;
+}
+.reveal .present .delay-16 {
+  transition-delay: 1.6s;
+}
+.reveal .present .delay-17 {
+  transition-delay: 1.7s;
+}
+.reveal .present .delay-18 {
+  transition-delay: 1.8s;
+}
+.reveal .present .delay-19 {
+  transition-delay: 1.9s;
+}
+.reveal .present .delay-20 {
+  transition-delay: 2s;
+}
+.reveal .present .delay-21 {
+  transition-delay: 2.1s;
+}
+.reveal .present .delay-22 {
+  transition-delay: 2.2s;
+}
+.reveal .present .delay-23 {
+  transition-delay: 2.3s;
+}
+.reveal .present .delay-24 {
+  transition-delay: 2.4s;
+}
+.reveal .present .delay-25 {
+  transition-delay: 2.5s;
+}
+.reveal .present .delay-26 {
+  transition-delay: 2.6s;
+}
+.reveal .present .delay-27 {
+  transition-delay: 2.7s;
+}
+.reveal .present .delay-28 {
+  transition-delay: 2.8s;
+}
+.reveal .present .delay-29 {
+  transition-delay: 2.9s;
+}
+.reveal .present .delay-30 {
+  transition-delay: 3s;
+}
+.reveal .present .delay-31 {
+  transition-delay: 3.1s;
+}
+.reveal .present .delay-32 {
+  transition-delay: 3.2s;
+}
+.reveal .present .delay-33 {
+  transition-delay: 3.3s;
+}
+.reveal .present .delay-34 {
+  transition-delay: 3.4s;
+}
+.reveal .present .delay-35 {
+  transition-delay: 3.5s;
+}
+.reveal .present .delay-36 {
+  transition-delay: 3.6s;
+}
+.reveal .present .delay-37 {
+  transition-delay: 3.7s;
+}
+.reveal .present .delay-38 {
+  transition-delay: 3.8s;
+}
+.reveal .present .delay-39 {
+  transition-delay: 3.9s;
+}
+.reveal .present .delay-40 {
+  transition-delay: 4s;
+}
+.reveal .light-foreground .sl-block * {
+  color: #fff;
+}
+.reveal .dark-foreground .sl-block * {
+  color: #000;
+}
+.reveal .has-dark-background .invert {
+  color: #000;
+}
+.reveal .has-light-background .invert * {
+  color: #fff;
+}
+.reveal .has-light-background .invert .only-light-background {
+  display: none ;
+}
+.reveal .has-light-background .invert .only-dark-background {
+  display: block !important;
+}
+.reveal .has-dark-background .invert .only-light-background {
+  display: block !important ;
+}
+.reveal .has-dark-background .invert .only-dark-background {
+  display: none !important;
+}
+.reveal .slide-number {
+  position: absolute !important;
+  opacity: 1;
+  right: 1em;
+  height: 28px;
+  min-width: 28px;
+  bottom: auto;
+  left: auto;
+  text-align: center;
+  font-size: 14px;
+  border-radius: 28px;
+  line-height: 28px;
+  color: white;
+  text-shadow: 0 0.1em 0.5em rgba(0, 0, 0, 0.4);
+  top: 1em;
+  font-family: "Overpass 2", Overpass, sans-serif;
+  font-weight: 500;
+  white-space: nowrap;
+  padding: 4px;
+  box-sizing: content-box;
+}
+.reveal .slide-number-delimiter {
+  margin: 0 1px;
+}
+html:not([data-mode="arrange"]) .reveal .present.in-3d-appear {
+  transform: translatez(0em) !important;
+  animation: none !important;
+  transition: transform 1s ease !important;
+}
+html:not([data-mode="arrange"]) .reveal .future.in-3d-appear {
+  transform: translatez(10em) rotateX(21deg) !important;
+  animation: none !important;
+}
+.reveal .no-filter img,
+.reveal .no-filter {
+  filter: none !important;
+  -webkit-filter: none !important;
+}
+.reveal .present .fade-in-slow {
+  transition: all 5s ease;
+}
+.reveal .future .fade-in-slow {
+  transition: none;
+  opacity: 0;
+}
+.reveal .redhat-logo .logotext {
+  fill: #000 !important;
+}
+.reveal .has-dark-background .redhat-logo .logotext {
+  fill: #fff !important;
+}
+.reveal [data-block-type="table"] .sl-block-content {
+  font-size: 0.75em;
+  background-color: #c00;
+  color: #fff;
+}
+.reveal [data-block-type="table"] td {
+  background-color: #e5e5e5;
+  color: #333;
+  border-color: white;
+}
+.reveal div[data-block-type="table"] th {
+  font-weight: 500;
+}
+.reveal [data-block-type="table"] tr:nth-child(odd) td {
+  background-color: #f5f5f5;
+  color: #333;
+}
+.reveal .has-dark-background > [data-block-type="table"] td {
+  background-color: #131619;
+  color: #fff;
+}
+.reveal .has-dark-background > [data-block-type="table"] tr:nth-child(odd) td {
+  background-color: #232629;
+  color: #fff;
+}
+.reveal [data-block-type="code"],
+.reveal .hljs {
+  background-color: white ;
+  color: rgba(55, 55, 55, 0.85) !important;
+}
+.reveal section .hljs {
+  background-color: white !important;
+}
+.reveal .has-dark-background [data-block-type="code"],
+.reveal .has-dark-background .hljs {
+  background-color: #012736 !important;
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+.reveal [data-block-type="code"] pre {
+  letter-spacing: 0.015em;
+  line-height: 1.5em;
+}
+.reveal .has-light-background[data-block-type="code"] pre,
+.reveal [data-block-type="code"] pre {
+  background-color: white ;
+  color: currentcolor;
+  padding: 1em !important;
+}
+.reveal .has-dark-background [data-block-type="code"] pre {
+  background-color: #012736;
+}
+.reveal .hljs,
+.reveal pre,
+.reveal code {
+  font-family: 'Overpass Mono', monospace !important;
+  font-weight: 200 !important;
+}
+.reveal .hljs-literal {
+  color: #ffb612 !important;
+}
+.reveal .hljs-keyword {
+  color: #ffb612;
+  font-weight: 700 !important;
+}
+.reveal .hljs-string {
+  color: #88c639;
+  font-weight: 700;
+}
+.reveal .hljs-comment {
+  color: #94a0a7 !important;
+  font-weight: 400 !important;
+}
+.reveal .hljs-params {
+  color: #028c98;
+  font-weight: 700;
+}
+.reveal .hljs-attr {
+  color: #EC7A08 !important;
+}
+.reveal .hljs-tag {
+  color: #7F5FAE !important;
+}
+.reveal .hljs-name {
+  color: #028c98 !important;
+}
+.reveal .hljs-string {
+  color: #7f5fae !important;
+}
+.reveal .hljs-comment {
+  color: rgba(125, 125, 125, 0.65) !important;
+}
+.reveal .hljs-number {
+  color: #4e9fdd !important;
+}
+.reveal .hljs-attribute {
+  color: #ec9e34 !important;
+}
+.reveal .hljs-variable {
+  color: #4e9fdd !important;
+}
+.reveal .hljs-built_in {
+  color: #ee1122 !important;
+}
+.reveal .hljs-selector-class {
+  color: #55aab2 !important;
+}
+.reveal [data-line-end-type="line-arrow"] line,
+.reveal [data-line-start-type="line-arrow"] line,
+.reveal [data-line-end-type="line-arrow"] path {
+  stroke-linecap: round;
+  stroke-linejoin: square;
+}
+.reveal div[data-block-type="line"] line[stroke="#000000"],
+.reveal div[data-block-type="line"] path[stroke="#000000"] {
+  stroke: currentcolor;
+}
+.reveal [fill="none"] {
+  fill: none !important;
+}
+.reveal [fill="#a30000"] {
+  fill: #a00 !important;
+}
+.reveal [fill="#cc2029"],
+.reveal [fill="#cb2027"],
+.reveal [fill="#c00"] {
+  fill: #c00 !important;
+}
+.reveal [fill="#fff"] {
+  fill: #fff !important;
+}
+.reveal [fill="#6d6e70"] {
+  fill: #6d6e70 !important;
+}
+.reveal [fill="#231f20"] {
+  fill: currentcolor !important;
+}
+.reveal [fill="#efab1f"] {
+  fill: #efab1f !important;
+}
+.reveal [fill="#92d400"] {
+  fill: #92d400 !important;
+}
+.reveal .has-dark-background [fill="#6d6e70"] {
+  fill: #266272 !important;
+}
+.reveal .has-dark-background [fill="#fff"] {
+  fill: #555 !important;
+}
+.reveal .has-dark-background [fill="#fff"] {
+  fill: #333 !important;
+}
+.reveal .has-dark-background [stroke="#231f20"] {
+  stroke: currentcolor;
+}
+.reveal .has-dark-background [fill="#221F1F"],
+.reveal .has-dark-background [fill="#221f1f"],
+.reveal .has-dark-background [fill="#231F20"],
+.reveal .has-dark-background [fill="#010101"] {
+  fill: white !important;
+}
+.reveal [data-inline-svg="true"] img {
+  display: none;
+}
+.reveal .product-logo path:nth-last-child(2) {
+  fill: #000;
+}
+.reveal .force-mono .product-logo path:nth-last-child(2) {
+  opacity: 0;
+}
+.reveal .corner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  z-index: 8;
+}
+.reveal .corner svg {
+  transition: all 0.75s ease 5s;
+}
+
+		</style>
+
+	</head>
+	<body class="reveal-viewport theme-font-overpass2 theme-color-no-color">
+		<div class="reveal">
+			<div class="slides">
+				<section data-background-color="rgb(156,0,0)" data-background-image="deck-1/32fa01ef1b64201650bdc7d29ce7c22c.svg" data-id="aaea07ce204a838e1012efaa867070e1"><div class="sl-block" data-block-type="text" style="height: auto; width: 915px; left: 45px; top: 280px;" data-block-id="0f0d6bab0ee2d2c7c646505fc24547e4"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; text-align: left;" data-has-custom-html="">
+<h1 style="font-size:2.25em">Can't WE JUST AGree?</h1>
+
+<h2 style="font-size:1.5em"> </h2>
+
+<h3> </h3>
+
+<h3>Ondřej Chaloupka, Vojtěch Juránek</h3>
+
+<p>FI MUNI 14. 11. 2019</p>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 360px; height: 122.4px; left: 45px; top: 76.5px; min-width: 4px; min-height: 4px;" data-block-id="de84a0137e646941f34398686c2556a1"><div class="sl-block-content" style="z-index: 11;" data-inline-svg="true">
+<img data-natural-width="500" data-natural-height="170" data-lazy-loaded="" style="" data-src="deck-1/bfa11a84cdd2fc0f50cb6fb54942bd62.svg"><svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 613 145" height="170" width="500" class="redhat-logo"><path class="logohat" style="fill:#fff;" d="M127.47,83.49c12.51,0,30.61-2.58,30.61-17.46a14,14,0,0,0-.31-3.42l-7.45-32.36c-1.72-7.12-3.23-10.35-15.73-16.6C124.89,8.69,103.76.5,97.51.5,91.69.5,90,8,83.06,8c-6.68,0-11.64-5.6-17.89-5.6-6,0-9.91,4.09-12.93,12.5,0,0-8.41,23.72-9.49,27.16A6.43,6.43,0,0,0,42.53,44c0,9.22,36.3,39.45,84.94,39.45M160,72.07c1.73,8.19,1.73,9.05,1.73,10.13,0,14-15.74,21.77-36.43,21.77C78.54,104,37.58,76.6,37.58,58.49a18.45,18.45,0,0,1,1.51-7.33C22.27,52,.5,55,.5,74.22c0,31.48,74.59,70.28,133.65,70.28,45.28,0,56.7-20.48,56.7-36.65,0-12.72-11-27.16-30.83-35.78"></path><path class="logotext" style="fill:#fff;" d="M579.74,92.8c0,11.89,7.15,17.67,20.19,17.67a52.11,52.11,0,0,0,11.89-1.68V95a24.84,24.84,0,0,1-7.68,1.16c-5.37,0-7.36-1.68-7.36-6.73V68.3h15.56V54.1H596.78v-18l-17,3.68V54.1H568.49V68.3h11.25Zm-53,.32c0-3.68,3.69-5.47,9.26-5.47a43.12,43.12,0,0,1,10.1,1.26v7.15a21.51,21.51,0,0,1-10.63,2.63c-5.46,0-8.73-2.1-8.73-5.57m5.2,17.56c6,0,10.84-1.26,15.36-4.31v3.37h16.82V74.08c0-13.56-9.14-21-24.39-21-8.52,0-16.94,2-26,6.1l6.1,12.52c6.52-2.74,12-4.42,16.83-4.42,7,0,10.62,2.73,10.62,8.31v2.73a49.53,49.53,0,0,0-12.62-1.58c-14.31,0-22.93,6-22.93,16.73,0,9.78,7.78,17.24,20.19,17.24m-92.44-.94h18.09V80.92h30.29v28.82H506V36.12H487.93V64.41H457.64V36.12H439.55ZM370.62,81.87c0-8,6.31-14.1,14.62-14.1A17.22,17.22,0,0,1,397,72.09V91.54A16.36,16.36,0,0,1,385.24,96c-8.2,0-14.62-6.1-14.62-14.09m26.61,27.87h16.83V32.44l-17,3.68V57.05a28.3,28.3,0,0,0-14.2-3.68c-16.19,0-28.92,12.51-28.92,28.5a28.25,28.25,0,0,0,28.4,28.6,25.12,25.12,0,0,0,14.93-4.83ZM320,67c5.36,0,9.88,3.47,11.67,8.83H308.47C310.15,70.3,314.36,67,320,67M291.33,82c0,16.2,13.25,28.82,30.28,28.82,9.36,0,16.2-2.53,23.25-8.42l-11.26-10c-2.63,2.74-6.52,4.21-11.14,4.21a14.39,14.39,0,0,1-13.68-8.83h39.65V83.55c0-17.67-11.88-30.39-28.08-30.39a28.57,28.57,0,0,0-29,28.81M262,51.58c6,0,9.36,3.78,9.36,8.31S268,68.2,262,68.2H244.11V51.58Zm-36,58.16h18.09V82.92h13.77l13.89,26.82H292l-16.2-29.45a22.27,22.27,0,0,0,13.88-20.72c0-13.25-10.41-23.45-26-23.45H226Z"></path></svg>
+</div></div></section><section data-background-color="#fafafa" data-background-image="deck-1/363f880de0b81ffc34d6778bb7f9e6a6.png" data-background-size="cover" data-id="16df1c11ec298b4881d2d3143ad1c151"><div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 94px;" data-block-id="3439244f2e2171d0ba97d4c109d37f71"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; font-size: 78%;">
+<h1>Who WE are</h1>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 160px; top: 245px;" data-block-id="a1fd5300f71d289f098fc5dee008795a"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;" dir="ui">
+<p>WORKING AS ENGINEERS AT RED HAT</p>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 36px; height: 34px; left: 89px; top: 241px; min-width: 4px; min-height: 4px;" data-block-id="aa545c5091b7660bcba41a776b1d2b12"><div class="sl-block-content" style="z-index: 12;" data-inline-svg="true">
+<img style="" data-natural-width="94" data-natural-height="90" data-lazy-loaded="" data-src="deck-1/b0ccfaca329ec42adb0499e203153b00.svg"><svg width="94.085" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 94.08483 90.360687" height="90.361" preserveaspectratio="xMidYMid meet">
+ <path d="m86.035 36.328a1.001 1.001 0 0 0 -0.808 -0.68l-25.767-3.742-11.52-23.346a1.003 1.003 0 0 0 -0.897 -0.56 0.995 0.995 0 0 0 -0.895 0.559l-11.523 23.347-25.77 3.742a1 1 0 0 0 -0.804 0.684 0.988 0.988 0 0 0 0.25 1.023l18.644 18.176-4.398 25.66a0.992 0.992 0 0 0 0.398 0.977 0.993 0.993 0 0 0 1.051 0.078l23.047-12.113 23.047 12.11a0.978 0.978 0 0 0 0.465 0.116 1 1 0 0 0 0.984 -1.168l-4.402-25.664 18.643-18.172c0.274-0.265 0.371-0.664 0.254-1.027zm-20.672 18.137c-0.234 0.23-0.34 0.562-0.285 0.887l4.149 24.18-21.72-11.419a1.003 1.003 0 0 0 -0.929 0l-21.718 11.418 4.149-24.183a0.99 0.99 0 0 0 -0.29 -0.883l-17.57-17.13 24.281-3.525a0.99 0.99 0 0 0 0.754 -0.547l10.859-22 10.855 22c0.149 0.297 0.43 0.5 0.754 0.547l24.282 3.527z"></path>
+ <path d="m49.137 66.914a0.5 0.5 0 0 0 0.207 0.676l16.722 8.793a0.497 0.497 0 0 0 0.676 -0.21 0.5 0.5 0 0 0 -0.21 -0.677l-16.723-8.789a0.496 0.496 0 0 0 -0.672 0.207zm-1.758-51.461a0.494 0.494 0 0 0 -0.668 0.227l-7.992 16.187a0.5 0.5 0 0 0 0.226 0.668 0.497 0.497 0 0 0 0.672 -0.227l7.988-16.187a0.5 0.5 0 0 0 -0.226 -0.668zm-30.586 24.007a0.5 0.5 0 1 0 -0.7 0.716l14.645 14.273-2.195 12.805a0.502 0.502 0 0 0 0.492 0.586 0.502 0.502 0 0 0 0.492 -0.418l2.243-13.063a0.502 0.502 0 0 0 -0.145 -0.441z"></path>
+</svg>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 160px; top: 343px;" data-block-id="98dd9dd2a504355de36407b881f11d2f"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;" dir="ui">
+<p>DISTRIBUTED SYSTEMS ENTHUSIASTS</p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 160px; top: 432px;" data-block-id="d85a4dfca2135f588b38fbd954ec97af"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14;" dir="ui">
+<p>MEET US AT BRNO DISTRIBUTED SYSTEMS MEET-UP<br>
+<a href="https://www.meetup.com/Brno-Distributed-Systems-Meetup-Group/" target="_blank">https://www.meetup.com/Brno-Distributed-Systems-Meetup-Group</a></p>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 36px; height: 34px; left: 89px; top: 339px; min-width: 4px; min-height: 4px;" data-block-id="d83eea51b25aaebe9640709dc0ca84b9"><div class="sl-block-content" style="z-index: 15;" data-inline-svg="true">
+<img style="" data-natural-width="94" data-natural-height="90" data-lazy-loaded="" data-src="deck-1/b0ccfaca329ec42adb0499e203153b00.svg"><svg width="94.085" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 94.08483 90.360687" height="90.361" preserveaspectratio="xMidYMid meet">
+ <path d="m86.035 36.328a1.001 1.001 0 0 0 -0.808 -0.68l-25.767-3.742-11.52-23.346a1.003 1.003 0 0 0 -0.897 -0.56 0.995 0.995 0 0 0 -0.895 0.559l-11.523 23.347-25.77 3.742a1 1 0 0 0 -0.804 0.684 0.988 0.988 0 0 0 0.25 1.023l18.644 18.176-4.398 25.66a0.992 0.992 0 0 0 0.398 0.977 0.993 0.993 0 0 0 1.051 0.078l23.047-12.113 23.047 12.11a0.978 0.978 0 0 0 0.465 0.116 1 1 0 0 0 0.984 -1.168l-4.402-25.664 18.643-18.172c0.274-0.265 0.371-0.664 0.254-1.027zm-20.672 18.137c-0.234 0.23-0.34 0.562-0.285 0.887l4.149 24.18-21.72-11.419a1.003 1.003 0 0 0 -0.929 0l-21.718 11.418 4.149-24.183a0.99 0.99 0 0 0 -0.29 -0.883l-17.57-17.13 24.281-3.525a0.99 0.99 0 0 0 0.754 -0.547l10.859-22 10.855 22c0.149 0.297 0.43 0.5 0.754 0.547l24.282 3.527z"></path>
+ <path d="m49.137 66.914a0.5 0.5 0 0 0 0.207 0.676l16.722 8.793a0.497 0.497 0 0 0 0.676 -0.21 0.5 0.5 0 0 0 -0.21 -0.677l-16.723-8.789a0.496 0.496 0 0 0 -0.672 0.207zm-1.758-51.461a0.494 0.494 0 0 0 -0.668 0.227l-7.992 16.187a0.5 0.5 0 0 0 0.226 0.668 0.497 0.497 0 0 0 0.672 -0.227l7.988-16.187a0.5 0.5 0 0 0 -0.226 -0.668zm-30.586 24.007a0.5 0.5 0 1 0 -0.7 0.716l14.645 14.273-2.195 12.805a0.502 0.502 0 0 0 0.492 0.586 0.502 0.502 0 0 0 0.492 -0.418l2.243-13.063a0.502 0.502 0 0 0 -0.145 -0.441z"></path>
+</svg>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 36px; height: 34px; left: 89px; top: 439px; min-width: 4px; min-height: 4px;" data-block-id="7f6f4440597bf7afb5486fa3049cbb8b"><div class="sl-block-content" style="z-index: 16;" data-inline-svg="true">
+<img style="" data-natural-width="94" data-natural-height="90" data-lazy-loaded="" data-src="deck-1/b0ccfaca329ec42adb0499e203153b00.svg"><svg width="94.085" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 94.08483 90.360687" height="90.361" preserveaspectratio="xMidYMid meet">
+ <path d="m86.035 36.328a1.001 1.001 0 0 0 -0.808 -0.68l-25.767-3.742-11.52-23.346a1.003 1.003 0 0 0 -0.897 -0.56 0.995 0.995 0 0 0 -0.895 0.559l-11.523 23.347-25.77 3.742a1 1 0 0 0 -0.804 0.684 0.988 0.988 0 0 0 0.25 1.023l18.644 18.176-4.398 25.66a0.992 0.992 0 0 0 0.398 0.977 0.993 0.993 0 0 0 1.051 0.078l23.047-12.113 23.047 12.11a0.978 0.978 0 0 0 0.465 0.116 1 1 0 0 0 0.984 -1.168l-4.402-25.664 18.643-18.172c0.274-0.265 0.371-0.664 0.254-1.027zm-20.672 18.137c-0.234 0.23-0.34 0.562-0.285 0.887l4.149 24.18-21.72-11.419a1.003 1.003 0 0 0 -0.929 0l-21.718 11.418 4.149-24.183a0.99 0.99 0 0 0 -0.29 -0.883l-17.57-17.13 24.281-3.525a0.99 0.99 0 0 0 0.754 -0.547l10.859-22 10.855 22c0.149 0.297 0.43 0.5 0.754 0.547l24.282 3.527z"></path>
+ <path d="m49.137 66.914a0.5 0.5 0 0 0 0.207 0.676l16.722 8.793a0.497 0.497 0 0 0 0.676 -0.21 0.5 0.5 0 0 0 -0.21 -0.677l-16.723-8.789a0.496 0.496 0 0 0 -0.672 0.207zm-1.758-51.461a0.494 0.494 0 0 0 -0.668 0.227l-7.992 16.187a0.5 0.5 0 0 0 0.226 0.668 0.497 0.497 0 0 0 0.672 -0.227l7.988-16.187a0.5 0.5 0 0 0 -0.226 -0.668zm-30.586 24.007a0.5 0.5 0 1 0 -0.7 0.716l14.645 14.273-2.195 12.805a0.502 0.502 0 0 0 0.492 0.586 0.502 0.502 0 0 0 0.492 -0.418l2.243-13.063a0.502 0.502 0 0 0 -0.145 -0.441z"></path>
+</svg>
+</div></div></section><section data-background-color="#fafafa" data-background-image="deck-1/363f880de0b81ffc34d6778bb7f9e6a6.png" data-background-size="cover" data-id="68436e18c6bee3a4af3c340ae4778bf5"><div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 94px;" data-block-id="574b1de1f6c828c845e3950b44976e3d"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; font-size: 78%;">
+<h1>What is this talk about</h1>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 160px; top: 320px;" data-block-id="ec8aad7bd670a8b67c5322097ec5261c"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 17;" dir="ui">
+<p>WHY CONSENSUS ALGORITHM IS AN ESSENTIAL PART<br>
+IN DISTRIBUTED LEDGER SYSTEMS</p>
+</div></div>
+<div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 36px; height: 55px; left: 89px; top: 320px;" data-block-id="c864c761ede8e47102acb4712a69f165"><div class="sl-block-content" style="z-index: 18;"><img style="" data-natural-width="216" data-natural-height="332" data-lazy-loaded="" data-src="deck-1/f130daa9a873cdd7eff753ade6df2d66.png"></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 160px; top: 212px;" data-block-id="9e8abd1c6a668ee2a7e291e43b58d0f4"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 19;" dir="ui">
+<p>A BRIEF OVERVIEW OF CONSENSUS ALGORITHMS<br>
+IN DISTRIBUTED LEDGER SYSTEMS</p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 526px; left: 160px; top: 428px;" data-block-id="dab8e40cff547177650e985e53a4fdb7"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 20;" dir="ui">
+<p>HOW THE CHOICE OF CONSENSUS ALGORITHM IMPACTS CAPABILITIES OF DISTRIBUTED SYSTEM</p>
+</div></div>
+<div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 36px; height: 55px; left: 89px; top: 210px;" data-block-id="a65236312e40a430e74a8f5a661923cc"><div class="sl-block-content" style="z-index: 21;"><img style="" data-natural-width="216" data-natural-height="332" data-lazy-loaded="" data-src="deck-1/f130daa9a873cdd7eff753ade6df2d66.png"></div></div>
+<div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 36px; height: 55px; left: 89px; top: 428px;" data-block-id="86937f6b5f7c087aef04644de3be9a01"><div class="sl-block-content" style="z-index: 22;"><img style="" data-natural-width="216" data-natural-height="332" data-lazy-loaded="" data-src="deck-1/f130daa9a873cdd7eff753ade6df2d66.png"></div></div></section><section data-background-color="#fafafa" data-background-image="deck-1/363f880de0b81ffc34d6778bb7f9e6a6.png" data-background-size="cover" data-id="2caf80eaf71b0a792a30f7d774aebf04"><div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 94px;" data-block-id="26a6adbb1e27c13c429fd75cd79945aa"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; font-size: 78%;">
+<h1>AGENDA</h1>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 160px; top: 238px;" data-block-id="d1a7e972eba904d6daf396a5a7583b1f"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;" dir="ui">
+<p>MOTIVATION FOR CONSENSUS IN DISTRIBUTED LEDGER SYSTEM</p>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 28px; height: 42px; left: 103px; top: 228px; min-width: 4px; min-height: 4px;" data-block-id="c096bd6adb339ba1887bf8ec4c5db419"><div class="sl-block-content" style="z-index: 12;"><img style="" data-natural-width="216" data-natural-height="332" data-lazy-loaded="" data-src="deck-1/f130daa9a873cdd7eff753ade6df2d66.png"></div></div>
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 160px; top: 304px;" data-block-id="37286e488711f6b11555c8cf7853d138"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;" dir="ui">
+<p>NON-BYZANTINE FAULT TOLERANT CONSENSUS FOR BLOCKCHAIN</p>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 28px; height: 42px; left: 103px; top: 295px; min-width: 4px; min-height: 4px;" data-block-id="dd44af2668b61525c12d1cf31254bf40"><div class="sl-block-content" style="z-index: 14;"><img style="" data-natural-width="216" data-natural-height="332" data-lazy-loaded="" data-src="deck-1/f130daa9a873cdd7eff753ade6df2d66.png"></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 160px; top: 369px;" data-block-id="11f460cfee972d13402df63f07f10d7e"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15;" dir="ui">
+<p>BYZANTINE FAULT TOLERANT CONSENSUS FOR BLOCKCHAIN</p>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 28px; height: 42px; left: 103px; top: 360px; min-width: 4px; min-height: 4px;" data-block-id="2e6c0d966f30a5db6292ef6223f53418"><div class="sl-block-content" style="z-index: 16;"><img style="" data-natural-width="216" data-natural-height="332" data-lazy-loaded="" data-src="deck-1/f130daa9a873cdd7eff753ade6df2d66.png"></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 160px; top: 434px;" data-block-id="aa091ea475de1259302890e7dceca998"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 19;" dir="ui">
+<p>BITCOIN CONSENSUS</p>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 28px; height: 42px; left: 103px; top: 425px; min-width: 4px; min-height: 4px;" data-block-id="661a02c93276778ed4accdbb49eee783"><div class="sl-block-content" style="z-index: 20;"><img style="" data-natural-width="216" data-natural-height="332" data-lazy-loaded="" data-src="deck-1/f130daa9a873cdd7eff753ade6df2d66.png"></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 160px; top: 500px;" data-block-id="e56ef25cdb990d83826b021dd7347be1"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 21;" dir="ui">
+<p>CONSENSUS ALGORITHMS ON TOP OF DIRECTED ACYCLIC GRAPHS (DAG)</p>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 28px; height: 42px; left: 103px; top: 491px; min-width: 4px; min-height: 4px;" data-block-id="b013e79966d62ced6efc8bbfb77429f9"><div class="sl-block-content" style="z-index: 22;"><img style="" data-natural-width="216" data-natural-height="332" data-lazy-loaded="" data-src="deck-1/f130daa9a873cdd7eff753ade6df2d66.png"></div></div></section><section data-id="9ae164b10707c5c208bd7707c53abeee" data-background-color="#ffffff"><div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 94px;" data-block-id="627b7d4d5aa06ebc3fc0ed56c8ed0f2b"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; font-size: 78%;">
+<h1>Transfer of the money</h1>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 612px; left: 80px; top: 604px;" data-block-id="daf0529b0a1d571a98ab7dd3529ad7a0"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;">
+<p><span style="color:#595959">Beware: distributed ledgers are not limited only to cryptocurrencies, there are lots of other applications!</span></p>
+</div></div>
+<div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 591px; height: 402px; left: 105px; top: 169px;" data-block-id="117e21b23cd1cd051cdb618c4f7f738c"><div class="sl-block-content" style="z-index: 13;"><img style="" data-natural-width="437" data-natural-height="297" data-lazy-loaded="" data-src="deck-1/1b8092e2775a95fd014ed96acf14db6c.png"></div></div></section><section data-id="d9dc21737ee3d16190a830f43ccedb1c" data-background-color="#ffffff"><div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 94px;" data-block-id="e34ec4f88f242a1c943bc2d845aedd86"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; font-size: 78%;">
+<h1>Central authority</h1>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 653px; height: 522px; left: 154px; top: 152px; min-width: 4px; min-height: 4px;" data-block-id="5375c24d28611b51a5c9f2e49eafc069"><div class="sl-block-content" style="z-index: 12;"><img style="" data-natural-width="585" data-natural-height="468" data-lazy-loaded="" data-src="deck-1/ed14d076c46ac1c30a391f1d94f28c87.png"></div></div>
+</section><section data-id="7c28a48037ddd94eea2ba89e6ed9ee31" data-background-color="#ffffff"><div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 94px;" data-block-id="ef01ebbd965f8ea35e5ebe566dfa7e4b"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; font-size: 78%;">
+<h1>Double spend problem</h1>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 612px; left: 80px; top: 637px;" data-block-id="328d44e8795267e1bfdedab2ca4d2266"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;">
+<p><span style="color:#595959">In distributed systems, we need agreement between </span><span style="color:#595959">participants, which transaction is valid.</span></p>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 649px; height: 480px; left: 156px; top: 145px; min-width: 4px; min-height: 4px;" data-block-id="ff0082086f42ded237061829c212cbb1"><div class="sl-block-content" style="z-index: 12;"><img style="" data-natural-width="692" data-natural-height="512" data-lazy-loaded="" data-src="deck-1/08f2a069b0748511cc6ff376d7210405.png"></div></div></section><section data-id="8e6e01d7c74b20a86f96f7a19e8ee2b9" data-background-color="#ffffff"><div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 81px; top: 70px;" data-block-id="a0b0d8cc4b39b81bb8264d3bd38f5109"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<h1 style="text-align:left">Consensus</h1>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 210px;" data-block-id="817be9de983c0828a0ffe232835df6d2"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; line-height: 1.95;" data-has-line-height="">
+<ul>
+	<li>Agreement between nodes on something, e.g. some value</li>
+	<li>Another example: whether to commit a (distributed ) transaction to a database</li>
+	<li>Hard, network is unreliable
+	<ul>
+		<li>delays or failures in communication</li>
+	</ul>
+	</li>
+	<li>Consensus has to have two properties: <strong>safety</strong> and <strong>liveness</strong>
+</li>
+</ul>
+</div></div></section><section data-background-color="#ffffff" data-id="b30ce8742345121cb4be875bb8f3d814">
+
+<div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 731px; height: 443px; left: 115px; top: 157px;" data-block-id="1b7b13c3ef9931cb3682b37f9aeaee01"><div class="sl-block-content" style="z-index: 11;"><img style="" data-natural-width="731" data-natural-height="443" data-lazy-loaded="" data-src="deck-1/57500c480127a70fc3271313375c7edc.png"></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 70px;" data-block-id="6e9158bd4c25966e70bf507ca066ead4"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;">
+<h1 style="text-align:left">Consensus</h1>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 200px; top: 630px;" data-block-id="a82909f335145dadc0f045cc886d3af0"><a class="sl-block-style" style="z-index: 13;" href="" target="_top"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;">
+<p>https://twitter.com/el33th4xor/status/1006931658338177024</p>
+</div></a></div></section><section data-background-color="#ffffff" data-id="dc30652fc64c9196e6a17809e1a66a7c">
+<div class="sl-block" data-block-type="text" style="height: auto; width: 640px; left: 80px; top: 71px;" data-block-id="5dd9deed4249e74d225071b133969ecc"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; text-align: left;" dir="ui">
+<h1>NON-byzantine</h1>
+<h2>Fault tolerant consensus</h2>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 532px; height: 272px; left: 393px; top: 406px; min-width: 4px; min-height: 4px;" data-block-id="d5c69e4295acd6822407531278e8224c"><div class="sl-block-content" style="z-index: 11;"><img style="" data-natural-width="514" data-natural-height="263" data-lazy-loaded="" data-src="deck-1/b42a90c4a532a6d4d544c43633608d13.png"></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 210px;" data-block-id="b1e25e85b83fd2dd1f12d8995f32836a"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12; line-height: 1.95;" data-has-line-height="" dir="ui">
+<ul>
+	<li>can withstand failures but not a cheating participant</li>
+	<li>trust in all involved parties</li>
+	<li>protocols like Paxos (Google Spanner), Raft (etcd), Zab (Zookeeper)
+	<ul>
+		<li>consensus is affirmed when majority of nodes agrees</li>
+		<li>withstand crashes or connection issues</li>
+	</ul>
+	</li>
+</ul>
+</div></div></section><section data-background-color="#ffffff" data-id="cfa21c461b46ccb384c3e502a540659a">
+<div class="sl-block" data-block-type="text" style="height: auto; width: 640px; left: 80px; top: 71px;" data-block-id="773e39eed43a241ecb7189c664156e04"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; text-align: left;" dir="ui">
+<h1>RAFT algorithm</h1>
+</div></div>
+
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 85px; top: 210px;" data-block-id="141a6d0be86c518a8cd9cd0820872588"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15;">
+<p><a href="https://raft.github.io/#raftscope" target="_blank">https://raft.github.io/#raftscope</a></p>
+</div></div></section><section data-id="7866c29e9b2f6bc230e48d0e7eeca30f" data-background-color="#ffffff"><div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 70px;" data-block-id="53a054ef4edf26b76c23561d17be799c"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<h1 style="text-align:left">Private blockchainS</h1>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 835px; left: 80px; top: 231px;" data-block-id="6352bf159d9fadbbeed158a8a4f41581"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13; line-height: 1.95;" data-has-line-height="">
+<ul>
+	<li>all nodes are under control of a <strong>single organization</strong>
+</li>
+	<li>number of participant is small, they know about each other and <strong>trust each</strong> other
+	<ul>
+		<li>Raft in Hyperledger (Sawtooth, Fabric)</li>
+	</ul>
+	</li>
+	<li>
+<strong>Permissioned</strong> : nodes needs some permission to join the network</li>
+	<li>
+<strong>Permissionless</strong> : nodes can join the network without any permission (public blockchains)</li>
+</ul>
+</div></div></section><section data-background-color="#ffffff" data-id="3153002c814f5449d92996c9c529e99e">
+<div class="sl-block" data-block-type="text" style="height: auto; width: 917px; left: 80px; top: 70px;" data-block-id="f97a86bc856e09a118ad7eb0da9a181e"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; text-align: left;" dir="ui">
+<h1>NON-byzantine consens.</h1>
+
+<h2>summary</h2>
+</div></div>
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 280px;" data-block-id="5df77346c13c360d8b6099ed8c599314"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13; line-height: 1.95;" data-has-line-height="" dir="ui">
+<ul>
+	<li>usually used in distributed database systems</li>
+	<li>trust in all involved parties</li>
+	<li>used in private permissioned blockchains</li>
+</ul>
+</div></div></section><section data-id="ffc69aa65f0a3e6dd4d81446b98fb3d1" data-background-color="#ffffff"><div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 70px;" data-block-id="857683d17706523c42c14724f6f2b05f"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<h1 style="text-align:left">Byzantine failure</h1>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 210px;" data-block-id="75c69f09fef96e463b9750f78118df18"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; line-height: 1.95;" data-has-line-height="" dir="ui">
+<ul>
+	<li>besides delays and failures in communication over network, the situation can be even worse - there can be malicious participants!</li>
+	<li>a byzantine failure is any fault presenting different symptoms to different observers.
+	<ul>
+		<li>e.g. attempt to double spend money.</li>
+	</ul>
+	</li>
+</ul>
+
+<p> </p>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 419px; height: 310px; left: 271px; top: 379px; min-width: 4px; min-height: 4px;" data-block-id="1f1297d450c8c5171e58ea327353dc52"><div class="sl-block-content" style="z-index: 13;"><img style="" data-natural-width="692" data-natural-height="512" data-lazy-loaded="" data-src="deck-1/08f2a069b0748511cc6ff376d7210405.png"></div></div></section><section data-id="d153c0b66483a9d824146bac061f797a" data-background-color="#ffffff"><div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 210px;" data-block-id="8aeae7f5bd9b02b2583198c333ecedaf"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; line-height: 1.95;" data-has-line-height="" dir="ui">
+<ul>
+	<li style="color:#595959">
+	<p><span style="color:#595959">PBFT, Tendermint, Stellar ...</span></p>
+	</li>
+	<li style="color:#595959">
+	<p><span style="color:#595959">Agreement can be imaged like a three-phase commit (propose a value, pre-prepare commit, prepare, commit)..</span></p>
+	</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 640px; left: 80px; top: 70px;" data-block-id="4208123abd21dd2126ae7036b6ec0c90"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12; text-align: left;" dir="ui">
+<h1>BFT algorithms</h1>
+
+<h2>Byzantine fault tolerant</h2>
+</div></div>
+<div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 648px; height: 277px; left: 148px; top: 347px;" data-block-id="376c60a5c07f13c88bd81694baab202c"><div class="sl-block-content" style="z-index: 13;"><img style="" data-natural-width="1053" data-natural-height="450" data-lazy-loaded="" data-src="deck-1/4c26f6b1d6f31a8d3d68bee7e53d5d29.png"></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 280px; left: 340px; top: 647px;" data-block-id="c9034bbd44017d53607246276db818c1"><a class="sl-block-style" style="z-index: 14;" href="" target="_top"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14;">
+<p><span style="font-size:0.7em">http://pmg.csail.mit.edu/papers/osdi99.pdf</span></p>
+</div></a></div></section><section data-id="725788be36b285c769f85285aacccac1" data-background-color="#ffffff"><div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 153px;" data-block-id="bb0de2c97af686b02ef262f37ffc1a0a"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; line-height: 1.95;" data-has-line-height="" dir="ui">
+<ul>
+	<li style="color:#595959">
+	<p><span style="color:#595959">Still to some extend centralized.</span></p>
+	</li>
+	<li style="color:#595959">
+	<p><span style="color:#595959">Usually to some extend permissioned or have to be combined e.g. with PoS (Tendermint).</span></p>
+	</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 621px; height: 361px; left: 170px; top: 280px;" data-block-id="2669373a86a36c7e8b00f25c146ea76c"><div class="sl-block-content" style="z-index: 12;"><img style="" data-natural-width="621" data-natural-height="361" data-lazy-loaded="" data-src="deck-1/7c9d9f8d773f1149962931dd61dd411f.png"></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 840px; left: 80px; top: 33px;" data-block-id="367dc34e702b34f67715cc7c08362d34"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;">
+<h1 style="text-align:left">Federated DISTRIBUTED LEDGERS</h1>
+
+<p> </p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 560px; left: 207px; top: 657px;" data-block-id="35f75327d0f6d5a1134a1fb70336cf57"><a class="sl-block-style" style="z-index: 14;" href="" target="_top"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14;">
+<p><span style="font-size:0.7em">https://mc.ai/whats-new-in-deep-learning-research-understanding-federated-learning/</span></p>
+</div></a></div></section><section data-background-color="#ffffff" data-id="dcc2dc4cb0c45c6dcca86d9f88bb033d">
+<div class="sl-block" data-block-type="text" style="height: auto; width: 917px; left: 80px; top: 70px;" data-block-id="e773465dada3cca8935e5b5dfe60a346"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; text-align: left;" dir="ui">
+<h1>byzantine consensus</h1>
+
+<h2>summary</h2>
+</div></div>
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 280px;" data-block-id="52c11d2a54d40875a51ddd8e3966976b"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; line-height: 1.95;" data-has-line-height="" dir="ui">
+<ul>
+	<li>usually slow
+	<ul>
+		<li>a lot of messages exchanged</li>
+	</ul>
+	</li>
+	<li>parties don't (fully) trust each other</li>
+	<li>usually used in semi-public and public blockchains</li>
+</ul>
+</div></div></section><section data-background-color="#ffffff" data-id="062e3d3b31a1bd4d5e1345b64423ec0f">
+<div class="sl-block" data-block-type="text" style="height: auto; width: 917px; left: 80px; top: 70px;" data-block-id="af12eaf263d7f4b9eca1054eeefd5d6e"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; text-align: left;" dir="ui">
+<h1>public blockchains</h1>
+</div></div>
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 280px;" data-block-id="433512630346d821ef5e973265cfaac2"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; line-height: 1.95;" data-has-line-height="" dir="ui">
+<ul>
+	<li>any party may connect
+	<ul>
+		<li>nobody trusts nobody</li>
+	</ul>
+	</li>
+	<li>some new challenges evolve</li>
+</ul>
+</div></div></section><section data-id="f325ed8566fa3d8b62f4cf8c254f9eb6" data-background-color="#ffffff"><div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 70px;" data-block-id="3bd20e29753e003e5b672fb5aa485609"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<h1 style="text-align:left">SibYLS attack</h1>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 140px;" data-block-id="09e77eb0fe422f9080fd94c6eabb75d1"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; line-height: 1.95;" data-has-line-height="">
+<ul>
+	<li>Forging the identity to subverted the result</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 538px; height: 417px; left: 211px; top: 212px;" data-block-id="27a27075eb7271301b43900c42428b93"><div class="sl-block-content" style="z-index: 13;"><img style="" data-natural-width="676" data-natural-height="524" data-lazy-loaded="" data-src="deck-1/0c5f5979cc6a8fc05426ac511744ad2b.png"></div></div></section><section data-background-color="#ffffff" data-id="8aa55dfc9b0b58795029b73d5c8fedca">
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 70px;" data-block-id="ea82feb35532a0a786a02b90cffd3a9f"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;">
+<h1 style="text-align:left">Proof-of-work</h1>
+</div></div>
+<div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 837px; height: 449px; left: 62px; top: 173px;" data-block-id="7795dd92a6c9d6e0eb1924c8eeaa589b"><div class="sl-block-content" style="z-index: 12;"><img style="" data-natural-width="731" data-natural-height="392" data-lazy-loaded="" data-src="deck-1/cf5d6045651531212e124dc972ea2403.png"></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 80px; top: 597px;" data-block-id="311ece32698d470bb5f2e2e15469b8a2"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;">
+<ul>
+	<li>A valid block starts with prefix <strong>0x00</strong>
+</li>
+</ul>
+</div></div></section><section data-background-color="#ffffff" data-id="e0c73c4f6f1591ebf269020c64ad11ef">
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 70px;" data-block-id="7cf94faea558b5b7ad019ec4eba44d51"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<h1 style="text-align:left">Blockchain fork</h1>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 859px; height: 480px; left: 51px; top: 173px; min-width: 4px; min-height: 4px;" data-block-id="c5cd9f7a54bacbb37beaa9102e613397"><div class="sl-block-content" style="z-index: 11;"><img style="" data-natural-width="707" data-natural-height="395" data-lazy-loaded="" data-src="deck-1/dcae9fa28c3488994eb144c320dfcccc.png"></div></div></section><section data-background-color="#ffffff" data-id="6feca045b8ae9c1395136d374f2270dc">
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 70px;" data-block-id="93440ed9b3cf13dcc2912fefc53baa74"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<h1 style="text-align:left">Blockchain fork</h1>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 960px; height: 254px; left: 0px; top: 271px; min-width: 4px; min-height: 4px;" data-block-id="8613face9bf09f506c8e4c782c632fa2"><div class="sl-block-content" style="z-index: 11;"><img style="" data-natural-width="1415" data-natural-height="374" data-lazy-loaded="" data-src="deck-1/830dcefaebbf248a0d699f186dc45af6.png"></div></div></section><section data-background-color="#ffffff" data-id="4411cd819adc3450219d5deeba569394">
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 70px;" data-block-id="65dcff7c51a2ac7f5635f6136cd2107c"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<h1 style="text-align:left">nakamoto consensus</h1>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 210px;" data-block-id="9196c9d7c322f770d97b5fe6d4b9c0b3"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; line-height: 1.95;" data-has-line-height="">
+<ul>
+	<li style="color:#595959">
+	<p><span style="color:#595959">Bitcoin is (almost) <strong>Byzantine fault tolerant (BFT)</strong> and also resistant to <strong>Sybil</strong> attack</span></p>
+	</li>
+	<li style="color:#595959">
+	<p><span style="color:#595959">Proof-of-Work (PoW) is mechanism how to prevents Sybil attacks</span></p>
+	</li>
+	<li style="color:#595959">
+	<p><span style="color:#595959">The truth (agreement) is determined by the longest chain (created by Proof-of-Work)<br>
+	usually called <strong>Nakamoto consensus algorithm</strong></span></p>
+	</li>
+	<li style="color:#595959">
+	<p><span style="color:#595959"><strong>Probabilistic</strong>: probability of consensus is less than 1</span></p>
+	</li>
+	<li style="color:#595959">
+	<p>Proof-of-Work finding a new block is stable to 10 minutes</p>
+
+	<ul>
+		<li style="color:#595959">
+		<p>Bitcoin network is essentially <strong>synchronous</strong></p>
+		</li>
+	</ul>
+	</li>
+</ul>
+</div></div></section><section data-background-color="#ffffff" data-id="e6a44adf3e37574880c2fec972636fac">
+<div class="sl-block" data-block-type="text" style="height: auto; width: 694px; left: 80px; top: 70px;" data-block-id="b380982e1b631ecd13722de353458cab"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; text-align: left;" dir="ui">
+<h1>Bitcoin consensus</h1>
+
+<h2>summary</h2>
+</div></div>
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 280px;" data-block-id="87ac4d0ca5d0b2584bb71e15345d4157"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; line-height: 1.95;" data-has-line-height="" dir="ui">
+<ul>
+	<li>proof-of-work solves sibyls attack + leader election</li>
+	<li>consensus is nakamoto consensus which adds "a static rule" on top of PoW and declares that the right chain is the longest chain</li>
+</ul>
+</div></div></section><section data-background-color="#ffffff" data-id="ea52aa74115e19cf2e402339093ae5c3">
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 70px;" data-block-id="97875086334899fe972f80c03b877af7"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<h1 style="text-align:left">What about POS</h1>
+
+<h2>PROOF-OF-STAKE</h2>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 268px;" data-block-id="70eba1cb8098a9f73a1ce9eb72f3c5fb"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; line-height: 1.95;" data-has-line-height="" dir="ui">
+<ul>
+	<li style="color:#595959">
+	<p><span style="color:#595959">Proof-of-Stake (PoS) is per se <strong>not a consensus</strong> algorithm</span></p>
+	</li>
+	<li style="color:#595959">
+	<p><span style="color:#595959">Proof-of-Stake <strong>solves Sybil</strong> attack</span></p>
+	</li>
+	<li style="color:#595959">
+	<p><strong>Two major types</strong></p>
+
+	<ul>
+		<li style="color:#595959">
+		<p><strong>Chain-based</strong></p>
+		</li>
+		<li style="color:#595959">
+		<p style="color:#595959"><strong>PBFT-style</strong></p>
+		</li>
+	</ul>
+	</li>
+	<li style="color:#595959">
+	<p style="color:#595959">Consensus algorithm is completed with additional flavor</p>
+
+	<ul>
+		<li style="color:#595959">
+		<p style="color:#595959">as a separate rule of the longest chain wins (chain-based)</p>
+		</li>
+		<li style="color:#595959">
+		<p style="color:#595959">as a consensus running among all validator to determine the final valid block (PBFT)</p>
+		</li>
+	</ul>
+	</li>
+</ul>
+</div></div></section><section data-background-color="#ffffff" data-id="6323d7b110f43faa48850d3e69e97245">
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 218px;" data-block-id="d2072680bf8c0f28fbfbbcdd8ff13770"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;" dir="ui">
+<p style="color:#595959"> </p>
+
+<p><span style="color:#595959">Blockchain</span></p>
+</div></div>
+<div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 104px; height: 276px; left: 428px; top: 132px;" data-block-id="d8bb00f1a311bf7b9bb8e2deb7c41970"><div class="sl-block-style" style="z-index: 12; transform: rotate(90deg);"><div class="sl-block-content" style="z-index: 12;"><img style="" data-natural-width="102" data-natural-height="271" data-lazy-loaded="" data-src="deck-1/cbbc958d05cc1c32785cea32e8fa0221.png"></div></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 778px; left: 80px; top: 363px;" data-block-id="c2b3c314d725ffd324cb1524c92df16d"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;">
+<p>DAG</p>
+
+<ul>
+	<li style="color:#595959">
+	<p><span style="color:#595959">Hashgraph, Avalanche, Tangle…</span></p>
+	</li>
+	<li style="color:#595959">
+	<p><span style="color:#595959">Usually are not resistant to Sibyl attack (needs PoS or something else)</span></p>
+	</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 574px; height: 189px; left: 210px; top: 466px;" data-block-id="a223a3463ae7bff2e155ec558e23b128"><div class="sl-block-content" style="z-index: 14;"><img style="" data-natural-width="1099" data-natural-height="362" data-lazy-loaded="" data-src="deck-1/76a3dd8dd203b222146e27e38446c0e2.png"></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 451px; left: 320px; top: 322px;" data-block-id="09d3f67bd3c5c8cd586f1f0a06f57e5c"><a class="sl-block-style" style="z-index: 15;" href="" target="_top"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15;">
+<p><span style="font-size:0.7em">https://en.wikipedia.org/wiki/Blockchain#/media/File:Blockchain.svg</span></p>
+</div></a></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 222px; top: 663px;" data-block-id="77b0b0020365a088cbd47dc3b9a5e0c1"><a class="sl-block-style" style="z-index: 16;" href="" target="_top"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 16;">
+<p><span style="font-size:0.7em">https://ministryofblockchain.io/is-directed-acyclic-graph-dag-blockchains-new-competitor/</span></p>
+</div></a></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 851px; left: 80px; top: 70px;" data-block-id="1a7f7bdee3150778456da825f1038d8e"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 18; text-align: left;" dir="ui">
+<h1 style="text-align:left">cONSENSUS ALGORITHMS</h1>
+
+<h2 style="text-align:left">ON TOP OF directed acyclic graphs</h2>
+</div></div></section><section data-background-color="#ffffff" data-id="707ecd7f268d6414727c2830ac5cc0f0">
+
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 80px; top: 218px;" data-block-id="63c8b43a5014c0d14934907e37ba7133"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;">
+<ul>
+	<li style="color:#595959">
+	<p><span style="color:#595959">Gossip about gossip</span></p>
+	</li>
+	<li style="color:#595959">
+	<p><span style="color:#595959">Virtual voting</span></p>
+	</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 305px; height: 355px; left: 328px; top: 254px;" data-block-id="731fc2a108de27f1ddecd4b72e5454c1"><div class="sl-block-content" style="z-index: 12;"><img style="" data-natural-width="305" data-natural-height="355" data-lazy-loaded="" data-src="deck-1/37978a44d88b88d30d6161b4d70dcf13.png"></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 376px; left: 313px; top: 640px;" data-block-id="1cf3607b2fabe1aacb5fe0e685665bdc"><a class="sl-block-style" style="z-index: 13;" href="" target="_top"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;">
+<p><span style="font-size:0.7em">https://swirlds.com/downloads/SWIRLDS-TR-2016-01.pdf</span></p>
+</div></a></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 849px; left: 80px; top: 70px;" data-block-id="e01342e779136933cdf551c5c3e68f20"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15;">
+<h1 style="text-align:left">hASHGRAPH</h1>
+</div></div></section><section data-background-color="#ffffff" data-id="6633ffccf57112be42d7dc7753ae5a6f">
+
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 160px; top: 210px;" data-block-id="bd037822638fe6e07d005e13d9e869e3"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;">
+<ul>
+	<li style="color:#000000; font-size:13.999999999999998pt">
+	<p><span style="color:#000000; font-size:13.999999999999998pt">Gossip protocol</span></p>
+	</li>
+	<li style="color:#000000; font-size:13.999999999999998pt">
+	<p><span style="color:#000000; font-size:13.999999999999998pt">Metastability</span></p>
+	</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 593px; height: 334px; left: 184px; top: 302px;" data-block-id="de756a4fab1565fe286dbe3e06e2f304"><div class="sl-block-content" style="z-index: 12;"><img style="" data-natural-width="1084" data-natural-height="610" data-lazy-loaded="" data-src="deck-1/70279b83e11536c489525566e86197ea.png"></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 323px; left: 320px; top: 648px;" data-block-id="0f2790ad9ba8e14495424bb77a339c2f"><a class="sl-block-style" style="z-index: 13;" href="" target="_top"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;">
+<p><span style="font-size:0.7em">https://www.youtube.com/watch?v=AXrrqtFlGow</span></p>
+</div></a></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 849px; left: 80px; top: 70px;" data-block-id="92f83965cb659baeb1cf5eba0be233cb"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15;">
+<h1 style="text-align:left">AVALANCHE</h1>
+</div></div></section><section data-background-color="#ffffff" data-id="12fbba39fbd8a498659ebe6df18177e7">
+<div class="sl-block" data-block-type="text" style="height: auto; width: 917px; left: 80px; top: 70px;" data-block-id="f8ad1e15cce553d3eb41c5d4961834a2"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; text-align: left;" dir="ui">
+<h1>DAG BASED consensus</h1>
+
+<h2>summary</h2>
+</div></div>
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 280px;" data-block-id="65ca9f8771983b8bc4dbb06851d2f2d7"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; line-height: 1.95;" data-has-line-height="" dir="ui">
+<ul>
+	<li>different data structure for storing transaction data</li>
+	<li>not resistant to sibyls attack - PoS is usually involved</li>
+</ul>
+</div></div></section><section data-background-color="#ffffff" data-id="479a4b7d307b8f9967b39dc027d2745d">
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 70px;" data-block-id="f89c0913cfa888bacd2cd57aae67420d"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; text-align: left;" dir="ui">
+<h2>Chaloupka-Juránek Taxonomy</h2>
+</div></div>
+<div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 936px; height: 433px; left: 12px; top: 166.5px;" data-block-id="0771790c2c7a8f3a338dc9201d1eb7bb"><div class="sl-block-content" style="z-index: 12;"><img style="" data-natural-width="1095" data-natural-height="507" data-lazy-loaded="" data-src="deck-1/dd264513f3be2f4f59756d2377c10ce4.png"></div></div></section><section data-background-color="#ffffff" data-id="780f9d42e2459c38e90c1e7ca0768225">
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 70px;" data-block-id="b355e12205ab21123cd69c57ad623ae1"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14;">
+<h1 style="text-align:left">Take-offs</h1>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 210px;" data-block-id="526b0b240c680f5ae015866ac71d80bb"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15; line-height: 1.95;" data-has-line-height="">
+<ul>
+	<li style="color:#595959">
+	<p><span style="color:#595959">Consensus protocol is a crucial part of any distributed ledger.</span></p>
+	</li>
+	<li style="color:#595959">
+	<p><span style="color:#595959">Choice of consensus protocol influences heavily many characteristic of distributed ledger (including performance and security).</span></p>
+	</li>
+	<li style="color:#595959">
+	<p><span style="color:#595959">There are several types of distributed ledgers, several families of consensus algorithms and not every consensus algorithm is suitable for every distributed ledger.</span></p>
+	</li>
+</ul>
+</div></div></section><section data-background-color="#444444" data-background-image="deck-1/7899fd4fb667860c7656877fadbd55af.png" data-background-size="cover" data-id="ec873cedcdec065ef29f573e70d699d9"><div class="sl-block" data-block-type="text" style="width: 800px; left: 80px; top: 320px; height: auto;" data-block-id="b13c742b73c9874a857269d8246a6aee"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="text-align: center; z-index: 10;">
+<h1>QUESTIONS</h1>
+</div></div></section><section data-background-color="#ffffff" data-id="3b6e2cb15b85cd221af50a9a364dbe1a">
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 779px; left: 81px; top: 218px;" data-block-id="a894abbe8bdb5c437c9fcbf77e429909"><div class="sl-block-style" style="z-index: 11; transform: rotate(360deg);"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;">
+<ul>
+	<li style="color:#595959">
+	<p><a href="https://bitcoin.org/bitcoin.pdf" target="_blank"><span style="color:#0097A7">S. Nakamoto, Bitcoin: A Peer-to-Peer Electronic Cash System</span></a></p>
+	</li>
+	<li style="color:#595959">
+	<p><a href="https://raft.github.io/raft.pdf" target="_blank"><span style="color:#0097A7">D. Ongaro, J. Ousterhout, In Search of an Understandable Consensus Algorithm</span></a></p>
+	</li>
+	<li style="color:#595959">
+	<p><a href="http://pmg.csail.mit.edu/papers/osdi99.pdf" target="_blank"><span style="color:#0097A7">M. Castro, B Liskov, Practical Byzantine Fault Tolerance</span></a></p>
+	</li>
+	<li style="color:#595959">
+	<p><a href="https://www.stellar.org/papers/stellar-consensus-protocol.pdf" target="_blank"><span style="color:#0097A7">D. Mazieres, The Stellar Consensus Protocol</span></a></p>
+	</li>
+	<li style="color:#595959">
+	<p><a href="https://github.com/tendermint/spec/releases" target="_blank"><span style="color:#0097A7">The latest gossip on BFT consensus - Tendermint consensus algorithm</span></a></p>
+	</li>
+	<li style="color:#595959">
+	<p><a href="https://swirlds.com/downloads/SWIRLDS-TR-2016-01.pdf" target="_blank"><span style="color:#0097A7">L. Baird, The Swirlds Hashgraph Consensus Algorithm</span></a></p>
+	</li>
+	<li style="color:#595959">
+	<p><a href="https://ipfs.io/ipfs/QmUy4jh5mGNZvLkjies1RWM4YuvJh5o2FYopNPVYwrRVGV" target="_blank"><span style="color:#0097A7">Team Rocket, Snowflake to Avalanche</span></a></p>
+	</li>
+	<li style="color:#595959">
+	<p><a href="https://arxiv.org/pdf/1805.02707.pdf" target="_blank">A Survey on Consensus Mechanisms and Mining Strategy Management<br>
+	in Blockchain Networks</a></p>
+	</li>
+</ul>
+</div></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 70px;" data-block-id="49097828b0dff2d2a3337017682c1878"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;">
+<h1 style="text-align:left">LINKS</h1>
+</div></div></section><section class="slide-outro mesh-zoom mesh-blue" data-background-color="#cc0000" data-id="1a378aa264eee3de1022708522f62ab6">
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 565px;" data-block-id="8bcb679e5103df046bf31e17d47f056d"><div class="sl-block-content show-in-thumb" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; font-size: 110%; text-align: center;">
+<p>Thank you for your attention!</p>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 360px; height: 135px; left: 300px; top: 260px; min-width: 4px; min-height: 4px;" data-block-id="fa488260dee344daadffa2f1cab9128f"><div class="sl-block-content slide-outro-logo show-in-thumb" style="z-index: 12;" data-inline-svg="true">
+<img data-natural-width="320" data-natural-height="120" style="" data-lazy-loaded="" data-src="deck-1/8a1138d6941c53e0ed44dfa46b44f3af.svg">
+<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 613 145" height="170" width="500" class="redhat-logo"><path class="logohat" style="fill:#fff;" d="M127.47,83.49c12.51,0,30.61-2.58,30.61-17.46a14,14,0,0,0-.31-3.42l-7.45-32.36c-1.72-7.12-3.23-10.35-15.73-16.6C124.89,8.69,103.76.5,97.51.5,91.69.5,90,8,83.06,8c-6.68,0-11.64-5.6-17.89-5.6-6,0-9.91,4.09-12.93,12.5,0,0-8.41,23.72-9.49,27.16A6.43,6.43,0,0,0,42.53,44c0,9.22,36.3,39.45,84.94,39.45M160,72.07c1.73,8.19,1.73,9.05,1.73,10.13,0,14-15.74,21.77-36.43,21.77C78.54,104,37.58,76.6,37.58,58.49a18.45,18.45,0,0,1,1.51-7.33C22.27,52,.5,55,.5,74.22c0,31.48,74.59,70.28,133.65,70.28,45.28,0,56.7-20.48,56.7-36.65,0-12.72-11-27.16-30.83-35.78"></path><path class="logotext" style="fill:#fff;" d="M579.74,92.8c0,11.89,7.15,17.67,20.19,17.67a52.11,52.11,0,0,0,11.89-1.68V95a24.84,24.84,0,0,1-7.68,1.16c-5.37,0-7.36-1.68-7.36-6.73V68.3h15.56V54.1H596.78v-18l-17,3.68V54.1H568.49V68.3h11.25Zm-53,.32c0-3.68,3.69-5.47,9.26-5.47a43.12,43.12,0,0,1,10.1,1.26v7.15a21.51,21.51,0,0,1-10.63,2.63c-5.46,0-8.73-2.1-8.73-5.57m5.2,17.56c6,0,10.84-1.26,15.36-4.31v3.37h16.82V74.08c0-13.56-9.14-21-24.39-21-8.52,0-16.94,2-26,6.1l6.1,12.52c6.52-2.74,12-4.42,16.83-4.42,7,0,10.62,2.73,10.62,8.31v2.73a49.53,49.53,0,0,0-12.62-1.58c-14.31,0-22.93,6-22.93,16.73,0,9.78,7.78,17.24,20.19,17.24m-92.44-.94h18.09V80.92h30.29v28.82H506V36.12H487.93V64.41H457.64V36.12H439.55ZM370.62,81.87c0-8,6.31-14.1,14.62-14.1A17.22,17.22,0,0,1,397,72.09V91.54A16.36,16.36,0,0,1,385.24,96c-8.2,0-14.62-6.1-14.62-14.09m26.61,27.87h16.83V32.44l-17,3.68V57.05a28.3,28.3,0,0,0-14.2-3.68c-16.19,0-28.92,12.51-28.92,28.5a28.25,28.25,0,0,0,28.4,28.6,25.12,25.12,0,0,0,14.93-4.83ZM320,67c5.36,0,9.88,3.47,11.67,8.83H308.47C310.15,70.3,314.36,67,320,67M291.33,82c0,16.2,13.25,28.82,30.28,28.82,9.36,0,16.2-2.53,23.25-8.42l-11.26-10c-2.63,2.74-6.52,4.21-11.14,4.21a14.39,14.39,0,0,1-13.68-8.83h39.65V83.55c0-17.67-11.88-30.39-28.08-30.39a28.57,28.57,0,0,0-29,28.81M262,51.58c6,0,9.36,3.78,9.36,8.31S268,68.2,262,68.2H244.11V51.58Zm-36,58.16h18.09V82.92h13.77l13.89,26.82H292l-16.2-29.45a22.27,22.27,0,0,0,13.88-20.72c0-13.25-10.41-23.45-26-23.45H226Z"></path></svg>
+</div></div></section><section data-background-color="#ffffff" data-id="e83739b0048c3007aa17e01c2cc043ac">
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 287px;" data-block-id="6de63feddee0511ae69c77b9b80f1215"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;" dir="ui">
+<p style="text-align:center"><strong>BACKUP SLIDES</strong></p>
+</div></div></section><section data-background-color="#ffffff" data-id="5cec36b11b18e319d414e8dd66b71052">
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 70px;" data-block-id="14473322665abd233d075afcb9a8ae4e"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<h1 style="text-align:left">bitcoin 51% attack</h1>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 913px; height: 403px; left: 24px; top: 210px; min-width: 4px; min-height: 4px;" data-block-id="6e1ac2644e5ba67d399c8ce484220ec8"><div class="sl-block-content" style="z-index: 11;"><img style="" data-natural-width="920" data-natural-height="406" data-lazy-loaded="" data-src="deck-1/2dd7afec25b243cf35e37320077999fe.png"></div></div></section><section data-background-color="#ffffff" data-id="559c11d41a8492fa9e630d9e2c108a2e">
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 70px;" data-block-id="be1e9fb594ff7f1db686318cd3052af7"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;">
+<h1 style="text-align:left">POS: nothing at stake</h1>
+</div></div>
+<div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 806px; height: 310px; left: 80px; top: 210px;" data-block-id="abbcdd41e0f9a77a6bdaf9122db4f31c"><div class="sl-block-content" style="z-index: 12;"><img style="" data-natural-width="1324" data-natural-height="509" data-lazy-loaded="" data-src="deck-1/f169e0c2b33f41cca9f12401f6b326ee.png"></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 180px; top: 335px;" data-block-id="f579e7cf7acb5d304bdd084b1ef2289b"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;"><p>Text</p></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 80px; top: 630px;" data-block-id="2ac70cd2e1ddf208aa6d1ad07ffc3e2f"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14;">
+<p><a href="https://github.com/ethereum/wiki/wiki/Proof-of-Stake-FAQs" target="_blank">https://github.com/ethereum/wiki/wiki/Proof-of-Stake-FAQs</a></p>
+</div></div></section><section data-background-color="#ffffff" data-id="c5442d995c4e272e3a579b8f6c7b0e2b">
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 210px;" data-block-id="14adc729c6d08cb1d49963ff85228670"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;" dir="ui">
+<p style="color:#595959"> </p>
+
+<p style="color:#595959"><span style="color:#595959">There are many:</span></p>
+
+<ul>
+	<li style="color:#595959">
+	<p><span style="color:#595959">Proof of Capacity</span></p>
+	</li>
+	<li style="color:#595959">
+	<p><span style="color:#595959">Proof of Elapsed Time (PoET)</span></p>
+	</li>
+	<li style="color:#595959">
+	<p><span style="color:#595959">Proof of Authority</span></p>
+	</li>
+	<li style="color:#595959">
+	<p><span style="color:#595959">Proof of Activity</span></p>
+	</li>
+	<li style="color:#595959">
+	<p><span style="color:#595959">Proof of Burn</span></p>
+	</li>
+	<li style="color:#595959">
+	<p><span style="color:#595959">Proof of Weight</span></p>
+	</li>
+	<li style="color:#595959">
+	<p><span style="color:#595959">…</span></p>
+	</li>
+</ul>
+
+<p style="color:#595959"> </p>
+
+<p style="color:#595959"><span style="color:#595959">Beware: Proof-of-X doesn’t mean it’s similar to PoW, actually in many cases it’s quite different (e.g. centralized).</span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 70px;" data-block-id="9e70499535d6245d98e8e3de0eec6ccc"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;">
+<h1 style="text-align:left">Proof-of-x</h1>
+</div></div></section><section data-background-color="#ffffff" data-id="4e6b4761c94af70bf58e1627dbe50cda">
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 70px;" data-block-id="cc5898f68af7f0f4db361656a3d927cf"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<h1 style="text-align:left">taxonomy table</h1>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 159px;" data-block-id="33ce0adf62e23f9ace07beaeaf723554"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14;" dir="ui">
+<table>
+	<colgroup>
+		<col>
+		<col>
+		<col>
+		<col>
+		<col>
+		<col>
+	</colgroup>
+	<tbody>
+		<tr>
+			<td>
+			<p><span style="color:#000000; font-size:13.999999999999998pt">Proof-of-Work</span></p>
+			</td>
+			<td>
+			<p><span style="color:#000000; font-size:13.999999999999998pt">Bitcoin</span></p>
+			</td>
+			<td>
+			<p><span style="color:#000000; font-size:13.999999999999998pt">Public Permissionless</span></p>
+			</td>
+			<td>
+			<p><span style="color:#000000; font-size:13.999999999999998pt">Byzantine tolerant</span></p>
+			</td>
+			<td>
+			<p><span style="color:#000000; font-size:13.999999999999998pt">Probabilistic</span></p>
+			</td>
+			<td> </td>
+		</tr>
+		<tr>
+			<td>
+			<p><span style="color:#000000; font-size:13.999999999999998pt">Proof-of-Stake</span></p>
+			</td>
+			<td>
+			<p><span style="color:#000000; font-size:13.999999999999998pt">Ethereum 2.0</span></p>
+			</td>
+			<td>
+			<p><span style="color:#000000; font-size:13.999999999999998pt">Public Permissionless</span></p>
+			</td>
+			<td>
+			<p><span style="color:#000000; font-size:13.999999999999998pt">Byzantine tolerant</span></p>
+			</td>
+			<td>
+			<p><span style="color:#000000; font-size:13.999999999999998pt">Finite</span></p>
+			</td>
+			<td> </td>
+		</tr>
+		<tr>
+			<td>
+			<p><span style="color:#000000; font-size:13.999999999999998pt">Delegated PoS</span></p>
+			</td>
+			<td>
+			<p><span style="color:#000000; font-size:13.999999999999998pt">Stellar</span></p>
+			</td>
+			<td>
+			<p><span style="color:#000000; font-size:13.999999999999998pt">Permissioned public</span></p>
+			</td>
+			<td>
+			<p><span style="color:#000000; font-size:13.999999999999998pt">Byzantine tolerant</span></p>
+			</td>
+			<td>
+			<p><span style="color:#000000; font-size:13.999999999999998pt">Finite</span></p>
+			</td>
+			<td> </td>
+		</tr>
+		<tr>
+			<td>
+			<p><span style="color:#000000; font-size:13.999999999999998pt">Raft</span></p>
+			</td>
+			<td>
+			<p><span style="color:#000000; font-size:13.999999999999998pt">Hyperledger</span></p>
+			</td>
+			<td>
+			<p><span style="color:#000000; font-size:13.999999999999998pt">Permissioned private</span></p>
+			</td>
+			<td>
+			<p><span style="color:#000000; font-size:13.999999999999998pt">non-Byzantine tolerant</span></p>
+			</td>
+			<td>
+			<p><span style="color:#000000; font-size:13.999999999999998pt">Finite</span></p>
+			</td>
+			<td> </td>
+		</tr>
+		<tr>
+			<td>
+			<p><span style="color:#000000; font-size:13.999999999999998pt">Tendermint</span></p>
+			</td>
+			<td>
+			<p><span style="color:#000000; font-size:13.999999999999998pt">Cosmos</span></p>
+			</td>
+			<td>
+			<p><span style="color:#000000; font-size:13.999999999999998pt">Permissionless public</span></p>
+			</td>
+			<td>
+			<p><span style="color:#000000; font-size:13.999999999999998pt">Byzantine tolerant</span></p>
+			</td>
+			<td>
+			<p><span style="color:#000000; font-size:13.999999999999998pt">Finite</span></p>
+			</td>
+			<td> </td>
+		</tr>
+		<tr>
+			<td>
+			<p><span style="color:#000000; font-size:13.999999999999998pt">Swirlds</span></p>
+			</td>
+			<td>
+			<p><span style="color:#000000; font-size:13.999999999999998pt">Hedera Hashgraph</span></p>
+			</td>
+			<td>
+			<p><span style="color:#000000; font-size:13.999999999999998pt">Permissionless public</span></p>
+			</td>
+			<td>
+			<p><span style="color:#000000; font-size:13.999999999999998pt">Byzantine tolerant</span></p>
+			</td>
+			<td>
+			<p><span style="color:#000000; font-size:13.999999999999998pt">Finite</span></p>
+			</td>
+			<td> </td>
+		</tr>
+		<tr>
+			<td>
+			<p><span style="color:#000000; font-size:13.999999999999998pt">Avalanche</span></p>
+			</td>
+			<td>
+			<p><span style="color:#000000; font-size:13.999999999999998pt">Ava</span></p>
+			</td>
+			<td>
+			<p><span style="color:#000000; font-size:13.999999999999998pt">Permissionless public</span></p>
+			</td>
+			<td>
+			<p><span style="color:#000000; font-size:13.999999999999998pt">Byzantine tolerant</span></p>
+			</td>
+			<td>
+			<p><span style="color:#000000; font-size:13.999999999999998pt">Probabilistic</span></p>
+			</td>
+			<td> </td>
+		</tr>
+	</tbody>
+</table>
+
+<p> </p>
+</div></div></section><section data-background-color="#ffffff" data-id="e8df6b59545db5108cdf82742c7dfd9e">
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 927px; left: 17px; top: 70px;" data-block-id="22f952000725235dc87f6c5e76fdb715"><div class="sl-block-content rh-ul" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;">
+<h1 style="text-align:left">Blockchain network imPL.</h1>
+</div></div>
+<div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 726px; height: 533px; left: 117px; top: 140px;" data-block-id="a93189c7c9989b78a14a3ef7db1cfc89"><div class="sl-block-content" style="z-index: 12;"><img style="" data-natural-width="1089" data-natural-height="800" data-src="deck-1/a60c45f5d54e4b9503c956084f78485b.png"></div></div></section>
+			</div>
+		</div>
+
+		<script>
+			var SLConfig = {"deck": {"id":1645544,"slug":"deck-1","title":"Consensus FI MUNI","description":"","width":960,"height":700,"visibility":"self","published_at":null,"sanitize_messages":null,"thumbnail_url":"https://s3.amazonaws.com/media-p.slid.es/thumbnails/7b783a7dde8c5397db77ea1f071c2549/thumb.jpg?1573500792","view_count":0,"user":{"id":524785,"username":"vojtechjuranek","name":"Vojtech Juranek","description":null,"thumbnail_url":"https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg?sz=50","paid":true,"pro":true,"lite":false,"team_id":32,"settings":{"id":367934,"present_controls":true,"present_upsizing":true,"present_pointer":false,"present_notes":true,"default_deck_tag_id":null},"enterprise":true,"membership":{"role":"member","manager":false,"activated":true}},"background_transition":"none","transition":"none","theme_id":176,"theme_font":"overpass2","theme_color":"no-color","auto_slide_interval":0,"comments_enabled":true,"forking_enabled":false,"rolling_links":false,"center":false,"shuffle":null,"should_loop":false,"share_notes":null,"slide_number":null,"slide_count":40,"rtl":false,"version":2,"collaborative":true,"deck_user_editor_limit":null,"data_updated_at":1573690415497,"font_typekit":null,"font_google":null,"time_limit":null,"upsizing_enabled":null,"notes":{"3153002c814f5449d92996c9c529e99e":"","cfa21c461b46ccb384c3e502a540659a":"Raft decomposes consensus into three sub-problems:\n\nwww.confluent.io/blog/using-logs-to-build-a-solid-data-infrastructure-or-why-dual-writes-are-a-bad-idea/\n\n* Leader Election: A new leader needs to be elected in case of the failure of an existing one.\n* Log replication: The leader needs to keep the logs of all servers in sync with its own through replication.\n* Safety: If one of the servers has committed a log entry at a particular index, no other server can apply a different log entry for that index.","b30ce8742345121cb4be875bb8f3d814":"https://medium.com/coinmonks/a-primer-on-blockchain-design-89605b287a5a","8aa55dfc9b0b58795029b73d5c8fedca":"Nakamoto consensus is a static rule: take the chain with the highest difficulty. No network communication is needed.\nPoW needs enough time to propagate the block to all nodes in network for not having multiple forks that would have hard time to converge","6323d7b110f43faa48850d3e69e97245":"Vojta\n\nDAG is a data structure which allows a block to have many parents, efficiently keeping track of many intertwined forks. In general, if two blocks are conflicting, the one included in more (weighted) forks become canonical.","df3994dc3632286a07d77249f2360ef0":"The premise of PoS is to replace the external resources (hardware and electricity needed for mining in PoW) with the internal resource (the underlying cryptocurrency).","ea52aa74115e19cf2e402339093ae5c3":"The premise of PoS is to replace the external resources (hardware and electricity needed for mining in PoW) with the internal resource (the underlying cryptocurrency).\n\nhttps://github.com/ethereum/wiki/wiki/Proof-of-Stake-FAQs\n\nThere is as well a hybrid model: Hybrid PoS: Proof-of-Work with Proof-of-Stake on top","aaea07ce204a838e1012efaa867070e1":"Vojta","68436e18c6bee3a4af3c340ae4778bf5":"","9ae164b10707c5c208bd7707c53abeee":"Ondra","d9dc21737ee3d16190a830f43ccedb1c":"","7c28a48037ddd94eea2ba89e6ed9ee31":"","8e6e01d7c74b20a86f96f7a19e8ee2b9":"Vojta","2e1b9f77f0f8fd42c435081c027e022f":"","7866c29e9b2f6bc230e48d0e7eeca30f":"","ffc69aa65f0a3e6dd4d81446b98fb3d1":"Vojta","d153c0b66483a9d824146bac061f797a":"","725788be36b285c769f85285aacccac1":"","f325ed8566fa3d8b62f4cf8c254f9eb6":"","e0c73c4f6f1591ebf269020c64ad11ef":"","4411cd819adc3450219d5deeba569394":"","707ecd7f268d6414727c2830ac5cc0f0":"","6633ffccf57112be42d7dc7753ae5a6f":"","414a3fd91fd080fc1a191d570545fa65":"","9e2a3af3fb37a22d68ad1dfb65b32f17":"","479a4b7d307b8f9967b39dc027d2745d":"Ondra","16df1c11ec298b4881d2d3143ad1c151":"","2caf80eaf71b0a792a30f7d774aebf04":"","dc30652fc64c9196e6a17809e1a66a7c":"Ondra","dcc2dc4cb0c45c6dcca86d9f88bb033d":"","062e3d3b31a1bd4d5e1345b64423ec0f":"Ondra","e6a44adf3e37574880c2fec972636fac":"","12fbba39fbd8a498659ebe6df18177e7":"","780f9d42e2459c38e90c1e7ca0768225":"Vojta","ec873cedcdec065ef29f573e70d699d9":"","3b6e2cb15b85cd221af50a9a364dbe1a":"","1a378aa264eee3de1022708522f62ab6":"","e83739b0048c3007aa17e01c2cc043ac":"","5cec36b11b18e319d414e8dd66b71052":"","559c11d41a8492fa9e630d9e2c108a2e":"","c5442d995c4e272e3a579b8f6c7b0e2b":"","4e6b4761c94af70bf58e1627dbe50cda":"","6feca045b8ae9c1395136d374f2270dc":""}}};
+
+				SLConfig.theme = {"id":176,"created_at":"2014-05-27T12:38:16.183Z","updated_at":"2019-10-17T00:32:59.630Z","name":"Red Hat Corporate (Archived)","thumbnail_url":"https://s3.amazonaws.com/media-p.slid.es/thumbnails/66755080be2b0c8c0146bfa70069ef16/thumb.jpg?1571272377","sanitize_messages":null,"slide_template_ids":[28642,36442,26765,26762,56704,16857,16856,16853,16855,16854,16852,16863,16862,16861,16860,16859,16858,56721,185268,185425],"font_typekit":"","font_google":"","width":960,"height":700};
+
+			// Use local fonts
+			SLConfig.fonts_url = 'lib/fonts/';
+		</script>
+
+		<script src="lib/reveal.min.js"></script>
+		<script src="lib/offline.js"></script>
+
+		<!-- Initialize the presentation -->
+		<script>
+			Reveal.initialize({
+				width: 960,
+				height: 700,
+				margin: 0.05,
+				maxScale: 1,
+
+				hash: true,
+				controls: true,
+				progress: true,
+				mouseWheel: false,
+				showNotes: false,
+				slideNumber: false,
+
+				autoSlide: 0,
+				autoSlideStoppable: true,
+
+				center: false,
+				shuffle: false,
+				loop: false,
+				rtl: false,
+
+				transition: "none",
+				backgroundTransition: "none",
+
+				highlight: {
+					escapeHTML: false
+				},
+
+				dependencies: [
+					{ src: 'lib/reveal-plugins/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'lib/reveal-plugins/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'lib/reveal-plugins/highlight/highlight.js' },
+					{ src: 'lib/reveal-plugins/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'lib/reveal-plugins/zoom/zoom.js', async: true }
+				]
+			});
+		</script>
+
+		
+  <script id="theme-js-output" type="text/javascript">var themeHTMLOutput = document.getElementById('theme-html-output');
+if( themeHTMLOutput ) {
+    themeHTMLOutput.innerHTML = '<link  rel="stylesheet" href="https://overpassmonotest-30e2.kxcdn.com/overpass-mono.css" />';
+}
+
+// (function() {
+// 
+//   var slidesInitInterval = setInterval( function() {
+//     if( window.SL && window.SL.view ) {
+//       // If we're in the editor, wait for the Blocks controller
+//       // to be initialized
+//       if( SL.editor ) {
+// 
+//         if( SL.editor.controllers && SL.editor.controllers.Blocks && SL.editor.controllers.Blocks.textSaved ) {
+//           SL.editor.controllers.Blocks.textSaved.add( function( element ) {
+//             var html = element.html();
+//             html = html.replace( /(@RedHat | @redhat)/g,                 '@redhat' );
+//             html = html.replace( 'redhat.com',                 'redhat.com' );
+//             html = html.replace( /(Red Hat|red hat|RedHat|Red hat|Redhat|redHat|red Hat)/g,  '<span class="name">Red Hat</span>' );
+//             html = html.replace( /( redhat |redhat )/g,  ' <span class="name">Red Hat</span> ' );
+//             html = html.replace( 'REDHAT',                    '<span class="name">RED HAT</span>' );
+//             html = html.replace( 'redhat<',                    '<span class="name">Red Hat</span><' );
+//             html = html.replace( 'openshift',                 '<span class="name">OpenShift</span>' );
+//             html = html.replace( '<span class="name"><span class="name">Red Hat</span></span>',                    '<span class="name">Red Hat</span>' );
+//             html = html.replace( 'redhat.com',                 'redhat.com' );
+//             html = html.replace( 'REDHAT.COM',                 'REDHAT.COM' );
+//             html = html.replace( '@redhat',                 '@redhat' );
+//             html = html.replace( /(@RedHatNews | @redhatnews)/g,                 '@RedHatNews' );
+//             html = html.replace( /(@RedHat | @redhat)/g,                 '@RedHatInc' );
+//             html = html.replace( /(RHEL-OSP|RHELOSP|Red Hat Enterprise Linux OpenStack Platform)/g,                 'Red Hat OpenStack Platform' );
+//             html = html.replace( /(openstack |openstack|open stack|openStack|Openstack)/g,                 'OpenStack' );
+//             html = html.replace( 'openstack',                    'OpenStack' );
+//             html = html.replace( 'openstack<',                    'OpenStack<' );
+// 
+//             element.html( html );
+//           } );
+// 
+//           clearInterval( slidesInitInterval );
+//         }
+// 
+//       }
+//       else {
+//         clearInterval( slidesInitInterval );
+//       }
+//     }
+//   }, 500 );
+// 
+// })();
+
+
+
+// piwik script
+var _paq = _paq || [];
+_paq.push(["trackPageView"]);
+_paq.push(["enableLinkTracking"]);
+
+/* Disabled Apr 25 since the script was unreachable
+ * and caused exports to fail. -hakim@slides.com
+(function() {
+    var u = (("https:" == document.location.protocol) ? "https" : "http") +
+    "://engstats.redhat.com/piwik/";
+    _paq.push(["setTrackerUrl", u+"piwik.php"]);
+    _paq.push(["setSiteId", "8"]);
+    var d=document, g=d.createElement("script"),
+    s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
+    g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
+})();
+*/
+
+
+ 
+function sliceString(selector) {
+    var elements = document.getElementsByClassName(selector);
+
+ 
+    for (var h=0; h<elements.length; h++){
+      var string = elements[h].innerText,
+          total = string.length,
+          div = '';
+
+// futile attempt to clean space
+var string = elements[h].innerText.trim();
+     
+      for (var i=0; i<total;  i++) {
+        var letter = string.charAt(i);
+        div+= '<span class="'+letter+'">'+letter+'</span>';
+      }
+      elements[h].innerHTML = div;
+    }        
+}
+sliceString('lettering');
+sliceString('lettering'); //no rogue spaces when fired twice for some reason
+
+
+
+// function sliceString(selector) {
+//    if (!document.querySelector) return;
+//    var string = document.querySelector(selector).innerText,
+//        total = string.length,
+//        html = '';
+//    for (var i=0; i<total; i++) {
+//        var letter = string.charAt(i);
+//        html+= '<span class="'+letter+'">'+letter+'</span>';
+//    }
+//    document.querySelector(selector).innerHTML = html;
+//}
+//sliceString('.lettering');</script>
+
+	</body>
+</html>
