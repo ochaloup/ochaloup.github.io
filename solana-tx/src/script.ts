@@ -57,14 +57,15 @@ export async function deserializeTransaction() {
       const instructions = msg.instructions.map(ix =>
         compiledInstructionToInstruction(ix, accountsMeta)
       )
-      parsedData = { txData: msg, type: 'normal', instructions, cluster }
+      console.log('instructions: ' + instructions.length)
+      parsedData = { txData: msg, type: 'legacy', instructions, cluster }
     } catch (e) {
       console.log(
-        'Failed deserialize normal transaction: ' + (e as Error).message
+        'Failed deserialize legacy transaction: ' + (e as Error).message
       )
     }
 
-    if (!parsedData) {
+    if (!parsedData || !parsedData.instructions.length) {
       try {
         const decoded: Buffer = decode(data)
         const vMsg = VersionedMessage.deserialize(decoded)
@@ -80,12 +81,12 @@ export async function deserializeTransaction() {
       }
     }
 
-    if (!parsedData) {
+    if (!parsedData || !parsedData.instructions.length) {
       try {
         const decoded: InstructionData = getInstructionDataFromBase64(data)
         parsedData = {
           txData: decoded,
-          type: 'spl-gov',
+          type: 'splgov',
           instructions: [toTransactionInstruction(decoded)],
           cluster
         }

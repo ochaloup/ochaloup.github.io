@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "develop": "webpack-dev-server --mode development"
   },
   "keywords": [
     "solana",
@@ -24,15 +25,16 @@
     "assert": "^2.0.0",
     "base64-js": "^1.5.1",
     "bn.js": "^5.2.1",
+    "buffer": "^6.0.3",
     "process": "^0.11.10",
-    "yaml": "^2.2.2",
-    "buffer": "^6.0.3"
+    "yaml": "^2.2.2"
   },
   "devDependencies": {
     "expose-loader": "^4.1.0",
     "ts-loader": "^9.4.2",
     "typescript": "^5.0.4",
     "webpack": "^5.82.1",
-    "webpack-cli": "^5.1.1"
+    "webpack-cli": "^5.1.1",
+    "webpack-dev-server": "^4.15.0"
   }
 }

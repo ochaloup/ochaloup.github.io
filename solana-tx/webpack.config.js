@@ -9,7 +9,7 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
   },
   devServer: {
-    static: path.join(__dirname, "dist"),
+    static: path.join(__dirname),
     compress: true,
     port: 4000,
   },
@@ -36,6 +36,7 @@ module.exports = {
     // fix "process is not defined" error:
     new webpack.ProvidePlugin({
       process: 'process/browser.js',
+      // https://stackoverflow.com/a/71515171/187035
       Buffer: ['buffer', 'Buffer'],
     })
   ]
