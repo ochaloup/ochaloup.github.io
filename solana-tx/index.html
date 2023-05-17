@@ -23,15 +23,16 @@
   
     <script>
         let params = new URL(document.location).searchParams;
-        let base64 = params.get("base64");
-        if (base64) {
-          document.getElementById("messageInput").value = base64;
+        let message = window.decodeURIComponent(document.get("message"));
+        if (message) {
+          document.getElementById("messageInput").value = message;
         }
 
         async function handleDisplayMessage() {
           // this redirects to the same page with the base64 param, not wanted
-          // window.location.search = "?base64=" + document.getElementById("messageInput").value;
-          window.history.replaceState(undefined, document.title, window.location.pathname + "?base64=" + document.getElementById("messageInput").value);
+          // window.location.search = "?message=" + document.getElementById("messageInput").value;
+          let encodedMessageInput = window.encodeURIComponent(document.getElementById("messageInput").value);
+          window.history.replaceState(undefined, document.title, window.location.pathname + "?message=" + encodedMessageInput);
           await scriptNamespace.deserializeTransaction();
         }
       </script>

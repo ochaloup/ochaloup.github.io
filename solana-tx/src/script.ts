@@ -57,7 +57,6 @@ export async function deserializeTransaction() {
       const instructions = msg.instructions.map(ix =>
         compiledInstructionToInstruction(ix, accountsMeta)
       )
-      console.log('instructions: ' + instructions.length)
       parsedData = { txData: msg, type: 'legacy', instructions, cluster }
     } catch (e) {
       console.log(
@@ -126,9 +125,13 @@ export async function deserializeTransaction() {
     )
 
     let output = ''
-    output += '<h4>solana base64 dump-transaction-message for legacy inspector:</h4>'
+    output += '<h4>solana base64 dump-transaction-message for legacy inspector: ' + 
+      '<a href="https://anchor.so/tx/inspector?message=' + encodeURIComponent(legacy) + '">anchor.so/tx/inspector</a>' +
+      '</h4>'
     output += '<p><code>' + legacy + '</code></p>'
-    output += '<h4>solana base64 dump-transaction-message for version0 inspector:</h4>'
+    output += '<h4>solana base64 dump-transaction-message for version0 inspector: ' +
+      '<a href="https://explorer.solana.com/tx/inspector?message=' + encodeURIComponent(version0) + '">explorer.solana.com/tx/inspector</a>' +
+      '</h4>'
     output += '<p><code>' + version0 + '</code></p>'
     output += '<h4>solana base64 dump-transaction-message for spl-gov:</h4>'
     for (const ix of context.instructions) {
