@@ -5,7 +5,7 @@
 [source,sh]
 ----
 pnpm install
-npx webpack
+pnpm build
 ----
 
 == To run

@@ -5,7 +5,7 @@
 </head>
 <body>
   <h1>Solana base64 transaction deserializer</h1>
-  <script src="./dist/bundle.js"></script>
+  <script src="dist/bundle.js"></script>
   
     <textarea type="text" id="messageInput" placeholder="Enter base64 transaction here" rows="15" cols="100"></textarea>
     <br/>
@@ -22,7 +22,9 @@
     <p id="messageOutput"></p>
   
     <script>
+        const path = require('path')
         async function handleDisplayMessage() {
+          console.log("handle message called...")
           await deserializeTransaction();
         }
       </script>

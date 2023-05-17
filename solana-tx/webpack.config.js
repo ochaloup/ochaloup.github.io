@@ -5,9 +5,7 @@ module.exports = {
   entry: './src/script.ts',
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, 'dist'),
-    libraryTarget: 'umd',
-    library: 'EntryPoint',
+    path: path.resolve(__dirname, 'dist')
   },
   resolve: {
     extensions: ['.ts', '.js'],
@@ -27,4 +25,7 @@ module.exports = {
       process: 'process/browser.js',
     }),
   ],
+  optimization: {
+    minimize: false
+  },
 };
