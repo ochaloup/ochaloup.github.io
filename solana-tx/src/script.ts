@@ -7,7 +7,6 @@ import {
   Transaction,
   TransactionInstruction,
   VersionedMessage,
-  VersionedTransaction,
 } from '@solana/web3.js'
 import YAML from 'yaml'
 import {
@@ -18,17 +17,19 @@ import {
 import {
   compiledInstructionToInstruction,
   parseTransactionAccounts,
+  SolanaParser,
 } from '@debridge-finance/solana-transaction-parser'
 import BN from 'bn.js'
 import * as base64 from "base64-js";
 
 
+const COMMITMENT = 'confirmed'
 type Context = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     txData: any
     type: string
     instructions: TransactionInstruction[]
-    cluster: string
+    connection: Connection
   }
 
 
@@ -50,20 +51,52 @@ export async function deserializeTransaction() {
 
   async function parseAndDeserialize(data: string, cluster: string): Promise<string> {
     let parsedData: Context | undefined = undefined
+
+    let connection: Connection | undefined = undefined
+    try {
+      connection = new Connection(cluster, COMMITMENT)
+    } catch (e) {
+      return doLogError('Failed to connect to cluster: ' + cluster, e.message)
+    }
+
+    // --- Is it transaction signature?
     try {
       const decoded: Buffer = decode(data)
-      const msg = Message.from(decoded)
-      const accountsMeta = parseTransactionAccounts(msg, undefined)
-      const instructions = msg.instructions.map(ix =>
-        compiledInstructionToInstruction(ix, accountsMeta)
-      )
-      parsedData = { txData: msg, type: 'legacy', instructions, cluster }
+      if (decoded.length === 64) {
+        const transactionResponse = await connection.getTransaction(data, { commitment: COMMITMENT, maxSupportedTransactionVersion: 0 });
+        if (transactionResponse) {
+          const msg = transactionResponse.transaction.message
+          const accountsMeta = parseTransactionAccounts(msg, transactionResponse.meta.loadedAddresses)
+          const instructions = msg.compiledInstructions.map(ix =>
+            compiledInstructionToInstruction(ix, accountsMeta)
+          )
+          parsedData = { txData: msg, type: 'from-chain', instructions, connection }
+        }
+      }
     } catch (e) {
       console.log(
-        'Failed deserialize legacy transaction: ' + (e as Error).message
+        'Failed deserialize transaction signature: ' + (e as Error).message
       )
     }
 
+    // --- Is it base64 legacy transaction data?
+    if (!parsedData || !parsedData.instructions.length) {
+      try {
+        const decoded: Buffer = decode(data)
+        const msg = Message.from(decoded)
+        const accountsMeta = parseTransactionAccounts(msg, undefined)
+        const instructions = msg.instructions.map(ix =>
+          compiledInstructionToInstruction(ix, accountsMeta)
+        )
+        parsedData = { txData: msg, type: 'legacy', instructions, connection }
+      } catch (e) {
+        console.log(
+          'Failed deserialize legacy transaction: ' + (e as Error).message
+        )
+      }
+    }
+
+    // --- Is it base64 versioned0 transaction data?
     if (!parsedData || !parsedData.instructions.length) {
       try {
         const decoded: Buffer = decode(data)
@@ -72,7 +105,7 @@ export async function deserializeTransaction() {
         const instructions = vMsg.compiledInstructions.map(ix =>
           compiledInstructionToInstruction(ix, accountsMeta)
         )
-        parsedData = { txData: vMsg, type: 'versioned', instructions, cluster }
+        parsedData = { txData: vMsg, type: 'versioned', instructions, connection }
       } catch (e) {
         console.log(
           'Failed deserialize versioned transaction: ' + (e as Error).message
@@ -80,6 +113,7 @@ export async function deserializeTransaction() {
       }
     }
 
+    // --- Is it borsh SPL Gov multisig transaction data?
     if (!parsedData || !parsedData.instructions.length) {
       try {
         const decoded: InstructionData = getInstructionDataFromBase64(data)
@@ -87,7 +121,7 @@ export async function deserializeTransaction() {
           txData: decoded,
           type: 'splgov',
           instructions: [toTransactionInstruction(decoded)],
-          cluster
+          connection
         }
       } catch (e) {
         console.error(e)
@@ -126,18 +160,18 @@ export async function deserializeTransaction() {
 
     let output = ''
     output += '<h4>solana base64 dump-transaction-message for legacy inspector: ' + 
-      '<a href="https://anchor.so/tx/inspector?message=' + encodeURIComponent(legacy) + '">anchor.so/tx/inspector</a>' +
+      '<a target="_blank" href="https://anchor.so/tx/inspector?message=' + encodeURIComponent(legacy) + '">anchor.so/tx/inspector</a>' +
       '</h4>'
     output += '<p><code>' + legacy + '</code></p>'
     output += '<h4>solana base64 dump-transaction-message for version0 inspector: ' +
-      '<a href="https://explorer.solana.com/tx/inspector?message=' + encodeURIComponent(version0) + '">explorer.solana.com/tx/inspector</a>' +
+      '<a target="_blank" href="https://explorer.solana.com/tx/inspector?message=' + encodeURIComponent(version0) + '">explorer.solana.com/tx/inspector</a>' +
       '</h4>'
     output += '<p><code>' + version0 + '</code></p>'
     output += '<h4>solana base64 dump-transaction-message for spl-gov:</h4>'
     for (const ix of context.instructions) {
       output += '<p><code>' + serializeInstructionToBase64(ix) + '</code></p>'
     }
-    output += '<h4>YAML output:</h4>'
+    output += `<h4>Transaction ${context.type} (YAML format):</h4>`
     output += '<p><pre><code>' + YAML.stringify(context.txData, replacer).trimEnd() + '</code></pre></p>'
 
     return output
@@ -162,8 +196,7 @@ export async function asDumpTransactionMessage(
     context: Context
   ): Promise<{ legacy: string, version0: string }> {
 
-    const connection = new Connection(context.cluster, 'confirmed')
-    const blockhash = await connection.getLatestBlockhash()
+    const blockhash = await context.connection.getLatestBlockhash()
     const ixes = context.instructions
     const feePayer = PublicKey.unique()
   
@@ -181,8 +214,8 @@ export async function asDumpTransactionMessage(
       instructions: ixes,
       recentBlockhash: blockhash.blockhash,
     })
-    const versionedTransaction = new VersionedTransaction(msg)
-    const version0 = Buffer.from(versionedTransaction.serialize()).toString(
+    // const versionedTransaction = new VersionedTransaction(msg)
+    const version0 = Buffer.from(msg.serialize()).toString(
       'base64'
     )
     return { legacy, version0 }
@@ -216,8 +249,10 @@ export async function asDumpTransactionMessage(
       return [value.length]
     }
     if (value instanceof Buffer) {
-
       return value.toString('base64')
+    }
+    if (value instanceof Uint8Array) {
+      return Buffer.from(value).toString('base64')
     }
     if (value instanceof Array && Array.isArray(value) && value.every(item => typeof item === "number")) {
       return Buffer.from(value as number[]).toString('base64')

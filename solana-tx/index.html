@@ -23,9 +23,10 @@
   
     <script>
         let params = new URL(document.location).searchParams;
-        let message = window.decodeURIComponent(document.get("message"));
+        let message = params.get("message");
         if (message) {
-          document.getElementById("messageInput").value = message;
+          const decodedMessage = window.decodeURIComponent(message);
+          document.getElementById("messageInput").value = decodedMessage;
         }
 
         async function handleDisplayMessage() {
@@ -36,5 +37,10 @@
           await scriptNamespace.deserializeTransaction();
         }
       </script>
+
+  <footer>
+    <p>Thanks to <a href="https://github.com/solana-labs/oyster/tree/main/packages/governance-sdk">SPL Governance SDK</a>
+    and <a href="https://github.com/debridge-finance/solana-tx-parser-public">Debridge finance SDK</a></p>
+  </footer>
 </body>
 </html>
