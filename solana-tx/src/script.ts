@@ -20,6 +20,7 @@ import {
   parseTransactionAccounts,
 } from '@debridge-finance/solana-transaction-parser'
 import BN from 'bn.js'
+import * as base64 from "base64-js";
 
 
 type Context = {
@@ -42,8 +43,7 @@ export async function deserializeTransaction() {
   
     const messageOutput = document.getElementById('messageOutput')
     if (!messageOutput) {
-        console.error(`Element 'messageOutput' not found!`)
-        return
+        return doLogError("Internal error: 'messageOutput' element not found")
     }
     messageOutput.innerHTML = messageParsed
   }
@@ -51,7 +51,7 @@ export async function deserializeTransaction() {
   async function parseAndDeserialize(data: string, cluster: string): Promise<string> {
     let parsedData: Context | undefined = undefined
     try {
-      const decoded: Buffer = Buffer.from(data, 'base64')
+      const decoded: Buffer = decode(data)
       const msg = Message.from(decoded)
       const accountsMeta = parseTransactionAccounts(msg, undefined)
       const instructions = msg.instructions.map(ix =>
@@ -64,48 +64,63 @@ export async function deserializeTransaction() {
       )
     }
 
-    try {
-      const decoded: Buffer = Buffer.from(data, 'base64')
-      const vMsg = VersionedMessage.deserialize(decoded)
-      const accountsMeta = parseTransactionAccounts(vMsg, undefined) // TODO: probably this is not correct
-      const instructions = vMsg.compiledInstructions.map(ix =>
-        compiledInstructionToInstruction(ix, accountsMeta)
-      )
-      parsedData = { txData: vMsg, type: 'versioned', instructions, cluster }
-    } catch (e) {
-      console.log(
-        'Failed deserialize versioned transaction: ' + (e as Error).message
-      )
-    }
-
-    try {
-      const decoded: InstructionData = getInstructionDataFromBase64(data)
-      parsedData = {
-        txData: decoded,
-        type: 'spl-gov',
-        instructions: [toTransactionInstruction(decoded)],
-        cluster
+    if (!parsedData) {
+      try {
+        const decoded: Buffer = decode(data)
+        const vMsg = VersionedMessage.deserialize(decoded)
+        const accountsMeta = parseTransactionAccounts(vMsg, undefined) // TODO: probably this is not correct
+        const instructions = vMsg.compiledInstructions.map(ix =>
+          compiledInstructionToInstruction(ix, accountsMeta)
+        )
+        parsedData = { txData: vMsg, type: 'versioned', instructions, cluster }
+      } catch (e) {
+        console.log(
+          'Failed deserialize versioned transaction: ' + (e as Error).message
+        )
       }
-    } catch (e) {
-      console.log(
-        'Failed deserialize spl gov transaction: ' + (e as Error).message
-      )
     }
 
-    if (parsedData === undefined) {
-      throw new Error('Failed to deserialize transaction data')
+    if (!parsedData) {
+      try {
+        const decoded: InstructionData = getInstructionDataFromBase64(data)
+        parsedData = {
+          txData: decoded,
+          type: 'spl-gov',
+          instructions: [toTransactionInstruction(decoded)],
+          cluster
+        }
+      } catch (e) {
+        console.error(e)
+        console.log(
+          'Failed deserialize spl gov transaction: ' + (e as Error).message
+        )
+      }
     }
 
-    return await doLog(parsedData)
+    if (!parsedData) {
+      return '<b style="color:red;">Failed to deserialize transaction data</b>' + `<p style='margin-left: 30px;'><code>${data}</code></p>`
+    } else {
+      try {
+        return await doLog(parsedData)
+      } catch (e) {
+        console.error(e)
+        console.error(YAML.stringify(parsedData.txData, replacer).trimEnd())
+        return doLogError('Failed to print transaction data', e.message)
+      }
+    }
+  }
+
+  function doLogError(message: string, whatever?: any): string {
+    let errOutput = '<b style="color:red;">' + message + '</b>'
+    if (whatever) {
+      errOutput += `<p style='margin-left: 30px;'><code>${whatever}</code></p>`
+    }
+    return errOutput
   }
   
   async function doLog(context: Context): Promise<string> {
     console.log('Transaction type: ' + context.type)
-  
-    const result = YAML.stringify(context.txData, replacer)
-    console.log(result.trimEnd())
-  
-    const { legacy, version0 } = await asDumpTransactionMessage(
+      const { legacy, version0 } = await asDumpTransactionMessage(
       context
     )
 
@@ -118,6 +133,9 @@ export async function deserializeTransaction() {
     for (const ix of context.instructions) {
       output += '<p><code>' + serializeInstructionToBase64(ix) + '</code></p>'
     }
+    output += '<h4>YAML output:</h4>'
+    output += '<p><pre><code>' + YAML.stringify(context.txData, replacer).trimEnd() + '</code></pre></p>'
+
     return output
   }
   
@@ -193,5 +211,16 @@ export async function asDumpTransactionMessage(
     ) {
       return [value.length]
     }
+    if (value instanceof Buffer) {
+
+      return value.toString('base64')
+    }
+    if (value instanceof Array && Array.isArray(value) && value.every(item => typeof item === "number")) {
+      return Buffer.from(value as number[]).toString('base64')
+    }
     return value
+  }
+
+  function decode(data: string): Buffer {
+    return Buffer.from(base64.toByteArray(data));
   }
