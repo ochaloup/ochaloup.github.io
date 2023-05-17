@@ -9,7 +9,7 @@
   
     <textarea type="text" id="messageInput" placeholder="Enter base64 transaction here" rows="15" cols="100"></textarea>
     <br/>
-    <input list="clusters" name="cluster" id="cluster" placeholder="https://api.devnet.solana.com" size="40">
+    <input list="clusters" name="cluster" id="cluster" placeholder="https://api.devnet.solana.com" size="40" onclick="document.getElementById('cluster').value=''">
     <datalist id="clusters">
         <option value="https://api.devnet.solana.com">
         <option value="https://api.mainnet-beta.solana.com">
@@ -28,12 +28,26 @@
           const decodedMessage = window.decodeURIComponent(message);
           document.getElementById("messageInput").value = decodedMessage;
         }
+        let cluster = params.get("cluster");
+        if (cluster) {
+          const decodedCluster = window.decodeURIComponent(cluster);
+          document.getElementById("cluster").value = decodedCluster;
+        }
 
         async function handleDisplayMessage() {
-          // this redirects to the same page with the base64 param, not wanted
-          // window.location.search = "?message=" + document.getElementById("messageInput").value;
-          let encodedMessageInput = window.encodeURIComponent(document.getElementById("messageInput").value);
-          window.history.replaceState(undefined, document.title, window.location.pathname + "?message=" + encodedMessageInput);
+          let searchParams = ''
+          let message = document.getElementById("messageInput").value;
+          if (message) {
+            searchParams = 'message=' + window.encodeURIComponent(message);
+          }
+          let cluster = document.getElementById("cluster").value;
+          if (cluster) {
+            if (searchParams) {
+              searchParams += '&';
+            }
+            searchParams += 'cluster=' + window.encodeURIComponent(cluster);
+          }
+          window.history.replaceState(undefined, document.title, window.location.pathname + "?" + searchParams);
           await scriptNamespace.deserializeTransaction();
         }
       </script>

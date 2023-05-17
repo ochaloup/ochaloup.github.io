@@ -17,10 +17,10 @@ import {
 import {
   compiledInstructionToInstruction,
   parseTransactionAccounts,
-  SolanaParser,
 } from '@debridge-finance/solana-transaction-parser'
 import BN from 'bn.js'
-import * as base64 from "base64-js";
+import  base64 from "base64-js";
+import  base58  from 'bs58'
 
 
 const COMMITMENT = 'confirmed'
@@ -61,7 +61,7 @@ export async function deserializeTransaction() {
 
     // --- Is it transaction signature?
     try {
-      const decoded: Buffer = decode(data)
+      const decoded: Buffer = decode58(data)
       if (decoded.length === 64) {
         const transactionResponse = await connection.getTransaction(data, { commitment: COMMITMENT, maxSupportedTransactionVersion: 0 });
         if (transactionResponse) {
@@ -71,6 +71,8 @@ export async function deserializeTransaction() {
             compiledInstructionToInstruction(ix, accountsMeta)
           )
           parsedData = { txData: msg, type: 'from-chain', instructions, connection }
+        } else {
+          console.log("Cannot find transaction with signature: " + data + " in cluster: " + cluster)
         }
       }
     } catch (e) {
@@ -82,7 +84,7 @@ export async function deserializeTransaction() {
     // --- Is it base64 legacy transaction data?
     if (!parsedData || !parsedData.instructions.length) {
       try {
-        const decoded: Buffer = decode(data)
+        const decoded: Buffer = decode64(data)
         const msg = Message.from(decoded)
         const accountsMeta = parseTransactionAccounts(msg, undefined)
         const instructions = msg.instructions.map(ix =>
@@ -99,7 +101,7 @@ export async function deserializeTransaction() {
     // --- Is it base64 versioned0 transaction data?
     if (!parsedData || !parsedData.instructions.length) {
       try {
-        const decoded: Buffer = decode(data)
+        const decoded: Buffer = decode64(data)
         const vMsg = VersionedMessage.deserialize(decoded)
         const accountsMeta = parseTransactionAccounts(vMsg, undefined) // TODO: probably this is not correct
         const instructions = vMsg.compiledInstructions.map(ix =>
@@ -260,6 +262,10 @@ export async function asDumpTransactionMessage(
     return value
   }
 
-  function decode(data: string): Buffer {
+  function decode64(data: string): Buffer {
     return Buffer.from(base64.toByteArray(data));
+  }
+
+  function decode58(data: string): Buffer {
+    return Buffer.from(base58.decode(data));
   }
