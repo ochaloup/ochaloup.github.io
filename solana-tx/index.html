@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Solana base64 transaction deserializer</title>
+</head>
+<body>
+  <h1>Solana base64 transaction deserializer</h1>
+  <script src="./dist/bundle.js"></script>
+  
+    <textarea type="text" id="messageInput" placeholder="Enter base64 transaction here" rows="15" cols="100"></textarea>
+    <br/>
+    <input list="clusters" name="cluster" id="cluster" placeholder="https://api.devnet.solana.com" size="40">
+    <datalist id="clusters">
+        <option value="https://api.devnet.solana.com">
+        <option value="https://api.mainnet-beta.solana.com">
+        <option value="https://api.testnet.solana.com">
+    </datalist>
+    <br/>
+    <button id="submitButton" onclick="handleDisplayMessage()">Show deserialized format</button>
+  
+    <hr/>
+    <p id="messageOutput"></p>
+  
+    <script>
+        async function handleDisplayMessage() {
+          await deserializeTransaction();
+        }
+      </script>
+</body>
+</html>

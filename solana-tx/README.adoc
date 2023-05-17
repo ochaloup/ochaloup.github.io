@@ -1,0 +1,16 @@
+= Simple page with processing Solana base64 form of transactions
+
+== To build
+
+[source,sh]
+----
+pnpm install
+npx webpack
+----
+
+== To run
+
+[source,sh]
+----
+chrome index.html
+----
