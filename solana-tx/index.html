@@ -21,11 +21,10 @@
     <hr/>
     <p id="messageOutput"></p>
   
-    <script type="module">
-        import {deserializeTransaction} from './dist/bundle.js';
+    <script>
         async function handleDisplayMessage() {
           console.log("handle message called...")
-          await deserializeTransaction();
+          await scriptNamespace.deserializeTransaction();
         }
       </script>
 </body>

@@ -1,4 +1,3 @@
-const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require('path');
 const webpack = require('webpack');
 
@@ -21,7 +20,14 @@ module.exports = {
     rules: [
       {
         test: /\.ts$/,
-        use: 'ts-loader',
+        use: [{
+          loader: 'expose-loader',
+          options: {
+            exposes: ['scriptNamespace'],
+          },
+        }, {
+          loader: 'ts-loader'
+        }],
         exclude: /node_modules/,
       },
     ],
@@ -30,10 +36,7 @@ module.exports = {
     // fix "process is not defined" error:
     new webpack.ProvidePlugin({
       process: 'process/browser.js',
-    }),
-    new HtmlWebpackPlugin({
-      title: 'our project', 
-      template: './index.html' }) 
+    })
   ],
   optimization: {
     minimize: false

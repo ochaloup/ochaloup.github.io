@@ -60123,6 +60123,55 @@ if (true) {
 
 /***/ }),
 
+/***/ 440:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var ___EXPOSE_LOADER_IMPORT___ = __webpack_require__(9613);
+var ___EXPOSE_LOADER_GET_GLOBAL_THIS___ = __webpack_require__(1462);
+var ___EXPOSE_LOADER_GLOBAL_THIS___ = ___EXPOSE_LOADER_GET_GLOBAL_THIS___;
+if (typeof ___EXPOSE_LOADER_GLOBAL_THIS___["scriptNamespace"] === 'undefined') ___EXPOSE_LOADER_GLOBAL_THIS___["scriptNamespace"] = ___EXPOSE_LOADER_IMPORT___;
+module.exports = ___EXPOSE_LOADER_IMPORT___;
+
+
+/***/ }),
+
+/***/ 1462:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+// eslint-disable-next-line func-names
+module.exports = function () {
+  if (typeof globalThis === "object") {
+    return globalThis;
+  }
+  var g;
+  try {
+    // This works if eval is allowed (see CSP)
+    // eslint-disable-next-line no-new-func
+    g = this || new Function("return this")();
+  } catch (e) {
+    // This works if the window reference is available
+    if (typeof window === "object") {
+      return window;
+    }
+
+    // This works if the self reference is available
+    if (typeof self === "object") {
+      return self;
+    }
+
+    // This works if the global reference is available
+    if (typeof __webpack_require__.g !== "undefined") {
+      return __webpack_require__.g;
+    }
+  }
+  return g;
+}();
+
+/***/ }),
+
 /***/ 2904:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -80644,7 +80693,7 @@ function public_api_stringify(value, replacer, options) {
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __webpack_require__(9613);
+/******/ 	var __webpack_exports__ = __webpack_require__(440);
 /******/ 	
 /******/ })()
 ;

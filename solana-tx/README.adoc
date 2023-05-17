@@ -1,16 +1,13 @@
 = Simple page with processing Solana base64 form of transactions
 
-== To build
+== To build and develop
 
 [source,sh]
 ----
 pnpm install
 pnpm build
-----
 
-== To run
+python -m http.server
 
-[source,sh]
-----
-chrome index.html
+# open http://localhost:8000
 ----

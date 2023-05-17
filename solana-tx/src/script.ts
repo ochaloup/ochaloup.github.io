@@ -1,5 +1,5 @@
 import {
-    Connection,
+  Connection,
   Keypair,
   Message,
   MessageV0,
