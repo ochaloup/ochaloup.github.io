@@ -35,6 +35,8 @@
         }
 
         async function handleDisplayMessage() {
+          document.getElementById("messageOutput").value = "Loading..."
+
           let searchParams = ''
           let message = document.getElementById("messageInput").value;
           if (message) {
