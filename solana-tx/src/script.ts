@@ -161,13 +161,12 @@ export async function deserializeTransaction() {
     )
 
     let output = ''
-    output += '<h4>solana base64 dump-transaction-message for legacy inspector: ' + 
-      '<a target="_blank" href="https://anchor.so/tx/inspector?message=' + encodeURIComponent(legacy) + '">anchor.so/tx/inspector</a>' +
+    output += '<h4>solana base64 dump-transaction-message for legacy inspector: ' +
+      getHref('https://anchor.so/tx/inspector', legacy) + ', ' + getHref('https://tribeca.so/tx/inspector', legacy) +
       '</h4>'
     output += '<p><code>' + legacy + '</code></p>'
     output += '<h4>solana base64 dump-transaction-message for version0 inspector: ' +
-      '<a target="_blank" href="https://explorer.solana.com/tx/inspector?message=' + encodeURIComponent(version0) + '">explorer.solana.com/tx/inspector</a>' +
-      '</h4>'
+      getHref('https://explorer.solana.com/tx/inspector', version0) + '</h4>'
     output += '<p><code>' + version0 + '</code></p>'
     output += '<h4>solana base64 dump-transaction-message for spl-gov:</h4>'
     for (const ix of context.instructions) {
@@ -177,6 +176,10 @@ export async function deserializeTransaction() {
     output += '<p><pre><code>' + YAML.stringify(context.txData, replacer).trimEnd() + '</code></pre></p>'
 
     return output
+  }
+
+  function getHref(hostname: string, message: string) {
+    return `<a style="font-size: 80%;" target="_blank" href="${hostname}?message=' + ${encodeURIComponent(message)} + '">${hostname}</a>`
   }
   
   function toTransactionInstruction(
