@@ -179,7 +179,7 @@ export async function deserializeTransaction() {
   }
 
   function getHref(hostname: string, message: string) {
-    return `<a style="font-size: 80%;" target="_blank" href="${hostname}?message=' + ${encodeURIComponent(message)} + '">${hostname}</a>`
+    return `<a style="font-size: 80%;" target="_blank" href="${hostname}?message=${encodeURIComponent(message)}">${hostname}</a>`
   }
   
   function toTransactionInstruction(
