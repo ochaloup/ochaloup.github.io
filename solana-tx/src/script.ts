@@ -203,7 +203,9 @@ export async function asDumpTransactionMessage(
 
     const blockhash = await context.connection.getLatestBlockhash()
     const ixes = context.instructions
-    const feePayer = PublicKey.unique()
+    // A random account owned by System Program that exists on all three networks (devnet, testnet, mainnet)
+    // We the account to exists to not getting 'Simulation Failure:AccountNotFound'
+    const feePayer = new PublicKey("2z9vpFpzn12nTrw3YUQBipBA2kSSc876Hy6KoeforKcf")
   
     // usable at https://anchor.so/tx/inspector or https://tribeca.so/tx/inspector
     const legacyTransaction = new Transaction({
@@ -241,9 +243,6 @@ export async function asDumpTransactionMessage(
       value = value.publicKey
     }
     if (value instanceof PublicKey) {
-      if (value.equals(PublicKey.default)) {
-        return null // system program is used as null key
-      }
       return value.toBase58()
     }
     if (
