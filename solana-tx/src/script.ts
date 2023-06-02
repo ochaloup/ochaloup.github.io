@@ -59,6 +59,9 @@ export async function deserializeTransaction() {
       return doLogError('Failed to connect to cluster: ' + cluster, e.message)
     }
 
+    // Let's check if the input string is URI encoded, if so then decode it
+    data = decodeIfUriEncoded(data)
+
     // --- Is it transaction signature?
     try {
       const decoded: Buffer = decode58(data)
@@ -144,6 +147,14 @@ export async function deserializeTransaction() {
         return doLogError('Failed to print transaction data', e.message)
       }
     }
+  }
+
+  function decodeIfUriEncoded(str: string): string {
+    const uriEncodedPattern = /%[0-9A-Fa-f]{2}/g
+    while (uriEncodedPattern.test(str)) {
+      str = decodeURIComponent(str)
+    }
+    return str;
   }
 
   function doLogError(message: string, whatever?: any): string {
