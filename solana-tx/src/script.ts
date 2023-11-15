@@ -19,8 +19,10 @@ import {
   parseTransactionAccounts,
 } from '@debridge-finance/solana-transaction-parser'
 import BN from 'bn.js'
-import  base64 from "base64-js";
+import  base64 from "base64-js"
 import  base58  from 'bs58'
+import { SolanaFMParser, checkIfInstructionParser, ParserType } from "@solanafm/explorer-kit"
+import { getProgramIdl } from "@solanafm/explorer-kit-idls"
 
 
 const COMMITMENT = 'confirmed'
@@ -31,7 +33,20 @@ type Context = {
     instructions: TransactionInstruction[]
     connection: Connection
   }
+type RecentBlockhash = Readonly<{
+    blockhash: string
+    lastValidBlockHeight: number
+  }>
+type ExplorerKitTransactionData = {
+  name: string
+  data: any
+  type: ParserType
+}
 
+// A random account (found randomly as a first such account via clicking in explorer)
+// owned by System Program that exists on all three networks (devnet, testnet, mainnet)
+// We need an account to exists to not getting 'Simulation Failure:AccountNotFound'
+export const RANDOM_FEE_PAYER = new PublicKey("2z9vpFpzn12nTrw3YUQBipBA2kSSc876Hy6KoeforKcf")
 
 export async function deserializeTransaction() {
     const messageInput = document.getElementById('messageInput') as HTMLInputElement
@@ -66,7 +81,7 @@ export async function deserializeTransaction() {
     try {
       const decoded: Buffer = decode58(data)
       if (decoded.length === 64) {
-        const transactionResponse = await connection.getTransaction(data, { commitment: COMMITMENT, maxSupportedTransactionVersion: 0 });
+        const transactionResponse = await connection.getTransaction(data, { commitment: COMMITMENT, maxSupportedTransactionVersion: 0 })
         if (transactionResponse) {
           const msg = transactionResponse.transaction.message
           const accountsMeta = parseTransactionAccounts(msg, transactionResponse.meta.loadedAddresses)
@@ -154,7 +169,7 @@ export async function deserializeTransaction() {
     while (uriEncodedPattern.test(str)) {
       str = decodeURIComponent(str)
     }
-    return str;
+    return str
   }
 
   function doLogError(message: string, whatever?: any): string {
@@ -167,9 +182,11 @@ export async function deserializeTransaction() {
   
   async function doLog(context: Context): Promise<string> {
     console.log('Transaction type: ' + context.type)
-      const { legacy, version0 } = await asDumpTransactionMessage(
-      context
+    const blockhash = await context.connection.getLatestBlockhash()
+    const { legacy, version0 } = await asDumpTransactionMessage(
+      context, blockhash
     )
+    const parsedExplorerKit = await parseExplorerKit(context, blockhash)
 
     let output = ''
     output += '<h4>solana base64 dump-transaction-message for legacy inspector: ' +
@@ -186,6 +203,9 @@ export async function deserializeTransaction() {
     output += `<h4>Transaction ${context.type} (YAML format):</h4>`
     output += '<p><pre><code>' + YAML.stringify(context.txData, replacer).trimEnd() + '</code></pre></p>'
 
+    output += `<h4>Parsed with <a href="https://github.com/solana-fm/explorer-kit">ExplorerKit</a>:</h4>`
+    output += '<p><pre><code>' + YAML.stringify(parsedExplorerKit, replacer).trimEnd() + '</code></pre></p>'
+
     return output
   }
 
@@ -194,12 +214,12 @@ export async function deserializeTransaction() {
   }
   
   function toTransactionInstruction(
-    intructionData: InstructionData
+    instructionData: InstructionData
   ): TransactionInstruction {
     return new TransactionInstruction({
-      keys: intructionData.accounts,
-      programId: intructionData.programId,
-      data: Buffer.from(intructionData.data),
+      keys: instructionData.accounts,
+      programId: instructionData.programId,
+      data: Buffer.from(instructionData.data),
     })
   }
 
@@ -209,35 +229,62 @@ export async function deserializeTransaction() {
  * by the Solana transaction inspector
  */
 export async function asDumpTransactionMessage(
-    context: Context
+    context: Context,
+    blockhash: RecentBlockhash
   ): Promise<{ legacy: string, version0: string }> {
-
-    const blockhash = await context.connection.getLatestBlockhash()
-    const ixes = context.instructions
-    // A random account owned by System Program that exists on all three networks (devnet, testnet, mainnet)
-    // We the account to exists to not getting 'Simulation Failure:AccountNotFound'
-    const feePayer = new PublicKey("2z9vpFpzn12nTrw3YUQBipBA2kSSc876Hy6KoeforKcf")
+    const iXes = context.instructions
   
     // usable at https://anchor.so/tx/inspector or https://tribeca.so/tx/inspector
     const legacyTransaction = new Transaction({
-      feePayer,
+      feePayer: RANDOM_FEE_PAYER,
       blockhash: blockhash.blockhash,
       lastValidBlockHeight: blockhash.lastValidBlockHeight,
-    }).add(...ixes)
+    }).add(...iXes)
     const legacy = legacyTransaction.serializeMessage().toString('base64')
   
     // usable at https://explorer.solana.com/tx/inspector
     const msg = MessageV0.compile({
-      payerKey: feePayer,
-      instructions: ixes,
+      payerKey: RANDOM_FEE_PAYER,
+      instructions: iXes,
       recentBlockhash: blockhash.blockhash,
     })
     // const versionedTransaction = new VersionedTransaction(msg)
     const version0 = Buffer.from(msg.serialize()).toString(
       'base64'
     )
+
     return { legacy, version0 }
   }
+
+export async function parseExplorerKit(
+  context: Context, blockhash: RecentBlockhash
+): Promise<ExplorerKitTransactionData[]> {
+  const result: ExplorerKitTransactionData[] = []
+  for (const ix of context.instructions) {
+    const msg = MessageV0.compile({
+      payerKey: RANDOM_FEE_PAYER,
+      instructions: [ix],
+      recentBlockhash: blockhash.blockhash,
+    })
+    const ixData = Buffer.from(msg.serialize()).toString(
+      'base58'
+    )
+
+    // https://github.com/solana-fm/explorer-kit/tree/main#-usage
+    const programId = ix.programId.toBase58()
+    const SFMIdlItem = await getProgramIdl(programId)
+    // Checks if SFMIdlItem is defined, if not you will not be able to initialize the parser layout
+    if (SFMIdlItem) {
+      const parser = new SolanaFMParser(SFMIdlItem, programId)
+      const instructionParser = parser.createParser(ParserType.INSTRUCTION)
+      if (instructionParser && checkIfInstructionParser(instructionParser)) {
+          // Parse the transaction
+          result.push(instructionParser.parseInstructions(ixData))
+      }
+    }
+  }
+  return result
+}
 
   /**
    * Helper function to print better in YAML.
@@ -276,9 +323,9 @@ export async function asDumpTransactionMessage(
   }
 
   function decode64(data: string): Buffer {
-    return Buffer.from(base64.toByteArray(data));
+    return Buffer.from(base64.toByteArray(data))
   }
 
   function decode58(data: string): Buffer {
-    return Buffer.from(base58.decode(data));
+    return Buffer.from(base58.decode(data))
   }
