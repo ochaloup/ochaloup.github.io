@@ -346,7 +346,7 @@ packages:
     resolution: {integrity: sha512-5qAgaOWXNNbfOAiBeX5GqX+ZahMGzm1s/kLADAVRWtPYI/vpwc8ENI5jpPOEWG5bgTnnBP+wLT9mgxgwoS4e+A==}
     dependencies:
       '@solana/web3.js': 1.76.0
-      axios: 1.4.0
+      axios: 1.6.2
       bignumber.js: 9.1.1
       bn.js: 5.2.1
       borsh: 0.3.1
@@ -434,7 +434,7 @@ packages:
     dependencies:
       '@coral-xyz/anchor': 0.27.0
       '@solanafm/kinobi-lite': 0.12.0
-      axios: 1.4.0
+      axios: 1.6.2
     transitivePeerDependencies:
       - bufferutil
       - debug
@@ -897,8 +897,8 @@ packages:
     engines: {node: '>= 0.4'}
     dev: false
 
-  /axios@1.4.0:
-    resolution: {integrity: sha512-S4XCWMEmzvo64T9GfvQDOXgYRDJ/wsSZc7Jvdgx5u1sd0JwsuPLqb3SYmusag+edF6ziyMensPVqLTSc1PiSEA==}
+  /axios@1.6.2:
+    resolution: {integrity: sha512-7i24Ri4pmDRfJTR7LDBhsOTtcm+9kjX5WiY1X3wIisx6G9So3pfMkEiU7emUBe46oceVImccTEM3k6C5dbVW8A==}
     dependencies:
       follow-redirects: 1.15.2
       form-data: 4.0.0
@@ -2152,6 +2152,7 @@ packages:
   /node-gyp-build@4.6.0:
     resolution: {integrity: sha512-NTZVKn9IylLwUzaKjkas1e4u2DLNcV4rdYagA4PWdPwW87Bi7z+BznyKSRwS/761tV/lzCGXplWsiaMjLqP2zQ==}
     hasBin: true
+    requiresBuild: true
 
   /node-releases@2.0.10:
     resolution: {integrity: sha512-5GFldHPXVG/YZmFzJvKK2zDSzPKhEp0+ZR5SVaoSag9fsL5YgHbUHDfnG5494ISANDcK4KwPXAx2xqVEydmd7w==}
