@@ -256,12 +256,13 @@ export async function parseExplorerKit(
 ): Promise<ExplorerKitTransactionData[]> {
   const result: ExplorerKitTransactionData[] = []
   let ixNumber = 0
+  const slot = await context.connection.getSlot(COMMITMENT)
 
   for (const ix of context.instructions) {
     ixNumber++
     // https://github.com/solana-fm/explorer-kit/tree/main#-usage
     const programId = ix.programId.toBase58()
-    const SFMIdlItem = await getProgramIdl(programId)
+    const SFMIdlItem = await getProgramIdl(programId, {slotContext: slot})
     // Checks if SFMIdlItem is defined, if not you will not be able to initialize the parser layout
     let parsedTx: ParserOutput | null = null
     if (SFMIdlItem) {
@@ -271,6 +272,7 @@ export async function parseExplorerKit(
       if (instructionParser && checkIfInstructionParser(instructionParser)) {
           // Parse the transaction
           parsedTx = instructionParser.parseInstructions(base58.encode(ix.data), ix.keys.map(k => k.pubkey.toBase58()))
+          // console.log(SFMIdlItem.idlSlotVersion, SFMIdlItem.idl)
       }
     }
     if (parsedTx !== null) {
