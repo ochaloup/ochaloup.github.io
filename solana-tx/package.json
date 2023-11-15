@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --mode production",
-    "develop": "webpack-dev-server --mode development"
+    "_hack": "cp './node_modules/.pnpm/@solanafm+utils@0.3.0/node_modules/dayjs/plugin/relativeTime.js' './node_modules/.pnpm/@solanafm+utils@0.3.0/node_modules/dayjs/esm/plugin/relativeTime'",
+    "build": "pnpm _hack && webpack --mode production",
+    "develop": "pnpm build && webpack-dev-server --mode development"
   },
   "keywords": [
     "solana",

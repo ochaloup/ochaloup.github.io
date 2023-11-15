@@ -11,6 +11,29 @@ pnpm install
 # this has to be run before the `git publish` to web
 pnpm build
 
+# for developing the code does not know to use hot-reload
+# it's needed to stop the server and re-run the `develop` on change manually
 # to test open http://localhost:4000
 pnpm develop
 ----
+
+[NOTE]
+====
+The build was failing with ExplorerKit error of 
+
+[source]
+----
+ERROR in ./node_modules/.pnpm/@solanafm+utils@0.3.0/node_modules/@solanafm/utils/dist/index.mjs 1:9663-9705
+Module not found: Error: Can't resolve 'dayjs/plugin/relativeTime' in 'solana-tx/node_modules/.pnpm/@solanafm+utils@0.3.0/node_modules/@solanafm/utils/dist'
+Did you mean 'relativeTime.js'?
+BREAKING CHANGE: The request 'dayjs/plugin/relativeTime' failed to resolve only because it was resolved as fully specified
+(probably because the origin is strict EcmaScript Module, e. g. a module with javascript mimetype, a '*.mjs' file, or a '*.js' file where the package.json contains '"type": "module"').
+The extension in the request is mandatory for it to be fully specified.
+Add the extension to the request.
+resolve 'dayjs/plugin/relativeTime' in 'solana-tx/node_modules/.pnpm/@solanafm+utils@0.3.0/node_modules/@solanafm/utils/dist'
+  Parsed request is a module
+----
+
+Which I have no much mood to investigate about. I just add a `pnpm _hack` to copy files and moving on.
+
+====

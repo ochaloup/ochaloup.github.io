@@ -14,7 +14,7 @@ module.exports = {
     port: 4000,
   },
   resolve: {
-    extensions: ['.ts', '.js', '.tsx'],
+    extensions: ['.ts', '.js', '.tsx']
   },
   module: {
     rules: [

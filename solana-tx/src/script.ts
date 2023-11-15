@@ -21,7 +21,7 @@ import {
 import BN from 'bn.js'
 import  base64 from "base64-js"
 import  base58  from 'bs58'
-import { SolanaFMParser, checkIfInstructionParser, ParserType } from "@solanafm/explorer-kit"
+import { SolanaFMParser, checkIfInstructionParser, ParserType, ParserOutput } from "@solanafm/explorer-kit"
 import { getProgramIdl } from "@solanafm/explorer-kit-idls"
 
 
@@ -33,14 +33,10 @@ type Context = {
     instructions: TransactionInstruction[]
     connection: Connection
   }
-type RecentBlockhash = Readonly<{
-    blockhash: string
-    lastValidBlockHeight: number
-  }>
 type ExplorerKitTransactionData = {
+  ixNumber: number
   name: string
   data: any
-  type: ParserType
 }
 
 // A random account (found randomly as a first such account via clicking in explorer)
@@ -182,11 +178,9 @@ export async function deserializeTransaction() {
   
   async function doLog(context: Context): Promise<string> {
     console.log('Transaction type: ' + context.type)
-    const blockhash = await context.connection.getLatestBlockhash()
     const { legacy, version0 } = await asDumpTransactionMessage(
-      context, blockhash
+      context
     )
-    const parsedExplorerKit = await parseExplorerKit(context, blockhash)
 
     let output = ''
     output += '<h4>solana base64 dump-transaction-message for legacy inspector: ' +
@@ -196,13 +190,14 @@ export async function deserializeTransaction() {
     output += '<h4>solana base64 dump-transaction-message for version0 inspector: ' +
       getHref('https://explorer.solana.com/tx/inspector', version0) + '</h4>'
     output += '<p><code>' + version0 + '</code></p>'
-    output += '<h4>solana base64 dump-transaction-message for spl-gov:</h4>'
+    output += '<h4>solana base64 dump-transaction-messages for spl-gov:</h4>'
     for (const ix of context.instructions) {
       output += '<p><code>' + serializeInstructionToBase64(ix) + '</code></p>'
     }
     output += `<h4>Transaction ${context.type} (YAML format):</h4>`
     output += '<p><pre><code>' + YAML.stringify(context.txData, replacer).trimEnd() + '</code></pre></p>'
 
+    const parsedExplorerKit = await parseExplorerKit(context)
     output += `<h4>Parsed with <a href="https://github.com/solana-fm/explorer-kit">ExplorerKit</a>:</h4>`
     output += '<p><pre><code>' + YAML.stringify(parsedExplorerKit, replacer).trimEnd() + '</code></pre></p>'
 
@@ -229,10 +224,10 @@ export async function deserializeTransaction() {
  * by the Solana transaction inspector
  */
 export async function asDumpTransactionMessage(
-    context: Context,
-    blockhash: RecentBlockhash
+    context: Context
   ): Promise<{ legacy: string, version0: string }> {
     const iXes = context.instructions
+    const blockhash = await context.connection.getLatestBlockhash()
   
     // usable at https://anchor.so/tx/inspector or https://tribeca.so/tx/inspector
     const legacyTransaction = new Transaction({
@@ -257,75 +252,76 @@ export async function asDumpTransactionMessage(
   }
 
 export async function parseExplorerKit(
-  context: Context, blockhash: RecentBlockhash
+  context: Context
 ): Promise<ExplorerKitTransactionData[]> {
   const result: ExplorerKitTransactionData[] = []
-  for (const ix of context.instructions) {
-    const msg = MessageV0.compile({
-      payerKey: RANDOM_FEE_PAYER,
-      instructions: [ix],
-      recentBlockhash: blockhash.blockhash,
-    })
-    const ixData = Buffer.from(msg.serialize()).toString(
-      'base58'
-    )
+  let ixNumber = 0
 
+  for (const ix of context.instructions) {
+    ixNumber++
     // https://github.com/solana-fm/explorer-kit/tree/main#-usage
     const programId = ix.programId.toBase58()
     const SFMIdlItem = await getProgramIdl(programId)
     // Checks if SFMIdlItem is defined, if not you will not be able to initialize the parser layout
+    let parsedTx: ParserOutput | null = null
     if (SFMIdlItem) {
+      console.log(`ExplorerKit found IDL for: ${programId} [${SFMIdlItem.idlType}]`)
       const parser = new SolanaFMParser(SFMIdlItem, programId)
       const instructionParser = parser.createParser(ParserType.INSTRUCTION)
       if (instructionParser && checkIfInstructionParser(instructionParser)) {
           // Parse the transaction
-          result.push(instructionParser.parseInstructions(ixData))
+          parsedTx = instructionParser.parseInstructions(base58.encode(ix.data), ix.keys.map(k => k.pubkey.toBase58()))
       }
+    }
+    if (parsedTx !== null) {
+      result.push({ ixNumber, name: parsedTx.name, data: parsedTx.data })
+    } else {
+      result.push({ ixNumber, name: 'unknown', data: 'failed to parse'})
     }
   }
   return result
 }
 
-  /**
-   * Helper function to print better in YAML.
-   */
-  export function replacer(key: unknown, value: unknown) {
-    if (value instanceof BN) {
-      try {
-        return (value as BN).toNumber()
-      } catch (e) {
-        return value.toString()
-      }
+/**
+ * Helper function to print better in YAML.
+ */
+export function replacer(key: unknown, value: unknown) {
+  if (value instanceof BN) {
+    try {
+      return (value as BN).toNumber()
+    } catch (e) {
+      return value.toString()
     }
-    if (value instanceof Keypair) {
-      value = value.publicKey
-    }
-    if (value instanceof PublicKey) {
-      return value.toBase58()
-    }
-    if (
-      typeof key === 'string' &&
-      (key as string).startsWith('reserved') &&
-      Array.isArray(value)
-    ) {
-      return [value.length]
-    }
-    if (value instanceof Buffer) {
-      return value.toString('base64')
-    }
-    if (value instanceof Uint8Array) {
-      return Buffer.from(value).toString('base64')
-    }
-    if (value instanceof Array && Array.isArray(value) && value.every(item => typeof item === "number")) {
-      return Buffer.from(value as number[]).toString('base64')
-    }
-    return value
   }
+  if (value instanceof Keypair) {
+    value = value.publicKey
+  }
+  if (value instanceof PublicKey) {
+    return value.toBase58()
+  }
+  if (
+    typeof key === 'string' &&
+    (key as string).startsWith('reserved') &&
+    Array.isArray(value)
+  ) {
+    return [value.length]
+  }
+  if (value instanceof Buffer) {
+    return value.toString('base64')
+  }
+  if (value instanceof Uint8Array) {
+    return Buffer.from(value).toString('base64')
+  }
+  if (value instanceof Array && Array.isArray(value) && value.every(item => typeof item === "number")) {
+    return Buffer.from(value as number[]).toString('base64')
+  }
+  return value
+}
 
-  function decode64(data: string): Buffer {
-    return Buffer.from(base64.toByteArray(data))
-  }
+function decode64(data: string): Buffer {
+  return Buffer.from(base64.toByteArray(data))
+}
 
-  function decode58(data: string): Buffer {
-    return Buffer.from(base58.decode(data))
-  }
+function decode58(data: string): Buffer {
+  return Buffer.from(base58.decode(data))
+}
