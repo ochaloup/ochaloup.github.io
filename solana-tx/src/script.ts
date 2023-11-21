@@ -22,8 +22,10 @@ import BN from 'bn.js'
 import  base64 from "base64-js"
 import  base58  from 'bs58'
 import { SolanaFMParser, checkIfInstructionParser, ParserType, ParserOutput } from "@solanafm/explorer-kit"
-import { getProgramIdl } from "@solanafm/explorer-kit-idls"
-
+import { addIdlToMap, getProgramIdl } from "@solanafm/explorer-kit-idls"
+import { decodeIdlAccount } from '@coral-xyz/anchor/dist/cjs/idl';
+import { utf8 } from '@coral-xyz/anchor/dist/cjs/utils/bytes';
+import {inflate} from 'pako'
 
 const COMMITMENT = 'confirmed'
 type Context = {
@@ -251,6 +253,38 @@ export async function asDumpTransactionMessage(
     return { legacy, version0 }
   }
 
+export async function anchorIdlAddress(programAddress: PublicKey): Promise<PublicKey> {
+  const [pdaProgramAddress,] = PublicKey.findProgramAddressSync(
+    [],
+    programAddress
+  );
+  const seedAddress = await PublicKey.createWithSeed(
+    pdaProgramAddress,
+    'anchor:idl',
+    programAddress
+  );
+  return seedAddress
+}
+
+export async function getAnchorIdl(context: Context, programAddress: PublicKey): Promise<string | null> {
+  const idlAddress = await anchorIdlAddress(programAddress)
+  const accountInfo = await context.connection.getAccountInfo(idlAddress)
+  if (accountInfo === null) {
+    console.warn(`Cannot load data of anchor IDL ${idlAddress} for program: ${programAddress.toBase58()}`)
+    return null
+  }
+  try {
+    const idlAccount = decodeIdlAccount(accountInfo.data.slice(8)); // chop off discriminator
+    const inflatedIdl = inflate(idlAccount.data);
+    const idlString = utf8.decode(inflatedIdl);
+    console.debug("Anchor IDL found:", idlAddress.toBase58())
+    return JSON.parse(idlString)
+  } catch (e) {
+    console.warn(`Cannot decode anchor IDL ${idlAddress} for program: ${programAddress.toBase58()}`, e)
+    return null
+  }
+}
+
 export async function parseExplorerKit(
   context: Context
 ): Promise<ExplorerKitTransactionData[]> {
@@ -262,7 +296,15 @@ export async function parseExplorerKit(
     ixNumber++
     // https://github.com/solana-fm/explorer-kit/tree/main#-usage
     const programId = ix.programId.toBase58()
-    const SFMIdlItem = await getProgramIdl(programId, {slotContext: slot})
+
+    // when we have anchor IDL from on-chain, let's put it into the SFMIdlItem as the most up-to-date
+    const anchorIdl = await getAnchorIdl(context, ix.programId)
+    let repoMap = undefined
+    if (anchorIdl !== null) {
+      repoMap = addIdlToMap(new Map(), ix.programId.toBase58(), anchorIdl, 0)
+    }
+
+    const SFMIdlItem = await getProgramIdl(programId, {slotContext: slot}, repoMap)
     // Checks if SFMIdlItem is defined, if not you will not be able to initialize the parser layout
     let parsedTx: ParserOutput | null = null
     if (SFMIdlItem) {
