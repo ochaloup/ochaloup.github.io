@@ -36,6 +36,7 @@ type Context = {
     connection: Connection
   }
 type ExplorerKitTransactionData = {
+  programId: string,
   ixNumber: number
   name: string
   data: any
@@ -318,9 +319,9 @@ export async function parseExplorerKit(
       }
     }
     if (parsedTx !== null) {
-      result.push({ ixNumber, name: parsedTx.name, data: parsedTx.data })
+      result.push({ programId, ixNumber, name: parsedTx.name, data: parsedTx.data })
     } else {
-      result.push({ ixNumber, name: 'unknown', data: 'failed to parse'})
+      result.push({ programId, ixNumber, name: 'unknown', data: 'failed to parse'})
     }
   }
   return result
