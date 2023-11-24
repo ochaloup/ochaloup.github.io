@@ -23,41 +23,16 @@
     <p id="messageOutput"></p>
   
     <script>
-        let params = new URL(document.location).searchParams;
-        let message = params.get("message");
-        if (message) {
-          const decodedMessage = window.decodeURIComponent(message);
-          document.getElementById("messageInput").value = decodedMessage;
-        }
-        let cluster = params.get("cluster");
-        if (cluster) {
-          const decodedCluster = window.decodeURIComponent(cluster);
-          document.getElementById("cluster").value = decodedCluster;
-        }
-
-        async function handleDisplayMessage() {
-          document.getElementById("messageOutput").value = "Loading..."
-
-          let searchParams = ''
-          let message = document.getElementById("messageInput").value;
-          if (message) {
-            searchParams = 'message=' + window.encodeURIComponent(message);
-          }
-          let cluster = document.getElementById("cluster").value;
-          if (cluster) {
-            if (searchParams) {
-              searchParams += '&';
-            }
-            searchParams += 'cluster=' + window.encodeURIComponent(cluster);
-          }
-          window.history.replaceState(undefined, document.title, window.location.pathname + "?" + searchParams);
-          await scriptNamespace.deserializeTransaction();
-        }
-      </script>
+      async function handleDisplayMessage() {
+        scriptNamespace.handleWindowState();
+        await scriptNamespace.deserializeTransaction();
+      }
+    </script>
 
   <footer style="position:fixed; bottom:0; height:auto; margin-top:40px; width:100%; text-align:center; font-size: 80%;">
     <p style="text-align: right; margin-right: 30px;">Tested with Chrome 113, thanks to <a href="https://github.com/solana-labs/oyster/tree/main/packages/governance-sdk">SPL Governance SDK</a>
-    and <a href="https://github.com/debridge-finance/solana-tx-parser-public">Debridge finance SDK</a></p>
+    and <a href="https://github.com/debridge-finance/solana-tx-parser-public">Debridge finance SDK</a>
+    and <a href="https://github.com/solana-fm/explorer-kit">SolanaFM ExplorerKit</a>
   </footer>
 </body>
 </html>
