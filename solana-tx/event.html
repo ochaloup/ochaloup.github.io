@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Solana base64 transaction deserializer</title>
-  <script defer="defer" src="./dist/bundle.js"></script>
+  <title>Solana base64 event deserializer</title>
+  <script src="./dist/bundle.js"></script>
 </head>
 <body>
-  <h1>Solana base64 transaction deserializer</h1>
-  
+  <h1>Solana base64 event deserializer</h1>
+    <input placeholder="Program ID" name="programIdInput" id="programIdInput" size="40" onclick="document.getElementById('programIdInput').value=''">
+    <br/>
     <textarea type="text" id="messageInput" placeholder="Enter base64 transaction here" rows="15" cols="100"></textarea>
     <br/>
-    <input list="clusters" name="cluster" id="cluster" placeholder="https://api.devnet.solana.com" size="40" onclick="document.getElementById('cluster').value=''">
+    <input list="clusters" name="clusterInput" id="clusterInput"
+        placeholder="https://api.devnet.solana.com" size="40"
+        onclick="document.getElementById('clusterInput').value=''"
+    >
     <datalist id="clusters">
         <option value="https://api.devnet.solana.com">
         <option value="https://api.mainnet-beta.solana.com">
@@ -17,21 +21,29 @@
         <option value="https://api.testnet.solana.com">
     </datalist>
     <br/>
-    <button id="submitButton" onclick="handleDisplayMessage()">Show deserialized format</button>
+    <button id="submitButton" onclick="handleDisplayMessage()">Show deserialized event</button>
   
     <hr/>
     <p id="messageOutput"></p>
   
     <script>
-        async function handleDisplayMessage() {
-          scriptNamespace.handleWindowState();
-          await scriptNamespace.deserializeEvent();
-        }
-      </script>
+      if (document.readyState === "complete" || document.readyState === "interactive") {
+        console.debug('DOM is ready')
+        scriptNamespace.loadWindowState(document);
+      } else {
+        console.debug('Adding DOM ready listener')
+        document.addEventListener("DOMContentLoaded", (() => scriptNamespace.loadWindowState(document)));
+      }
+
+      async function handleDisplayMessage() {
+        scriptNamespace.handleWindowState(document);
+        await scriptNamespace.deserializeEvent(document);
+      }
+    </script>
 
   <footer style="position:fixed; bottom:0; height:auto; margin-top:40px; width:100%; text-align:center; font-size: 80%;">
-    <p style="text-align: right; margin-right: 30px;">Tested with Chrome 113, thanks to
-     <a href="https://github.com/solana-fm/explorer-kit">SolanaFM ExplorerKit</a>
+    <p style="text-align: right; margin-right: 30px;">Tested with Chrome 119, thanks to
+    <a href="https://github.com/solana-fm/explorer-kit">SolanaFM ExplorerKit</a>
   </footer>
 </body>
 </html>

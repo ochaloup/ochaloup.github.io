@@ -57,51 +57,93 @@ type ExplorerKitTransactionData = ExplorerKitData & {
 // We need an account to exists to not getting 'Simulation Failure:AccountNotFound'
 export const RANDOM_FEE_PAYER = new PublicKey("2z9vpFpzn12nTrw3YUQBipBA2kSSc876Hy6KoeforKcf")
 
+export const MESSAGE_HTML_ELEMENT_ID = 'messageInput'
+export const MESSAGE_URL_NAME = 'message'
+export const CLUSTER_HTML_ELEMENT_ID = 'clusterInput'
+export const CLUSTER_URL_NAME = 'cluster'
+export const PROGRAM_ID_HTML_ELEMENT_ID = 'programIdInput'
+export const PROGRAM_ID_URL_NAME = 'program'
 
 // --------------- MAIN SCREEN INITIALIZATION ----------------
 
-export function handleWindowState() {
-  processOutput("<i>Loading...</i>");
+export function fillHtmlInputState(document: Document, searchParams: URLSearchParams, searchParamKey: string, htmlElementId: string) {
+  let searchParamValue = searchParams.get(searchParamKey);
+  if (searchParamValue) {
+    const decodedSearchParamValue = window.decodeURIComponent(searchParamValue);
+    const htmlElement = document.getElementById(htmlElementId)
+    if (!htmlElement || !(htmlElement instanceof HTMLTextAreaElement || htmlElement instanceof HTMLInputElement)) {
+      console.error(`Cannot find getElementById('${htmlElementId}') element`)
+    } else {
+      htmlElement.value = decodedSearchParamValue;
+    }
+  } else {
+    console.log(`No ${searchParamKey} parameter found in URL`)
+  }
+}
 
+export function loadWindowState(document: Document) {
+  let searchParams = new URLSearchParams(document.location.search);
+  fillHtmlInputState(document, searchParams, MESSAGE_URL_NAME, MESSAGE_HTML_ELEMENT_ID)
+  fillHtmlInputState(document, searchParams, CLUSTER_URL_NAME, CLUSTER_HTML_ELEMENT_ID)
+  fillHtmlInputState(document, searchParams, PROGRAM_ID_URL_NAME, PROGRAM_ID_HTML_ELEMENT_ID)
+}
+
+
+// --------------- MAIN SCREEN PROCESSING ----------------
+
+export function handleWindowState(document: Document) {
+  processOutput(document, "<i>Loading...</i>");
   let searchParams = ''
-  const messageElement = document.getElementById("messageInput")
+
+  const messageElement = document.getElementById(MESSAGE_HTML_ELEMENT_ID)
   if (!messageElement || !(messageElement instanceof HTMLTextAreaElement)) {
-    console.error("Cannot find getElementById('messageInput') element")
+    console.error(`Cannot find getElementById('${MESSAGE_HTML_ELEMENT_ID}') element`)
   } else {
     const message = messageElement.value
     if (message) {
-      searchParams = 'message=' + window.encodeURIComponent(message);
+      searchParams = MESSAGE_URL_NAME + '=' + window.encodeURIComponent(message);
     }
   }
 
-  let clusterElement = document.getElementById("cluster")
+  let clusterElement = document.getElementById(CLUSTER_HTML_ELEMENT_ID)
   if (!clusterElement || !(clusterElement instanceof HTMLInputElement)) {
-    console.error("Cannot find getElementById('cluster') element")
+    console.error(`Cannot find getElementById('${CLUSTER_HTML_ELEMENT_ID}') element`)
   } else {
     const cluster = clusterElement.value
     if (cluster) {
       if (searchParams) {
         searchParams += '&';
       }
-      searchParams += 'cluster=' + window.encodeURIComponent(cluster);
+      searchParams += CLUSTER_URL_NAME + '=' + window.encodeURIComponent(cluster);
+    }
+    window.history.replaceState(undefined, document.title, window.location.pathname + "?" + searchParams);
+  }
+
+  let programIdElement = document.getElementById(PROGRAM_ID_HTML_ELEMENT_ID)
+  if (!programIdElement || !(programIdElement instanceof HTMLInputElement)) {
+    console.error(`Cannot find getElementById('${PROGRAM_ID_HTML_ELEMENT_ID}') element`)
+  } else {
+    const programId = programIdElement.value
+    if (programId) {
+      if (searchParams) {
+        searchParams += '&';
+      }
+      searchParams += PROGRAM_ID_URL_NAME + '=' + window.encodeURIComponent(programId);
     }
     window.history.replaceState(undefined, document.title, window.location.pathname + "?" + searchParams);
   }
 }
 
-
-// --------------- MAIN SCREEN PROCESSING ----------------
-
-function processInput(): { message: string, cluster: string} {
-  const messageInput = document.getElementById('messageInput') as HTMLInputElement
+function processInput(document: Document): { message: string, cluster: string} {
+  const messageInput = document.getElementById(MESSAGE_HTML_ELEMENT_ID) as HTMLInputElement
   const message = messageInput.value
-  const clusterInput = document.getElementById('cluster') as HTMLInputElement
+  const clusterInput = document.getElementById(CLUSTER_HTML_ELEMENT_ID) as HTMLInputElement
   const cluster = clusterInput.value || 'https://api.devnet.solana.com'
   console.log('cluster: ' + cluster)
   return { message, cluster }
 }
 
-function processOutput(outMessage: string) {
+function processOutput(document: Document, outMessage: string) {
   const messageOutput = document.getElementById('messageOutput')
   if (!messageOutput) {
     return doLogError("Internal error: 'messageOutput' element not found")
@@ -109,34 +151,16 @@ function processOutput(outMessage: string) {
   messageOutput.innerHTML = outMessage
 }
 
-export async function deserializeTransaction() {
-  const { message, cluster } = processInput()
+export async function deserializeTransaction(document: Document) {
+  const { message, cluster } = processInput(document)
   const messageParsed = await parseAndDeserializeTransaction(message, cluster)
-  processOutput(messageParsed)
+  processOutput(document, messageParsed)
 }
 
-export async function deserializeEvent() {
-  const { message: data, cluster } = processInput()
-  const programIdInput = document.getElementById('programId') as HTMLInputElement
-  const programId = programIdInput.value 
-  if (!programId || programId.trim() === '') {
-    return doLogError("Program ID is required")
-  }
-
-  let connection: Connection | undefined = undefined
-  try {
-    connection = new Connection(cluster, COMMITMENT)
-  } catch (e) {
-    return doLogError('Failed to connect to cluster: ' + cluster, e.message)
-  }
-
-  const explorerKitParsed = await parseEventByExplorerKit({data, connection, programId})
-
-  let output = ''
-  output += `<h4>Parsed:</h4>`
-  output += '<p><pre><code>' + YAML.stringify(explorerKitParsed, replacer).trimEnd() + '</code></pre></p>'
-
-  processOutput(output)
+export async function deserializeEvent(document: Document) {
+  const { message: data, cluster } = processInput(document)
+  const output = await parseAndDeserializeEvent(document, cluster, data)
+  processOutput(document, output)
 }
 
 // --------------- ALL WORK METHODS ----------------
@@ -242,6 +266,46 @@ async function parseAndDeserializeTransaction(data: string, cluster: string): Pr
       return doLogError('Failed to print transaction data', e.message)
     }
   }
+}
+
+async function parseAndDeserializeEvent(document: Document, cluster: string, data: string): Promise<string> {
+  const programIdInput = document.getElementById(PROGRAM_ID_HTML_ELEMENT_ID)
+  if (!programIdInput || !(programIdInput instanceof HTMLInputElement)) {
+    return doLogError(`Internal error: '${PROGRAM_ID_HTML_ELEMENT_ID}' element not found`)
+  }
+  const programId = programIdInput.value 
+  if (!programId || programId.trim() === '') {
+    return doLogError("Program ID is required")
+  }
+
+  let connection: Connection | undefined = undefined
+  try {
+    connection = new Connection(cluster, COMMITMENT)
+  } catch (e) {
+    return doLogError('Failed to connect to cluster: ' + cluster, e.message)
+  }
+
+  let output = ''
+  output += `<h4>Parsed:</h4>`
+  for (let line of data.split('\n')) {
+    line = line.trim()
+    if (!line || line === '') {
+      // empty line - skip
+      continue
+    }
+    const programDataIndex = line.indexOf('Program data:')
+    if (line.includes('>') && programDataIndex < 0) {
+      // line starting with '>' but not 'Program data:' - skip
+      continue
+    }
+    if (programDataIndex >= 0) {
+      line = line.substring(programDataIndex + 'Program data:'.length).trim()
+    }
+    const explorerKitParsed = await parseEventByExplorerKit({data: line, connection, programId})
+    output += '<p><pre><code>' + YAML.stringify(explorerKitParsed, replacer).trimEnd() + '</code></pre></p>'
+  }
+
+  return output
 }
 
 function decodeIfUriEncoded(str: string): string {
