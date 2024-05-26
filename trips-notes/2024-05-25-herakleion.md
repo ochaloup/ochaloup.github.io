@@ -22,6 +22,9 @@ Cíl byl návštěva archeologického naleziště Knossos.
   Fajn bylo si k procházce [pustit podcast](https://shows.acast.com/the-ancients/episodes/knossos).
 * Druhým cílem bylo [archeologické muzeum](https://en.mapy.cz/s/loronejofe). Obsahuje ve spodním patře minojské nálezy (všechny zajímavé jako fresky,
   disk z Faistu, bronzové nálezy atp.) a v horním patře sbírku z doby římské. 
+ ** Jako řeckou bizardnost vidím to, že zavírací doba v sobotu (den návstěvy) byla do 15h. Nikde nic napsaného, žádná informace u pokladny,
+    jen 30 minut před 15h, když jsem si dával kafe se ozvalo hlášení, že se za 30 minut zavírá. Bizardní bylo, že lístky se prodávali až snad do půl třetí,
+    a nikdo nikoho neinformoval. Nezjišťoval jsem příčinu, zda je to ojedinělé nebo se to stává normálně.
 * Poslední byl pěší výlet přes [VoiceMap audio app](https://voicemap.me/tour/heraklion/a-stroll-through-the-layers-of-heraklion-s-historical-treasures).
   Procházka začíná u [autobusového nádraží](https://en.mapy.cz/s/mebosunane) 
   a protáhne člověka přes celé město. Dozví se o historii především ohledně osvobozování z otomanské nadvlády
