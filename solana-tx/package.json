@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "_hack": "cp './node_modules/.pnpm/@solanafm+utils@0.3.0/node_modules/dayjs/plugin/relativeTime.js' './node_modules/.pnpm/@solanafm+utils@0.3.0/node_modules/dayjs/esm/plugin/relativeTime'",
+    "_hack": "pnpm _hack1 && pnpm _hack2",
+    "_hack1": "cp './node_modules/.pnpm/@solanafm+utils@0.3.0/node_modules/dayjs/plugin/relativeTime.js' './node_modules/.pnpm/@solanafm+utils@0.3.0/node_modules/dayjs/esm/plugin/relativeTime'",
+    "_hack2": "cp './node_modules/.pnpm/@solanafm+utils@0.3.0/node_modules/dayjs/plugin/relativeTime.js' './node_modules/dayjs/plugin/relativeTime'",
     "build": "pnpm _hack && webpack --mode production",
     "develop": "pnpm build && webpack-dev-server --mode development"
   },

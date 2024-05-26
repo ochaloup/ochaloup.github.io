@@ -338,7 +338,7 @@ async function doLogTransactionContext(context: TransactionContext): Promise<str
   output += '<h4>solana base64 dump-transaction-message for version0 inspector: ' +
     getHref('https://explorer.solana.com/tx/inspector', version0) + '</h4>'
   output += '<p><code>' + version0 + '</code></p>'
-  output += '<h4>solana base64 dump-transaction-messages for spl-gov:</h4>'
+  output += '<h4>solana base64 dump-transaction-instruction-messages for spl-gov:</h4>'
   for (const ix of context.instructions) {
     output += '<p><code>' + serializeInstructionToBase64(ix) + '</code></p>'
   }

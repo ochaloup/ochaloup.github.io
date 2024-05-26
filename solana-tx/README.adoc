@@ -8,7 +8,7 @@
 pnpm install
 
 # creating webpack build
-# this has to be run before the `git publish` to web
+# this has to be run before the `git push` to web
 pnpm build
 
 # `pnpm develop` does build and then start devel server to open http://localhost:4000
