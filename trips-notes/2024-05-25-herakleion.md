@@ -23,7 +23,7 @@ Cíl byl návštěva archeologického naleziště Knossos.
 * Druhým cílem bylo [archeologické muzeum](https://en.mapy.cz/s/loronejofe). Obsahuje ve spodním patře minojské nálezy (všechny zajímavé jako fresky,
   disk z Faistu, bronzové nálezy atp.) a v horním patře sbírku z doby římské. 
  ** Jako řeckou bizardnost vidím to, že zavírací doba v sobotu (den návstěvy) byla do 15h. Nikde nic napsaného, žádná informace u pokladny,
-    jen 30 minut před 15h, když jsem si dával kafe se ozvalo hlášení, že se za 30 minut zavírá. Bizardní bylo, že lístky se prodávali až snad do půl třetí,
+    jen 30 minut (před 15h, když jsem si dával kafe se ozvalo hlášení, že se za 30 minut zavírá. Bizardní bylo, že lístky se prodávali až snad do půl třetí,
     a nikdo nikoho neinformoval. Nezjišťoval jsem příčinu, zda je to ojedinělé nebo se to stává normálně.
 * Poslední byl pěší výlet přes [VoiceMap audio app](https://voicemap.me/tour/heraklion/a-stroll-through-the-layers-of-heraklion-s-historical-treasures).
   Procházka začíná u [autobusového nádraží](https://en.mapy.cz/s/mebosunane) 
@@ -32,3 +32,11 @@ Cíl byl návštěva archeologického naleziště Knossos.
 * Ubytování přes booking https://www.mirabello-hotel.gr/, cíl samostatný pokoj v docházkové vzdálenosti od muzea, ~55 EUR na noc (mimo sezónu?).
   Varná konvice, funkční klimatizace, jsou slyšet letadla.
 * Cesta do [Chanii](https://en.mapy.cz/s/culevuluza) [z autobusového nádraží společnost KTEL](https://www.e-ktel.com/en/tourist-guide/cities) každou hodinu za ~16 EUR, cesta trvá 2,5 hodiny.
+  Lístky se kupují uvnitř budovy, lístky do Chanie na místě vykoupené na další autobus už 30 minut před odjezdem. V budově wc a zásuvky.
+  Jako v každém autobuse na jihu jede klimoška na plné obrátky a mikina do autobusu je nutnost.
+* Autobus [cesta z Chanii](https://en.mapy.cz/s/mezujegore) do [Agia Maria](https://en.mapy.cz/s/cevavelaho) je autobus KTEL, který vyjíždí přímo "z parkoviště" autobusového nádraží.
+  Lístek se dal koupit u paní uvnitř autobusu, která vyřvávala cestou následující stanice. Cena 2 EUR.
+  Info o cestě a odjezdech jsem bral z https://www.allincrete.com/buses-timetables/ (`Chania – Stalos – Ag. Marina – Platanias – Gerani – Maleme – Tavronitis – Kamisiana – Skoytelonas – Kolymbari`)
+  na mapy.cz jsou dobře značené zastávky. Na autobusovém nádraží byla velká mapa zastávek.
+  Tahle trasa není [součástí urban autobusů v Chanii](https://chaniabus.gr/en).
+ * Urban buses okolo Chanii jezdí například i sem https://maps.app.goo.gl/w1heysqM68yPuQ5dA s tím, že na zastávky je možné kouknout na https://chaniabus.gr/en/telematics
