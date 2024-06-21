@@ -462,15 +462,19 @@ export async function parseTransactionByExplorerKit(
     const sfmIdlItem = await getProgramIdl(programId, {slotContext: slot}, repoMap)
     // Checks if SFMIdlItem is defined, if not you will not be able to initialize the parser layout
     let parsedTx: ParserOutput | null = null
-    if (sfmIdlItem) {
-      console.log(`ExplorerKit found IDL for: ${programId} [${sfmIdlItem.idlType}]`)
-      const parser = new SolanaFMParser(sfmIdlItem, programId)
-      const instructionParser = parser.createParser(ParserType.INSTRUCTION)
-      if (instructionParser && checkIfInstructionParser(instructionParser)) {
-          // Parse the transaction
-          parsedTx = instructionParser.parseInstructions(base58.encode(ix.data), ix.keys.map(k => k.pubkey.toBase58()))
-          // console.log(SFMIdlItem.idlSlotVersion, SFMIdlItem.idl)
+    try {
+      if (sfmIdlItem) {
+        console.log(`ExplorerKit found IDL for: ${programId} [${sfmIdlItem.idlType}]`)
+        const parser = new SolanaFMParser(sfmIdlItem, programId)
+        const instructionParser = parser.createParser(ParserType.INSTRUCTION)
+        if (instructionParser && checkIfInstructionParser(instructionParser)) {
+            // Parse the transaction
+            parsedTx = instructionParser.parseInstructions(base58.encode(ix.data), ix.keys.map(k => k.pubkey.toBase58()))
+            // console.log(SFMIdlItem.idlSlotVersion, SFMIdlItem.idl)
+        }
       }
+    } catch (e) {
+      console.warn(`Cannot parse instruction ${ixNumber} of program: ${programId} via SolanaFM parser`, e)
     }
     if (parsedTx !== null) {
       result.push({ programId, ixNumber, name: parsedTx.name, data: parsedTx.data })
