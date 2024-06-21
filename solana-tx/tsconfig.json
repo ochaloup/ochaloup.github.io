@@ -9,6 +9,12 @@
       "noEmitOnError": true,
       "removeComments": false,
       "sourceMap": true,
+      "baseUrl": "./",
+      "paths": {
+        "crypto": [
+          "node_modules/crypto-js"
+        ]
+      }
     },
     "exclude": [
       "node_modules"

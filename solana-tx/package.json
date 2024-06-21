@@ -5,9 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "_hack": "pnpm _hack1 && pnpm _hack2",
-    "_hack1": "cp './node_modules/.pnpm/@solanafm+utils@0.3.0/node_modules/dayjs/plugin/relativeTime.js' './node_modules/.pnpm/@solanafm+utils@0.3.0/node_modules/dayjs/esm/plugin/relativeTime'",
-    "_hack2": "cp './node_modules/.pnpm/@solanafm+utils@0.3.0/node_modules/dayjs/plugin/relativeTime.js' './node_modules/dayjs/plugin/relativeTime'",
+    "_hack": "pnpm _hack1 && pnpm _hack2 && pnpm _hack3 && pnpm _hack4",
+    "_hack1": "cp './node_modules/.pnpm/@solanafm+utils@1.1.0/node_modules/dayjs/plugin/relativeTime.js' './node_modules/.pnpm/@solanafm+utils@1.1.0/node_modules/dayjs/esm/plugin/relativeTime'",
+    "_hack2": "cp './node_modules/.pnpm/@solanafm+utils@1.1.0/node_modules/dayjs/plugin/relativeTime.js' './node_modules/dayjs/plugin/relativeTime'",
+    "_hack3": "cp './node_modules/.pnpm/@solanafm+utils@1.1.0/node_modules/dayjs/plugin/utc.js' './node_modules/.pnpm/@solanafm+utils@1.1.0/node_modules/dayjs/esm/plugin/utc'",
+    "_hack4": "cp './node_modules/.pnpm/@solanafm+utils@1.1.0/node_modules/dayjs/plugin/utc.js' './node_modules/dayjs/plugin/utc'",
     "build": "pnpm _hack && webpack --mode production",
     "develop": "pnpm build && webpack-dev-server --mode development"
   },
@@ -23,30 +25,32 @@
   ],
   "dependencies": {
     "@coral-xyz/anchor": "^0.29.0",
-    "@debridge-finance/solana-transaction-parser": "^1.1.1",
-    "@solana/spl-governance": "^0.3.27",
-    "@solana/web3.js": "^1.76.0",
-    "@solanafm/explorer-kit": "^1.0.2",
-    "@solanafm/explorer-kit-idls": "^1.0.0",
-    "@solanafm/utils": "^0.3.0",
-    "assert": "^2.0.0",
+    "@debridge-finance/solana-transaction-parser": "^2.0.1",
+    "@solana/spl-governance": "^0.3.28",
+    "@solana/web3.js": "^1.93.0",
+    "@solanafm/explorer-kit": "^1.1.3",
+    "@solanafm/explorer-kit-idls": "^1.1.3",
+    "@solanafm/utils": "^1.1.0",
+    "assert": "^2.1.0",
     "base64-js": "^1.5.1",
     "bn.js": "^5.2.1",
     "bs58": "^5.0.0",
     "buffer": "^6.0.3",
-    "dayjs": "^1.11.10",
+    "crypto-js": "^4.2.0",
+    "dayjs": "^1.11.11",
     "pako": "^2.1.0",
     "process": "^0.11.10",
     "stream": "^0.0.2",
-    "yaml": "^2.2.2"
+    "yaml": "^2.4.5"
   },
   "devDependencies": {
+    "@types/crypto-js": "^4.2.2",
     "@types/pako": "^2.0.3",
-    "expose-loader": "^4.1.0",
-    "ts-loader": "^9.4.2",
-    "typescript": "^5.0.4",
-    "webpack": "^5.82.1",
-    "webpack-cli": "^5.1.1",
-    "webpack-dev-server": "^4.15.0"
+    "expose-loader": "^5.0.0",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.5.2",
+    "webpack": "^5.92.1",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.0.4"
   }
 }

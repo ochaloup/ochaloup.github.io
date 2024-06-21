@@ -436,7 +436,16 @@ export async function parseTransactionByExplorerKit(
 ): Promise<ExplorerKitTransactionData[]> {
   const result: ExplorerKitTransactionData[] = []
   let ixNumber = 0
-  const slot = await context.connection.getSlot(COMMITMENT)
+  let slot
+  try {
+    slot = await context.connection.getSlot(COMMITMENT)
+  } catch {
+    slot = 273_134_000 // slot at date: 2024-06-24
+    console.warn(
+      `Cannot get slot from cluster: ${context.connection.rpcEndpoint}, ` +
+      `using some recent slot ${slot} as default slot`
+    )
+  }
 
   for (const ix of context.instructions) {
     ixNumber++
