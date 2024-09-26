@@ -24,7 +24,7 @@ import  base58  from 'bs58'
 import { SolanaFMParser, checkIfInstructionParser, checkIfEventParser, ParserType, ParserOutput } from "@solanafm/explorer-kit"
 import { addIdlToMap, getProgramIdl } from "@solanafm/explorer-kit-idls"
 import { decodeIdlAccount } from '@coral-xyz/anchor/dist/cjs/idl';
-import { utf8 } from '@coral-xyz/anchor/dist/cjs/utils/bytes';
+import { bs58, utf8 } from '@coral-xyz/anchor/dist/cjs/utils/bytes';
 import {inflate} from 'pako'
 
 const COMMITMENT = 'confirmed'
@@ -256,7 +256,7 @@ async function parseAndDeserializeTransaction(data: string, cluster: string): Pr
   }
 
   if (!parsedData) {
-    return '<b style="color:red;">Failed to deserialize transaction data</b>' + `<p style='margin-left: 30px;'><code>${data}</code></p>`
+    return '<b style="color:red;">Failed to deserialize provided data</b>' + `<p style='margin-left: 30px;'><code>${data}</code></p>`
   } else {
     try {
       return await doLogTransactionContext(parsedData)
@@ -301,11 +301,49 @@ async function parseAndDeserializeEvent(document: Document, cluster: string, dat
     if (programDataIndex >= 0) {
       line = line.substring(programDataIndex + 'Program data:'.length).trim()
     }
-    const explorerKitParsed = await parseEventByExplorerKit({data: line, connection, programId})
+    let explorerKitParsed: ExplorerKitData;
+    try {
+      explorerKitParsed = await parseEventByExplorerKit({data: line, connection, programId})
+    } catch (e) {
+      // let's check if the data could be Anchor CPI event; then we will try to parse it
+      const cpiEvent = parseAsTransactionCpiData(line)
+      if (cpiEvent) {
+        explorerKitParsed = await parseEventByExplorerKit({data: cpiEvent, connection, programId})
+      } else {
+        throw e
+      }
+    }
+
     output += '<p><pre><code>' + YAML.stringify(explorerKitParsed, replacer).trimEnd() + '</code></pre></p>'
   }
 
   return output
+}
+
+/**
+ * Check the log data to be transaction Anchor CPI event:
+ * Expected data format (just strange format of juggling with base64 and base58):
+ *  < cpi event discriminator | event name discriminator | event data >
+ * If matches cpi event discriminator
+ * < event name | event data> base64 formatted is returned
+ * otherwise null is returned.
+ */
+function parseAsTransactionCpiData(log: string): string | null {
+  const eventIxTag: BN = new BN('1d9acb512ea545e4', 'hex')
+  let encodedLog: Buffer
+  try {
+    // verification if log is transaction cpi data encoded with base58
+    encodedLog = bs58.decode(log)
+  } catch (e) {
+    return null
+  }
+  const disc = encodedLog.subarray(0, 8)
+  if (disc.equals(eventIxTag.toBuffer('le'))) {
+    // after CPI tag data follows in format of standard event
+    return base64.fromByteArray(encodedLog.subarray(8))
+  } else {
+    return null
+  }
 }
 
 function decodeIfUriEncoded(str: string): string {
