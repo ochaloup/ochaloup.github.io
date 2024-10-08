@@ -44,7 +44,7 @@ type EventContext = {
 
 type ExplorerKitData = {
   programId: string,
-  name: string
+  name: string | undefined
   data: any
 }
 
@@ -302,15 +302,20 @@ async function parseAndDeserializeEvent(document: Document, cluster: string, dat
       line = line.substring(programDataIndex + 'Program data:'.length).trim()
     }
     let explorerKitParsed: ExplorerKitData;
+    let failedParsing = false
     try {
+      console.log(`Parsing event data with Explorer Kit for program: ${programId}`)
       explorerKitParsed = await parseEventByExplorerKit({data: line, connection, programId})
     } catch (e) {
-      // let's check if the data could be Anchor CPI event; then we will try to parse it
+      console.error('Failed to parse event data with Explorer Kit', e)
+      failedParsing = true
+    }
+
+    if (explorerKitParsed.name === undefined || failedParsing) {
       const cpiEvent = parseAsTransactionCpiData(line)
+      console.log("Failed to get parsed event, let's check if the data could be Anchor CPI event", 'data', cpiEvent);
       if (cpiEvent) {
         explorerKitParsed = await parseEventByExplorerKit({data: cpiEvent, connection, programId})
-      } else {
-        throw e
       }
     }
 
@@ -329,7 +334,6 @@ async function parseAndDeserializeEvent(document: Document, cluster: string, dat
  * otherwise null is returned.
  */
 function parseAsTransactionCpiData(log: string): string | null {
-  const eventIxTag: BN = new BN('1d9acb512ea545e4', 'hex')
   let encodedLog: Buffer
   try {
     // verification if log is transaction cpi data encoded with base58
@@ -337,8 +341,12 @@ function parseAsTransactionCpiData(log: string): string | null {
   } catch (e) {
     return null
   }
+
+  const eventIxTag: bigint = BigInt('0x1d9acb512ea545e4')
+  const eventIxBuffer = Buffer.alloc(8);
+  eventIxBuffer.writeBigInt64LE(eventIxTag, 0)
   const disc = encodedLog.subarray(0, 8)
-  if (disc.equals(eventIxTag.toBuffer('le'))) {
+  if (disc.equals(eventIxBuffer)) {
     // after CPI tag data follows in format of standard event
     return base64.fromByteArray(encodedLog.subarray(8))
   } else {
@@ -517,7 +525,7 @@ export async function parseTransactionByExplorerKit(
     if (parsedTx !== null) {
       result.push({ programId, ixNumber, name: parsedTx.name, data: parsedTx.data })
     } else {
-      result.push({ programId, ixNumber, name: 'unknown', data: 'failed to parse'})
+      result.push({ programId, ixNumber, name: undefined, data: 'failed to parse'})
     }
   }
   return result
@@ -558,7 +566,7 @@ export async function parseEventByExplorerKit({
   if (parsedEvent !== null) {
     result = { programId, name: parsedEvent.name, data: parsedEvent.data }
   } else {
-    result = { programId, name: 'unknown', data: 'Failed to load and parse'}
+    result = { programId, name: undefined, data: 'Failed to load and parse'}
   }
   return result
 }
