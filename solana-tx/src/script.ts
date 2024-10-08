@@ -337,10 +337,16 @@ function parseAsTransactionCpiData(log: string): string | null {
   let encodedLog: Buffer
   try {
     // verification if log is transaction cpi data encoded with base58
-    encodedLog = bs58.decode(log)
+    encodedLog = decode58(log)
   } catch (e) {
-    return null
+    try {
+      encodedLog = decode64(log)
+    } catch (e) {
+      console.error('Failed to decode CPI log data either being base58 or base64', e)
+      return null
+    }
   }
+
 
   const eventIxTag: bigint = BigInt('0x1d9acb512ea545e4')
   const eventIxBuffer = Buffer.alloc(8);
