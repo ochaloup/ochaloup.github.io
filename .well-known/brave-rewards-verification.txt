@@ -1,0 +1,4 @@
+This is a Brave Creators publisher verification file.
+
+Domain: chalda.cz
+Token: ff3664e26c29fb7873a3bba82bd57d3531d89c6b4d24e7db53eacdc52b947fbd
