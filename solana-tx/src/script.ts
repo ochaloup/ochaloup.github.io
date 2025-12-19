@@ -28,10 +28,13 @@ import { bs58, utf8 } from '@coral-xyz/anchor/dist/cjs/utils/bytes';
 import {inflate} from 'pako'
 
 const COMMITMENT = 'confirmed'
+
+type TransactionType = 'legacy' | 'versioned' | 'from-chain' | 'splgov'
+
 type TransactionContext = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   txData: any
-  type: string
+  type: TransactionType
   instructions: TransactionInstruction[]
   connection: Connection
 }
@@ -193,9 +196,12 @@ async function parseAndDeserializeTransaction(data: string, cluster: string): Pr
           compiledInstructionToInstruction(ix, accountsMeta)
         )
         parsedData = { txData: msg, type: 'from-chain', instructions, connection }
-      } else {
-        console.log("Cannot find transaction with signature: " + data + " in cluster: " + cluster)
       }
+    }
+    if (!parsedData || !parsedData.instructions.length) {
+      // maybe the base58 input is directly the transaction message
+      const { message: msg, instructions } = decodeIfTransaction(decoded)
+      parsedData = { txData: msg, type: 'legacy', instructions, connection }
     }
   } catch (e) {
     console.log(
@@ -203,36 +209,15 @@ async function parseAndDeserializeTransaction(data: string, cluster: string): Pr
     )
   }
 
-  // --- Is it base64 legacy transaction data?
+  // --- Is it base64 transaction data?
   if (!parsedData || !parsedData.instructions.length) {
     try {
       const decoded: Buffer = decode64(data)
-      const msg = Message.from(decoded)
-      const accountsMeta = parseTransactionAccounts(msg, undefined)
-      const instructions = msg.instructions.map(ix =>
-        compiledInstructionToInstruction(ix, accountsMeta)
-      )
+      const { message: msg, instructions } = decodeIfTransaction(decoded)
       parsedData = { txData: msg, type: 'legacy', instructions, connection }
     } catch (e) {
       console.log(
-        'Failed deserialize legacy transaction: ' + (e as Error).message
-      )
-    }
-  }
-
-  // --- Is it base64 versioned0 transaction data?
-  if (!parsedData || !parsedData.instructions.length) {
-    try {
-      const decoded: Buffer = decode64(data)
-      const vMsg = VersionedMessage.deserialize(decoded)
-      const accountsMeta = parseTransactionAccounts(vMsg, undefined) // TODO: probably this is not correct
-      const instructions = vMsg.compiledInstructions.map(ix =>
-        compiledInstructionToInstruction(ix, accountsMeta)
-      )
-      parsedData = { txData: vMsg, type: 'versioned', instructions, connection }
-    } catch (e) {
-      console.log(
-        'Failed deserialize versioned transaction: ' + (e as Error).message
+        'Failed deserialize base64 transaction: ' + (e as Error).message
       )
     }
   }
@@ -367,6 +352,30 @@ function decodeIfUriEncoded(str: string): string {
   }
   return str
 }
+
+function decodeIfTransaction(data: Buffer): {type: TransactionType, message: Message | VersionedMessage, instructions: TransactionInstruction[]} {
+  try {
+        const msg = Message.from(data)
+      const accountsMeta = parseTransactionAccounts(msg, undefined)
+      const instructions = msg.instructions.map(ix =>
+        compiledInstructionToInstruction(ix, accountsMeta)
+      )
+      return { type: 'legacy', message: msg, instructions }
+  } catch {
+    console.log('Not a legacy transaction message')
+  }
+  try {
+        const vMsg = VersionedMessage.deserialize(data)
+      const accountsMeta = parseTransactionAccounts(vMsg, undefined) // TODO: probably this is not correct
+      const instructions = vMsg.compiledInstructions.map(ix =>
+        compiledInstructionToInstruction(ix, accountsMeta)
+      )
+      return { type: 'versioned', message: vMsg, instructions }
+  } catch {
+    console.log('Not a versioned transaction message')
+  }
+  throw new Error('Data is not a valid transaction message')
+    }
 
 function doLogError(message: string, whatever?: any): string {
   let errOutput = '<b style="color:red;">' + message + '</b>'
