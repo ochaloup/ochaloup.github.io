@@ -552,21 +552,30 @@ async function doLogTransactionContext(
   context: TransactionContext,
 ): Promise<string> {
   console.log('Transaction type: ' + context.type)
-  const { legacy, version0 } = await asDumpTransactionMessage(context)
+  const { legacyBase64, version0Base64, version0Base58 } =
+    await asDumpTransactionMessage(context)
 
   let output = ''
+  // --- LEGACY BASE 64
   output +=
     '<h4>solana base64 dump-transaction-message for legacy inspector: ' +
-    getHref('https://anchor.so/tx/inspector', legacy) +
+    getHref('https://anchor.so/tx/inspector', legacyBase64) +
     ', ' +
-    getHref('https://tribeca.so/tx/inspector', legacy) +
+    getHref('https://tribeca.so/tx/inspector', legacyBase64) +
     '</h4>'
-  output += '<p><code>' + legacy + '</code></p>'
+  output += '<p><code>' + legacyBase64 + '</code></p>'
+  // --- VERSION 0 BASE 64
   output +=
     '<h4>solana base64 dump-transaction-message for version0 inspector: ' +
-    getHref('https://explorer.solana.com/tx/inspector', version0) +
+    getHref('https://explorer.solana.com/tx/inspector', version0Base64) +
+    ', ' +
+    getHref('https://solana.fm/inspector', version0Base64) +
     '</h4>'
-  output += '<p><code>' + version0 + '</code></p>'
+  output += '<p><code>' + version0Base64 + '</code></p>'
+  // --- VERSION 0 BASE 58
+  output += '<h4>solana base58 dump-transaction-message:</h4> '
+  output += '<p><code>' + version0Base58 + '</code></p>'
+  // --- SPL GOV BASE 64
   output +=
     '<h4>solana base64 dump-transaction-instruction-messages for spl-gov:</h4>'
   for (const ix of context.instructions) {
@@ -609,7 +618,11 @@ function toTransactionInstruction(
  */
 export async function asDumpTransactionMessage(
   context: TransactionContext,
-): Promise<{ legacy: string; version0: string }> {
+): Promise<{
+  legacyBase64: string
+  version0Base64: string
+  version0Base58: string
+}> {
   const iXes = context.instructions
   const blockhash = await context.connection.getLatestBlockhash()
 
@@ -619,7 +632,7 @@ export async function asDumpTransactionMessage(
     blockhash: blockhash.blockhash,
     lastValidBlockHeight: blockhash.lastValidBlockHeight,
   }).add(...iXes)
-  const legacy = legacyTransaction.serializeMessage().toString('base64')
+  const legacyBase64 = legacyTransaction.serializeMessage().toString('base64')
 
   // usable at https://explorer.solana.com/tx/inspector
   const msg = MessageV0.compile({
@@ -628,9 +641,10 @@ export async function asDumpTransactionMessage(
     recentBlockhash: blockhash.blockhash,
   })
   // const versionedTransaction = new VersionedTransaction(msg)
-  const version0 = Buffer.from(msg.serialize()).toString('base64')
+  const version0Base64 = Buffer.from(msg.serialize()).toString('base64')
+  const version0Base58 = base58.encode(msg.serialize()).toString()
 
-  return { legacy, version0 }
+  return { legacyBase64, version0Base64, version0Base58 }
 }
 
 export async function anchorIdlAddress(

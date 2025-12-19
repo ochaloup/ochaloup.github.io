@@ -191421,27 +191421,35 @@ function doLogError(message, whatever) {
 }
 function doLogTransactionContext(context) {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, legacy, version0, output, _i, _b, ix, parsedExplorerKit;
+        var _a, legacyBase64, version0Base64, version0Base58, output, _i, _b, ix, parsedExplorerKit;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     console.log('Transaction type: ' + context.type);
                     return [4 /*yield*/, asDumpTransactionMessage(context)];
                 case 1:
-                    _a = _c.sent(), legacy = _a.legacy, version0 = _a.version0;
+                    _a = _c.sent(), legacyBase64 = _a.legacyBase64, version0Base64 = _a.version0Base64, version0Base58 = _a.version0Base58;
                     output = '';
+                    // --- LEGACY BASE 64
                     output +=
                         '<h4>solana base64 dump-transaction-message for legacy inspector: ' +
-                            getHref('https://anchor.so/tx/inspector', legacy) +
+                            getHref('https://anchor.so/tx/inspector', legacyBase64) +
                             ', ' +
-                            getHref('https://tribeca.so/tx/inspector', legacy) +
+                            getHref('https://tribeca.so/tx/inspector', legacyBase64) +
                             '</h4>';
-                    output += '<p><code>' + legacy + '</code></p>';
+                    output += '<p><code>' + legacyBase64 + '</code></p>';
+                    // --- VERSION 0 BASE 64
                     output +=
                         '<h4>solana base64 dump-transaction-message for version0 inspector: ' +
-                            getHref('https://explorer.solana.com/tx/inspector', version0) +
+                            getHref('https://explorer.solana.com/tx/inspector', version0Base64) +
+                            ', ' +
+                            getHref('https://solana.fm/inspector', version0Base64) +
                             '</h4>';
-                    output += '<p><code>' + version0 + '</code></p>';
+                    output += '<p><code>' + version0Base64 + '</code></p>';
+                    // --- VERSION 0 BASE 58
+                    output += '<h4>solana base58 dump-transaction-message:</h4> ';
+                    output += '<p><code>' + version0Base58 + '</code></p>';
+                    // --- SPL GOV BASE 64
                     output +=
                         '<h4>solana base64 dump-transaction-instruction-messages for spl-gov:</h4>';
                     for (_i = 0, _b = context.instructions; _i < _b.length; _i++) {
@@ -191483,7 +191491,7 @@ function toTransactionInstruction(instructionData) {
  */
 function asDumpTransactionMessage(context) {
     return __awaiter(this, void 0, void 0, function () {
-        var iXes, blockhash, legacyTransaction, legacy, msg, version0;
+        var iXes, blockhash, legacyTransaction, legacyBase64, msg, version0Base64, version0Base58;
         var _a;
         return __generator(this, function (_b) {
             switch (_b.label) {
@@ -191499,14 +191507,15 @@ function asDumpTransactionMessage(context) {
                         blockhash: blockhash.blockhash,
                         lastValidBlockHeight: blockhash.lastValidBlockHeight,
                     })).add.apply(_a, iXes);
-                    legacy = legacyTransaction.serializeMessage().toString('base64');
+                    legacyBase64 = legacyTransaction.serializeMessage().toString('base64');
                     msg = web3_js_1.MessageV0.compile({
                         payerKey: exports.RANDOM_FEE_PAYER,
                         instructions: iXes,
                         recentBlockhash: blockhash.blockhash,
                     });
-                    version0 = Buffer.from(msg.serialize()).toString('base64');
-                    return [2 /*return*/, { legacy: legacy, version0: version0 }];
+                    version0Base64 = Buffer.from(msg.serialize()).toString('base64');
+                    version0Base58 = bs58_1.default.encode(msg.serialize()).toString();
+                    return [2 /*return*/, { legacyBase64: legacyBase64, version0Base64: version0Base64, version0Base58: version0Base58 }];
             }
         });
     });
@@ -205781,7 +205790,7 @@ module.exports = ___EXPOSE_LOADER_IMPORT___;
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("09c97c6a2531e1a2b813")
+/******/ 		__webpack_require__.h = () => ("ba2c7e7aeb6185d99d67")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */
