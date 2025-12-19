@@ -1,3 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, no-await-in-loop, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access, no-param-reassign, sonarjs/no-duplicate-string, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call */
+
+import { decodeIdlAccount } from '@coral-xyz/anchor/dist/cjs/idl'
+import { utf8 } from '@coral-xyz/anchor/dist/cjs/utils/bytes'
+import {
+  compiledInstructionToInstruction,
+  parseTransactionAccounts,
+} from '@debridge-finance/solana-transaction-parser'
+import {
+  getInstructionDataFromBase64,
+  serializeInstructionToBase64,
+} from '@solana/spl-governance'
 import {
   Connection,
   Keypair,
@@ -8,31 +20,27 @@ import {
   TransactionInstruction,
   VersionedMessage,
 } from '@solana/web3.js'
-import YAML from 'yaml'
 import {
-  InstructionData,
-  getInstructionDataFromBase64,
-  serializeInstructionToBase64,
-} from '@solana/spl-governance'
-import {
-  compiledInstructionToInstruction,
-  parseTransactionAccounts,
-} from '@debridge-finance/solana-transaction-parser'
+  SolanaFMParser,
+  checkIfInstructionParser,
+  checkIfEventParser,
+  ParserType,
+} from '@solanafm/explorer-kit'
+import { addIdlToMap, getProgramIdl } from '@solanafm/explorer-kit-idls'
+import base64 from 'base64-js'
 import BN from 'bn.js'
-import  base64 from "base64-js"
-import  base58  from 'bs58'
-import { SolanaFMParser, checkIfInstructionParser, checkIfEventParser, ParserType, ParserOutput } from "@solanafm/explorer-kit"
-import { addIdlToMap, getProgramIdl } from "@solanafm/explorer-kit-idls"
-import { decodeIdlAccount } from '@coral-xyz/anchor/dist/cjs/idl';
-import { bs58, utf8 } from '@coral-xyz/anchor/dist/cjs/utils/bytes';
-import {inflate} from 'pako'
+import base58 from 'bs58'
+import { inflate } from 'pako'
+import YAML from 'yaml'
+
+import type { InstructionData } from '@solana/spl-governance'
+import type { ParserOutput } from '@solanafm/explorer-kit'
 
 const COMMITMENT = 'confirmed'
 
 type TransactionType = 'legacy' | 'versioned' | 'from-chain' | 'splgov'
 
 type TransactionContext = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   txData: any
   type: TransactionType
   instructions: TransactionInstruction[]
@@ -40,13 +48,13 @@ type TransactionContext = {
 }
 
 type EventContext = {
-  programId: string,
+  programId: string
   data: string
   connection: Connection
 }
 
 type ExplorerKitData = {
-  programId: string,
+  programId: string
   name: string | undefined
   data: any
 }
@@ -58,7 +66,9 @@ type ExplorerKitTransactionData = ExplorerKitData & {
 // A random account (found randomly as a first such account via clicking in explorer)
 // owned by System Program that exists on all three networks (devnet, testnet, mainnet)
 // We need an account to exists to not getting 'Simulation Failure:AccountNotFound'
-export const RANDOM_FEE_PAYER = new PublicKey("2z9vpFpzn12nTrw3YUQBipBA2kSSc876Hy6KoeforKcf")
+export const RANDOM_FEE_PAYER = new PublicKey(
+  '2z9vpFpzn12nTrw3YUQBipBA2kSSc876Hy6KoeforKcf',
+)
 
 export const MESSAGE_HTML_ELEMENT_ID = 'messageInput'
 export const MESSAGE_URL_NAME = 'message'
@@ -69,15 +79,26 @@ export const PROGRAM_ID_URL_NAME = 'program'
 
 // --------------- MAIN SCREEN INITIALIZATION ----------------
 
-export function fillHtmlInputState(document: Document, searchParams: URLSearchParams, searchParamKey: string, htmlElementId: string) {
-  let searchParamValue = searchParams.get(searchParamKey);
+export function fillHtmlInputState(
+  document: Document,
+  searchParams: URLSearchParams,
+  searchParamKey: string,
+  htmlElementId: string,
+) {
+  let searchParamValue = searchParams.get(searchParamKey)
   if (searchParamValue) {
-    const decodedSearchParamValue = window.decodeURIComponent(searchParamValue);
+    const decodedSearchParamValue = window.decodeURIComponent(searchParamValue)
     const htmlElement = document.getElementById(htmlElementId)
-    if (!htmlElement || !(htmlElement instanceof HTMLTextAreaElement || htmlElement instanceof HTMLInputElement)) {
+    if (
+      !htmlElement ||
+      !(
+        htmlElement instanceof HTMLTextAreaElement ||
+        htmlElement instanceof HTMLInputElement
+      )
+    ) {
       console.error(`Cannot find getElementById('${htmlElementId}') element`)
     } else {
-      htmlElement.value = decodedSearchParamValue;
+      htmlElement.value = decodedSearchParamValue
     }
   } else {
     console.log(`No ${searchParamKey} parameter found in URL`)
@@ -85,71 +106,109 @@ export function fillHtmlInputState(document: Document, searchParams: URLSearchPa
 }
 
 export function loadWindowState(document: Document) {
-  let searchParams = new URLSearchParams(document.location.search);
-  fillHtmlInputState(document, searchParams, MESSAGE_URL_NAME, MESSAGE_HTML_ELEMENT_ID)
-  fillHtmlInputState(document, searchParams, CLUSTER_URL_NAME, CLUSTER_HTML_ELEMENT_ID)
-  fillHtmlInputState(document, searchParams, PROGRAM_ID_URL_NAME, PROGRAM_ID_HTML_ELEMENT_ID)
+  let searchParams = new URLSearchParams(document.location.search)
+  fillHtmlInputState(
+    document,
+    searchParams,
+    MESSAGE_URL_NAME,
+    MESSAGE_HTML_ELEMENT_ID,
+  )
+  fillHtmlInputState(
+    document,
+    searchParams,
+    CLUSTER_URL_NAME,
+    CLUSTER_HTML_ELEMENT_ID,
+  )
+  fillHtmlInputState(
+    document,
+    searchParams,
+    PROGRAM_ID_URL_NAME,
+    PROGRAM_ID_HTML_ELEMENT_ID,
+  )
 }
-
 
 // --------------- MAIN SCREEN PROCESSING ----------------
 
 export function handleWindowState(document: Document) {
-  processOutput(document, "<i>Loading...</i>");
+  processOutput(document, '<i>Loading...</i>')
   let searchParams = ''
 
   const messageElement = document.getElementById(MESSAGE_HTML_ELEMENT_ID)
   if (!messageElement || !(messageElement instanceof HTMLTextAreaElement)) {
-    console.error(`Cannot find getElementById('${MESSAGE_HTML_ELEMENT_ID}') element`)
+    console.error(
+      `Cannot find getElementById('${MESSAGE_HTML_ELEMENT_ID}') element`,
+    )
   } else {
     const message = messageElement.value
     if (message) {
-      searchParams = MESSAGE_URL_NAME + '=' + window.encodeURIComponent(message);
+      searchParams = MESSAGE_URL_NAME + '=' + window.encodeURIComponent(message)
     }
   }
 
   let clusterElement = document.getElementById(CLUSTER_HTML_ELEMENT_ID)
   if (!clusterElement || !(clusterElement instanceof HTMLInputElement)) {
-    console.error(`Cannot find getElementById('${CLUSTER_HTML_ELEMENT_ID}') element`)
+    console.error(
+      `Cannot find getElementById('${CLUSTER_HTML_ELEMENT_ID}') element`,
+    )
   } else {
     const cluster = clusterElement.value
     if (cluster) {
       if (searchParams) {
-        searchParams += '&';
+        searchParams += '&'
       }
-      searchParams += CLUSTER_URL_NAME + '=' + window.encodeURIComponent(cluster);
+      searchParams +=
+        CLUSTER_URL_NAME + '=' + window.encodeURIComponent(cluster)
     }
-    window.history.replaceState(undefined, document.title, window.location.pathname + "?" + searchParams);
+    window.history.replaceState(
+      undefined,
+      document.title,
+      window.location.pathname + '?' + searchParams,
+    )
   }
 
   let programIdElement = document.getElementById(PROGRAM_ID_HTML_ELEMENT_ID)
   if (!programIdElement || !(programIdElement instanceof HTMLInputElement)) {
-    console.error(`Cannot find getElementById('${PROGRAM_ID_HTML_ELEMENT_ID}') element`)
+    console.error(
+      `Cannot find getElementById('${PROGRAM_ID_HTML_ELEMENT_ID}') element`,
+    )
   } else {
     const programId = programIdElement.value
     if (programId) {
       if (searchParams) {
-        searchParams += '&';
+        searchParams += '&'
       }
-      searchParams += PROGRAM_ID_URL_NAME + '=' + window.encodeURIComponent(programId);
+      searchParams +=
+        PROGRAM_ID_URL_NAME + '=' + window.encodeURIComponent(programId)
     }
-    window.history.replaceState(undefined, document.title, window.location.pathname + "?" + searchParams);
+    window.history.replaceState(
+      undefined,
+      document.title,
+      window.location.pathname + '?' + searchParams,
+    )
   }
 }
 
-function processInput(document: Document): { message: string, cluster: string} {
-  const messageInput = document.getElementById(MESSAGE_HTML_ELEMENT_ID) as HTMLInputElement
+function processInput(document: Document): {
+  message: string
+  cluster: string
+} {
+  const messageInput = document.getElementById(
+    MESSAGE_HTML_ELEMENT_ID,
+  ) as HTMLInputElement
   const message = messageInput.value
-  const clusterInput = document.getElementById(CLUSTER_HTML_ELEMENT_ID) as HTMLInputElement
+  const clusterInput = document.getElementById(
+    CLUSTER_HTML_ELEMENT_ID,
+  ) as HTMLInputElement
   const cluster = clusterInput.value || 'https://api.devnet.solana.com'
   console.log('cluster: ' + cluster)
   return { message, cluster }
 }
 
-function processOutput(document: Document, outMessage: string) {
+function processOutput(document: Document, outMessage: string): void {
   const messageOutput = document.getElementById('messageOutput')
   if (!messageOutput) {
-    return doLogError("Internal error: 'messageOutput' element not found")
+    doLogError("Internal error: 'messageOutput' element not found")
+    return
   }
   messageOutput.innerHTML = outMessage
 }
@@ -168,7 +227,10 @@ export async function deserializeEvent(document: Document) {
 
 // --------------- ALL WORK METHODS ----------------
 
-async function parseAndDeserializeTransaction(data: string, cluster: string): Promise<string> {
+async function parseAndDeserializeTransaction(
+  data: string,
+  cluster: string,
+): Promise<string> {
   let parsedData: TransactionContext | undefined = undefined
   if (!data || data.trim() === '') {
     return doLogError('<b style="color:red;">Transaction data is empty</b>')
@@ -188,14 +250,25 @@ async function parseAndDeserializeTransaction(data: string, cluster: string): Pr
   try {
     const decoded: Buffer = decode58(data)
     if (decoded.length === 64) {
-      const transactionResponse = await connection.getTransaction(data, { commitment: COMMITMENT, maxSupportedTransactionVersion: 0 })
+      const transactionResponse = await connection.getTransaction(data, {
+        commitment: COMMITMENT,
+        maxSupportedTransactionVersion: 0,
+      })
       if (transactionResponse) {
         const msg = transactionResponse.transaction.message
-        const accountsMeta = parseTransactionAccounts(msg, transactionResponse.meta.loadedAddresses)
-        const instructions = msg.compiledInstructions.map(ix =>
-          compiledInstructionToInstruction(ix, accountsMeta)
+        const accountsMeta = parseTransactionAccounts(
+          msg,
+          transactionResponse.meta.loadedAddresses,
         )
-        parsedData = { txData: msg, type: 'from-chain', instructions, connection }
+        const instructions = msg.compiledInstructions.map(ix =>
+          compiledInstructionToInstruction(ix, accountsMeta),
+        )
+        parsedData = {
+          txData: msg,
+          type: 'from-chain',
+          instructions,
+          connection,
+        }
       }
     }
     if (!parsedData || !parsedData.instructions.length) {
@@ -205,7 +278,7 @@ async function parseAndDeserializeTransaction(data: string, cluster: string): Pr
     }
   } catch (e) {
     console.log(
-      'Failed deserialize transaction signature: ' + (e as Error).message
+      'Failed deserialize transaction signature: ' + (e as Error).message,
     )
   }
 
@@ -217,7 +290,7 @@ async function parseAndDeserializeTransaction(data: string, cluster: string): Pr
       parsedData = { txData: msg, type: 'legacy', instructions, connection }
     } catch (e) {
       console.log(
-        'Failed deserialize base64 transaction: ' + (e as Error).message
+        'Failed deserialize base64 transaction: ' + (e as Error).message,
       )
     }
   }
@@ -230,18 +303,21 @@ async function parseAndDeserializeTransaction(data: string, cluster: string): Pr
         txData: decoded,
         type: 'splgov',
         instructions: [toTransactionInstruction(decoded)],
-        connection
+        connection,
       }
     } catch (e) {
       console.error(e)
       console.log(
-        'Failed deserialize spl gov transaction: ' + (e as Error).message
+        'Failed deserialize spl gov transaction: ' + (e as Error).message,
       )
     }
   }
 
   if (!parsedData) {
-    return '<b style="color:red;">Failed to deserialize provided data</b>' + `<p style='margin-left: 30px;'><code>${data}</code></p>`
+    return (
+      '<b style="color:red;">Failed to deserialize provided data</b>' +
+      `<p style='margin-left: 30px;'><code>${data}</code></p>`
+    )
   } else {
     try {
       return await doLogTransactionContext(parsedData)
@@ -253,14 +329,20 @@ async function parseAndDeserializeTransaction(data: string, cluster: string): Pr
   }
 }
 
-async function parseAndDeserializeEvent(document: Document, cluster: string, data: string): Promise<string> {
+async function parseAndDeserializeEvent(
+  document: Document,
+  cluster: string,
+  data: string,
+): Promise<string> {
   const programIdInput = document.getElementById(PROGRAM_ID_HTML_ELEMENT_ID)
   if (!programIdInput || !(programIdInput instanceof HTMLInputElement)) {
-    return doLogError(`Internal error: '${PROGRAM_ID_HTML_ELEMENT_ID}' element not found`)
+    return doLogError(
+      `Internal error: '${PROGRAM_ID_HTML_ELEMENT_ID}' element not found`,
+    )
   }
-  const programId = programIdInput.value 
+  const programId = programIdInput.value
   if (!programId || programId.trim() === '') {
-    return doLogError("Program ID is required")
+    return doLogError('Program ID is required')
   }
 
   let connection: Connection | undefined = undefined
@@ -271,7 +353,7 @@ async function parseAndDeserializeEvent(document: Document, cluster: string, dat
   }
 
   let output = ''
-  output += `<h4>Parsed:</h4>`
+  output += '<h4>Parsed:</h4>'
   for (let line of data.split('\n')) {
     line = line.trim()
     if (!line || line === '') {
@@ -286,11 +368,17 @@ async function parseAndDeserializeEvent(document: Document, cluster: string, dat
     if (programDataIndex >= 0) {
       line = line.substring(programDataIndex + 'Program data:'.length).trim()
     }
-    let explorerKitParsed: ExplorerKitData;
+    let explorerKitParsed: ExplorerKitData
     let failedParsing = false
     try {
-      console.log(`Parsing event data with Explorer Kit for program: ${programId}`)
-      explorerKitParsed = await parseEventByExplorerKit({data: line, connection, programId})
+      console.log(
+        `Parsing event data with Explorer Kit for program: ${programId}`,
+      )
+      explorerKitParsed = await parseEventByExplorerKit({
+        data: line,
+        connection,
+        programId,
+      })
     } catch (e) {
       console.error('Failed to parse event data with Explorer Kit', e)
       failedParsing = true
@@ -298,13 +386,24 @@ async function parseAndDeserializeEvent(document: Document, cluster: string, dat
 
     if (explorerKitParsed.name === undefined || failedParsing) {
       const cpiEvent = parseAsTransactionCpiData(line)
-      console.log("Failed to get parsed event, let's check if the data could be Anchor CPI event", 'data', cpiEvent);
+      console.log(
+        "Failed to get parsed event, let's check if the data could be Anchor CPI event",
+        'data',
+        cpiEvent,
+      )
       if (cpiEvent) {
-        explorerKitParsed = await parseEventByExplorerKit({data: cpiEvent, connection, programId})
+        explorerKitParsed = await parseEventByExplorerKit({
+          data: cpiEvent,
+          connection,
+          programId,
+        })
       }
     }
 
-    output += '<p><pre><code>' + YAML.stringify(explorerKitParsed, replacer).trimEnd() + '</code></pre></p>'
+    output +=
+      '<p><pre><code>' +
+      YAML.stringify(explorerKitParsed, replacer).trimEnd() +
+      '</code></pre></p>'
   }
 
   return output
@@ -323,18 +422,20 @@ function parseAsTransactionCpiData(log: string): string | null {
   try {
     // verification if log is transaction cpi data encoded with base58
     encodedLog = decode58(log)
-  } catch (e) {
+  } catch (_e) {
     try {
       encodedLog = decode64(log)
     } catch (e) {
-      console.error('Failed to decode CPI log data either being base58 or base64', e)
+      console.error(
+        'Failed to decode CPI log data either being base58 or base64',
+        e,
+      )
       return null
     }
   }
 
-
   const eventIxTag: bigint = BigInt('0x1d9acb512ea545e4')
-  const eventIxBuffer = Buffer.alloc(8);
+  const eventIxBuffer = Buffer.alloc(8)
   eventIxBuffer.writeBigInt64LE(eventIxTag, 0)
   const disc = encodedLog.subarray(0, 8)
   if (disc.equals(eventIxBuffer)) {
@@ -353,29 +454,33 @@ function decodeIfUriEncoded(str: string): string {
   return str
 }
 
-function decodeIfTransaction(data: Buffer): {type: TransactionType, message: Message | VersionedMessage, instructions: TransactionInstruction[]} {
+function decodeIfTransaction(data: Buffer): {
+  type: TransactionType
+  message: Message | VersionedMessage
+  instructions: TransactionInstruction[]
+} {
   try {
-        const msg = Message.from(data)
-      const accountsMeta = parseTransactionAccounts(msg, undefined)
-      const instructions = msg.instructions.map(ix =>
-        compiledInstructionToInstruction(ix, accountsMeta)
-      )
-      return { type: 'legacy', message: msg, instructions }
+    const msg = Message.from(data)
+    const accountsMeta = parseTransactionAccounts(msg, undefined)
+    const instructions = msg.instructions.map(ix =>
+      compiledInstructionToInstruction(ix, accountsMeta),
+    )
+    return { type: 'legacy', message: msg, instructions }
   } catch {
     console.log('Not a legacy transaction message')
   }
   try {
-        const vMsg = VersionedMessage.deserialize(data)
-      const accountsMeta = parseTransactionAccounts(vMsg, undefined) // TODO: probably this is not correct
-      const instructions = vMsg.compiledInstructions.map(ix =>
-        compiledInstructionToInstruction(ix, accountsMeta)
-      )
-      return { type: 'versioned', message: vMsg, instructions }
+    const vMsg = VersionedMessage.deserialize(data)
+    const accountsMeta = parseTransactionAccounts(vMsg, undefined) // TODO: probably this is not correct
+    const instructions = vMsg.compiledInstructions.map(ix =>
+      compiledInstructionToInstruction(ix, accountsMeta),
+    )
+    return { type: 'versioned', message: vMsg, instructions }
   } catch {
     console.log('Not a versioned transaction message')
   }
   throw new Error('Data is not a valid transaction message')
-    }
+}
 
 function doLogError(message: string, whatever?: any): string {
   let errOutput = '<b style="color:red;">' + message + '</b>'
@@ -385,30 +490,42 @@ function doLogError(message: string, whatever?: any): string {
   return errOutput
 }
 
-async function doLogTransactionContext(context: TransactionContext): Promise<string> {
+async function doLogTransactionContext(
+  context: TransactionContext,
+): Promise<string> {
   console.log('Transaction type: ' + context.type)
-  const { legacy, version0 } = await asDumpTransactionMessage(
-    context
-  )
+  const { legacy, version0 } = await asDumpTransactionMessage(context)
 
   let output = ''
-  output += '<h4>solana base64 dump-transaction-message for legacy inspector: ' +
-    getHref('https://anchor.so/tx/inspector', legacy) + ', ' + getHref('https://tribeca.so/tx/inspector', legacy) +
+  output +=
+    '<h4>solana base64 dump-transaction-message for legacy inspector: ' +
+    getHref('https://anchor.so/tx/inspector', legacy) +
+    ', ' +
+    getHref('https://tribeca.so/tx/inspector', legacy) +
     '</h4>'
   output += '<p><code>' + legacy + '</code></p>'
-  output += '<h4>solana base64 dump-transaction-message for version0 inspector: ' +
-    getHref('https://explorer.solana.com/tx/inspector', version0) + '</h4>'
+  output +=
+    '<h4>solana base64 dump-transaction-message for version0 inspector: ' +
+    getHref('https://explorer.solana.com/tx/inspector', version0) +
+    '</h4>'
   output += '<p><code>' + version0 + '</code></p>'
-  output += '<h4>solana base64 dump-transaction-instruction-messages for spl-gov:</h4>'
+  output +=
+    '<h4>solana base64 dump-transaction-instruction-messages for spl-gov:</h4>'
   for (const ix of context.instructions) {
     output += '<p><code>' + serializeInstructionToBase64(ix) + '</code></p>'
   }
   output += `<h4>Transaction ${context.type} (YAML format):</h4>`
-  output += '<p><pre><code>' + YAML.stringify(context.txData, replacer).trimEnd() + '</code></pre></p>'
+  output +=
+    '<p><pre><code>' +
+    YAML.stringify(context.txData, replacer).trimEnd() +
+    '</code></pre></p>'
 
   const parsedExplorerKit = await parseTransactionByExplorerKit(context)
-  output += `<h4>Parsed:</h4>`
-  output += '<p><pre><code>' + YAML.stringify(parsedExplorerKit, replacer).trimEnd() + '</code></pre></p>'
+  output += '<h4>Parsed:</h4>'
+  output +=
+    '<p><pre><code>' +
+    YAML.stringify(parsedExplorerKit, replacer).trimEnd() +
+    '</code></pre></p>'
 
   return output
 }
@@ -418,7 +535,7 @@ function getHref(hostname: string, message: string) {
 }
 
 function toTransactionInstruction(
-  instructionData: InstructionData
+  instructionData: InstructionData,
 ): TransactionInstruction {
   return new TransactionInstruction({
     keys: instructionData.accounts,
@@ -427,73 +544,81 @@ function toTransactionInstruction(
   })
 }
 
-  /**
+/**
  * Helper function to print instruction in base64 format
  * that's not for SPL Gov multisig(!) but it can be used to get the txn parsed
  * by the Solana transaction inspector
  */
 export async function asDumpTransactionMessage(
-    context: TransactionContext
-  ): Promise<{ legacy: string, version0: string }> {
-    const iXes = context.instructions
-    const blockhash = await context.connection.getLatestBlockhash()
-  
-    // usable at https://anchor.so/tx/inspector or https://tribeca.so/tx/inspector
-    const legacyTransaction = new Transaction({
-      feePayer: RANDOM_FEE_PAYER,
-      blockhash: blockhash.blockhash,
-      lastValidBlockHeight: blockhash.lastValidBlockHeight,
-    }).add(...iXes)
-    const legacy = legacyTransaction.serializeMessage().toString('base64')
-  
-    // usable at https://explorer.solana.com/tx/inspector
-    const msg = MessageV0.compile({
-      payerKey: RANDOM_FEE_PAYER,
-      instructions: iXes,
-      recentBlockhash: blockhash.blockhash,
-    })
-    // const versionedTransaction = new VersionedTransaction(msg)
-    const version0 = Buffer.from(msg.serialize()).toString(
-      'base64'
-    )
+  context: TransactionContext,
+): Promise<{ legacy: string; version0: string }> {
+  const iXes = context.instructions
+  const blockhash = await context.connection.getLatestBlockhash()
 
-    return { legacy, version0 }
-  }
+  // usable at https://anchor.so/tx/inspector or https://tribeca.so/tx/inspector
+  const legacyTransaction = new Transaction({
+    feePayer: RANDOM_FEE_PAYER,
+    blockhash: blockhash.blockhash,
+    lastValidBlockHeight: blockhash.lastValidBlockHeight,
+  }).add(...iXes)
+  const legacy = legacyTransaction.serializeMessage().toString('base64')
 
-export async function anchorIdlAddress(programAddress: PublicKey): Promise<PublicKey> {
-  const [pdaProgramAddress,] = PublicKey.findProgramAddressSync(
+  // usable at https://explorer.solana.com/tx/inspector
+  const msg = MessageV0.compile({
+    payerKey: RANDOM_FEE_PAYER,
+    instructions: iXes,
+    recentBlockhash: blockhash.blockhash,
+  })
+  // const versionedTransaction = new VersionedTransaction(msg)
+  const version0 = Buffer.from(msg.serialize()).toString('base64')
+
+  return { legacy, version0 }
+}
+
+export async function anchorIdlAddress(
+  programAddress: PublicKey,
+): Promise<PublicKey> {
+  const [pdaProgramAddress] = PublicKey.findProgramAddressSync(
     [],
-    programAddress
-  );
+    programAddress,
+  )
   const seedAddress = await PublicKey.createWithSeed(
     pdaProgramAddress,
     'anchor:idl',
-    programAddress
-  );
+    programAddress,
+  )
   return seedAddress
 }
 
-export async function getAnchorIdl(connection: Connection, programAddress: PublicKey): Promise<string | null> {
+export async function getAnchorIdl(
+  connection: Connection,
+  programAddress: PublicKey,
+): Promise<string | null> {
   const idlAddress = await anchorIdlAddress(programAddress)
   const accountInfo = await connection.getAccountInfo(idlAddress)
   if (accountInfo === null) {
-    console.warn(`Cannot load data of anchor IDL ${idlAddress} for program: ${programAddress.toBase58()}`)
+    console.warn(
+      `Cannot load data of anchor IDL ${idlAddress.toBase58()} for program: ${programAddress.toBase58()}`,
+    )
     return null
   }
   try {
-    const idlAccount = decodeIdlAccount(accountInfo.data.slice(8)); // chop off discriminator
-    const inflatedIdl = inflate(idlAccount.data);
-    const idlString = utf8.decode(inflatedIdl);
-    console.debug("Anchor IDL found:", idlAddress.toBase58())
+    const idlAccount = decodeIdlAccount(accountInfo.data.slice(8)) // chop off discriminator
+    const inflatedIdl = inflate(idlAccount.data)
+    const idlString = utf8.decode(inflatedIdl)
+    console.debug('Anchor IDL found:', idlAddress.toBase58())
     return JSON.parse(idlString)
   } catch (e) {
-    console.warn(`Cannot decode anchor IDL ${idlAddress} for program: ${programAddress.toBase58()}`, e)
+    console.warn(
+      `Cannot decode anchor IDL ${idlAddress.toBase58()} for program: ${programAddress.toBase58()}`,
+      e,
+    )
     return null
   }
 }
 
 export async function parseTransactionByExplorerKit(
-  context: TransactionContext
+  context: TransactionContext,
 ): Promise<ExplorerKitTransactionData[]> {
   const result: ExplorerKitTransactionData[] = []
   let ixNumber = 0
@@ -504,7 +629,7 @@ export async function parseTransactionByExplorerKit(
     slot = 273_134_000 // slot at date: 2024-06-24
     console.warn(
       `Cannot get slot from cluster: ${context.connection.rpcEndpoint}, ` +
-      `using some recent slot ${slot} as default slot`
+        `using some recent slot ${slot} as default slot`,
     )
   }
 
@@ -520,27 +645,49 @@ export async function parseTransactionByExplorerKit(
       repoMap = addIdlToMap(new Map(), ix.programId.toBase58(), anchorIdl, 0)
     }
 
-    const sfmIdlItem = await getProgramIdl(programId, {slotContext: slot}, repoMap)
+    const sfmIdlItem = await getProgramIdl(
+      programId,
+      { slotContext: slot },
+      repoMap,
+    )
     // Checks if SFMIdlItem is defined, if not you will not be able to initialize the parser layout
     let parsedTx: ParserOutput | null = null
     try {
       if (sfmIdlItem) {
-        console.log(`ExplorerKit found IDL for: ${programId} [${sfmIdlItem.idlType}]`)
+        console.log(
+          `ExplorerKit found IDL for: ${programId} [${sfmIdlItem.idlType}]`,
+        )
         const parser = new SolanaFMParser(sfmIdlItem, programId)
         const instructionParser = parser.createParser(ParserType.INSTRUCTION)
         if (instructionParser && checkIfInstructionParser(instructionParser)) {
-            // Parse the transaction
-            parsedTx = instructionParser.parseInstructions(base58.encode(ix.data), ix.keys.map(k => k.pubkey.toBase58()))
-            // console.log(SFMIdlItem.idlSlotVersion, SFMIdlItem.idl)
+          // Parse the transaction
+          parsedTx = instructionParser.parseInstructions(
+            base58.encode(ix.data),
+            ix.keys.map(k => k.pubkey.toBase58()),
+          )
+          // console.log(SFMIdlItem.idlSlotVersion, SFMIdlItem.idl)
         }
       }
     } catch (e) {
-      console.warn(`Cannot parse instruction ${ixNumber} of program: ${programId} via SolanaFM parser`, e)
+      console.warn(
+        `Cannot parse instruction ${ixNumber} of program: ${programId} via SolanaFM parser`,
+        e,
+      )
     }
     if (parsedTx !== null) {
-      result.push({ programId, ixNumber, name: parsedTx.name, data: parsedTx.data })
+      result.push({
+        programId,
+        ixNumber,
+        name: parsedTx.name,
+        data: parsedTx.data,
+      })
     } else {
-      result.push({ programId, ixNumber, name: undefined, data: 'failed to parse'})
+      result.push({
+        programId,
+        ixNumber,
+        name: undefined,
+        data: 'failed to parse',
+      })
     }
   }
   return result
@@ -550,8 +697,7 @@ export async function parseEventByExplorerKit({
   programId,
   data,
   connection,
-} : EventContext
-): Promise<ExplorerKitData> {
+}: EventContext): Promise<ExplorerKitData> {
   let sfmIdlItem
   try {
     const slot = await connection.getSlot(COMMITMENT)
@@ -560,20 +706,24 @@ export async function parseEventByExplorerKit({
     if (anchorIdl !== null) {
       repoMap = addIdlToMap(new Map(), programId, anchorIdl, 0)
     }
-    sfmIdlItem = await getProgramIdl(programId, {slotContext: slot}, repoMap)
+    sfmIdlItem = await getProgramIdl(programId, { slotContext: slot }, repoMap)
   } catch {
-    console.warn(`Cannot load data of anchor IDL for program: ${programId} from cluster: ${connection.rpcEndpoint}`)
+    console.warn(
+      `Cannot load data of anchor IDL for program: ${programId} from cluster: ${connection.rpcEndpoint}`,
+    )
     sfmIdlItem = await getProgramIdl(programId)
   }
 
   // Checks if SFMIdlItem is defined, if not you will not be able to initialize the parser layout
   let parsedEvent: ParserOutput | null = null
   if (sfmIdlItem) {
-    console.log(`ExplorerKit found IDL for: ${programId} [${sfmIdlItem.idlType}]`)
+    console.log(
+      `ExplorerKit found IDL for: ${programId} [${sfmIdlItem.idlType}]`,
+    )
     const parser = new SolanaFMParser(sfmIdlItem, programId)
     const eventParser = parser.createParser(ParserType.EVENT)
     if (eventParser && checkIfEventParser(eventParser)) {
-        parsedEvent = eventParser.parseEvents(data)
+      parsedEvent = eventParser.parseEvents(data)
     }
   }
 
@@ -581,7 +731,7 @@ export async function parseEventByExplorerKit({
   if (parsedEvent !== null) {
     result = { programId, name: parsedEvent.name, data: parsedEvent.data }
   } else {
-    result = { programId, name: undefined, data: 'Failed to load and parse'}
+    result = { programId, name: undefined, data: 'Failed to load and parse' }
   }
   return result
 }
@@ -589,12 +739,12 @@ export async function parseEventByExplorerKit({
 /**
  * Helper function to print better in YAML.
  */
-export function replacer(key: unknown, value: unknown) {
+export function replacer(key: unknown, value: unknown): unknown {
   if (value instanceof BN) {
     try {
       return (value as BN).toNumber()
-    } catch (e) {
-      return value.toString()
+    } catch (_e) {
+      return (value as BN).toString()
     }
   }
   if (value instanceof Keypair) {
@@ -605,7 +755,7 @@ export function replacer(key: unknown, value: unknown) {
   }
   if (
     typeof key === 'string' &&
-    (key as string).startsWith('reserved') &&
+    key.startsWith('reserved') &&
     Array.isArray(value)
   ) {
     return [value.length]
@@ -616,8 +766,12 @@ export function replacer(key: unknown, value: unknown) {
   if (value instanceof Uint8Array) {
     return Buffer.from(value).toString('base64')
   }
-  if (value instanceof Array && Array.isArray(value) && value.every(item => typeof item === "number")) {
-    return Buffer.from(value as number[]).toString('base64')
+  if (
+    value instanceof Array &&
+    Array.isArray(value) &&
+    value.every(item => typeof item === 'number')
+  ) {
+    return Buffer.from(value).toString('base64')
   }
   return value
 }

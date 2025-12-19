@@ -1,5 +1,5 @@
-const path = require('path');
-const webpack = require('webpack');
+const path = require('path')
+const webpack = require('webpack')
 
 module.exports = {
   devtool: 'source-map',
@@ -17,21 +17,24 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.js', '.tsx'],
     fallback: {
-      "crypto": false
-    }
+      crypto: false,
+    },
   },
   module: {
     rules: [
       {
         test: /\.ts$/,
-        use: [{
-          loader: 'expose-loader',
-          options: {
-            exposes: ['scriptNamespace'],
+        use: [
+          {
+            loader: 'expose-loader',
+            options: {
+              exposes: ['scriptNamespace'],
+            },
           },
-        }, {
-          loader: 'ts-loader'
-        }],
+          {
+            loader: 'ts-loader',
+          },
+        ],
         exclude: /node_modules/,
       },
     ],
@@ -42,6 +45,6 @@ module.exports = {
       process: 'process/browser.js',
       // https://stackoverflow.com/a/71515171/187035
       Buffer: ['buffer', 'Buffer'],
-    })
-  ]
-};
+    }),
+  ],
+}

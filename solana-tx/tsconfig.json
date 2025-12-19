@@ -1,23 +1,19 @@
 {
-    "compilerOptions": {
-      "rootDir": ".",
-      "outDir": "dist",
-      "esModuleInterop": true,
-      "resolveJsonModule": true,
-      "skipLibCheck": true,
-      "noImplicitAny": false,
-      "noEmitOnError": true,
-      "removeComments": false,
-      "sourceMap": true,
-      "baseUrl": "./",
-      "paths": {
-        "crypto": [
-          "node_modules/crypto-js"
-        ]
-      }
-    },
-    "exclude": [
-      "node_modules"
-    ],
-    "include": ["package.json", "src/*"]
-  }
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "dist",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "noImplicitAny": false,
+    "noEmitOnError": true,
+    "removeComments": false,
+    "sourceMap": true,
+    "baseUrl": "./",
+    "paths": {
+      "crypto": ["node_modules/crypto-js"]
+    }
+  },
+  "exclude": ["node_modules"],
+  "include": ["package.json", "src/*"]
+}

@@ -1,49 +1,88 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-  <title>Solana base58/base64 event deserializer</title>
-  <script src="./dist/bundle.js"></script>
-</head>
-<body>
-  <h1>Solana base58/base64 event deserializer</h1>
-    <input placeholder="Program ID" name="programIdInput" id="programIdInput" size="40" onclick="document.getElementById('programIdInput').value=''">
-    <br/>
-    <textarea type="text" id="messageInput" placeholder="Enter base64 transaction here" rows="15" cols="100"></textarea>
-    <br/>
-    <input list="clusters" name="clusterInput" id="clusterInput"
-        placeholder="https://api.devnet.solana.com" size="40"
-        onclick="document.getElementById('clusterInput').value=''"
-    >
+  <head>
+    <title>Solana base58/base64 event deserializer</title>
+    <script src="./dist/bundle.js"></script>
+  </head>
+  <body>
+    <h1>Solana base58/base64 event deserializer</h1>
+    <input
+      placeholder="Program ID"
+      name="programIdInput"
+      id="programIdInput"
+      size="40"
+      onclick="document.getElementById('programIdInput').value = ''"
+    />
+    <br />
+    <textarea
+      type="text"
+      id="messageInput"
+      placeholder="Enter base64 transaction here"
+      rows="15"
+      cols="100"
+    ></textarea>
+    <br />
+    <input
+      list="clusters"
+      name="clusterInput"
+      id="clusterInput"
+      placeholder="https://api.devnet.solana.com"
+      size="40"
+      onclick="document.getElementById('clusterInput').value = ''"
+    />
     <datalist id="clusters">
-        <option value="https://api.devnet.solana.com">
-        <option value="https://api.mainnet-beta.solana.com">
-        <option value="https://mainnet.helius-rpc.com/?api-key=d5e3e601-06cd-4b44-b98e-e579bef20d6e">
-        <option value="https://api.testnet.solana.com">
+      <option value="https://api.devnet.solana.com"></option>
+      <option value="https://api.mainnet-beta.solana.com"></option>
+      <option
+        value="https://mainnet.helius-rpc.com/?api-key=d5e3e601-06cd-4b44-b98e-e579bef20d6e"
+      ></option>
+      <option value="https://api.testnet.solana.com"></option>
     </datalist>
-    <br/>
-    <button id="submitButton" onclick="handleDisplayMessage()">Show deserialized event</button>
-  
-    <hr/>
+    <br />
+    <button id="submitButton" onclick="handleDisplayMessage()">
+      Show deserialized event
+    </button>
+
+    <hr />
     <p id="messageOutput"></p>
-  
+
     <script>
-      if (document.readyState === "complete" || document.readyState === "interactive") {
+      if (
+        document.readyState === 'complete' ||
+        document.readyState === 'interactive'
+      ) {
         console.debug('DOM is ready')
-        scriptNamespace.loadWindowState(document);
+        scriptNamespace.loadWindowState(document)
       } else {
         console.debug('Adding DOM ready listener')
-        document.addEventListener("DOMContentLoaded", (() => scriptNamespace.loadWindowState(document)));
+        document.addEventListener('DOMContentLoaded', () =>
+          scriptNamespace.loadWindowState(document),
+        )
       }
 
       async function handleDisplayMessage() {
-        scriptNamespace.handleWindowState(document);
-        await scriptNamespace.deserializeEvent(document);
+        scriptNamespace.handleWindowState(document)
+        await scriptNamespace.deserializeEvent(document)
       }
     </script>
 
-  <footer style="position:fixed; bottom:0; height:auto; margin-top:40px; width:100%; text-align:center; font-size: 80%;">
-    <p style="text-align: right; margin-right: 30px;">Tested with Chrome 119, thanks to
-    <a href="https://github.com/solana-fm/explorer-kit">SolanaFM ExplorerKit</a>
-  </footer>
-</body>
+    <footer
+      style="
+        position: fixed;
+        bottom: 0;
+        height: auto;
+        margin-top: 40px;
+        width: 100%;
+        text-align: center;
+        font-size: 80%;
+      "
+    >
+      <p style="text-align: right; margin-right: 30px">
+        Tested with Chrome 119, thanks to
+        <a href="https://github.com/solana-fm/explorer-kit"
+          >SolanaFM ExplorerKit</a
+        >
+      </p>
+    </footer>
+  </body>
 </html>
