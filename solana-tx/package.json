@@ -12,6 +12,7 @@
     "_hack4": "cp './node_modules/.pnpm/@solanafm+utils@1.1.0/node_modules/dayjs/plugin/utc.js' './node_modules/dayjs/plugin/utc'",
     "build": "pnpm _hack && webpack --mode production",
     "develop": "pnpm build && webpack-dev-server --mode development",
+    "start:dev": "pnpm develop",
     "lint:ts": "eslint .",
     "lint:ts-fix": "eslint . --fix",
     "lint": "pnpm run lint:ts",
