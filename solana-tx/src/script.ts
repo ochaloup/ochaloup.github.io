@@ -37,6 +37,7 @@ import YAML from 'yaml'
 import splGovernanceIdl from './idl/gov.json'
 
 import type { InstructionData } from '@solana/spl-governance'
+import type { CompiledInnerInstruction } from '@solana/web3.js'
 import type { ParserOutput } from '@solanafm/explorer-kit'
 
 const COMMITMENT = 'confirmed'
@@ -44,15 +45,23 @@ const COMMITMENT = 'confirmed'
 // Local IDL registry for programs not covered by Explorer Kit's API
 const LOCAL_IDL_REGISTRY: Map<string, any> = new Map([
   ['GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw', splGovernanceIdl],
+  ['GovMaiHfpVPw8BAM1mbdzgmSZYDw2tdP32J2fapoQoYs', splGovernanceIdl],
 ])
 
 type TransactionType = 'legacy' | 'versioned' | 'from-chain' | 'splgov'
+
+type InnerInstructionGroup = {
+  index: number // parent instruction index (0-based)
+  instructions: TransactionInstruction[]
+}
 
 type TransactionContext = {
   txData: any
   type: TransactionType
   instructions: TransactionInstruction[]
   connection: Connection
+  innerInstructions?: InnerInstructionGroup[]
+  logMessages?: string[]
 }
 
 type EventContext = {
@@ -69,6 +78,7 @@ type ExplorerKitData = {
 
 type ExplorerKitTransactionData = ExplorerKitData & {
   ixNumber: number
+  innerInstructions?: ExplorerKitData[]
 }
 
 // A random account (found randomly as a first such account via clicking in explorer)
@@ -279,11 +289,23 @@ async function parseAndDeserializeTransaction(
             const instructions = msg.compiledInstructions.map(ix =>
               compiledInstructionToInstruction(ix, accountsMeta),
             )
+            const innerInstructions = (
+              transactionResponse.meta?.innerInstructions ?? []
+            ).map(
+              (group: CompiledInnerInstruction): InnerInstructionGroup => ({
+                index: group.index,
+                instructions: group.instructions.map(ix =>
+                  compiledInstructionToInstruction(ix, accountsMeta),
+                ),
+              }),
+            )
             parsedData = {
               txData: msg,
               type: 'from-chain',
               instructions,
               connection,
+              innerInstructions,
+              logMessages: transactionResponse.meta?.logMessages ?? undefined,
             }
           }
         }
@@ -555,6 +577,28 @@ function doLogError(message: string, whatever?: any): string {
   return errOutput
 }
 
+async function simulateForContext(
+  context: TransactionContext,
+): Promise<{ logMessages?: string[] }> {
+  try {
+    const blockhash = await context.connection.getLatestBlockhash()
+    const msg = MessageV0.compile({
+      payerKey: RANDOM_FEE_PAYER,
+      instructions: context.instructions,
+      recentBlockhash: blockhash.blockhash,
+    })
+    const tx = new VersionedTransaction(msg)
+    const result = await context.connection.simulateTransaction(tx, {
+      sigVerify: false,
+      replaceRecentBlockhash: true,
+    })
+    return { logMessages: result.value.logs ?? undefined }
+  } catch (e) {
+    console.warn('Simulation failed:', (e as Error).message)
+    return {}
+  }
+}
+
 async function doLogTransactionContext(
   context: TransactionContext,
 ): Promise<string> {
@@ -594,12 +638,27 @@ async function doLogTransactionContext(
     YAML.stringify(context.txData, replacer).trimEnd() +
     '</code></pre></p>'
 
+  // For non-chain paths, try simulation to get logs
+  if (context.type !== 'from-chain' && !context.logMessages) {
+    const simResult = await simulateForContext(context)
+    if (simResult.logMessages) {
+      context.logMessages = simResult.logMessages
+    }
+  }
+
   const parsedExplorerKit = await parseTransactionByExplorerKit(context)
   output += '<h4>Parsed:</h4>'
   output +=
     '<p><pre><code>' +
     YAML.stringify(parsedExplorerKit, replacer).trimEnd() +
     '</code></pre></p>'
+
+  // --- LOGS
+  if (context.logMessages && context.logMessages.length > 0) {
+    output += '<h4>Logs:</h4>'
+    output +=
+      '<p><pre><code>' + context.logMessages.join('\n') + '</code></pre></p>'
+  }
 
   return output
 }
@@ -669,31 +728,149 @@ export async function anchorIdlAddress(
   return seedAddress
 }
 
+// Solana Program Metadata program (new Anchor IDL storage, Nov 2025+)
+const PROGRAM_METADATA_PROGRAM_ID = new PublicKey(
+  'ProgM6JCCvbYkfKqJYHePx4xxSUSqJp7rh8Lyv7nk7S',
+)
+
+function programMetadataIdlAddress(programAddress: PublicKey): PublicKey {
+  const seed = Buffer.alloc(16)
+  seed.write('idl', 0, 'utf-8')
+  const [pda] = PublicKey.findProgramAddressSync(
+    [programAddress.toBuffer(), Buffer.alloc(32), seed],
+    PROGRAM_METADATA_PROGRAM_ID,
+  )
+  return pda
+}
+
 export async function getAnchorIdl(
   connection: Connection,
   programAddress: PublicKey,
 ): Promise<string | null> {
+  // Try old format: anchor:idl seed-based address
   const idlAddress = await anchorIdlAddress(programAddress)
   const accountInfo = await connection.getAccountInfo(idlAddress)
-  if (accountInfo === null) {
-    console.warn(
-      `Cannot load data of anchor IDL ${idlAddress.toBase58()} for program: ${programAddress.toBase58()}`,
-    )
-    return null
+  if (accountInfo !== null) {
+    try {
+      const idlAccount = decodeIdlAccount(accountInfo.data.slice(8)) // chop off discriminator
+      const inflatedIdl = inflate(idlAccount.data)
+      const idlString = utf8.decode(inflatedIdl)
+      console.debug('Anchor IDL found (old format):', idlAddress.toBase58())
+      return JSON.parse(idlString)
+    } catch (e) {
+      console.warn(
+        `Cannot decode anchor IDL ${idlAddress.toBase58()} for program: ${programAddress.toBase58()}`,
+        e,
+      )
+    }
   }
+
+  // Try new format: Program Metadata program (Anchor 0.31+)
+  const pmpAddress = programMetadataIdlAddress(programAddress)
+  const pmpInfo = await connection.getAccountInfo(pmpAddress)
+  if (pmpInfo !== null && pmpInfo.data.length > 96 && pmpInfo.data[0] === 2) {
+    try {
+      const compression = pmpInfo.data[84] // 0=none, 1=gzip, 2=zlib
+      const dataLength = pmpInfo.data.readUInt32LE(87)
+      let idlData: Buffer | Uint8Array = pmpInfo.data.slice(96, 96 + dataLength)
+      if (compression === 1 || compression === 2) {
+        idlData = inflate(idlData)
+      }
+      const idlString = Buffer.from(idlData).toString('utf-8')
+      console.debug('Anchor IDL found (PMP format):', pmpAddress.toBase58())
+      return JSON.parse(idlString)
+    } catch (e) {
+      console.warn(
+        `Cannot decode PMP IDL ${pmpAddress.toBase58()} for program: ${programAddress.toBase58()}`,
+        e,
+      )
+    }
+  }
+
+  console.warn(
+    `No on-chain IDL found for program: ${programAddress.toBase58()}`,
+  )
+  return null
+}
+
+async function parseOneInstruction(
+  ix: TransactionInstruction,
+  connection: Connection,
+  slot: number,
+): Promise<{ name: string | undefined; data: any }> {
+  const programId = ix.programId.toBase58()
   try {
-    const idlAccount = decodeIdlAccount(accountInfo.data.slice(8)) // chop off discriminator
-    const inflatedIdl = inflate(idlAccount.data)
-    const idlString = utf8.decode(inflatedIdl)
-    console.debug('Anchor IDL found:', idlAddress.toBase58())
-    return JSON.parse(idlString)
+    const anchorIdl = await getAnchorIdl(connection, ix.programId)
+    let repoMap: Map<string, any> | undefined = undefined
+    if (anchorIdl !== null) {
+      repoMap = addIdlToMap(new Map(), programId, anchorIdl, 0)
+    }
+    const localIdl = LOCAL_IDL_REGISTRY.get(programId)
+    if (localIdl) {
+      repoMap = addIdlToMap(repoMap ?? new Map(), programId, localIdl, 0)
+    }
+    const sfmIdlItem = await getProgramIdl(
+      programId,
+      { slotContext: slot },
+      repoMap,
+    )
+    if (sfmIdlItem) {
+      console.log(
+        `ExplorerKit found IDL for: ${programId} [${sfmIdlItem.idlType}]`,
+      )
+      const parser = new SolanaFMParser(sfmIdlItem, programId)
+      const instructionParser = parser.createParser(ParserType.INSTRUCTION)
+      if (instructionParser && checkIfInstructionParser(instructionParser)) {
+        const parsed = instructionParser.parseInstructions(
+          base58.encode(ix.data),
+          ix.keys.map(k => k.pubkey.toBase58()),
+        )
+        if (parsed) {
+          return { name: parsed.name, data: parsed.data }
+        }
+      }
+    }
   } catch (e) {
     console.warn(
-      `Cannot decode anchor IDL ${idlAddress.toBase58()} for program: ${programAddress.toBase58()}`,
+      `Cannot parse instruction of program: ${programId} via SolanaFM parser`,
       e,
     )
-    return null
   }
+  // Fallback: detect Anchor built-in IDL management instructions (not in any IDL)
+  const anchorIdlParsed = tryParseAnchorIdlInstruction(ix)
+  if (anchorIdlParsed) {
+    return anchorIdlParsed
+  }
+  return { name: undefined, data: 'failed to parse' }
+}
+
+// Anchor IDL_IX_TAG: 0x0a69e9a778bcf440 (little-endian)
+const ANCHOR_IDL_IX_TAG = Buffer.from([
+  0x40, 0xf4, 0xbc, 0x78, 0xa7, 0xe9, 0x69, 0x0a,
+])
+const ANCHOR_IDL_VARIANTS = [
+  'IdlCreate',
+  'IdlCreateBuffer',
+  'IdlWrite',
+  'IdlSetBuffer',
+  'IdlSetAuthority',
+  'IdlClose',
+  'IdlResize',
+]
+
+function tryParseAnchorIdlInstruction(
+  ix: TransactionInstruction,
+): { name: string; data: any } | null {
+  if (ix.data.length < 9) return null
+  const tag = Buffer.from(ix.data.slice(0, 8))
+  if (!tag.equals(ANCHOR_IDL_IX_TAG)) return null
+  const variant = ix.data[8]
+  const name = ANCHOR_IDL_VARIANTS[variant] ?? `IdlUnknown(${variant})`
+  const accounts: Record<string, string> = {}
+  ix.keys.forEach((k, i) => {
+    accounts[`account_${i}`] = k.pubkey.toBase58()
+  })
+  return { name, data: accounts }
 }
 
 export async function parseTransactionByExplorerKit(
@@ -714,64 +891,37 @@ export async function parseTransactionByExplorerKit(
 
   for (const ix of context.instructions) {
     ixNumber++
-    // https://github.com/solana-fm/explorer-kit/tree/main#-usage
     const programId = ix.programId.toBase58()
+    const parsed = await parseOneInstruction(ix, context.connection, slot)
 
-    let parsedTx: ParserOutput | null = null
-    try {
-      // when we have anchor IDL from on-chain, let's put it into the SFMIdlItem as the most up-to-date
-      const anchorIdl = await getAnchorIdl(context.connection, ix.programId)
-      let repoMap: Map<string, any> | undefined = undefined
-      if (anchorIdl !== null) {
-        repoMap = addIdlToMap(new Map(), programId, anchorIdl, 0)
-      }
-      // add local IDLs for programs not covered by Explorer Kit's API
-      const localIdl = LOCAL_IDL_REGISTRY.get(programId)
-      if (localIdl) {
-        repoMap = addIdlToMap(repoMap ?? new Map(), programId, localIdl, 0)
-      }
-
-      const sfmIdlItem = await getProgramIdl(
-        programId,
-        { slotContext: slot },
-        repoMap,
-      )
-      // Checks if SFMIdlItem is defined, if not you will not be able to initialize the parser layout
-      if (sfmIdlItem) {
-        console.log(
-          `ExplorerKit found IDL for: ${programId} [${sfmIdlItem.idlType}]`,
+    // Parse inner CPI instructions for this top-level instruction
+    const innerGroup = context.innerInstructions?.find(
+      g => g.index === ixNumber - 1,
+    )
+    let parsedInner: ExplorerKitData[] | undefined = undefined
+    if (innerGroup && innerGroup.instructions.length > 0) {
+      parsedInner = []
+      for (const innerIx of innerGroup.instructions) {
+        const innerParsed = await parseOneInstruction(
+          innerIx,
+          context.connection,
+          slot,
         )
-        const parser = new SolanaFMParser(sfmIdlItem, programId)
-        const instructionParser = parser.createParser(ParserType.INSTRUCTION)
-        if (instructionParser && checkIfInstructionParser(instructionParser)) {
-          // Parse the transaction
-          parsedTx = instructionParser.parseInstructions(
-            base58.encode(ix.data),
-            ix.keys.map(k => k.pubkey.toBase58()),
-          )
-        }
+        parsedInner.push({
+          programId: innerIx.programId.toBase58(),
+          name: innerParsed.name,
+          data: innerParsed.data,
+        })
       }
-    } catch (e) {
-      console.warn(
-        `Cannot parse instruction ${ixNumber} of program: ${programId} via SolanaFM parser`,
-        e,
-      )
     }
-    if (parsedTx !== null) {
-      result.push({
-        programId,
-        ixNumber,
-        name: parsedTx.name,
-        data: parsedTx.data,
-      })
-    } else {
-      result.push({
-        programId,
-        ixNumber,
-        name: undefined,
-        data: 'failed to parse',
-      })
-    }
+
+    result.push({
+      programId,
+      ixNumber,
+      name: parsed.name,
+      data: parsed.data,
+      innerInstructions: parsedInner,
+    })
   }
   return result
 }
