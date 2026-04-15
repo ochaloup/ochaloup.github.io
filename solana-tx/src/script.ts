@@ -34,10 +34,17 @@ import base58 from 'bs58'
 import { inflate } from 'pako'
 import YAML from 'yaml'
 
+import splGovernanceIdl from './idl/gov.json'
+
 import type { InstructionData } from '@solana/spl-governance'
 import type { ParserOutput } from '@solanafm/explorer-kit'
 
 const COMMITMENT = 'confirmed'
+
+// Local IDL registry for programs not covered by Explorer Kit's API
+const LOCAL_IDL_REGISTRY: Map<string, any> = new Map([
+  ['GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw', splGovernanceIdl],
+])
 
 type TransactionType = 'legacy' | 'versioned' | 'from-chain' | 'splgov'
 
@@ -346,7 +353,7 @@ async function parseAndDeserializeTransaction(
       console.error(e)
       console.error(YAML.stringify(parsedData.txData, replacer).trimEnd())
       return doLogError(
-        'Failed to print transaction data. We deserialized but no instruction found.',
+        'Failed to process deserialized transaction data.',
         e.message,
       )
     }
@@ -710,21 +717,26 @@ export async function parseTransactionByExplorerKit(
     // https://github.com/solana-fm/explorer-kit/tree/main#-usage
     const programId = ix.programId.toBase58()
 
-    // when we have anchor IDL from on-chain, let's put it into the SFMIdlItem as the most up-to-date
-    const anchorIdl = await getAnchorIdl(context.connection, ix.programId)
-    let repoMap = undefined
-    if (anchorIdl !== null) {
-      repoMap = addIdlToMap(new Map(), ix.programId.toBase58(), anchorIdl, 0)
-    }
-
-    const sfmIdlItem = await getProgramIdl(
-      programId,
-      { slotContext: slot },
-      repoMap,
-    )
-    // Checks if SFMIdlItem is defined, if not you will not be able to initialize the parser layout
     let parsedTx: ParserOutput | null = null
     try {
+      // when we have anchor IDL from on-chain, let's put it into the SFMIdlItem as the most up-to-date
+      const anchorIdl = await getAnchorIdl(context.connection, ix.programId)
+      let repoMap: Map<string, any> | undefined = undefined
+      if (anchorIdl !== null) {
+        repoMap = addIdlToMap(new Map(), programId, anchorIdl, 0)
+      }
+      // add local IDLs for programs not covered by Explorer Kit's API
+      const localIdl = LOCAL_IDL_REGISTRY.get(programId)
+      if (localIdl) {
+        repoMap = addIdlToMap(repoMap ?? new Map(), programId, localIdl, 0)
+      }
+
+      const sfmIdlItem = await getProgramIdl(
+        programId,
+        { slotContext: slot },
+        repoMap,
+      )
+      // Checks if SFMIdlItem is defined, if not you will not be able to initialize the parser layout
       if (sfmIdlItem) {
         console.log(
           `ExplorerKit found IDL for: ${programId} [${sfmIdlItem.idlType}]`,
@@ -737,7 +749,6 @@ export async function parseTransactionByExplorerKit(
             base58.encode(ix.data),
             ix.keys.map(k => k.pubkey.toBase58()),
           )
-          // console.log(SFMIdlItem.idlSlotVersion, SFMIdlItem.idl)
         }
       }
     } catch (e) {
