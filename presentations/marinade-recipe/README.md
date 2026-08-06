@@ -80,7 +80,8 @@ marinade-recipe/
     deck.md          <- the actual slide content, markdown
     index.html       <- reveal bootstrap, loads deck.md
     theme/
-      marinade-dark.css   <- Marinade brand overlay on the black theme
+      marinade.css        <- Marinade brand overlay on the black theme
+    fonts/                <- self-hosted DM Sans and PT Serif woff2, no network needed
     images/
       marinade-white.svg  <- white hat, use this one on dark slides
       marinade.svg        <- dark hat, invisible on the dark background
@@ -138,26 +139,108 @@ The palette, typography, and voice rules carry over unchanged.
 - **Headings are sentence case.** The reveal black theme uppercases all headings.
   The brand rule is sentence case, so `--r-heading-text-transform` is overridden to `none`.
 - **Numbers use `tabular-nums`.** Brand rule, applied globally.
+- **Canvas is 1920x1080.** Set in `Reveal.initialize`. This is the cookbook's canonical slide
+  size, and it makes the point-based type scale meaningful instead of arbitrary.
+- **The type scale is the cookbook's, converted at 96 DPI.** The guide specifies points on a
+  20 inch slide, so 1pt renders as 1.333px. Body 30pt becomes 40px, H1 72pt becomes 96px.
+  The `--mn-*` variables in the theme carry the conversion, with the point value in a comment.
+- **Margins follow the 12-column grid.** 80px left and right, 82px top and bottom, which is the
+  guide's 0.83in and 0.85in on a 20 x 11.25in slide.
+- **Slides anchor to the top, not the middle.** `center: false`, because the archetypes put the
+  title upper-left and a fixed title baseline stops headings jumping between slides. Sparse
+  slides opt back into vertical centering with `class="vcenter"`.
+- **Light slides are one attribute away.** The theme drives colors through semantic tokens
+  (`--mn-surface`, `--mn-fg`, `--mn-accent`), so a slide flips to the guide's white-dominant
+  look with `class="light"` plus `data-background-color="#FFFFFF"`. This matters because the
+  dark-versus-light question below stays open, and switching should not mean a rewrite.
 
 ### Known deviations from the brand guide (deliberate, worth a sanity check)
 
 1. **Dark is the default background here.** The slide-design skill says white is the dominant
    slide background and dark should be reserved for cover and section breaks. A fully dark deck
-   is a deviation. Every color used is still from the palette. Flagging it because it is the one
-   place this deck knowingly departs from the guide.
+   is a deviation. Every color used is still from the palette. The `light` class exists so this
+   can be reversed cheaply if you want to go guide-faithful.
 2. **Not matching the 16 archetypes exactly.** reveal.js is a different medium. Layouts stay
    close in spirit: one message per slide, low density, generous white space.
 
-### Utility classes available in `theme/marinade-dark.css`
+### Archetypes implemented in `theme/marinade.css`
 
-`.label` (teal category label above a statement), `.metric`, `.metric-label`, `.tag`,
-`.accent` (PT Serif italic), `.note`, `.highlight`, `.card`, `.columns`, `.columns-3`,
-`.step-num`, `.watermark`, `.text-sm`, `.text-xs`.
+Each maps to a numbered archetype in the slide-design skill.
+
+| Class | Archetype | Notes |
+|---|---|---|
+| `cover` | 1, title / cover | Background image, hat watermark at 12% opacity, logo row |
+| `statement` | 4, statement / quote | Centered, pairs with `label` and `vcenter` |
+| `grid-3` | 2 and 10, point grids | Equal-height cards |
+| `columns`, `columns-3` | 3, multi-column feature | Plain CSS grid |
+| `steps` | 8, four-step process | Numbered circles on a connector line |
+| `timeline` | 11, timeline / roadmap | Alternating brand-teal and light-teal dots |
+| `flow` | 15, flow diagram | Nodes with CSS arrows between them |
+| `bar-chart` | 9, bar chart | Light-teal fills, chart-teal labels, no gridlines |
+| table + `mn-col` | 16, comparison table | Teal tint on the Marinade column |
+| `metrics`, `metric`, `metric-label` | 6, three-metric | Teal numbers, muted labels |
+
+Inline helpers: `label`, `tag`, `accent` (PT Serif italic), `note`, `highlight`, `step-num`,
+`watermark`, `logo-row`, `icon`, `yes`, `no`, `text-sm`, `text-xs`.
+Slide modifiers: `light`, `vcenter`, `center-text`, `compact`, `dense`.
+
+### Two reveal.js quirks the theme has to work around
+
+Both cost time to find, so they are written down rather than rediscovered.
+
+1. **reveal sets `display` as an inline style via JS.** No stylesheet rule can beat that, so
+   `.vcenter` needs `display: flex !important`. Verified this does not leak hidden slides:
+   reveal hides past and future slides with `opacity: 0`, so forcing display stays safe.
+2. **Sections default to `box-sizing: content-box`.** Slide padding is added on top of the
+   1080px canvas height, which pushes content off the bottom and puts absolutely positioned
+   elements like the watermark outside the visible area. The theme sets `border-box`.
+
+### Verified
+
+Rendered headless at 1600x900 and screenshotted. All 20 slides build, cards sit at equal
+height, and the only network 404 is `favicon.ico`.
+
+Then re-run with every non-localhost request aborted, simulating dead conference wifi:
+zero external requests, only the local woff2 files fetched, DM Sans 400 / 600 / italic all
+loaded, and the cover pixel-identical to the online run.
+
+### Fonts are self-hosted
+
+The deck needs no network. `slides/fonts/` holds six woff2 files, about 196 kB total,
+declared as `@font-face` at the top of `theme/marinade.css`.
+
+| File | Covers |
+|---|---|
+| `dm-sans-latin.woff2` | DM Sans 400 and 600, latin |
+| `dm-sans-latin-ext.woff2` | DM Sans 400 and 600, latin-ext (Czech and Serbian Latin diacritics) |
+| `dm-sans-italic-latin.woff2` | DM Sans italic 400, latin |
+| `dm-sans-italic-latin-ext.woff2` | DM Sans italic 400, latin-ext |
+| `pt-serif-italic-latin.woff2` | PT Serif italic 400, latin |
+| `pt-serif-italic-latin-ext.woff2` | PT Serif italic 400, latin-ext |
+
+Notes:
+
+- DM Sans is a **variable** font, so 400 and 600 share one file per subset. Verified the weight
+  axis actually works rather than the browser faking bold: at 96px the same string measures
+  918.7px at weight 400 and 974.5px at weight 600.
+- `unicode-range` is preserved from the Google Fonts response, so latin-ext only downloads when
+  a diacritic appears. Verified `Ondřej Đorđević žluťoučký Čačak` renders correctly in DM Sans.
+- `font-display: block` rather than `swap`. On a projector a brief blank beats a visible
+  font swap mid-sentence.
+- **DM Sans has no Cyrillic subset.** Google does not publish one. Any Cyrillic on a slide,
+  say a Belgrade greeting, falls back to a system font. Set that text in PT Serif or use an
+  image if it needs to look right.
+
+To refresh the files, request the css2 URL with a browser User-Agent and pull the woff2 links
+out of the response:
+
+```sh
+curl -A "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/140.0.0.0" \
+  "https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;1,9..40,400&family=PT+Serif:ital@1&display=swap"
+```
 
 ### Open styling TODOs
 
-- [ ] **Self-host DM Sans and PT Serif.** The theme currently pulls them from Google Fonts.
-      Conference wifi is unreliable. Download the woff2 files into `slides/fonts/` before the talk.
 - [ ] Get the full Marinade wordmark. What we have is only the hat icon:
       `images/marinade.svg` (dark `#151A1A`), `images/marinade-white.svg` (white, generated
       by recoloring the dark one), and `images/marinade.png` (white hat, raster). The brand
@@ -437,6 +520,10 @@ Ordered by how much they block the next step.
 6. **Talk slot?** Day 1 or day 2, and which track, affects how much Solana context to assume.
 7. **Do we mention Marinade Borrow and USDC Vault?** They are the current platform positioning
    but they are not staking infrastructure. Probably one sentence in the framing, nothing more.
+8. **Dark deck or guide-faithful white?** The cookbook wants white-dominant with dark reserved
+   for covers and section breaks. The deck is currently dark throughout. The theme supports
+   both, so this is a per-slide decision rather than a rebuild. One middle option: keep dark
+   for cover, section breaks, and statements, and flip the content slides to `light`.
 
 ## Decision log
 
@@ -445,7 +532,16 @@ Ordered by how much they block the next step.
 - 2026-08-06 — Dark deck kept, recolored to Marinade brand tokens in `theme/marinade-dark.css`.
 - 2026-08-06 — Event confirmed: Solana Summit Serbia, Sava Centar Belgrade, 26–27 August 2026.
 - 2026-08-06 — Title flagged for change. "Recipes" collides with a live Marinade product and
-  the food metaphor is retired brand vocabulary. Not yet decided.
+  the food metaphor is retired brand vocabulary. Abstract already went to the organizers,
+  so a rename means asking them. Parked until the content is written, then revisit.
+  `deck.md` carries *Staking is the easy part* as a placeholder.
+- 2026-08-06 — Theme rebuilt against the cookbook: 1920x1080 canvas, point-based type scale,
+  12-column margins, archetype classes, semantic tokens so `light` slides are one attribute
+  away. `marinade-dark.css` renamed to `marinade.css` since it now drives both surfaces.
+- 2026-08-06 — `deck.md` filled with the 20-slide skeleton from the outline. Content is
+  placeholder, marked `[TODO]`, structure and styling are real.
+- 2026-08-06 — Fonts self-hosted into `slides/fonts/`. The Google Fonts `@import` is gone and
+  the deck runs with no network at all.
 
 ## Conversation notes
 

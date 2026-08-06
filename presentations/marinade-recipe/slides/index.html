@@ -7,12 +7,12 @@
 			content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
 		/>
 
-		<title>The Marinade Recipe</title>
+		<title>Marinade staking infrastructure</title>
 
 		<link rel="stylesheet" href="dist/reset.css" />
 		<link rel="stylesheet" href="dist/reveal.css" />
 		<link rel="stylesheet" href="dist/theme/black.css" />
-		<link rel="stylesheet" href="theme/marinade-dark.css" />
+		<link rel="stylesheet" href="theme/marinade.css" />
 
 		<!-- Theme used for syntax highlighted code -->
 		<link rel="stylesheet" href="dist/plugin/highlight/monokai.css" />
@@ -36,6 +36,12 @@
 		<script src="dist/plugin/highlight.js"></script>
 		<script>
 			Reveal.initialize({
+				// Canonical Marinade slide size, keeps the cookbook's pt scale honest.
+				width: 1920,
+				height: 1080,
+				margin: 0.04,
+				// Archetypes anchor the title upper-left, so no vertical centering by default.
+				center: false,
 				hash: true,
 				slideNumber: "c/t",
 				transition: "fade",
