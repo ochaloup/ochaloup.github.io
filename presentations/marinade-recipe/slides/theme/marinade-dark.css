@@ -1,0 +1,201 @@
+/*
+ * Marinade dark theme for reveal.js 6.x
+ * Overlay on top of dist/theme/black.css. Load it AFTER the base theme.
+ * Palette and type rules from marinade-finance/internal-docs .claude/skills/marinade-brand.
+ */
+
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;1,9..40,400&family=PT+Serif:ital@1&display=swap");
+
+:root {
+	--mn-dark: #151a1a;
+	--mn-white: #ffffff;
+	--mn-deep-teal: #194544;
+	--mn-brand-teal: #308d8a;
+	--mn-medium-teal: #2b8784;
+	--mn-muted-teal: #447579;
+	--mn-light-teal: #94c9c8;
+	--mn-soft-teal: #59a9a7;
+	--mn-body-secondary: #323a38;
+	--mn-muted-text: #7f7f7f;
+	--mn-chart-teal: #82b7b7;
+	--mn-near-white: #f3f3f3;
+	--mn-dark-card: #232329;
+	--mn-highlight: #fef29d;
+
+	--mn-cat-teal: #308d8a;
+	--mn-cat-indigo: #818cf8;
+	--mn-cat-coral: #cf7b63;
+	--mn-cat-lavender: #a794d4;
+	--mn-cat-rose: #d4789b;
+
+	--r-background-color: #151a1a;
+	--r-main-font: "DM Sans", Helvetica, sans-serif;
+	--r-main-color: #f3f3f3;
+	--r-heading-font: "DM Sans", Helvetica, sans-serif;
+	--r-heading-color: #ffffff;
+	--r-heading-text-transform: none;
+	--r-heading-font-weight: 600;
+	--r-heading-line-height: 1.15;
+	--r-heading1-size: 2.2em;
+	--r-heading2-size: 1.5em;
+	--r-heading3-size: 1.2em;
+	--r-link-color: #94c9c8;
+	--r-link-color-dark: #59a9a7;
+	--r-link-color-hover: #ffffff;
+	--r-selection-background-color: #308d8a;
+	--r-selection-color: #ffffff;
+	--r-code-font: "Geist Mono", "JetBrains Mono", monospace;
+}
+
+.reveal {
+	-webkit-font-smoothing: antialiased;
+	font-variant-numeric: tabular-nums;
+}
+
+.reveal p,
+.reveal li {
+	line-height: 1.45;
+}
+
+.reveal section > h2::after {
+	content: "";
+	display: block;
+	width: 2.2em;
+	height: 3px;
+	margin: 0.35em auto 0;
+	background: var(--mn-brand-teal);
+}
+
+/* Category label above a statement. Brand pattern: label frames the takeaway. */
+.reveal .label {
+	display: block;
+	font-size: 0.5em;
+	font-weight: 600;
+	color: var(--mn-brand-teal);
+	margin-bottom: 0.4em;
+}
+
+.reveal .metric {
+	font-size: 2.4em;
+	font-weight: 600;
+	color: var(--mn-light-teal);
+	line-height: 1;
+}
+
+.reveal .metric-label {
+	font-size: 0.55em;
+	color: var(--mn-muted-text);
+}
+
+.reveal .accent {
+	font-family: "PT Serif", serif;
+	font-style: italic;
+	font-weight: 400;
+}
+
+.reveal .note {
+	font-size: 0.55em;
+	color: var(--mn-muted-text);
+}
+
+.reveal .highlight {
+	color: var(--mn-highlight);
+}
+
+.reveal .tag {
+	display: inline-block;
+	padding: 0.15em 0.6em;
+	border-radius: 4px;
+	font-size: 0.5em;
+	font-weight: 600;
+	background: rgba(48, 141, 138, 0.18);
+	border: 1px solid rgba(48, 141, 138, 0.45);
+	color: var(--mn-light-teal);
+}
+
+.reveal .columns,
+.reveal .columns-3 {
+	display: grid;
+	gap: 0.8em;
+	text-align: left;
+}
+
+.reveal .columns {
+	grid-template-columns: 1fr 1fr;
+}
+
+.reveal .columns-3 {
+	grid-template-columns: repeat(3, 1fr);
+}
+
+.reveal .card {
+	padding: 0.6em 0.7em;
+	border-radius: 8px;
+	background: rgba(255, 255, 255, 0.04);
+	border: 1px solid rgba(48, 141, 138, 0.3);
+	overflow: hidden;
+	word-break: break-word;
+	overflow-wrap: anywhere;
+}
+
+.reveal .card h3 {
+	color: var(--mn-light-teal);
+	margin-bottom: 0.25em;
+}
+
+.reveal .step-num {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 1.6em;
+	height: 1.6em;
+	border-radius: 50%;
+	font-size: 0.6em;
+	font-weight: 600;
+	background: var(--mn-brand-teal);
+	color: var(--mn-white);
+}
+
+.reveal table {
+	font-variant-numeric: tabular-nums;
+}
+
+.reveal table th {
+	color: var(--mn-light-teal);
+	border-bottom: 2px solid var(--mn-brand-teal);
+}
+
+.reveal table td {
+	border-bottom: 1px solid rgba(48, 141, 138, 0.15);
+}
+
+.reveal pre {
+	box-shadow: none;
+	border: 1px solid rgba(48, 141, 138, 0.25);
+	border-radius: 8px;
+}
+
+.reveal .progress {
+	color: var(--mn-brand-teal);
+}
+
+.reveal .controls {
+	color: var(--mn-muted-teal);
+}
+
+/* Hat watermark on cover slides, brand asks for 10-15% opacity. */
+.reveal .watermark {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 12%;
+	opacity: 0.12;
+}
+
+.reveal .text-sm {
+	font-size: 0.7em;
+}
+
+.reveal .text-xs {
+	font-size: 0.55em;
+}
