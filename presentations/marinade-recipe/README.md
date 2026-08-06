@@ -178,14 +178,41 @@ Two independent conflicts with the working title.
    "recipes", "kitchen", "chefs", "cooking up", "secret sauce" as narrative framing.
    Marinade is moving from DeFi-charm to fintech-clarity.
 
-**Recommendation:** change the title. Candidates:
+**First check whether renaming is even possible.** The original doc marked the title
+_(locked in)_. If the abstract is already on solanasummit.rs or in the printed program,
+the program line is fixed and the rest of this section applies to the deck only.
 
-| Title | Note |
+**Recommended, if the title is still open:**
+
+> # Staking is the easy part
+> ### Everything that happens after you click stake
+
+Why this one:
+
+- It states the thesis of the talk instead of labelling the topic. The whole deck argues
+  that the stake instruction is trivial and the interesting engineering is everything around it.
+- It works on both halves of a mixed room. A regulator understands it. A Rust developer
+  hears a promise of depth.
+- No product-name collision, no retired metaphor, sentence case, no superlatives.
+- It survives being read out loud, and it gives the closing slide something to pay off.
+
+Marinade is not in the title. Conference programs list speaker affiliation, so it shows up
+anyway. If it must be explicit, swap the subtitle for *Inside Marinade's staking stack*.
+
+**Fallbacks, in order:**
+
+| Title | When to prefer it |
 |---|---|
-| *What it takes to stake 10M SOL* | Concrete, number-first, matches brand voice |
-| *Inside Marinade: the stack behind Solana staking* | Plain, descriptive, low risk |
-| *One SOL, end to end* | Matches the narrative structure proposed below |
-| *Staking is the easy part* | Hook-shaped, sets up the infrastructure reveal |
+| *Inside Marinade: the stack behind Solana staking* | If a plain, zero-risk, descriptive line is wanted |
+| *One SOL, end to end* | If the deck locks to the follow-one-SOL narrative and the program shows a description under the title |
+
+**Rejected:**
+
+- *What it takes to stake N million SOL.* Brand loves a number-first line, but a number in a
+  title has to be current on the day, needs a public source, and dates the deck the moment it
+  is reused. Keep numbers on slides where they can be updated.
+- *Where does your stake actually go?* Good question, wrong venue. At a summit with other
+  staking providers in the room, "actually" reads as a dig.
 
 Decision still open. See "Open questions".
 
