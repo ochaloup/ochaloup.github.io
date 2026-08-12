@@ -149,6 +149,23 @@ The palette, typography, and voice rules carry over unchanged.
 - **Slides anchor to the top, not the middle.** `center: false`, because the archetypes put the
   title upper-left and a fixed title baseline stops headings jumping between slides. Sparse
   slides opt back into vertical centering with `class="vcenter"`.
+- **The deck has a visual motif: the journey rail.** A five-stage rail, Stake, Auction, Bond,
+  Settle, Exit, sits at the bottom of every content slide with the current stage lit. A slide
+  opts in with `data-stage="auction"`, or `data-stage="all"` for the infrastructure section,
+  which lights the whole rail. The stage list lives in `index.html`, not the theme. This does
+  three jobs at once: it fills the dead bottom third that top-anchored slides used to leave,
+  it gives the deck a signature that is not just "dark reveal.js", and it keeps the
+  follow-one-SOL structure visible to the audience the whole way through.
+- **Backgrounds are a gradient, not a flat fill.** `.reveal-viewport` carries two radial
+  gradients interpolated between `dark-primary` and `deep-teal`. Flat `#151A1A` over 20 slides
+  read as monotone.
+- **Content is optically centred.** `index.html` wraps everything below the heading in
+  `.slide-body` at ready time, so the heading baseline still does not move between slides but
+  the content no longer clings to the top with a void underneath.
+- **The slide counter is gone.** `slideNumber: false`. The progress bar already carries
+  position, and a counter on a conference slide invites the audience to count what is left.
+- **Canvas margin is zero.** `margin: 0.04` drew a visible band around every full-bleed
+  background. The theme's own 80px grid margin is the breathing room.
 - **Light slides are one attribute away.** The theme drives colors through semantic tokens
   (`--mn-surface`, `--mn-fg`, `--mn-accent`), so a slide flips to the guide's white-dominant
   look with `class="light"` plus `data-background-color="#FFFFFF"`. This matters because the
@@ -181,8 +198,9 @@ Each maps to a numbered archetype in the slide-design skill.
 | `metrics`, `metric`, `metric-label` | 6, three-metric | Teal numbers, muted labels |
 
 Inline helpers: `label`, `tag`, `accent` (PT Serif italic), `note`, `highlight`, `step-num`,
-`watermark`, `logo-row`, `icon`, `yes`, `no`, `text-sm`, `text-xs`.
-Slide modifiers: `light`, `vcenter`, `center-text`, `compact`, `dense`.
+`watermark`, `logo-row`, `lockup`, `icon`, `yes`, `no`, `text-sm`, `text-xs`.
+Slide modifiers: `light`, `art`, `vcenter`, `center-text`, `compact`, `dense`.
+Injected at runtime: `journey`, `slide-body`.
 
 ### Two reveal.js quirks the theme has to work around
 
@@ -239,15 +257,41 @@ curl -A "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/140.0.0.0" \
   "https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;1,9..40,400&family=PT+Serif:ital@1&display=swap"
 ```
 
+### Brand artwork
+
+`marinade.finance` runs short looping videos as section heroes. Their poster frames are
+painterly illustrations, 720x720, and four of them are now in `slides/images/brand-art/`:
+
+| File | Subject | Used on |
+|---|---|---|
+| `p-liquidity.jpg` | Grand kitchen, copper pots, a mountain of gold coins | Cover |
+| `p-rewards.jpg` | Chef writing at a table covered in coins | "Where does the stake go?" |
+| `p-security.jpg` | Vault door in a seawall, gold spilling into the water | "What if the validator misbehaves?" |
+| `p-manage.jpg` | Chef at a desk in a huge pantry | Infrastructure section, closing slide |
+
+The treatment is copied from the site's own OpenGraph card: painting full-bleed, a teal scrim
+over it, white DM Sans heading, one PT Serif italic word. Add `class="art"` plus
+`data-background-image` and the theme does the rest.
+
+**Worth knowing: the metaphor ban is on words, not pictures.** `marinade-brand` retires
+"recipes", "kitchen", "chefs", "cooking up". The live marketing site's hero art is literally
+chefs in kitchens. So the deck can carry the warmth of the metaphor visually while the copy
+stays in the fintech-clarity register. This does not reopen the title question, the product
+collision with Marinade Recipes is a separate problem.
+
+Two caveats. The source art is 720x720, so a 16:9 full-bleed crop upscales about 1.5x. It
+holds up because the images are painterly and sit under a heavy scrim, but do not use them
+as a sharp foreground image. And the videos exist too, `-transcode.mp4`, about 1.7 MB and
+5 seconds each, if a moving section break is ever wanted.
+
 ### Open styling TODOs
 
-- [ ] Get the full Marinade wordmark. What we have is only the hat icon:
-      `images/marinade.svg` (dark `#151A1A`), `images/marinade-white.svg` (white, generated
-      by recoloring the dark one), and `images/marinade.png` (white hat, raster). The brand
-      guide also expects a wordmark and an icon+text lockup for cover slides. Only the three
-      background PNGs are bundled in the internal-docs skill, so the rest needs sourcing.
-      Use `marinade-white.svg` on the dark slides, the dark one would be invisible.
+- [x] Marinade wordmark. No vector lockup ships on the CDN or in `internal-docs`, so the
+      `lockup` class rebuilds it the way the OpenGraph card does: `marinade-white.svg` plus
+      the word set in DM Sans 600. Vector-crisp at any size, no asset to source.
 - [ ] Decide on a Solana Summit / Superteam Balkan logo on the cover slide.
+- [ ] "Getting out" and "What I would take away" section breaks have no artwork. Either find
+      two more paintings or leave them on the plain teal glow for rhythm.
 
 ## Naming: "Recipe" is a problem
 
@@ -301,15 +345,114 @@ Decision still open. See "Open questions".
 
 ## Content
 
-### Thesis (draft)
+### Deck plan as of 2026-08-12 (current, supersedes "follow one SOL" below)
 
-> Staking one SOL is a single click. Keeping that click honest, optimized, and reversible
-> takes on-chain programs, an auction, a data pipeline, and a fleet of services running every epoch.
+Structure changed from a single narrative thread to a **product tour**. Captured verbatim in
+intent from the planning session. This is the working outline now.
 
-The one sentence to leave behind: **the interesting engineering in staking is not the stake
-instruction, it is everything that decides where the stake goes and proves it stayed honest.**
+**Overall tone**
 
-### Recommended structure: follow one SOL
+- Playful. Memes and joke pictures are wanted, not just diagrams.
+- Technical over promotional. Even the company slide should read as engineering, not branding.
+- Every product section leads with **why**, then how or what. Never the reverse.
+
+**Slide 1, cover**
+
+- Keep a background image. The reference is the marinade.finance hero: painting behind, heavily
+  faded, text on top. Screenshot saved at `resources/marinade-finance-hero.png`.
+- Title stays as submitted. It breaks the brand rules, it went to the organizers, it is not
+  changing. Stop revisiting it.
+- **Remove the conference name from the cover.** No "Solana Summit Serbia".
+
+**Slide 2, agenda**
+
+- What the audience can expect, expressed as products, not as chapter numbers.
+- Layout: product name, then its one-line shout-out on the next line beside it, then the next
+  product indented a step further. A descending staircase.
+- Products to cover: Liquid Staking, Native Staking, Instant Unstake.
+- Shout-outs should be punchy, sourced from marinade.finance or the docs. A degen note is
+  welcome if the source material supports one.
+- Open: is the three-product list complete? See the product research below.
+
+**Slide 3, who talks to you**
+
+- Framing is "who talks to you", not "who am I", if the phrasing fits the design.
+- Layout reference: `athensdao2025-realms/slides/index.html#/2`.
+- The helmet image is mine and I want to keep using it.
+- Points to make, each with a project icon on the line:
+  - Backend developer. This is the one to highlight.
+  - Formerly a Java engineer at Red Hat. Use the Fedora logo from
+    https://www.redhat.com/en/about/brand/standards/logo
+  - Interested in distributed systems. Needs rewording, shorter and punchier.
+  - Contributor to Realms, worked on it extensively about two years ago.
+- A fourth point would balance the slide. No idea what it should be. Suggestions welcome.
+
+**Slide 4, about Marinade**
+
+- Technical perspective, not a branding slide, even though it is short.
+- We run the infrastructure that manages staking. Home of staking on Solana.
+- What we are actually good for: best yield for stakers, because we understand Solana, we
+  operate inside the ecosystem, and we sit between validators who want stake and stakers who
+  want yield.
+- We assess validator behaviour continuously, finding the honest ones with the best
+  performance, and we keep doing it for as long as Solana runs.
+- On top of that we ship several products around staking.
+- Small aside, not a selling point: we supply validator data to the Foundation, somehow tied to
+  `delegation-strategy-2`. Confirm what the program is actually called before saying it aloud.
+
+**Slide 5, section break: "A PRODUCT"**
+
+- Big separator slide with a background image, same treatment as the other art slides.
+
+**Liquid Staking**
+
+- Everyone knows what it is, so do not over-explain the concept.
+- Marinade was the first, built as a joint effort by two hackathon teams.
+- mSOL is the liquid token. One sentence on what being a liquid staking token means.
+- Then the interesting part: how the Marinade program differs technically from the standard
+  SPL stake pool. Compare `liquid-staking-program` against `stake-pool`, and work out what
+  `single-pool` even is.
+- Two development war stories, framed as use cases, problem then why then fix:
+  1. **Delinquent stake.** Caused by later Solana changes. The program has its own state
+     machine that outside processing must not be able to break, which is how security is
+     preserved. Delinquency did not exist when Solana launched, so when it appeared it broke an
+     assumption. Result: some SOL could not be unstaked. Explain what broke, why, and the
+     two-part fix.
+  2. **Canonical stake processing.** Marinade is big, and creating many stake accounts is
+     unkind to Solana and has a real impact on validators. We want fewer accounts, but
+     delegation mechanics and Solana's processing make that hard. Explain what the canonical
+     stake change buys.
+- Wanted: articles or blog posts on stake account counts and their performance impact, as
+  source material to speak from.
+
+**Native Staking**
+
+- Lead with why. Native staking exists because some people are afraid of on-chain program code,
+  and because plenty of stakers want yield without touching web3 finance or holding mSOL.
+- The consequence is an off-chain backend, which is the interesting engineering.
+- The core problem: make it work for both sides. That is the auction.
+- Because we are not on-chain we had to build something that still feels "kind of"
+  permissionless. That is a contradiction, we do operate it, but the feeling matters and is
+  worth naming honestly on the slide.
+- Some auction detail, reusing `marinade-auction-presentation/slides/index.html#/4`.
+- Then Select and Recipes: working with a different collateral and being repaid in it.
+- We are moving further into web3 financial strategies to give yield more ways to work.
+  I do not know this area well and want a summary of `~/marinade/marinade-web` to learn from.
+
+**Instant Unstake**
+
+- The product I know least, which is exactly why it is worth talking about. There is another
+  auction in there.
+- Research start point `~/marinade/unstake-taker-client`, then marinade-web, the docs, and the
+  Marinade GitHub org.
+- Want a suggested why plus the technical hooks, then we discuss.
+
+**Closing**
+
+- Keep the "Solana to the moon" slide from
+  `marinade-auction-presentation/slides/index.html#/19`. The font needs fixing.
+
+### Recommended structure: follow one SOL (superseded 2026-08-12, kept for its material)
 
 Single narrative thread. A user stakes 1 SOL, and we follow it through every layer.
 This beats a layered "here are our programs, here are our services" tour, because the mixed
@@ -542,6 +685,14 @@ Ordered by how much they block the next step.
   placeholder, marked `[TODO]`, structure and styling are real.
 - 2026-08-06 — Fonts self-hosted into `slides/fonts/`. The Google Fonts `@import` is gone and
   the deck runs with no network at all.
+- 2026-08-12 — Design pass. The deck was diagnosed as flat: every content slide left its
+  bottom half empty, all 20 slides shared one background, cards at 4% white would have
+  disappeared on a projector, and nothing on a content slide identified the talk. Fixes: the
+  journey rail, gradient backgrounds, `.slide-body` centring, card contrast raised to teal
+  at 10% fill and 45% border, slide counter removed, canvas margin zeroed.
+- 2026-08-12 — Brand artwork sourced from marinade.finance video posters. Cover, closing, and
+  three section breaks now carry painterly illustrations under a teal scrim. Verified all 20
+  slides render with no overflow and no console errors.
 
 ## Conversation notes
 

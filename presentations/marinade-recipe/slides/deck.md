@@ -1,13 +1,12 @@
-<!-- .slide: data-background="images/brand-backgrounds/deep-teal-solid.png" class="cover vcenter" -->
+<!-- .slide: data-background-image="images/brand-art/p-liquidity.jpg" class="cover art vcenter" -->
 
-<img class="watermark" src="images/marinade-white.svg" alt="">
+<span class="lockup"><img src="images/marinade-white.svg" alt="">Marinade</span>
 
 # Staking is the easy part
 
-## Everything that happens after you click stake
+## Everything that happens <span class="accent">after</span> you click stake
 
 <div class="logo-row">
-<img src="images/marinade-white.svg" alt="Marinade">
 <img src="images/solana-logo.svg" alt="Solana">
 </div>
 
@@ -61,9 +60,11 @@ This is the thesis. Everything after this slide defends it.
 
 ---
 
+<!-- .slide: data-stage="stake" -->
+
 ## What one click actually starts
 
-<div class="flow" style="margin-top:72px">
+<div class="flow">
 <div>Wallet</div>
 <div>Transaction API</div>
 <div>Stake account</div>
@@ -77,9 +78,11 @@ Keep it at four boxes. The detail arrives later, this is the map.
 
 ---
 
+<!-- .slide: data-stage="stake" -->
+
 ## Two shapes of staking
 
-<div class="columns" style="margin-top:56px">
+<div class="columns">
 <div class="card">
 <h3>Marinade Native</h3>
 <p>Self-custodial. The stake account stays in the user's wallet. Marinade only decides delegation.</p>
@@ -90,14 +93,14 @@ Keep it at four boxes. The detail arrives later, this is the map.
 </div>
 </div>
 
-<p class="note" style="margin-top:48px">Different custody, same delegation brain underneath.</p>
+<p class="note">Different custody, same delegation brain underneath.</p>
 
 Note:
 The last line is the transition into SAM.
 
 ---
 
-<!-- .slide: class="vcenter statement" -->
+<!-- .slide: class="vcenter statement art" data-stage="auction" data-background-image="images/brand-art/p-rewards.jpg" -->
 
 <span class="label">Section</span>
 
@@ -105,9 +108,11 @@ The last line is the transition into SAM.
 
 ---
 
+<!-- .slide: data-stage="auction" -->
+
 ## Stake Auction Marketplace
 
-<div class="steps" style="margin-top:64px">
+<div class="steps">
 <div><div class="step-num">1</div><h3>Bid</h3>Validators commit to a share of rewards.</div>
 <div><div class="step-num">2</div><h3>Clear</h3>The auction runs once per epoch.</div>
 <div><div class="step-num">3</div><h3>Delegate</h3>Stake moves to the winners.</div>
@@ -119,6 +124,8 @@ Expand the acronym out loud on first use. Stake Auction Marketplace, SAM from he
 
 ---
 
+<!-- .slide: data-stage="auction" -->
+
 ## Last price, not your price
 
 <span class="note">[TODO] Deep dive 1. One diagram. Reuse the auction slides from the
@@ -129,7 +136,7 @@ Chosen deep dive. Budget three to four minutes. Watch the non-technical half of 
 
 ---
 
-<!-- .slide: class="vcenter statement" -->
+<!-- .slide: class="vcenter statement art" data-stage="bond" data-background-image="images/brand-art/p-security.jpg" -->
 
 <span class="label">Section</span>
 
@@ -137,9 +144,11 @@ Chosen deep dive. Budget three to four minutes. Watch the non-technical half of 
 
 ---
 
+<!-- .slide: data-stage="bond" -->
+
 ## The bond makes the promise real
 
-<div class="columns" style="margin-top:56px">
+<div class="columns">
 <div class="card">
 <h3>Validator Bonds</h3>
 <p>On-chain escrow. Collateral you can read from an account, not a promise in a term sheet.</p>
@@ -155,6 +164,8 @@ Expand PSR on first use. This is the accountability half of the story.
 
 ---
 
+<!-- .slide: data-stage="settle" -->
+
 ## One epoch, one settlement
 
 <span class="note">[TODO] Deep dive 2. Merkle trees, generated per epoch, claimed on-chain.
@@ -165,7 +176,7 @@ Chosen deep dive. This is where the off-chain half of the stack first becomes vi
 
 ---
 
-<!-- .slide: class="vcenter statement" -->
+<!-- .slide: class="vcenter statement" data-stage="exit" -->
 
 <span class="label">Section</span>
 
@@ -173,23 +184,25 @@ Chosen deep dive. This is where the off-chain half of the stack first becomes vi
 
 ---
 
+<!-- .slide: data-stage="exit" -->
+
 ## Instant Unstake
 
-<div class="flow" style="margin-top:72px">
+<div class="flow">
 <div>User requests exit</div>
 <div>RFQ auction</div>
 <div>Liquidity provider takes the stake</div>
 <div>SOL back in the wallet</div>
 </div>
 
-<p class="note" style="margin-top:48px">A second auction, and no conversion to a liquid token.</p>
+<p class="note">A second auction, and no conversion to a liquid token.</p>
 
 Note:
 Nice symmetry with SAM. Keep it short, the audience already understands auctions by now.
 
 ---
 
-<!-- .slide: class="vcenter statement" -->
+<!-- .slide: class="vcenter statement art" data-stage="all" data-background-image="images/brand-art/p-manage.jpg" -->
 
 <span class="label">Section</span>
 
@@ -197,9 +210,11 @@ Nice symmetry with SAM. Keep it short, the audience already understands auctions
 
 ---
 
+<!-- .slide: data-stage="all" -->
+
 ## The epoch is the heartbeat
 
-<div class="timeline" style="margin-top:64px">
+<div class="timeline">
 <div><span class="when">Epoch start</span>[TODO]</div>
 <div><span class="when">Mid epoch</span>[TODO]</div>
 <div><span class="when">Epoch end</span>[TODO]</div>
@@ -213,7 +228,7 @@ This is the differentiating slide. Almost no staking talk shows the cadence.
 
 ---
 
-<!-- .slide: class="compact" -->
+<!-- .slide: class="compact" data-stage="all" -->
 
 ## What runs between the clicks
 
@@ -235,7 +250,7 @@ Resist listing everything. Three or four categories, not a catalogue.
 
 ## Three things that transfer
 
-<div class="grid-3" style="margin-top:56px">
+<div class="grid-3">
 <div class="card">
 <h3>Decide off-chain, enforce on-chain</h3>
 <p>An auction over hundreds of validators does not belong in a program. The proof of it does.</p>
@@ -252,9 +267,9 @@ Resist listing everything. Three or four categories, not a catalogue.
 
 ---
 
-<!-- .slide: data-background="images/brand-backgrounds/deep-teal-solid.png" class="cover vcenter" -->
+<!-- .slide: data-background-image="images/brand-art/p-manage.jpg" class="cover art vcenter" -->
 
-<img class="watermark" src="images/marinade-white.svg" alt="">
+<span class="lockup"><img src="images/marinade-white.svg" alt="">Marinade</span>
 
 # Thank you
 

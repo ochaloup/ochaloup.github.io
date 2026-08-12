@@ -39,13 +39,57 @@
 				// Canonical Marinade slide size, keeps the cookbook's pt scale honest.
 				width: 1920,
 				height: 1080,
-				margin: 0.04,
+				// Zero, because the theme's own 80px grid margin is the breathing room.
+				// Any canvas margin shows as a band around full-bleed backgrounds.
+				margin: 0,
 				// Archetypes anchor the title upper-left, so no vertical centering by default.
 				center: false,
 				hash: true,
-				slideNumber: "c/t",
+				slideNumber: false,
 				transition: "fade",
 				plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
+			});
+
+			// The SOL's journey. A slide opts in with data-stage="auction", or "all".
+			const STAGES = ["Stake", "Auction", "Bond", "Settle", "Exit"];
+
+			function addJourney(section) {
+				const stage = section.dataset.stage;
+				if (!stage) return;
+				const current = STAGES.findIndex((s) => s.toLowerCase() === stage.toLowerCase());
+				if (current < 0 && stage !== "all") return;
+
+				const rail = document.createElement("nav");
+				rail.className = stage === "all" ? "journey all" : "journey";
+				rail.setAttribute("aria-hidden", "true");
+				for (const [i, name] of STAGES.entries()) {
+					const node = document.createElement("span");
+					node.className = `j ${i < current ? "past" : i === current ? "now" : "next"}`;
+					node.textContent = name;
+					rail.append(node);
+				}
+				section.prepend(rail);
+				section.classList.add("has-journey");
+			}
+
+			// Heading stays pinned top, everything under it becomes one centreable block.
+			function wrapBody(section) {
+				if (section.matches(".vcenter, .cover")) return;
+				const body = [...section.children].filter(
+					(el) => !el.matches("aside.notes, .journey, h1, h2, .label, .watermark"),
+				);
+				if (!body.length) return;
+				const wrapper = document.createElement("div");
+				wrapper.className = "slide-body";
+				section.insertBefore(wrapper, body[0]);
+				wrapper.append(...body);
+			}
+
+			Reveal.on("ready", () => {
+				for (const section of document.querySelectorAll(".reveal .slides section")) {
+					wrapBody(section);
+					addJourney(section);
+				}
 			});
 		</script>
 	</body>

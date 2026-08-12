@@ -154,8 +154,9 @@
 	--mn-fg-muted: var(--mn-muted-text);
 	--mn-accent: var(--mn-light-teal);
 	--mn-accent-strong: var(--mn-brand-teal);
-	--mn-rule: rgba(48, 141, 138, 0.3);
-	--mn-fill: rgba(255, 255, 255, 0.04);
+	/* Both are strong enough to survive a projector in a lit room. */
+	--mn-rule: rgba(48, 141, 138, 0.45);
+	--mn-fill: rgba(48, 141, 138, 0.1);
 
 	/* reveal overrides */
 	--r-background-color: #151a1a;
@@ -186,16 +187,43 @@
 	font-variant-numeric: tabular-nums;
 }
 
+/* Depth instead of a flat fill. Both stops interpolate palette colors. */
+.reveal-viewport {
+	background-color: var(--mn-dark);
+	background-image: radial-gradient(
+			ellipse 120% 80% at 15% -10%,
+			rgba(25, 69, 68, 0.85),
+			transparent 60%
+		),
+		radial-gradient(ellipse 90% 70% at 100% 110%, rgba(48, 141, 138, 0.18), transparent 65%);
+}
+
 /* Archetypes put the title upper-left, so slides start at the top, not centred. */
 .reveal .slides {
 	text-align: left;
 }
 
 /* reveal sizes sections to the canvas, so padding has to sit inside it. */
+/* reveal assigns display:block as an inline style, so this has to shout. */
 .reveal .slides section {
 	box-sizing: border-box;
 	padding: var(--mn-margin-y) var(--mn-margin-x);
 	overflow: hidden;
+	display: flex !important;
+	flex-direction: column;
+	height: 100%;
+}
+
+/*
+ * index.html wraps everything below the heading in .slide-body at ready time,
+ * so content can be optically centred while the heading baseline stays put.
+ */
+.reveal .slides section > .slide-body {
+	flex: 1 1 auto;
+	min-height: 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }
 
 .reveal h1,
@@ -277,6 +305,11 @@
 
 /* ---- archetype 1: cover -------------------------------------------- */
 
+.reveal section.cover .lockup {
+	align-self: flex-start;
+	margin-bottom: 72px;
+}
+
 .reveal section.cover h1 {
 	font-size: var(--mn-h1);
 	margin-bottom: 24px;
@@ -315,10 +348,37 @@
 	background: none;
 }
 
+/*
+ * Icon + text lockup, rebuilt from the hat and DM Sans because no vector
+ * wordmark ships with the brand assets. Matches the OpenGraph card.
+ */
+.reveal .lockup {
+	display: inline-flex;
+	align-items: center;
+	gap: 20px;
+	font-size: 44px;
+	font-weight: 600;
+	letter-spacing: -0.01em;
+	color: var(--mn-fg-strong);
+}
+
+.reveal .lockup img {
+	height: 46px;
+	margin: 0;
+	border: none;
+	box-shadow: none;
+	background: none;
+}
+
 /* ---- archetype 4: statement / section break ------------------------ */
 
 .reveal .slides section.statement {
 	text-align: center;
+	background-image: radial-gradient(
+		ellipse 70% 55% at 50% 42%,
+		rgba(48, 141, 138, 0.16),
+		transparent 70%
+	);
 }
 
 .reveal section.statement h2 {
@@ -326,6 +386,32 @@
 	max-width: 22em;
 	margin-left: auto;
 	margin-right: auto;
+}
+
+/* ---- art slides ---------------------------------------------------- */
+/*
+ * Pairs with data-background-image. reveal paints the painting, the section
+ * paints this scrim over it, text sits on top. Same treatment as the
+ * marinade.finance OpenGraph card. Declared after .statement so it wins.
+ */
+
+/* Bottom layer first: keeps the journey rail off the bright parts of a painting. */
+.reveal .slides section.art {
+	background-image: linear-gradient(to top, rgba(21, 26, 26, 0.88) 0%, transparent 30%),
+		linear-gradient(
+			100deg,
+			rgba(21, 26, 26, 0.95) 0%,
+			rgba(25, 69, 68, 0.88) 50%,
+			rgba(25, 69, 68, 0.7) 100%
+		);
+}
+
+.reveal section.art .label {
+	color: var(--mn-light-teal);
+}
+
+.reveal section.art .note {
+	color: var(--mn-chart-teal);
 }
 
 /* Category label above a statement, frames the takeaway before it lands. */
@@ -339,6 +425,94 @@
 
 .reveal section.light .label {
 	color: var(--mn-brand-teal);
+}
+
+/* ---- journey rail -------------------------------------------------- */
+/* Built by index.html from data-stage. Stage order lives there, not here. */
+
+.reveal .slides section.has-journey {
+	padding-bottom: 190px;
+}
+
+.reveal .journey {
+	position: absolute;
+	left: var(--mn-margin-x);
+	right: var(--mn-margin-x);
+	bottom: 60px;
+	display: grid;
+	grid-auto-flow: column;
+	grid-auto-columns: 1fr;
+	font-size: var(--mn-caption);
+	text-align: left;
+}
+
+.reveal .journey::before {
+	content: "";
+	position: absolute;
+	top: 5px;
+	left: 0;
+	right: 0;
+	height: 1px;
+	background: var(--mn-rule);
+}
+
+.reveal .journey .j {
+	position: relative;
+	padding-top: 32px;
+	color: var(--mn-fg-muted);
+}
+
+.reveal .journey .j::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 11px;
+	height: 11px;
+	border-radius: 50%;
+	background: var(--mn-surface);
+	box-shadow: inset 0 0 0 2px var(--mn-muted-text);
+}
+
+.reveal .journey .past {
+	color: var(--mn-muted-teal);
+}
+
+.reveal .journey .past::before {
+	background: var(--mn-brand-teal);
+	box-shadow: none;
+}
+
+.reveal .journey .now {
+	color: var(--mn-light-teal);
+	font-weight: 600;
+}
+
+.reveal .journey .now::before {
+	top: -3px;
+	left: -3px;
+	width: 17px;
+	height: 17px;
+	background: var(--mn-light-teal);
+	box-shadow: 0 0 0 7px rgba(148, 201, 200, 0.14);
+}
+
+/* The infra section spans every stage, so it lights the whole rail evenly. */
+.reveal .journey.all .j {
+	color: var(--mn-light-teal);
+}
+
+.reveal .journey.all .j::before {
+	background: var(--mn-brand-teal);
+	box-shadow: none;
+}
+
+.reveal section.light .journey .j {
+	color: var(--mn-muted-text);
+}
+
+.reveal section.light .journey .now {
+	color: var(--mn-heading-teal);
 }
 
 /* ---- metrics ------------------------------------------------------- */
@@ -681,16 +855,6 @@
 
 .reveal .controls {
 	color: var(--mn-muted-teal);
-}
-
-/* Default position collides with the nav arrows, so move it to the other corner. */
-.reveal .slide-number {
-	background: none;
-	color: var(--mn-fg-muted);
-	font-size: var(--mn-caption);
-	right: auto;
-	left: 24px;
-	bottom: 20px;
 }
 
 @media (prefers-reduced-motion: reduce) {

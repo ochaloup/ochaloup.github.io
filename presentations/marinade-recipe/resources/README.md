@@ -5,7 +5,10 @@ Keep one file per source, and add a row below so a number on a slide can be trac
 
 | File | Source | Used for |
 |---|---|---|
-| _(none yet)_ | | |
+| `../slides/images/brand-art/p-liquidity.jpg` | marinade.finance video poster, retrieved 2026-08-12 | Cover slide background |
+| `../slides/images/brand-art/p-rewards.jpg` | marinade.finance video poster, retrieved 2026-08-12 | "Where does the stake go?" section break |
+| `../slides/images/brand-art/p-security.jpg` | marinade.finance video poster, retrieved 2026-08-12 | "What if the validator misbehaves?" section break |
+| `../slides/images/brand-art/p-manage.jpg` | marinade.finance video poster, retrieved 2026-08-12 | Infrastructure section break, closing slide |
 
 Conventions:
 
