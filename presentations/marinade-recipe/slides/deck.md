@@ -2,61 +2,102 @@
 
 <span class="lockup"><img src="images/marinade-white.svg" alt="">Marinade</span>
 
-# Staking is the easy part
+# The Marinade Recipe
 
-## Everything that happens <span class="accent">after</span> you click stake
+## Building staking infrastructure on <span class="accent">Solana</span>
 
 <div class="logo-row">
 <img src="images/solana-logo.svg" alt="Solana">
 </div>
 
-<span class="note">Ondra Chaloupka · Solana Summit Serbia · Belgrade, 26 August 2026</span>
+<span class="note">Ondra Chaloupka</span>
 
 Note:
-Title is a placeholder. Submitted title is "The Marinade Recipe: Building Staking
-Infrastructure on Solana". Decide once the content is settled, see ../README.md.
+Title is the one submitted to the organizers. Locked, do not renegotiate it.
+Conference name deliberately absent, the audience knows where they are.
 
 ---
 
-<!-- .slide: class="vcenter statement" -->
+## What we are going to cook through
 
-<span class="label">Warm-up</span>
-
-## Who deployed the first liquid staking program on Solana mainnet?
-
-<div class="grid-3" style="margin-top:56px">
-<div class="card">Jito</div>
-<div class="card">Lido</div>
-<div class="card">Marinade</div>
+<div class="agenda">
+<div>
+<span class="agenda-name">Liquid staking</span>
+<span class="agenda-shout">The original Solana LST</span>
+</div>
+<div>
+<span class="agenda-name">Native staking</span>
+<span class="agenda-shout">Keep custody. No program ever holds your SOL.</span>
+<ul class="agenda-sub">
+<li><strong>Max Yield</strong> 100+ validators bidding for your stake</li>
+<li><strong>Select</strong> Verified identity, zero tolerance for malicious MEV</li>
+<li><strong>Recipes</strong> Stake SOL, get paid in <span class="accent">$BONK</span></li>
+</ul>
+</div>
+<div>
+<span class="agenda-name">Instant unstake</span>
+<span class="agenda-shout">Skip the two day wait</span>
+</div>
 </div>
 
 Note:
-Show of hands. One beat only, do not let this run long. Answer on the next slide.
+Three products, three strategies under Native. Recipes pays out in a different token,
+merkle dropped. Talk about the payout rail, not about where the stake is delegated.
+Do not read the shout-outs out loud, they are there to be scanned.
 
 ---
 
-<!-- .slide: class="vcenter statement" -->
+## Who talks to you
 
-<span class="label">Answer</span>
-
-## Marinade. 2021, out of the Solana x Serum DeFi hackathon.
-
-<span class="note">The first non-custodial liquid staking token on Solana.</span>
+<div class="bio">
+<img class="bio-avatar" src="images/helmet.jpg" alt="">
+<ul>
+<li><strong>Backend developer</strong> at Marinade
+<img class="bio-icon" src="images/marinade-white.svg" alt="">
+<img class="bio-icon" src="images/solana-logo.svg" alt=""></li>
+<li>Before that, Java engineer at Red Hat
+<img class="bio-icon" src="images/logos/redhat.svg" alt=""></li>
+<li>Distributed systems are my thing <span class="note">[TODO reword, punchier]</span></li>
+<li>Contributor to Realms, and author of its SPL Governance deep dive
+<img class="bio-icon" src="images/logos/realms.png" alt=""></li>
+</ul>
+</div>
 
 Note:
-Hackathon origin lands well here, this summit runs its own Demo Day.
-Do not turn this into a company history slide. Move on.
+[TODO] Fourth point still open, see README. Realms line now carries the deep dive
+rather than giving it its own bullet.
 
 ---
 
-<!-- .slide: class="vcenter statement" -->
+## What Marinade actually runs
 
-<span class="label">The point</span>
+<div class="columns">
+<div class="card">
+<h3>A market, not a pool</h3>
+<p>Validators bid for delegated SOL. A higher stake earns them more, so they share part of it back. Stakers capture yield that plain delegation does not pay.</p>
+</div>
+<div class="card">
+<h3>Judged every epoch</h3>
+<p>We score validator behaviour continuously, find the honest performers, and move stake to them. For as long as Solana keeps running.</p>
+</div>
+</div>
 
-## Staking one SOL is a click.<br>Deciding where it goes is a system.
+<p class="note">Stakers pay no fee. Validators pay, because validators are the ones buying something.</p>
 
 Note:
-This is the thesis. Everything after this slide defends it.
+Technical framing, not a pitch. The point is that we operate a market and a
+scoring pipeline, not that we are great.
+[TODO] Optional aside: we also supply validator data to the Foundation.
+Confirm the program name before saying it, see README.
+
+---
+
+<!-- .slide: data-background-image="images/brand-art/p-rewards.jpg" class="cover art vcenter statement" -->
+
+# A product
+
+Note:
+Big separator. The three product sections follow.
 
 ---
 

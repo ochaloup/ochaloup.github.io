@@ -515,6 +515,100 @@
 	color: var(--mn-heading-teal);
 }
 
+/* ---- agenda staircase ---------------------------------------------- */
+/* Each product steps right, its shout-out sits below and inset. */
+
+.reveal .agenda {
+	display: flex;
+	flex-direction: column;
+	gap: 44px;
+}
+
+.reveal .agenda > div {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.reveal .agenda > div:nth-child(2) {
+	margin-left: 180px;
+}
+
+.reveal .agenda > div:nth-child(3) {
+	margin-left: 360px;
+}
+
+.reveal .agenda-name {
+	font-size: var(--mn-h3);
+	font-weight: 600;
+	color: var(--mn-fg-strong);
+}
+
+.reveal .agenda-shout {
+	font-size: var(--mn-body-sm);
+	color: var(--mn-accent);
+	margin-left: 56px;
+}
+
+.reveal .agenda-sub {
+	list-style: none;
+	margin: 14px 0 0 56px;
+	font-size: var(--mn-caption);
+	color: var(--mn-fg-muted);
+	border-left: 2px solid var(--mn-rule);
+	padding-left: 28px;
+}
+
+.reveal .agenda-sub li + li {
+	margin-top: 8px;
+}
+
+.reveal .agenda-sub strong {
+	color: var(--mn-fg);
+	font-weight: 600;
+	margin-right: 12px;
+}
+
+/* ---- bio slide ----------------------------------------------------- */
+
+.reveal .bio {
+	display: flex;
+	align-items: flex-start;
+	gap: 64px;
+}
+
+.reveal .bio-avatar {
+	flex: 0 0 300px;
+	width: 300px;
+	border-radius: 50%;
+	margin: 0;
+	border: 2px solid var(--mn-rule);
+	box-shadow: none;
+}
+
+.reveal .bio ul {
+	margin: 0;
+	list-style: none;
+	font-size: var(--mn-body-sm);
+}
+
+.reveal .bio li + li {
+	margin-top: 28px;
+}
+
+.reveal .bio strong {
+	color: var(--mn-accent);
+}
+
+.reveal .bio-icon {
+	height: 0.95em;
+	margin: 0 0 0 12px;
+	vertical-align: baseline;
+	border: none;
+	box-shadow: none;
+	background: none;
+}
+
 /* ---- metrics ------------------------------------------------------- */
 
 .reveal .metrics {

@@ -61,8 +61,9 @@ From marinade.finance and the internal product portfolio. Use exact casing.
   Clears once per epoch.
 - **Marinade Max Yield** — the retail default Native strategy, auto-delegation to SAM winners.
 - **Marinade Select** — curated, identity-verified validator set. Institutional and ETF focus.
-- **Marinade Recipes** — third Native strategy. One Marinade validator, rewards swapped and
-  paid out in another token (USDG today) via merkle drop.
+- **Marinade Recipes** — third Native strategy. Rewards are swapped and paid out in a different
+  token via merkle drop. The public page lists USDG, ZBTC, MNDE, BONK, FWOG, NOBODY, TRENCHER
+  and USDC.
 - **Protected Staking Rewards (PSR)** — the validator's bond absorbs the loss if they
   underperform or raise fees.
 - **Validator Bonds** — the on-chain escrow backing SAM bids and PSR coverage.
@@ -87,8 +88,12 @@ marinade-recipe/
       marinade.svg        <- dark hat, invisible on the dark background
       solana-logo.svg
       brand-backgrounds/  <- teal-gradient, deep-teal-solid, light-teal-solid
-  resources/         <- downloaded articles, docs, references cited in slides
+  research/          <- my summaries of code and product research, one file per topic
+  resources/         <- original sources: downloaded articles, screenshots, exports
 ```
+
+`research/` holds the write-ups. `resources/` holds the untouched originals they are based on,
+so every claim can be traced back and re-read without me in the loop.
 
 ### Running the slides
 
@@ -298,9 +303,8 @@ as a sharp foreground image. And the videos exist too, `-transcode.mp4`, about 1
 Two independent conflicts with the working title.
 
 1. **`Recipes` is a real, live Marinade product.** It is the third Native Staking strategy
-   next to MaxYield and Select. Stake goes to one Marinade validator, rewards are swapped and
-   paid out in another token (USDG today) via a merkle drop. An audience that knows Marinade
-   will expect a talk about that product.
+   next to Max Yield and Select. Rewards are swapped and paid out in a different token via a
+   merkle drop. An audience that knows Marinade will expect a talk about that product.
 2. **The food metaphor is retired brand vocabulary.** The brand guide explicitly bans
    "recipes", "kitchen", "chefs", "cooking up", "secret sauce" as narrative framing.
    Marinade is moving from DeFi-charm to fintech-clarity.
@@ -370,6 +374,9 @@ intent from the planning session. This is the working outline now.
 - Layout: product name, then its one-line shout-out on the next line beside it, then the next
   product indented a step further. A descending staircase.
 - Products to cover: Liquid Staking, Native Staking, Instant Unstake.
+- **Native Staking shows its three strategies nested underneath it:** Max Yield, Select,
+  Recipes. Decided 2026-08-12. Describe Recipes by its payout rail only, never by where the
+  stake is delegated.
 - Shout-outs should be punchy, sourced from marinade.finance or the docs. A degen note is
   welcome if the source material supports one.
 - Open: is the three-product list complete? See the product research below.
@@ -434,6 +441,20 @@ intent from the planning session. This is the working outline now.
 - Because we are not on-chain we had to build something that still feels "kind of"
   permissionless. That is a contradiction, we do operate it, but the feeling matters and is
   worth naming honestly on the slide.
+- **The hard part is undelegation, not delegation.** This is the strongest technical beat in the
+  native staking section, and it was missing from the first capture. Delegating is easy.
+  Un-delegating in a way that behaves properly for a real user is where the engineering is:
+  the revoke process, the state machine behind it, the queues.
+  - Root cause is a Solana limit, not a design choice. Only a limited number of stake accounts
+    fit into one transaction, so a revoke that spans many accounts cannot be one atomic step.
+    Everything else, the queueing and the state machine, is a workaround for that ceiling.
+  - Solana is raising transaction size and account-count limits. When that lands, most of this
+    machinery can be deleted.
+  - Narrative purpose, and it is the reason to include it: show a concrete limitation the chain
+    imposes, show the workaround it forced, and show that we track the ecosystem closely enough
+    to drop the workaround the moment the platform makes it unnecessary. Being current is the
+    point, not the queue design itself.
+  - Research target: the `native-staking` component in the stack. Not yet read.
 - Some auction detail, reusing `marinade-auction-presentation/slides/index.html#/4`.
 - Then Select and Recipes: working with a different collateral and being repaid in it.
 - We are moving further into web3 financial strategies to give yield more ways to work.
@@ -451,6 +472,38 @@ intent from the planning session. This is the working outline now.
 
 - Keep the "Solana to the moon" slide from
   `marinade-auction-presentation/slides/index.html#/19`. The font needs fixing.
+
+### Research status for the plan above
+
+| Topic | State | Where |
+|---|---|---|
+| Delinquent stake use case | Done and reviewed, accepted 2026-08-12 | `research/liquid-staking-delinquent-stake.md` |
+| Canonical stake use case | Done, open questions listed | `research/liquid-staking-canonical-stake.md` |
+| Native staking undelegation, revoke, queues | Done | `research/native-staking-undelegation.md` |
+| Product list and shout-outs for the agenda slide | Done | `research/products-and-positioning.md` |
+| Company positioning for the Marinade slide | Done | `research/products-and-positioning.md` |
+| Instant Unstake, product-level mechanics | Done, code research still pending | `research/products-and-positioning.md` |
+| Marinade program vs SPL stake pool vs single pool | Done, includes a standard-user view | `research/liquid-staking-vs-spl-stake-pool.md` |
+| Competitors: Jito, Helius, Sanctum | Done | `research/competitors-jito-helius-sanctum.md` |
+| Articles on stake account count and performance | Not found yet | |
+| `marinade-web` summary: Select, Recipes, strategies | Not started | |
+| Instant Unstake, from `unstake-taker-client` outward | Not started | |
+
+Slides 1 to 5 are sketched in `deck.md` and render clean. Everything from the "A product"
+separator onward is still the old skeleton.
+
+### Fourth point for the "who talks to you" slide, still open
+
+Two candidates were considered and both are rejected:
+
+- **SPL Governance Deep Dive** (https://docs.realms.today/spl-governance). Real, but it belongs
+  *inside* the Realms contributor line, not beside it. It was written for a DAO conference
+  audience, and this is not one. Fold it into the Realms point as supporting evidence, do not
+  give it its own bullet.
+- **Vote Aggregator plugin.** Out completely. Private project, since decommissioned.
+
+So the slide currently has three points: backend developer, ex-Red Hat Java engineer, Realms
+contributor. A fourth is still wanted to balance the layout. Nothing obvious yet.
 
 ### Recommended structure: follow one SOL (superseded 2026-08-12, kept for its material)
 
