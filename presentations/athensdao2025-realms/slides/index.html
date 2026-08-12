@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <title>Governance in Action: Marinade × Realms</title>
+
+        <link rel="stylesheet" href="dist/reset.css">
+        <link rel="stylesheet" href="dist/reveal.css">
+        <link rel="stylesheet" href="dist/theme/black-changed.css">
+
+        <!-- Theme used for syntax highlighted code -->
+        <link rel="stylesheet" href="plugin/highlight/monokai.css">
+    </head>
+
+    <!-- NOTES-->
+    <!-- to show border: class="r-frame" or ... -->
+    <!-- style="border-style: solid; border-color: white; border-width: 1px !important;"-->
+    <!-- black theme background color: #191919-->
+
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                
+                <!-- INTRODUCTION-->
+                <section>
+                    <h2>Governance in Action</h2>
+					<div style="display: flex; justify-content: center; align-items: center; font-size: 1.5em;">
+						<img src="images/marinade.png" style="opacity:0.85; padding: 0px; margin: 0px;" width="20%; vertical-align: middle;"/>
+						<span>&nbsp;&nbsp;&nbsp;×&nbsp;&nbsp;&nbsp;</span>
+						<img src="images/spl-governance.png" style="opacity:0.85; padding: 0px; margin: 0px;" width="14%; vertical-align: middle;"/>
+					</div>
+                </section>
+
+                <!-- AGENDA -->
+                <section data-background="images/background.png">
+                    <h2>Agenda</h2>
+                    <div style="display:flex;">
+                        <div style="flex: 1; vertical-align: top; float: left; margin: 0px;">
+                            <a href="https://marinade.finance">
+                                <img src="images/governance-heads-squared.jpeg" style="border-radius: 50%; margin: 0px;">
+                            </a>
+                        </div>
+                        <div style="flex: 7; text-align: left; margin-left: 3%;">
+                            <ul style="margin-top: 0em;">
+                                <li>Governance history at Marinade DAO</li>
+                                <li>Set-up of Realms SPL Governance</li>
+                                <li>Development of delegation plugin</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+                        
+
+                <!-- ABOUT -->
+                <section data-background="images/background.png">
+                    <div style="display:flex;">
+                        <div style="flex: 1; vertical-align: top; float: left; margin: 0px;">
+                            <a href="https://blog.chalda.cz">
+                                <img src="images/helmet.jpg" alt="avatar" style="border-radius: 50%; margin: 0px;">
+                            </a>
+                        </div>
+                        <div style="flex: 7; text-align: left; margin-left: 3%;">
+                            <ul style="margin-top: 0em;>
+                                <li>
+                                    Ondra Chaloupka
+                                    <a href="https://twitter.com/_chalda" style="font-size: 0.7em;">
+                                        <sup>@_chalda</sup>
+                                    </a>
+                                </li>
+                                <li>
+                                    developer at Marinade.finance
+                                    <a href="https://marinade.finance">
+                                        <img src="images/marinade.png" style="height: 0.9em; margin: 0px;">
+                                    </a>
+                                    <a href="https://solana.com">
+                                        <img src="images/solana-logo.svg" style="height: 0.8em; margin: 0px;">
+                                    </a>
+                                </li>
+                                <li>
+                                    contributor to Realms on-chain program
+                                    <a href="https://github.com/solana-labs/solana-program-library/pulls?q=is%3Apr+author%3Aochaloup">
+                                        <img src="images/spl-governance.png" style="height: 0.8em; margin: 0px;">
+                                    </a>
+                                </li>
+                                <li>
+                                    author of SPL Governance Deep Dive
+                                    <a href="https://docs.realms.today/spl-governance">
+                                        <img src="images/diagram-deep-dive-cropped.png" style="height: 0.8em; margin: 0px;">
+                                    </a>
+                                </li>
+                                <li>
+                                    inputs on Marinade's Vote Aggregator plugin
+                                    <a href="https://github.com/marinade-finance/vote-aggregator">
+                                        <img src="images/vote-aggregator-screenshot.png" style="height: 0.8em; margin: 0px;">
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+				<section data-background="images/background.png">
+                    <h2>Marinade DAO</h2>
+                    <div style="display:flex;">
+                        <div style="flex: 1; vertical-align: top; float: left; margin: 0px;">
+                            <a href="https://marinade.finance">
+                                <img src="images/marinade.png" alt="marinade logo" style="border-radius: 0%; margin: 0px;">
+                            </a>
+                        </div>
+                        <div style="flex: 7; text-align: left; margin-left: 3%;">
+                            <ul style="margin-top: 0em;">
+                                <li>Solana first staking protocol</li>
+                                <li>Staking platform<br/>and Stake auction marketplace</li>
+                                <li>Liquid and Native staking</li>
+                                <li>Decentralizing Solana</li>
+								<li>Securing the max value for your SOL</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section data-background="images/background.png">
+					<div>
+						<img src="images/screenshot-webpage.png"/>
+					</div>
+				</section>
+
+                <!-- TO WHAT PURPOSE MARINADE USES DAO management platforms -->
+                <section data-background="images/background.png">
+                    <h3>Why Marinade believes in DAO</h3>
+                    <div style="display:flex;">
+                        <div style="flex: 1; vertical-align: top; float: left; margin: 0px;">
+                            <a href="https://marinade.finance">
+                                <img src="images/marinade.png" alt="marinade logo" style="border-radius: 0%; margin: 0px;">
+                            </a>
+                        </div>
+                        <div style="flex: 7; text-align: left; margin-left: 3%;">
+                            <ul style="margin-top: 0em;">
+                                <!-- All decisions and actions are publicly visible -->
+                                <li>Transparency</li>
+                                <!-- Rules are enforced by code rather than individuals -->
+                                <li>Trustlessness</li>
+                                <!-- Executed decisions cannot be altered -->
+                                <li>Immutability</li>
+                                <!-- Power is distributed among token holders -->
+                                <li>Decentralization</li>
+                                <!-- A reduced need for manual intervention -->
+                                <li>Automation</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section data-background="images/background.png">
+					<div>
+						<img src="images/screenshot-spl-governance-leaderboard.png"/>
+					</div>
+				</section>
+
+                <section data-background="images/background.png">
+                    <h3>The Purpose of Using On-Chain Governance Tooling</h3>
+                    <div style="display:flex;">
+                        <div style="flex: 1; vertical-align: top; float: left; margin: 0px;">
+                            <img src="images/dao.jpg" alt="dao icon" style="border-radius: 50%; margin: 0px; opacity: 80%;">
+                        </div>
+                        <div style="flex: 7; text-align: left; margin-left: 3%;">
+                            <ul style="margin-top: 0em;">
+                                <!-- Program deployments and other stuff requiring multiple signatures to pass proposal -->
+                                <li>Multi-signature</li>
+                                <!--Changes of protocol parameters, member management -->
+                                <li>Governance</li>
+                                <li>Treasury</li>
+                                <!-- We stopped using this when we moved from Tribeca to SPL Governance, we do distribution with partners as Kamino, Solend -->
+                                <!-- Community incentives are distributed by asking community for budget and that is directly send to the partner -->
+                                <li>Community incentives</li>
+                                <!-- A good and transparent way, publicly accessible, timeline for when vesting happens -->
+                                <li>Token vesting</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            
+
+                <section data-background="images/background.png">
+                    <h2>Governance history</h2>
+                    <div style="display: flex; justify-content: center; align-items: center; font-size: 1.5em;">
+						<img src="images/marinade.png" style="opacity:0.85; padding: 0px; margin: 0px;" width="20%; vertical-align: middle;"/>
+					</div>
+                </section>
+
+                <section data-background="images/background.png">
+					<div>
+						<img src="images/octopus-voting.png"/>
+					</div>
+				</section>
+
+                <!-- Saber team developed the system -->
+                <section data-background="images/background.png">
+                    <!-- <h4>Tribeca governance system</h4> -->
+                    <div>
+                        <img src="images/screenshot-tribeca.jpg"/>
+                    </div>
+                </section>
+
+                <!-- Pointing an ongoing votes with some amount of tokens to some pools -->
+                <!-- https://stats.marinade.finance/d/SWlR6-g4z/liquidity-mining-gauges?orgId=1&from=now-5y&to=now -->
+                <section data-background="images/background.png">
+                    <!-- <h4>Incentivize the community</h4> -->
+                    <div>
+                        <img src="images/screenshot-quarry.png"/>
+                        <p style="text-align: right; float: right;">
+                            Liquidity gauges
+                        </p>
+                    </div>
+                </section>
+
+                <!-- Based on serum multisig, used for managing treasury as well -->
+                <section data-background="images/background.png">
+                    <!-- <h3>Multi-signature contract</h3> -->
+					<div>
+						<img src="images/screenshot-liquid-staking-multisig.png">
+						<p style="text-align: right; float: right;">
+                            <img src="images/aankor.png" style="height: 1.5em; margin: 0px;">
+                        </p>
+					</div>
+				</section>
+
+
+                <section data-background="images/background.png">
+                    <h2>SPL Governance</h2>
+                    <div style="display: flex; justify-content: center; align-items: center; font-size: 1.5em;">
+						<img src="images/marinade.png" style="opacity:0.85; padding: 0px; margin: 0px;" width="20%; vertical-align: middle;"/>
+					</div>
+                </section>
+
+
+                <section data-background="images/background.png">
+					<div>
+						<img src="images/solana-meta.webp"/>
+					</div>
+				</section>
+
+                <!--
+                Benefits of SPL Governance setup in comparison to  Tribeca
+                -->
+                <section data-background="images/background.png">
+                    <h2>Benefits of SPL Setup</h2>
+                    <div style="display:flex;">
+                        <div style="flex: 1; vertical-align: top; float: left; margin: 0px;">
+                            <a href="https://marinade.finance">
+                                <img src="images/room-with-table-plus.jpeg" style="border-radius: 50%; margin: 0px;">
+                            </a>
+                        </div>
+                        <div style="flex: 7; text-align: left; margin-left: 3%;">
+                            <ul style="margin-top: 0em;">
+                                <li>Split between council<br/>and community powers</li>
+                                <li>On-chain execution of transactions</li>
+                                <li>Granular control over voting power</li>
+                                <li>Token vesting with customizable durations</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!--
+                What we were using in Tribeca and not being a feature of SPL Governance
+                -->
+                <section data-background="images/background.png">
+                    <h2>...Missing <!--<sup style="font-size: 0.7em;">(at the time)</sup>--></h2>
+                    <div style="display:flex;">
+                        <div style="flex: 1; vertical-align: top; float: left; margin: 0px;">
+                            <a href="https://marinade.finance">
+                                <img src="images/room-with-table-minus.jpeg" style="border-radius: 50%; margin: 0px;">
+                            </a>
+                        </div>
+                        <div style="flex: 7; text-align: left; margin-left: 3%;">
+                            <ul style="margin-top: 0em;">
+                                <li>Recurring proposals</li>
+                                <li>Rewards distribution <span style="font-size: 0.7em;">(liquidity mining)</span></li>
+                                <li>Delegation voting <span style="font-size: 0.7em;">(in progress)</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section data-background="images/background.png">
+					<div>
+						<img src="images/screenshot-spl-governance.png"/>
+					</div>
+				</section>
+
+                <!-- Memo proposals UI is still clumsy for longer discussions, no way to assign a username to a wallet -->
+                <section data-background="images/background.png">
+                    <!-- <h4>Marinade forum</h4> -->
+                    <div>
+                        <img src="images/screenshot-forum.png"/>
+                    </div>
+                </section>
+                
+                <!--
+                    * we forked the code and deployed our version of the SPL Governance program (3.1.0)
+                        (as of recommended at https://github.com/solana-labs/solana-program-library/tree/master/governance#deployment)
+                        When a DAO needs full control over the governance program then it's recommended to deploy and use its own instance and put it under the DAO governance.
+                    * We use VSR (Vote Stake Registry) plugin created by Mango for vesting tokens
+                        and scaling the voting power of the token holders
+                        https://github.com/blockworks-foundation/voter-stake-registry
+                -->
+                <section data-background="images/background.png">
+                    <h2>Marinade SPL Setup</h2>
+                    <div style="display:flex;">
+                        <div style="flex: 1; vertical-align: top; float: left; margin: 0px;">
+                            <a href="https://marinade.finance">
+                                <img src="images/coding-guys.jpeg" style="border-radius: 50%; margin: 0px;">
+                            </a>
+                        </div>
+                        <div style="flex: 7; text-align: left; margin-left: 3%;">
+                            <ul style="margin-top: 0em;">
+                                <li><a href="https://github.com/solana-labs/solana-program-library/tree/master/governance">Solana Program Library: Governance</a></li>
+                                <li><a href="https://github.com/blockworks-foundation/voter-stake-registry/tree/master">Voter Stake Registry plugin</a></li>
+                                <li><a href="https://www.realms.today/">Realms UI</a></li>
+                                <li><a href="https://github.com/marinade-finance/spl-governance-cli">TypeScript based CLI</a></li>
+                                <li><a href="https://github.com/marinade-finance/spl-gov-notifier?tab=readme-ov-file">Bot emitting notifications</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- <section data-background="images/background.png">
+					<div>
+						<img src="images/screenshot-spl-vsr.jpeg"/>
+					</div>
+				</section> -->
+
+                <section data-background="images/background.png">
+                    <div>
+						<img src="images/spl-governance-account-structure-2.png" style="width: 100%; height: 100%; object-fit: contain;"/>
+					</div>
+				</section>
+
+                <!--
+                  Emergency council DAO
+                    - members can be different from the board members
+                    - membership is managed by main DAO council
+                    - in case of emergency it is the DAO having permission to stop processing of Marinade programs
+                    - at some point we need to react fast, we cannot wait 3 days to fix a bug
+                -->
+                <section data-background="images/background.png">
+                    <h4>Emergency council Realm</h4>
+					<div>
+						<img src="images/screenshot-marinade-daos.jpeg"/>
+					</div>
+				</section>
+                
+
+                <section data-background="images/background.png">
+                    <div>
+						<img src="images/smart-guy.jpg"/>
+					</div>
+				</section>
+
+                <!-- TODO: maybe duplicate slide on SPL setup? -->
+
+                <!-- https://neodyme.io/en/blog/how_to_hack_a_dao/ -->
+                <section data-background="images/background.png">
+                    <h2>4 Levels of Governance</h2>
+                    <div style="display:flex;">
+                        <div style="flex: 7; text-align: left; margin-left: 3%;">
+                            <ul style="margin-top: 0em;">
+                                <li>Level 1: Community sovereign – <span style="font-size: 75%">Council membership management</span></li>
+                                <li>Level 2: Community + Council Veto – <span style="font-size: 75%">Realms configuration, treasuries, and administrative authorities</span></li>
+                                <li>Level 3: Council Fast-Forward – <span style="font-size: 75%">Emergency council membership and council budget treasury</span></li>
+                                <li>Level 4: Community Opinions – <span style="font-size: 75%">Community opinion voting (no real on-chain power)</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- <section data-background="images/background.png">
+					<h4>DAO parameters</h4>
+                    <div>
+						<img src="images/screenshot-dao-parameters.png"/>
+					</div>
+				</section> -->
+
+                <!-- TODO: check with notion -->
+                <!-- MNDE supply is one billion 10^9 -->
+                <!-- Text only proposals, no real on-chain power -->
+                <section data-background="images/background.png">
+                    <h3>Level 4: Community Opinions</h3>
+                    <div style="display:flex;">
+                        <div style="flex: 7; text-align: left; margin-left: 3%;">
+                            <ul style="margin-top: 0em;">
+                                <li>Community voting (threshold 2%, 20M MNDE)</li>
+                                <li>No council</li>
+                                <li>200K MNDE required to create a proposal</li>
+                                <li>Voting time: 3 days + 1 Signing off</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Emergency council members management, council budget management -->
+                <section data-background="images/background.png">
+                    <h3>Level 3: Council Fast-Forward</h3>
+                    <div style="display:flex;">
+                        <div style="flex: 7; text-align: left; margin-left: 3%;">
+                            <ul style="margin-top: 0em;">
+                                <li>No community</li>
+                                <li>council voting (threshold 50%)</li>
+                                <li>Voting time: 3 days + Vote-tipping</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Upgrade authority of Marinade programs, DAO treasury, configuration parameters of programs -->
+                <section data-background="images/background.png">
+                    <h3>Level 2: Community + Council Veto</h3>
+                    <div style="display:flex;">
+                        <div style="flex: 7; text-align: left; margin-left: 3%;">
+                            <ul style="margin-top: 0em;">
+                                <li>Community voting (threshold: 2%, 20M MNDE)</li>
+                                <li>council veto (threshold 50%)</li>
+                                <li>200K MNDE required to create a proposal</li>
+                                <li>Voting time: 3 days + 1 Signing off</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+               <!-- voting for council members and SPL Governance program self management -->
+                <section data-background="images/background.png">
+                    <h3>Level 1: Community sovereign</h3>
+                    <div style="display:flex;">
+                        <div style="flex: 7; text-align: left; margin-left: 3%;">
+                            <ul style="margin-top: 0em;">
+                                <li>Community voting (threshold: 2%, 20M MNDE)</li>
+                                <li>No council</li>
+                                <li>1M MNDE required to create a proposal</li>
+                                <li>Voting time: 3 days + 1 Signing off </li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+
+                <!--
+                Why we consider this feature important:
+                - delegation - people don't want to go for every vote - a representative, reading, analysing and voing with care on budget, large decisions
+                - only those that are more engaged in the community should be voting
+                -->
+                <section data-background="images/background.png">
+                    <h2>Vote Aggregator Plugin</h2>
+                    <div style="display: flex; justify-content: center; align-items: center; font-size: 1.5em;">
+						<img src="images/marinade.png" style="opacity:0.85; padding: 0px; margin: 0px;" width="20%; vertical-align: middle;"/>
+					</div>
+                </section>
+
+                <section data-background="images/background.png">
+                    <div>
+						<img src="images/screenshot-vote-aggregator.png"/>
+					</div>
+                </section>
+
+
+                <section data-background="images/background.png">
+                    <div>
+						<img src="images/voter-aggregator-chain.svg"/>
+					</div>
+                </section>
+                
+                <section data-background="images/background.png">
+                    <div>
+						<img src="images/vote-aggregator-plugin.svg"/>
+					</div>
+                </section>
+
+                <section>
+					<div style="display: flex; justify-content: center; align-items: center; font-size: 1.5em;">
+						<img src="images/marinade.png" style="opacity:0.85; padding: 0px; margin: 0px;" width="20%; vertical-align: middle;"/>
+						<img src="images/heart.png" style="opacity:0.85; padding: 0px; padding-left: 1em; padding-right: 1em; margin: 0px;" width="10%; vertical-align: middle;"/>
+						<img src="images/spl-governance.png" style="opacity:0.85; padding: 0px; margin: 0px;" width="14%; vertical-align: middle;"/>
+					</div>
+                </section>
+                
+            </div>
+        </div>
+        <script src="dist/reveal.js"></script>
+        <script src="plugin/notes/notes.js"></script>
+        <script src="plugin/markdown/markdown.js"></script>
+        <script src="plugin/highlight/highlight.js"></script>
+        <script>
+            // More info about initialization & config:
+            // - https://revealjs.com/initialization/
+            // - https://revealjs.com/config/
+            Reveal.initialize({
+                hash: true,
+
+                // Learn about plugins: https://revealjs.com/plugins/
+                plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+            });
+            Reveal.configure({ pdfMaxPagesPerSlide: 1 })
+        </script>
+    </body>
+</html>
