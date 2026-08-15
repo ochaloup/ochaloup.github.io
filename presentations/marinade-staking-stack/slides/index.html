@@ -78,7 +78,9 @@
 				if (section.matches(".vcenter, .cover")) return;
 				const body = [...section.children].filter(
 					(el) =>
-						!el.matches("aside.notes, .journey, h1, h2, .label, .watermark, .slide-icon"),
+						!el.matches(
+							"aside.notes, .journey, h1, h2, .label, .watermark, .slide-icon, .lockup",
+						),
 				);
 				if (!body.length) return;
 				const wrapper = document.createElement("div");

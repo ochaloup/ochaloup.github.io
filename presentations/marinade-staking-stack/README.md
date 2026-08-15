@@ -75,7 +75,7 @@ From marinade.finance and the internal product portfolio. Use exact casing.
 ## Repo layout
 
 ```
-marinade-recipe/
+marinade-staking-stack/
   README.md          <- this file: context, ideas, links, slide drafts
   slides/            <- reveal.js 6.0.1, shallow clone, .git removed
     deck.md          <- the actual slide content, markdown
@@ -465,24 +465,149 @@ intent from the planning session. This is the working outline now.
 
 **Liquid Staking**
 
-- Everyone knows what it is, so do not over-explain the concept.
-- Marinade was the first, built as a joint effort by two hackathon teams.
-- mSOL is the liquid token. One sentence on what being a liquid staking token means.
-- Then the interesting part: how the Marinade program differs technically from the standard
-  SPL stake pool. Compare `liquid-staking-program` against `stake-pool`, and work out what
-  `single-pool` even is.
-- Two development war stories, framed as use cases, problem then why then fix:
-  1. **Delinquent stake.** Caused by later Solana changes. The program has its own state
-     machine that outside processing must not be able to break, which is how security is
-     preserved. Delinquency did not exist when Solana launched, so when it appeared it broke an
-     assumption. Result: some SOL could not be unstaked. Explain what broke, why, and the
+Captured 2026-08-15. This is the raw flow of thinking for the section, kept as stated. Not all
+of it goes on slides, see "Liquid staking: slide split" below for the structure derived from it.
+
+- **What an LST is, briefly.** Everyone knows it, so keep it short. There is an on-chain program,
+  you put SOL in, you get a token back that trades on DeFi protocols. The staked SOL is liquid,
+  it is still staked, and the owner still receives the staking rewards.
+- **Marinade is the OG protocol**, the first LST on Solana. Built as a joint effort by two
+  hackathon teams.
+- **How the network is monitored.** Research targets `marcrank` and the delegation-strategy
+  side. Explain what watches what.
+- **A slide on how the system works**: what calls what, why, and on what schedule.
+  `liquid-staking-program/Docs/` has good material for this.
+- **Permissionless, but scored.** We rate validators on performance, and because we still believe
+  in decentralisation, points are also given for things like location. The main input to the
+  ordering is the validator auction.
+- **Marinade protects its stakers in more ways than yield.** We monitor the network and run PSR,
+  which "slashes" validators that take downtime and therefore stop generating staking rewards.
+  Rewards come from voting on chain, so no voting means no rewards.
+- **How can we slash at all? Bonds.** A validator that wants to be part of the Marinade staking
+  system must have a bond and fund it. That is an on-chain program, `validator-bonds`. Processing
+  the end-of-epoch state lets us decide how the validator behaved.
+- **Bonds also let us pay stakers more than plain staking rewards.** Until the SIMD that shares
+  block rewards is activated, direct priority-fee delegation is not available, so we gather that
+  value through the auction instead. A validator decides how much extra of its rewards to share
+  with stakers, and that is distributed through the bonds program.
+  - **TODO**: find the SIMD number for block-reward sharing. Do not present this without it.
+- **Difference from the standard Solana LST program.** This must be something graspable about
+  *how our approach works* versus theirs. Differently calculated fees are not interesting here.
+  Claim processing is closer, but still not interesting enough on its own.
+- **Two war stories, moved to an appendix at the end of the deck**, one slide each. They are
+  challenges of being a long-standing OG program while the Solana protocol changes underneath.
+  1. **Delinquent stake.** Solana later shipped a permissionless deactivation instruction. The
+     program has its own state machine that outside processing must not be able to break, which
+     is how security is preserved. Delinquency did not exist at launch, so when it appeared it
+     broke an assumption and some SOL could not be unstaked. Explain what broke, why, and the
      two-part fix.
-  2. **Canonical stake processing.** Marinade is big, and creating many stake accounts is
-     unkind to Solana and has a real impact on validators. We want fewer accounts, but
-     delegation mechanics and Solana's processing make that hard. Explain what the canonical
-     stake change buys.
+  2. **Canonical / PDA stake accounts.** Marinade is big, and creating many stake accounts is
+     unkind to Solana and has a real impact on validators. We want fewer accounts, but delegation
+     mechanics and Solana's processing make that hard. Explain what the canonical stake change
+     buys.
 - Wanted: articles or blog posts on stake account counts and their performance impact, as
   source material to speak from.
+
+**Liquid staking: slide split, proposed 2026-08-15**
+
+Six slides in the main section, two in the appendix. Derived from the flow above plus
+`research/liquid-staking-system-and-bonds.md`. Restructure freely, but note the order is
+deliberate: each slide creates the question the next one answers.
+
+| # | Slide | Carries |
+|---|---|---|
+| L1 | **What an LST is, and who was first** | Program in, token out, still staked, still earning, tradeable. Marinade first on Solana, 2021, two hackathon teams. One slide, fast. |
+| L2 | **Not the standard pool** | The graspable difference. See below. |
+| L3 | **The loop** | The crank cycle each epoch. `update_price`, `stake_delta`, `merge_stakes`. mSOL price rises, nothing is distributed. **Say the permissionless claim precisely, see below.** |
+| L4 | **Who gets the stake** | Off-chain auction and scoring, applied on chain. `stakePriority` / `unstakePriority`. Decentralisation is scored, not only performance. |
+| L5 | **Three sources of yield** | `total = inflation + MEV + bid`. The bid exists only because there is an auction. |
+| L6 | **One bond, two jobs** | A validator posts collateral to get Marinade stake. That same bond pays the bid and covers PSR when the validator fails. Nothing more. |
+| A1 | *Appendix:* delinquent stake | War story 1. |
+| A2 | *Appendix:* canonical stake accounts | War story 2. |
+
+**On L2, the difference from the SPL stake pool.** This was the open question. Two candidate
+angles, and the recommendation is to lead with the first and use the second only if there is time:
+
+1. **Who does the waiting.** Reframed 2026-08-15 after the first version failed on Ondra himself,
+   which is the clearest possible signal it would fail on the room. The earlier wording,
+   *"Marinade turns the wait into a price, SPL leaves it as a wait"*, is accurate but silently
+   assumes the listener already holds three concepts: what a pool reserve is, the difference
+   between `WithdrawSol` and `WithdrawStake`, and LP economics. That is a paragraph of setup for
+   a 70-second slide.
+
+   The graspable version leads with the constraint, not the mechanism:
+
+   > **Everyone waits two days. The only question is who.**
+   > SPL: you wait. Marinade: someone else waits, and you pay them a fee for it.
+
+   Supporting detail, only if a question comes: Solana forces a cooldown of roughly two days on
+   any unstake, so "instant" always means somebody took your staked position and is waiting in
+   your place. An SPL pool can only pay you from its own spare reserve, and when that runs dry it
+   hands you a stake account to deactivate yourself. Marinade runs a SOL/mSOL pool inside the
+   program, funded by third parties who deposit specifically to earn the fee, and the fee rises
+   from about 0.3% to 3% as that pool empties. Scarcer liquidity means a higher fee, which pulls
+   in more providers. If it empties completely, Marinade users fall back to a ticket and wait
+   two days, which is where SPL users live permanently.
+2. **The accounting model.** SPL keeps one stake account per validator plus one transient account,
+   rigid by construction. Marinade keeps a free list of stake accounts, which is more flexible and
+   is exactly why canonical stake is now being retrofitted. This one sets up appendix slide A2
+   nicely, so it is a good bridge if the appendix is being presented.
+
+Explicitly **not** the difference to use: fee calculation. Correct but boring, and the audience
+will not care.
+
+**On L3, how permissionless the contract really is.** Checked against signer requirements in the
+program, not taken from the design doc. The split is clean:
+
+- **Anyone can call** `update_active`, `update_deactivated`, `merge_stakes` (no signer at all),
+  and `stake_reserve` / `deactivate_stake` (a signer, but only as **rent payer**, not authority).
+- **Only Marinade can call** `add_validator`, `remove_validator`, `set_validator_score`,
+  `emergency_unstake`, `partial_unstake`, all gated on `manager_authority` or
+  `validator_manager_authority`.
+
+**So the mechanism is permissionless, the policy is not.** Anyone can turn the crank; only
+Marinade decides who is on the validator list and what their score is, which is exactly the
+staking priority that drives `stake_delta`.
+
+The line to use, because it survives a hostile question from someone who has read the program:
+
+> If Marinade disappeared tomorrow, the mSOL price would keep updating, rewards would keep being
+> booked, and you could still deposit and unstake, because anyone can turn those cranks. What
+> would stop is the scores. Delegation would freeze at whatever was last written. **Your money
+> stays safe and liquid. It just stops getting smarter.**
+
+**On L5 and L6, the framing that makes the section land.** SIMD-0096 sent 100% of priority fees
+to validators and left no in-protocol way to share them back with delegators. SIMD-0123 adds
+exactly that and passed governance in March 2025. **Until it activates, Marinade's auction plus
+bonds is the mechanism that moves that value anyway.**
+
+**On L6, no settlement pipeline. Decided 2026-08-15.** The `validator-bonds` README offers a
+ready-made six-stage flow, *snapshot → bid-distribution CLI → settlement JSON → merkle trees →
+on-chain settlements → claims*. **It is not going on a slide.** It is builder detail, and the time
+is not there: roughly 7 minutes for the whole Liquid section means about 70 seconds a slide, and
+that diagram would spend two minutes answering a question nobody in the room asked.
+
+What the bond slide owes the audience is only this: a validator posts collateral to get Marinade
+stake, and that one deposit is what makes both the bid and PSR enforceable. **A promise becomes an
+account you can read.** The pipeline stays in
+`research/liquid-staking-system-and-bonds.md` for Q&A or a longer version of the talk.
+
+**On the "chain limits" motif, decided 2026-08-15.** The recurring shape — *here is a gap in
+Solana, here is the machinery we built to bridge it, here is the protocol change that will make
+that machinery unnecessary* — appears in both Liquid (block-reward sharing, SIMD-0123) and Native
+(transaction size limits). It is a real idea of the talk and should be **present everywhere**.
+
+But it is **not the headline and not a slide.** Keep it **spoken**, in Ondra's own words, as the
+connective tissue between sections. Do not build a slide that announces it, do not put it in the
+title, and do not turn the deck into a thesis about Solana's limitations. The deck stays a
+product tour; this is the thing the speaker keeps noticing out loud.
+
+**On saying "slashing", decided 2026-08-15.** The word stays, used **once with the correction
+attached**, then dropped in favour of "the bond covers the loss". On Solana, slashing means the
+protocol destroys staked **principal**; Marinade's bonds pay out **rewards** from collateral the
+validator posted, and principal is never touched. Saying the imprecision out loud before anyone
+in the room does converts an objection into a point in your favour. Full suggested wording in
+`research/liquid-staking-system-and-bonds.md`.
 
 **Native Staking**
 
@@ -520,7 +645,24 @@ intent from the planning session. This is the working outline now.
   Marinade GitHub org.
 - Want a suggested why plus the technical hooks, then we discuss.
 
-**Closing**
+**Closing: "Stake it till you make it"**
+
+Replaces "Thank you". Attribution was checked on 2026-08-15 and **none is needed**:
+
+- The base idiom *"fake it till you make it"* is generic English, decades old, from self-help and
+  recovery contexts. Nobody owns it.
+- *"Stake it till you make it"* is the obvious pun and is used widely and independently. The
+  most notable public use found is an **SEC Commissioner statement, May 2025**, titled
+  "Response to Staff Statement on Protocol Staking Activities: Stake it Till You Make It?".
+- **No connection to Staking Facilities was found.** Searched specifically for it; nothing links
+  the phrase to them or to any Solana team as a signature slogan. The hunch does not hold up.
+
+So it is a common pun, not anyone's mark, and safe to use with no credit line. If you want to be
+generous anyway, the SEC use is the only citable one and it is an odd fit for a closing slide.
+
+The `<span class="accent">make</span>` puts the one PT Serif italic word on "make".
+
+**Closing (original plan)**
 
 - Keep the "Solana to the moon" slide from
   `marinade-auction-presentation/slides/index.html#/19`. The font needs fixing.

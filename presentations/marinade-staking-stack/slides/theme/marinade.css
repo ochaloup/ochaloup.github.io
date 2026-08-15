@@ -370,6 +370,21 @@
 	background: none;
 }
 
+/* Quiet brand mark for content slides, pinned bottom-left. */
+.reveal .lockup-sm {
+	position: absolute;
+	left: var(--mn-margin-x);
+	bottom: var(--mn-margin-y);
+	gap: 14px;
+	font-size: var(--mn-body-sm);
+	color: var(--mn-fg-muted);
+}
+
+.reveal .lockup-sm img {
+	height: 30px;
+	opacity: 0.75;
+}
+
 /* ---- archetype 4: statement / section break ------------------------ */
 
 .reveal .slides section.statement {
@@ -539,6 +554,27 @@
 	height: 300px;
 	color: var(--mn-accent);
 	opacity: 0.55;
+	z-index: 0;
+}
+
+/* Wash variant: big enough to read as a backdrop, faint enough to sit behind copy. */
+.reveal .slide-icon.wash {
+	width: 780px;
+	height: 780px;
+	right: -120px;
+	opacity: 0.13;
+}
+
+/*
+ * Content is static, the glyph is positioned, so the text needs lifting above it.
+ * .lockup is deliberately absent: giving it position:relative would break the
+ * absolutely-pinned .lockup-sm variant.
+ */
+.reveal .slides section > h1,
+.reveal .slides section > h2,
+.reveal .slides section > .slide-body {
+	position: relative;
+	z-index: 1;
 }
 
 /* A block cursor that does not blink is just a rectangle. */
