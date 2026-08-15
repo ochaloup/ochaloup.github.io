@@ -7,7 +7,8 @@
 			content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
 		/>
 
-		<title>Marinade staking infrastructure</title>
+		<!-- Browser tab and PDF export name. Carries the descriptive line the cover does not. -->
+		<title>Inside Marinade's staking stack: liquid, native, and getting out early</title>
 
 		<link rel="stylesheet" href="dist/reset.css" />
 		<link rel="stylesheet" href="dist/reveal.css" />
@@ -92,12 +93,21 @@
 				Reveal.getSlideBackground(section)?.classList.add("art-bg");
 			}
 
+			// Never navigate the deck away mid-talk. Reveal's own #/ links are left alone.
+			function externalLinksInNewTab() {
+				for (const link of document.querySelectorAll('.reveal a[href^="http"]')) {
+					link.target = "_blank";
+					link.rel = "noopener noreferrer";
+				}
+			}
+
 			Reveal.on("ready", () => {
 				for (const section of document.querySelectorAll(".reveal .slides section")) {
 					wrapBody(section);
 					addJourney(section);
 					markArtBackground(section);
 				}
+				externalLinksInNewTab();
 			});
 		</script>
 	</body>

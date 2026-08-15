@@ -177,6 +177,12 @@ The palette, typography, and voice rules carry over unchanged.
   `index.html` now tags each art slide's background with `.art-bg` via
   `Reveal.getSlideBackground()`, and the gradients render on `.slide-background-content::after`,
   so the scrim fades in lockstep with the image it dims.
+- **Every external link opens in a new tab.** `index.html` sets `target="_blank"` plus
+  `rel="noopener noreferrer"` on every `a[href^="http"]` at ready time, rather than putting the
+  attribute on each anchor in `deck.md`. Doing it in one place means links added later are
+  covered automatically, reveal's own `#/` navigation is untouched, and the `rel` that should
+  always accompany `_blank` cannot be forgotten. The point is that clicking a link during the
+  talk must never navigate the deck away from the slide you are standing on.
 - **The agenda is a flat list.** A staircase indent was tried and rejected on sight: all three
   products now sit at one indentation, each with its shout-out inset below it.
 - **Light slides are one attribute away.** The theme drives colors through semantic tokens
@@ -308,8 +314,21 @@ as a sharp foreground image. And the videos exist too, `-transcode.mp4`, about 1
 
 ## Naming: "Recipe" is a problem
 
-**Status: the submitted title stands and is on the cover.** It went to the organizers and is not
-being renegotiated. This section is the contingency plan if a rename ever becomes possible.
+**Status: decided 2026-08-15. The deck is retitled. "The Marinade Recipe" is gone from the
+slides.**
+
+The cover now reads:
+
+> # Inside Marinade's staking stack
+> ### Building staking infrastructure on Solana
+
+The programme still carries the submitted line, *The Marinade Recipe: Building Staking
+Infrastructure on Solana*, and that is fine. The subtitle is deliberately unchanged, so anyone
+matching the slide against the programme still recognises it.
+
+The document `<title>` in `index.html` is
+*Inside Marinade's staking stack: liquid, native, and getting out early*. That line was rejected
+for the cover but is useful for the browser tab and the PDF export name.
 
 ## The objection that still holds
 
@@ -334,15 +353,20 @@ is an exception, not a default.
 ## Preferred replacement, chosen 2026-08-15
 
 > # Inside Marinade's staking stack
-> ### Liquid, native, and getting out early
 
-Chosen over the alternatives because it names the company and the three sections, has nothing to
-misread, and promises exactly what the deck now delivers. The trade accepted knowingly: it reads
-as a session title rather than a thesis, and it is the least distinctive of the options
-considered in a 50-speaker program.
+Chosen over the alternatives because it names the company, has nothing to misread, and promises
+exactly what the deck now delivers. The trade accepted knowingly: it reads as a session title
+rather than a thesis, and it is the least distinctive of the options considered in a 50-speaker
+program.
 
-If it is used, the cover subtitle changes from *Building staking infrastructure on Solana* to
-*Liquid, native, and getting out early*.
+**The cover is not affected and does not change.** It keeps the submitted H1 *The Marinade
+Recipe* and the H2 *Building staking infrastructure on Solana*, which is the subtitle wanted
+regardless of any rename.
+
+*Liquid, native, and getting out early* was tried as a cover subtitle and rejected on sight. It
+now lives only in the document `<title>` in `index.html`, which reads
+*The Marinade Recipe: liquid, native, and getting out early*. That keeps the browser tab and the
+PDF export name aligned with the programme while still saying what the talk contains.
 
 ## Rejected
 

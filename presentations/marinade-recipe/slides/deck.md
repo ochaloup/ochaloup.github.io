@@ -2,7 +2,7 @@
 
 <span class="lockup"><img src="images/marinade-white.svg" alt="">Marinade</span>
 
-# The Marinade Recipe
+# Inside Marinade's staking stack
 
 ## Building staking infrastructure on <span class="accent">Solana</span>
 
@@ -13,8 +13,10 @@
 <span class="note">Ondra Chaloupka</span>
 
 Note:
-Title is the one submitted to the organizers. Locked, do not renegotiate it.
-Conference name deliberately absent, the audience knows where they are.
+The programme still carries the submitted title, "The Marinade Recipe: Building Staking
+Infrastructure on Solana". The deck drops it: "Recipes" is a live Marinade product and
+the collision would cost the first minute. The subtitle is unchanged, so the room can
+still match this slide to the programme line. Conference name deliberately absent.
 
 ---
 
