@@ -370,19 +370,25 @@
 	background: none;
 }
 
-/* Quiet brand mark for content slides, pinned bottom-left. */
-.reveal .lockup-sm {
+/*
+ * Hat-only brand mark, pinned bottom-left. No wordmark: the cover already showed
+ * the full lockup, so this can be a mark rather than a signature.
+ */
+.reveal .brand-mark {
 	position: absolute;
 	left: var(--mn-margin-x);
 	bottom: var(--mn-margin-y);
-	gap: 14px;
-	font-size: var(--mn-body-sm);
-	color: var(--mn-fg-muted);
+	z-index: 1;
+	line-height: 0;
 }
 
-.reveal .lockup-sm img {
-	height: 30px;
-	opacity: 0.75;
+.reveal .brand-mark img {
+	height: 168px;
+	margin: 0;
+	border: none;
+	box-shadow: none;
+	background: none;
+	opacity: 0.6;
 }
 
 /* ---- archetype 4: statement / section break ------------------------ */
@@ -434,6 +440,16 @@
 }
 
 .reveal section.art .note {
+	color: var(--mn-chart-teal);
+}
+
+/* Cards need to float over a painting, so they carry their own ground. */
+.reveal section.art .card {
+	background: rgba(21, 26, 26, 0.66);
+	border-color: rgba(148, 201, 200, 0.32);
+}
+
+.reveal section.art .slide-foot {
 	color: var(--mn-chart-teal);
 }
 
@@ -575,6 +591,47 @@
 .reveal .slides section > .slide-body {
 	position: relative;
 	z-index: 1;
+}
+
+/* ---- machinery wash -------------------------------------------------- */
+/* Interlocking cogs behind a slide. Original drawing, no borrowed artwork. */
+
+.reveal .gears {
+	position: absolute;
+	top: 50%;
+	right: -160px;
+	transform: translateY(-50%);
+	width: 840px;
+	height: 840px;
+	color: var(--mn-accent);
+	opacity: 0.15;
+	z-index: 0;
+	pointer-events: none;
+}
+
+.reveal .gear {
+	position: absolute;
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 1;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	animation: mn-spin 26s linear infinite;
+}
+
+.reveal .gear-b {
+	animation-duration: 17s;
+	animation-direction: reverse;
+}
+
+.reveal .gear-c {
+	animation-duration: 11s;
+}
+
+@keyframes mn-spin {
+	to {
+		transform: rotate(360deg);
+	}
 }
 
 /* A block cursor that does not blink is just a rectangle. */
@@ -734,7 +791,7 @@
 .reveal .columns-3,
 .reveal .grid-3 {
 	display: grid;
-	gap: 28px;
+	gap: 48px;
 	align-items: stretch;
 }
 
@@ -981,6 +1038,69 @@
 	color: var(--mn-fg-muted);
 }
 
+/* ---- footnote pinned to the bottom of a slide ----------------------- */
+/* Small asides belong out of the reading flow, not trailing the content. */
+
+.reveal .slide-foot {
+	position: absolute;
+	left: var(--mn-margin-x);
+	right: var(--mn-margin-x);
+	bottom: var(--mn-margin-y);
+	z-index: 1;
+	margin: 0;
+	font-size: var(--mn-caption);
+	color: var(--mn-fg-muted);
+}
+
+/* Clear the journey rail on slides that carry one. */
+.reveal section.has-journey .slide-foot {
+	bottom: 200px;
+}
+
+/* ---- token names ---------------------------------------------------- */
+/* mSOL and friends: consistent, quieter than bold, still unmistakable. */
+
+/*
+ * A chip, not bold. Bolding every mention gets noisy, and inside a card heading
+ * that is already accent-coloured a colour change would not read at all.
+ */
+.reveal .token {
+	background: rgba(148, 201, 200, 0.16);
+	color: var(--mn-fg-strong);
+	border-radius: 6px;
+	padding: 0.04em 0.28em;
+	font-weight: 600;
+	letter-spacing: 0.01em;
+}
+
+/* ---- icon sitting inline with text ---------------------------------- */
+
+.reveal .inline-icon {
+	width: 1.05em;
+	height: 1.05em;
+	vertical-align: -0.14em;
+	margin-right: 0.35em;
+	stroke: currentColor;
+	fill: none;
+	stroke-width: 2;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+/* ---- figure --------------------------------------------------------- */
+/* A picture that is the point of the slide, rather than a background. */
+
+.reveal .figure {
+	display: block;
+	margin: 0 auto;
+	max-height: 560px;
+	max-width: 100%;
+	width: auto;
+	border-radius: 16px;
+	border: 1px solid var(--mn-rule);
+	box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+}
+
 /* ---- inline text utilities ----------------------------------------- */
 
 .reveal .accent {
@@ -1054,7 +1174,8 @@
 		transition: none !important;
 	}
 
-	.reveal .slide-icon .cursor {
+	.reveal .slide-icon .cursor,
+	.reveal .gear {
 		animation: none;
 	}
 }

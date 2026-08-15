@@ -35,17 +35,96 @@ exists at a scarcity-priced fee.
 
 ### Jito: on-chain automation, and MEV
 
+**Verified from source 2026-08-15**, `jito-foundation/stakenet` cloned at
+`/home/chalda/marinade/stakenet`. Everything below is from `programs/steward/README.md` rather
+than marketing pages.
+
 Stock pool, and the effort went into **StakeNet / Steward**, an Anchor program that holds the
-staking authority for the SPL pool and does validator selection **on chain**:
+staking authority for the SPL pool and does validator selection **on chain**. Quoting its README:
 
-- Reads the on-chain Validator History program.
-- Every **10 epochs**, scores 1,000+ validators, picks the top **400**, and gives each an
-  **equal** share, 1/400th of the pool.
-- Runs as a state machine across the 10-epoch cycle.
-- Cranking is **permissionless**, anyone can drive it.
-- Scoring parameters are set by the Jito DAO.
+> "The Steward Program is an Anchor program designed to manage the staking authority for a SPL
+> Stake Pool... The core operations of the Steward Program are permissionless such that any
+> cranker can operate the system... the steward surfaces this staking algorithm through variable
+> parameters to be decided by Jito DAO. In turn, this greatly decentralizes the stake pool
+> operations."
 
-The extra yield comes from **MEV**, captured by the Jito-Solana client and flowed into the pool.
+- **10-epoch cycle**, run as an explicit state machine: `RebalanceDirected` → `ComputeScores` →
+  `ComputeDelegations` → `Idle` → `ComputeInstantUnstake` → `Rebalance`.
+- `num_delegation_validators` = **400**, and the README is explicit that the top N by score
+  "become our validator set... with each receiving 1/N of the pool's stake". **Equal split, not
+  proportional to score.**
+- Score is **tiered and bit-packed** into an integer, e.g. "Tier 2 (bits 42-55): MEV commission
+  average (inverted)", so ranking is a single integer comparison.
+- Extra yield comes from **MEV**, via the Jito-Solana client.
+
+Two details worth knowing that did not appear in the docs pages:
+
+- **Directed staking (JIP-27)** lets JitoSOL holders name the validators their stake backs.
+  Marinade has a `directed-stake` repo too, so this is a shared idea rather than a Jito-only one.
+- **Priority-fee scoring is built but switched off**, via `priority_fee_max_commission_bps` =
+  10000 and `priority_fee_scoring_start_epoch` = 65535, with a note that governance could enable
+  it later. That is the same territory as SIMD-0123, and it says Jito is staged and waiting too.
+
+### Who fills the data in, and does anyone pay them
+
+StakeNet is two programs, and the split matters:
+
+- **Validator History** is the data layer. Up to **512 epochs per validator**, in one `zero_copy`
+  account holding a `CircBuf` of per-epoch entries.
+- **Steward** is the decision layer. It holds the SPL pool's `staker` authority and scores from
+  that history.
+
+**Most of the data is copied, not uploaded, and that is the clever part.** The instruction set
+splits cleanly:
+
+| Instruction | Who can call it |
+|---|---|
+| `copy_vote_account`, `copy_gossip_contact_info`, `copy_cluster_info`, `copy_tip_distribution_account`, `copy_priority_fee_distribution` | **Anyone.** `pub signer: Signer` with no authority constraint. |
+| `update_stake_history`, `update_priority_fee_history`, `upload_validator_age` | **Oracle only.** `has_one = oracle_authority`. |
+
+So it is only *partly* an oracle. The `copy_*` path is trustless by construction: the program reads
+the real on-chain source account and copies from it, so a caller cannot lie. What genuinely needs
+an oracle is the handful of fields that are not cheap to derive on chain, chiefly total active
+stake, stake rank and superminority status, which come from a `getVoteAccounts` call. There is a
+separate `priority_fee_oracle_authority` too, and `set_new_oracle_authority` to rotate them.
+
+**Nobody gets paid.** No reward, fee-share or incentive appears anywhere in the keeper setup. The
+quick-start is blunt about the direction of the money: the keeper keypair *"signs and pays for all
+transactions"*. Jito runs its own keeper; anyone else running one is subsidising the network.
+
+**This is worth internalising because Marinade is in the same position.** Marinade's cranks are
+permissionless and equally unfunded, and in practice `marcrank` on a cron job does the work and
+Marinade pays the fees. In both systems permissionless means *nobody can be locked out or held to
+ransom*, not *a crowd of independent operators competes to do it*. It is a fallback guarantee, not
+an active market.
+
+Say that honestly if the topic comes up. "Anyone can turn the crank, and in practice we are the
+ones who do, because we are the ones who care" is a much stronger answer than implying a
+decentralised keeper economy that neither protocol has.
+
+### The convergent guardrail, and this is the best find of the comparison
+
+Steward caps how much stake can be unstaked per cycle, in basis points of the whole pool:
+
+| Parameter | Value | Guards against |
+|---|---|---|
+| `scoring_unstake_cap_bps` | 750 | Churn from a new delegation set |
+| `instant_unstake_cap_bps` | 1000 | Churn from instant-unstake triggers |
+| `stake_deposit_unstake_cap_bps` | 1000 | Churn from deposits above target |
+
+The README's stated reason: *"This helps prevent yield drag from excessive unstaking."*
+
+**Marinade has exactly the same guardrail**, `max_stake_moved_per_epoch`, a percentage of total
+lamports under control, enforced in the program and reset each epoch.
+
+Two independent teams, different architectures, one on-chain and one off-chain, arrived at the
+same rate limit for the same reason: **moving stake on Solana costs about two epochs of yield,
+because redelegation was never enabled.** Neither team chose that constraint, and both had to
+build the same defence against it.
+
+That is the generous, credible way to talk about a competitor: not "we are better", but "this
+constraint is real enough that everyone who builds this discovers it". It also quietly proves the
+point about Solana's limits shaping architecture, without the deck having to argue it.
 
 **This is the most interesting contrast in the whole deck, and it is a direct challenge to one of
 the draft takeaways.** The old "what I would tell a builder" list says *put the decision logic
@@ -117,10 +196,11 @@ looks the way it does.
 
 ## Verify before presenting
 
-- The 400-validator count and the 10-epoch cadence are "currently configured" values set by Jito
-  DAO parameters. Re-check.
+- ~~The 400-validator count and 10-epoch cadence~~ **verified from source 2026-08-15**. They are
+  still DAO-tunable parameters, so re-read `programs/steward/README.md` near the talk date if a
+  number goes on a slide.
 - Whether Sanctum's `SanctumSpl` is a straight redeployment of SPL stake pool or a modified fork.
-  I did not verify the source.
+  Not verified, no local clone.
 - Marinade's own validator count and TVL, for any side-by-side number.
 - hSOL fee claims are from Helius marketing pages, not from code.
 

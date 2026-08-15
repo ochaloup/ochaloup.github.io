@@ -52,7 +52,8 @@
 			});
 
 			// The SOL's journey. A slide opts in with data-stage="auction", or "all".
-			const STAGES = ["Stake", "Auction", "Bond", "Settle", "Exit"];
+			// Bond before Auction: a validator has to fund a bond before it can bid.
+			const STAGES = ["Stake", "Bond", "Auction", "Settle", "Exit"];
 
 			function addJourney(section) {
 				const stage = section.dataset.stage;
@@ -79,7 +80,7 @@
 				const body = [...section.children].filter(
 					(el) =>
 						!el.matches(
-							"aside.notes, .journey, h1, h2, .label, .watermark, .slide-icon, .lockup",
+							"aside.notes, .journey, h1, h2, .label, .watermark, .slide-icon, .lockup, .brand-mark, .slide-foot, .gears",
 						),
 				);
 				if (!body.length) return;

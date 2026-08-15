@@ -88,6 +88,7 @@ marinade-staking-stack/
       marinade.svg        <- dark hat, invisible on the dark background
       solana-logo.svg
       brand-backgrounds/  <- teal-gradient, deep-teal-solid, light-teal-solid
+  PUNCHLINES.md      <- lines to say out loud, or keep ready for Q&A. Not slide copy.
   research/          <- my summaries of code and product research, one file per topic
   resources/         <- original sources: downloaded articles, screenshots, exports
 ```
@@ -183,6 +184,12 @@ The palette, typography, and voice rules carry over unchanged.
   covered automatically, reveal's own `#/` navigation is untouched, and the `rel` that should
   always accompany `_blank` cannot be forgotten. The point is that clicking a link during the
   talk must never navigate the deck away from the slide you are standing on.
+- **Sparse slides carry a hat-only brand mark, `.brand-mark`.** 96px, bottom-left, 60% opacity,
+  no wordmark. The cover already showed the full lockup, so later slides only need the mark, and
+  dropping the text means the slide gains presence while losing an element rather than adding
+  one. Two alternatives were considered and rejected: the hat inside the terminal frame (clever,
+  but merges two ideas into one muddled object) and a large watermark top-right (most brand
+  presence, but a third element competing with the heading and the glyph).
 - **The agenda is a flat list.** A staircase indent was tried and rejected on sight: all three
   products now sit at one indentation, each with its shout-out inset below it.
 - **Light slides are one attribute away.** The theme drives colors through semantic tokens
@@ -390,6 +397,77 @@ PDF export name aligned with the programme while still saying what the talk cont
 Structure changed from a single narrative thread to a **product tour**. Captured verbatim in
 intent from the planning session. This is the working outline now.
 
+**The organising principle, decided 2026-08-15: every slide raises the question the next one
+answers.**
+
+This is the main line of the talk. Not the chain-limits motif, not a thesis, not a metaphor.
+**A chain of questions.** Each slide should end owing the audience something, and the next slide
+should pay it. If a slide can be removed without breaking a question, it was decoration. If two
+adjacent slides have no question between them, the order is wrong or one of them is filler.
+
+Practical tests when writing or reordering any slide:
+
+- What question does the audience have in their head as this slide ends?
+- Does the next slide answer *that* question, or a different one?
+- Is the last slide of a section leaving a question that the next section opens with?
+
+Section-crossing matters as much as within a section. The seams are where a product tour usually
+falls apart into an inventory, and the questions are what keep it a single argument.
+
+The chain as currently designed for Liquid staking:
+
+| Slide | Leaves the room asking |
+|---|---|
+| L1 What an LST is, who was first | Fine, but does that mean it is just the standard pool? |
+| L2 Who does the waiting | So who decides where my stake actually goes? |
+| L3 The loop | Great, it runs. But *who* gets it, and on what basis? |
+| L4 Who gets the stake | Why would a validator want to be picked badly enough to give something up? |
+| L5 Three sources of yield | The bid is a promise. What makes a promise pay out? |
+| L6 One bond, two jobs | Sets up Native staking: this whole thing is a program. What if you do not want a program at all? |
+
+Note L6 deliberately hands off into the Native section rather than closing the topic. Do the same
+at the end of Native and Instant Unstake.
+
+**On memes and borrowed images. Read before sourcing any.**
+
+The repo is public and the deck goes on a conference screen, so third-party artwork is a real
+problem, not a technicality:
+
+- **Scrooge McDuck is Disney.** Raised as a risk, and **Ondra decided to use it anyway** on
+  2026-08-15. It is `slides/images/now-what.jpg` on the "You staked. Now what?" slide, logged in
+  `resources/README.md`. Informed decision, do not re-litigate it. If it ever needs pulling, the
+  slide works with `brand-art/p-liquidity.jpg` instead, whose lower right corner is a mountain of
+  gold coins.
+- **Factorio screenshots are Wube Software's.** Game screenshots get tolerated a lot in practice,
+  but "tolerated" is not "licensed", and this deck is published.
+- Most reaction memes carry someone's photograph or film still underneath.
+
+Two safe routes, both already used:
+
+1. **The Marinade paintings.** They are first-party and they already contain the imagery wanted.
+   `p-liquidity.jpg` is a mountain of gold coins, which is exactly the "now you get paid" beat
+   without borrowing anyone's duck.
+2. **Draw it.** The gears on the validator-choosing slide are the Lucide cog composed three times
+   at different sizes and rotation speeds, in brand teal, as an original SVG. No IP, no download,
+   scales to any projector, and it moves.
+
+If a genuine meme is still wanted, source one with a clear licence and log it in
+`resources/README.md` like every other asset.
+
+**Slide copy rules, added 2026-08-15. These are hard.**
+
+- **Never name a competitor on a slide.** Jito, Helius, Sanctum and the rest stay off the screen
+  unless Ondra says otherwise. Comparisons are worth two sentences spoken, never a table. A
+  comparison slide reads as defensive with other providers in the room.
+- **Never state the epoch length on a slide.** Not "two days", not any number. Epoch time is
+  moving and may be close to a day by the conference. Say "every epoch" instead.
+- **One sentence per box.** Nobody reads a paragraph on a slide, and if they are reading they are
+  not listening. Long explanations belong in the speaker notes.
+- **Small asides go to the bottom of the slide**, in `.slide-foot`, not trailing the content.
+  It clears the journey rail automatically.
+- **Token names use `.token`**, a subtle chip rather than bold. Bolding every mention of mSOL
+  gets noisy, and inside an already-accented card heading a colour change does not read at all.
+
 **Overall tone**
 
 - Playful. Memes and joke pictures are wanted, not just diagrams.
@@ -517,11 +595,24 @@ deliberate: each slide creates the question the next one answers.
 | # | Slide | Carries |
 |---|---|---|
 | L1 | **What an LST is, and who was first** | Program in, token out, still staked, still earning, tradeable. Marinade first on Solana, 2021, two hackathon teams. One slide, fast. |
-| L2 | **Not the standard pool** | The graspable difference. See below. |
+| L2 | **Somebody has to choose the validators** | Watch, Judge, Move. The message is the *machinery*: we collect data off Solana, work out where the best yield and better decentralisation are, and move stake there, continuously. Not "a choice exists" but "we built the thing that keeps making it". |
 | L3 | **The loop** | The crank cycle each epoch. `update_price`, `stake_delta`, `merge_stakes`. mSOL price rises, nothing is distributed. **Say the permissionless claim precisely, see below.** |
-| L4 | **Who gets the stake** | Off-chain auction and scoring, applied on chain. `stakePriority` / `unstakePriority`. Decentralisation is scored, not only performance. |
-| L5 | **Three sources of yield** | `total = inflation + MEV + bid`. The bid exists only because there is an auction. |
-| L6 | **One bond, two jobs** | A validator posts collateral to get Marinade stake. That same bond pays the bid and covers PSR when the validator fails. Nothing more. |
+| L4 | **Validators put up collateral** | Bond funded before any stake arrives. PSR covers the gap when a validator goes down. Foot line poses the question: Solana cannot share priority fees, so how do we pay you more? |
+| L5 | **Validators bid for your stake** | The answer. Bid, allocate highest first, last winner clears. Yield decomposition (`inflation + MEV + bid`) is **spoken**, not a slide. |
+| L6 | **From promise to payment** | Measure, calculate, settle on chain, permissionless claim. Deliberately light: no six-stage pipeline, no merkle detail unless asked. |
+
+**Order changed 2026-08-15: bonds now come before the auction.** It reads better and it is also
+more correct, because a validator has to fund a bond *before* it can bid. The journey rail was
+reordered to match: `Stake → Bond → Auction → Settle → Exit`.
+
+**The standalone "three sources of yield" slide was folded away.** The `RevShare` decomposition is
+still worth saying out loud on the auction slide, but it did not earn 60 seconds of its own once
+the settlement slide was added. Restore it if the section turns out to have room.
+
+**The settlement slide reverses an earlier decision.** The six-stage pipeline was ruled out on
+2026-08-15 as builder detail, and that still holds for the *diagram*. What went in is four beats
+of shape only: measured, calculated, settled on chain, claimable by anyone. Merkle trees and the
+distribution CLI stay in the speaker notes.
 | A1 | *Appendix:* delinquent stake | War story 1. |
 | A2 | *Appendix:* canonical stake accounts | War story 2. |
 
@@ -535,10 +626,31 @@ angles, and the recommendation is to lead with the first and use the second only
    between `WithdrawSol` and `WithdrawStake`, and LP economics. That is a paragraph of setup for
    a 70-second slide.
 
-   The graspable version leads with the constraint, not the mechanism:
+   **Moved out of Liquid staking, 2026-08-15.** The "who waits" framing is about *exit
+   liquidity*, which is Instant Unstake's territory and a different product. Keep the line, use
+   it there or near the end when the products are drawn together. It does not belong in L2.
 
    > **Everyone waits two days. The only question is who.**
-   > SPL: you wait. Marinade: someone else waits, and you pay them a fee for it.
+
+   **L2 became "Somebody has to choose the validators" instead.** One question asked of three
+   systems, which is more useful than a feature comparison and is not defensive:
+
+   | Pool | Who decides delegation |
+   |---|---|
+   | Most SPL stake pools | A `staker` keypair. People. |
+   | Jito | An on-chain program, cranked by anyone. |
+   | **Marinade** | A market. Validators bid for your stake. |
+
+   Confirmed from the SPL source: `(Staker only)` gates `AddValidatorToPool`,
+   `RemoveValidatorFromPool`, `IncreaseValidatorStake`, `DecreaseValidatorStake`,
+   `SetPreferredValidator` and `Redelegate`. So in a stock SPL pool **one keypair decides the
+   whole validator set**, and "who holds the staker key" is the real question about any
+   SPL-based LST. Jito is interesting precisely because it put a *program* in that seat.
+
+   History to say out loud, not put on the slide: Marinade wrote its own program in 2021 because
+   it was first and there was nothing to reuse. The original vision was the crank and
+   decentralisation. There were no bonds and no auction. Those came later, when it became clear
+   they could get stakers a better yield.
 
    Supporting detail, only if a question comes: Solana forces a cooldown of roughly two days on
    any unstake, so "instant" always means somebody took your staked position and is waiting in

@@ -271,6 +271,164 @@ on the epoch clock at a flat price.
 Marinade turns the wait into a price. SPL leaves it as a wait. That is the sentence for the
 slide.
 
+## Who decides where the stake goes, in each design
+
+This answers a direct question and turns out to be the best available framing for a comparison
+slide, because it is one question asked of three systems rather than a feature table.
+
+**The SPL stake pool has a `staker` authority.** It is a single account, and the instruction docs
+gate the delegation surface on it explicitly:
+
+- `(Staker only)` — `AddValidatorToPool`, `RemoveValidatorFromPool`, `IncreaseValidatorStake`,
+  `DecreaseValidatorStake`, `SetPreferredValidator`, `Redelegate`
+- `(Manager only)` — fees, roles, funding authorities
+- `SetStaker` is "Manager or staker only"
+
+So in a stock SPL pool, **one keypair decides the entire validator set and every stake movement.**
+That is the honest answer, and it is why "who holds the staker key" is the real question to ask
+about any SPL-based LST.
+
+**What each protocol puts in that seat:**
+
+| | Who decides delegation | What that thing is |
+|---|---|---|
+| Most SPL pools | The `staker` authority | A keypair or multisig, i.e. people |
+| **Jito** | The `staker` authority, assigned to **Steward** | An on-chain program, permissionlessly cranked |
+| **Marinade** | `manager_authority` on its own program | A keypair, fed by an off-chain auction where validators bid |
+
+**This is the comparison slide.** Not features, not fees, not liquidity. *Every pool has someone
+who decides where your stake goes. The interesting question is what that someone is.* A person, a
+program, or a market. All three answers are defensible, and Marinade's is the only one where the
+validators themselves compete on price for the privilege.
+
+It also sets up L4 directly: if the answer is "a market", the next question is how that market
+clears.
+
+## What `staker` actually is, and why redelegation is the real story
+
+### `staker` is a pool-level authority, not the depositor
+
+Confirmed from `stake-pool/program/src/state.rs`, and the doc comments say it outright:
+
+```rust
+/// Manager authority, allows for updating the staker, manager, and fee account
+pub manager: Pubkey,
+
+/// Staker authority, allows for adding and removing validators, and
+/// managing stake distribution
+pub staker: Pubkey,
+```
+
+Two single pubkeys stored on the `StakePool` account. **The `staker` has nothing to do with the
+people depositing SOL.** Anyone can deposit; the depositor gets pool tokens and no authority at
+all. The `staker` is one key that names the validator set and moves stake between validators.
+
+So the mental model is right: a specific keypair says "these are the validators", and the program
+distributes deposits according to what that key set up.
+
+### Redelegation does not exist on Solana. That is the important part.
+
+This was the interesting find. **Solana's stake-level `redelegate` instruction was never
+enabled**, and both implementations had to back out of it:
+
+- SPL still carries the instruction, explicitly deprecated:
+  ```rust
+  #[deprecated(
+      since = "2.0.0",
+      note = "The stake redelegate instruction used in this will not be enabled."
+  )]
+  Redelegate { ... }
+  ```
+- Marinade **removed** its `crank/redelegate.rs` entirely. Git history shows it existed; the
+  crank directory now holds only `update`, `stake_reserve`, `deactivate_stake`, `merge_stakes`,
+  `create_canonical_stake` and the two delinquent-migration instructions.
+
+**Consequence, and this is a genuinely good talk point:** you cannot move stake sideways on
+Solana. To move stake from validator A to validator B you must deactivate on A, wait out the
+cooldown, let it land in the reserve, then activate on B and wait for warm-up. That is roughly
+**two epochs, about four days, during which that SOL is earning less or nothing.**
+
+So rebalancing is not free bookkeeping, it is a real yield cost paid by the stakers. That is why
+the auction emits `stakePriority` and `unstakePriority` rather than just a target allocation:
+the system has to decide **what is worth moving**, not only where things should end up.
+
+### What the SPL `staker` can actually do, and what bounds it
+
+Yes, the SPL `staker` is the same *kind* of role as Marinade's manager authority: it drives
+rebalancing. But the powers are bounded very differently.
+
+**What the staker can do:** add and remove validators, decrease stake on any validator, increase
+stake on any validator from the reserve, set a preferred deposit/withdraw validator. The
+`DecreaseValidatorStake` docs are explicit about the amount:
+
+> "This instruction splits some amount of stake, **up to the total activated stake**, from the
+> canonical validator stake account, into its 'transient' stake account."
+
+**There is no percentage cap. Searched `state.rs` and `processor.rs` for any movement counter,
+epoch tracker or cap: zero hits.** The SPL program has no equivalent of
+`max_stake_moved_per_epoch`. A staker can drain a validator to zero in one instruction, and
+every validator in the same epoch.
+
+**What actually bounds the staker is mechanical, not policy:**
+
+1. **One transient stake account per validator.** `DecreaseValidatorStake` "only succeeds if the
+   transient stake account does not exist", which naturally limits a validator to one in-flight
+   move. But `DecreaseAdditionalValidatorStake` and `IncreaseAdditionalValidatorStake` exist
+   precisely to do a second move in the same epoch using an ephemeral account, so even this is
+   bypassable by design.
+2. **Minimum amounts.** At least rent-exemption plus
+   `max(MINIMUM_ACTIVE_STAKE, get_minimum_delegation())`.
+3. **Physics.** Deactivation takes an epoch, activation takes an epoch. This is the real brake,
+   and it applies to everybody.
+
+**What the staker cannot do: take the money.** The instruction docs state the design intent
+directly, "in order to rebalance the pool **without taking custody**, the staker needs a way of
+reducing the stake". The stake authority is a program PDA; the staker only signs to authorise the
+program to act. Withdrawals require burning pool tokens, so there is no path from staker key to
+SOL in a pocket.
+
+So the honest risk statement for a stock SPL pool: **the staker key cannot steal your principal,
+but it can destroy your yield**, by churning stake so aggressively that everything sits in warm-up
+and cool-down.
+
+### Where the guardrail lives, in each design
+
+| | Cap on stake movement | Where it is enforced |
+|---|---|---|
+| Stock SPL pool, keypair staker | **None** | Nowhere. Only physics and minimums. |
+| **Jito** | `scoring_unstake_cap_bps` 750, `instant_unstake_cap_bps` 1000, `stake_deposit_unstake_cap_bps` 1000 | In **Steward**, the program that holds the staker key |
+| **Marinade** | `max_stake_moved_per_epoch`, % of total lamports under control | In **the staking program itself** |
+
+All three can rebalance. None can steal. The difference is whether a cap exists at all, and if so
+how deep it sits. Marinade's is in the pool program, so it binds regardless of who holds the
+authority. Jito's is in the layer above, which is program-enforced too but is a different program
+with its own admin surface, including documented "passthrough instructions for SPL Stake Pool".
+
+**This strengthens L2 considerably.** "Who holds the staker key" is not a rhetorical question for
+a stock SPL pool: that key has unlimited rebalancing power over the whole pool, and nothing in the
+program says otherwise.
+
+### Marinade caps its own rebalancing on chain
+
+`state/mod.rs`:
+
+```rust
+pub last_stake_move_epoch: u64,     // epoch of the last stake move action
+pub stake_moved: u64,               // total moved during that epoch
+pub max_stake_moved_per_epoch: Fee, // % of total_lamports_under_control
+```
+
+`on_stake_moved()` resets the counter at each epoch boundary and rejects anything that would push
+`stake_moved` past the cap.
+
+**This is a rate limit on Marinade itself, enforced by the program.** However wrong the off-chain
+scoring got, and whoever held the manager key, only a bounded percentage of the pool can move in
+a single epoch. It is a strong counterweight to the honest admission that the *policy* is
+Marinade's: the policy is ours, but the program bounds how fast we can apply it.
+
+Worth adding to the L3 speaker notes as the answer to "so you can do whatever you like with my
+stake?" No. Not in one epoch.
+
 ## Suggested slide framing
 
 Do not do a feature table on stage, it will not read. One comparison and one code quote:

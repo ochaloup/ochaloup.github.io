@@ -243,16 +243,72 @@ That earns the word instead of borrowing it. Then drop back to "the bond covers 
 rest of the section. Naming the imprecision before anyone else does converts the objection into a
 point in your favour.
 
-## 6. Decentralisation is scored, not just performance
+## 6. How scoring actually works, for completeness
 
-The scoring inputs are not only performance. Marinade deliberately gives credit for
-decentralisation factors such as geography, so stake does not concentrate purely on the
-highest-yield operators. The auction is the main input to ordering, but it runs inside constraints
-(`constraints: String` in the record above is where a validator's binding constraint is reported).
+**Correction, 2026-08-15: the R script below is legacy and is not what runs today.** Ondra
+confirmed the live path is:
 
-**Still to confirm from source before presenting**: the exact scoring components and weights. Look
-in `/home/chalda/marinade/ds-sam` and `/home/chalda/marinade/delegation-strategy-2`, and the
-public `ds-sam` blog post. This note has not yet read them.
+```
+ds-sam-pipeline  runs  ds-sam (the auction)
+      -> loads results into delegation-strategy-2
+      -> which serves them over REST
+      -> marcrank fetches /api/v1/scores/sam/last and stakes on chain
+```
+
+So `delegation-strategy-2` is now the **store and API**, not the brain. The brain is `ds-sam`.
+Its README states the mechanism in one sentence, which is the single most useful quote found for
+the auction slide:
+
+> "Validators bid PMPE (per mille per epoch) to receive Marinade stake. Allocation proceeds
+> highest to lowest PMPE until stake depletes or constraints bind; the last (lowest) group to
+> receive stake sets the clearing price."
+
+That is the last-price auction, complete, in one line. It also carries the fairness point without
+needing a mechanism slide: everyone who wins pays what the *last* winner bid, not what they
+personally offered.
+
+The R material below is kept for history and because the component list is still a fair
+description of what validator quality means. **Not a slide.** Ondra's call: decentralisation is
+not a selling point on Solana today and nobody in the room will care.
+
+### The formula, verbatim in shape
+
+```r
+validators$score <- (0
+   + validators$normalized_dc_concentration * WEIGHT_DC_CONCENTRATION
+   + validators$normalized_grace_skip_rate  * WEIGHT_GRACE_SKIP_RATE
+   + validators$normalized_adjusted_credits * WEIGHT_ADJUSTED_CREDITS
+) / (WEIGHT_ADJUSTED_CREDITS + WEIGHT_GRACE_SKIP_RATE + WEIGHT_DC_CONCENTRATION)
+```
+
+Three normalised components, weighted, divided by the sum of the weights so the result lands in
+0..1:
+
+| Component | Measures |
+|---|---|
+| `adjusted_credits` | Vote credits. How reliably the validator votes, which is what actually earns rewards. |
+| `grace_skip_rate` | Block production skip rate, with a grace allowance. |
+| `dc_concentration` | Data-centre concentration, **inverted**: `normalize(1 - avg_dc_concentration)`, so being in a *less* crowded data centre scores higher. |
+
+The weights are read from environment variables, so **they are configuration, not code**. Score
+then drives `rank`, eligibility thresholds, and `target_stake_algo`, which is the pro-rata share
+of algorithmic stake.
+
+### The two details actually worth knowing
+
+1. **It is written in R, not Rust.** A statistical language, run as a batch job, producing a CSV
+   of scores. Only the result reaches the chain. If a slide ever needs to prove "the decision is
+   computed off-chain", this is the proof: the decision literally lives in an R script.
+2. **Decentralisation is a real term in the formula**, via inverted data-centre concentration.
+   Marinade does put weight on it. It just is not a story the current audience wants.
+
+### Caveat, do not skip this
+
+`delegation-strategy-2` is the **scoring** side. `marcrank` fetches from `/api/v1/scores/sam/last`,
+which is **SAM**, the auction side (`ds-sam`). Whether this R scoring still feeds live SAM
+allocation, or is now partly historical, was **not verified**. Do not present the formula as
+"how stake is allocated today" without checking. What is safe to say: scoring judges validator
+quality, the auction allocates stake, and the two are separate systems.
 
 ## Sources
 
