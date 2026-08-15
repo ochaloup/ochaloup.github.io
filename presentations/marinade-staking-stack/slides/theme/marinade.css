@@ -873,6 +873,26 @@
 	margin: 0 0 8px 0;
 }
 
+/* One step that is really two, stacked. Stake and unstake are the same crank. */
+.reveal .steps .split {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.reveal .steps .split > div {
+	padding: 14px 18px;
+	border-radius: 10px;
+	background: var(--mn-fill);
+	border: 1px solid var(--mn-rule);
+}
+
+.reveal .steps .split h3 {
+	font-size: var(--mn-body-sm);
+	color: var(--mn-accent);
+	margin: 0 0 2px 0;
+}
+
 /* ---- archetype 11: timeline ---------------------------------------- */
 
 .reveal .timeline {
@@ -1099,6 +1119,15 @@
 	border-radius: 16px;
 	border: 1px solid var(--mn-rule);
 	box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+}
+
+/* The line that lands after the picture, at heading weight. */
+.reveal .punch {
+	margin: 40px 0 0 0;
+	font-size: var(--mn-h2);
+	font-weight: 600;
+	line-height: 1.15;
+	color: var(--mn-fg-strong);
 }
 
 /* ---- inline text utilities ----------------------------------------- */

@@ -134,11 +134,14 @@ Leaves the question: fine, but somebody has to decide where all that stake goes.
 
 ---
 
-<!-- .slide: data-stage="stake" class="center-text" -->
+<!-- .slide: class="center-text" -->
+<!-- No data-stage on purpose: the journey rail would clutter the joke. -->
 
-## You staked. Now what?
+## You staked.
 
 <img class="figure" src="images/now-what.jpg" alt="">
+
+<p class="punch">Now what?</p>
 
 Note:
 The playful beat. You handed over your SOL, the token is in your wallet, and the
@@ -173,7 +176,7 @@ Leaves the question: so what is actually happening while I do nothing?
 </div>
 </div>
 
-<p class="slide-foot">A validator worth staking last epoch may not be worth it in this one. So it never stops.</p>
+<p class="slide-foot">A validator worth staking last epoch may not be worth it in this one.</p>
 
 Note:
 THE MESSAGE: Marinade runs machinery that collects data off Solana, works out where
@@ -202,7 +205,12 @@ Leaves the question: so who actually turns all this, and how often?
 
 <div class="steps">
 <div><div class="step-num">1</div><h3>Update</h3>Book rewards. <span class="token">mSOL</span> gets worth more.</div>
-<div><div class="step-num">2</div><h3>Stake</h3>Reserve out to validators.</div>
+<div><div class="step-num">2</div>
+<div class="split">
+<div><h3>Stake</h3>Reserve out to validators.</div>
+<div><h3>Unstake</h3>Validators back to reserve.</div>
+</div>
+</div>
 <div><div class="step-num">3</div><h3>Merge</h3>Fewer stake accounts.</div>
 <div><div class="step-num">4</div><h3>Repeat</h3>Every epoch. Forever.</div>
 </div>
