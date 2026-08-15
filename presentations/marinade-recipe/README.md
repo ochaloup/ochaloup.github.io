@@ -171,6 +171,14 @@ The palette, typography, and voice rules carry over unchanged.
   position, and a counter on a conference slide invites the audience to count what is left.
 - **Canvas margin is zero.** `margin: 0.04` drew a visible band around every full-bleed
   background. The theme's own 80px grid margin is the breathing room.
+- **The art scrim lives on the background, not the section.** Put on the section it was a
+  `background-image`, so reveal's exit fade dropped the scrim's opacity along with the text and
+  flashed the raw, undimmed painting for a moment before the background cross-faded.
+  `index.html` now tags each art slide's background with `.art-bg` via
+  `Reveal.getSlideBackground()`, and the gradients render on `.slide-background-content::after`,
+  so the scrim fades in lockstep with the image it dims.
+- **The agenda is a flat list.** A staircase indent was tried and rejected on sight: all three
+  products now sit at one indentation, each with its shout-out inset below it.
 - **Light slides are one attribute away.** The theme drives colors through semantic tokens
   (`--mn-surface`, `--mn-fg`, `--mn-accent`), so a slide flips to the guide's white-dominant
   look with `class="light"` plus `data-background-color="#FFFFFF"`. This matters because the
@@ -374,9 +382,12 @@ intent from the planning session. This is the working outline now.
 - Layout: product name, then its one-line shout-out on the next line beside it, then the next
   product indented a step further. A descending staircase.
 - Products to cover: Liquid Staking, Native Staking, Instant Unstake.
-- **Native Staking shows its three strategies nested underneath it:** Max Yield, Select,
-  Recipes. Decided 2026-08-12. Describe Recipes by its payout rail only, never by where the
-  stake is delegated.
+- **The agenda stays at three products.** Native's three strategies were tried nested underneath
+  and pulled back out on 2026-08-15: six items to read when the room only needs three, and no
+  context yet for what Select or Recipes mean. The block is parked in a comment in `deck.md` and
+  should become a strategies slide inside the Native section. This also moves the `$BONK` line
+  later, deliberately, so it arrives as a surprise instead of a bullet nobody reads closely.
+  Wherever it lands, describe Recipes by its payout rail only, never by where stake is delegated.
 - Shout-outs should be punchy, sourced from marinade.finance or the docs. A degen note is
   welcome if the source material supports one.
 - Open: is the three-product list complete? See the product research below.

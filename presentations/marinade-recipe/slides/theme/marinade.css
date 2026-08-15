@@ -395,8 +395,16 @@
  * marinade.finance OpenGraph card. Declared after .statement so it wins.
  */
 
-/* Bottom layer first: keeps the journey rail off the bright parts of a painting. */
-.reveal .slides section.art {
+/*
+ * The scrim rides the background element, not the section. On the section it
+ * faded out with the text on slide exit and flashed the raw painting.
+ * index.html tags the matching background with .art-bg at ready time.
+ * Bottom layer first: keeps the journey rail off the bright parts of a painting.
+ */
+.reveal .slide-background.art-bg .slide-background-content::after {
+	content: "";
+	position: absolute;
+	inset: 0;
 	background-image: linear-gradient(to top, rgba(21, 26, 26, 0.88) 0%, transparent 30%),
 		linear-gradient(
 			100deg,
@@ -515,8 +523,8 @@
 	color: var(--mn-heading-teal);
 }
 
-/* ---- agenda staircase ---------------------------------------------- */
-/* Each product steps right, its shout-out sits below and inset. */
+/* ---- agenda --------------------------------------------------------- */
+/* Flat list, one indent level. Its shout-out sits below and inset. */
 
 .reveal .agenda {
 	display: flex;
@@ -528,14 +536,6 @@
 	display: flex;
 	flex-direction: column;
 	gap: 10px;
-}
-
-.reveal .agenda > div:nth-child(2) {
-	margin-left: 180px;
-}
-
-.reveal .agenda > div:nth-child(3) {
-	margin-left: 360px;
 }
 
 .reveal .agenda-name {

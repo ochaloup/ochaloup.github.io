@@ -85,10 +85,17 @@
 				wrapper.append(...body);
 			}
 
+			// The art scrim belongs to the background, so it does not fade with the text.
+			function markArtBackground(section) {
+				if (!section.classList.contains("art")) return;
+				Reveal.getSlideBackground(section)?.classList.add("art-bg");
+			}
+
 			Reveal.on("ready", () => {
 				for (const section of document.querySelectorAll(".reveal .slides section")) {
 					wrapBody(section);
 					addJourney(section);
+					markArtBackground(section);
 				}
 			});
 		</script>

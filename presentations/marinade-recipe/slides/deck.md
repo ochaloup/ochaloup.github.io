@@ -28,11 +28,15 @@ Conference name deliberately absent, the audience knows where they are.
 <div>
 <span class="agenda-name">Native staking</span>
 <span class="agenda-shout">Keep custody. No program ever holds your SOL.</span>
+<!-- Parked: the three strategies crowd the agenda and land better inside the Native
+     section, where the room has context. Reuse this block for a strategies slide there,
+     and spend the $BONK line as a surprise rather than a bullet.
 <ul class="agenda-sub">
 <li><strong>Max Yield</strong> 100+ validators bidding for your stake</li>
 <li><strong>Select</strong> Verified identity, zero tolerance for malicious MEV</li>
 <li><strong>Recipes</strong> Stake SOL, get paid in <span class="accent">$BONK</span></li>
 </ul>
+-->
 </div>
 <div>
 <span class="agenda-name">Instant unstake</span>
@@ -41,8 +45,8 @@ Conference name deliberately absent, the audience knows where they are.
 </div>
 
 Note:
-Three products, three strategies under Native. Recipes pays out in a different token,
-merkle dropped. Talk about the payout rail, not about where the stake is delegated.
+Three products, nothing more. The Native strategies are parked in a comment in this
+file and belong in the Native section, where the room has context for them.
 Do not read the shout-outs out loud, they are there to be scanned.
 
 ---
