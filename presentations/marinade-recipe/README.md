@@ -308,52 +308,56 @@ as a sharp foreground image. And the videos exist too, `-transcode.mp4`, about 1
 
 ## Naming: "Recipe" is a problem
 
-Two independent conflicts with the working title.
+**Status: the submitted title stands and is on the cover.** It went to the organizers and is not
+being renegotiated. This section is the contingency plan if a rename ever becomes possible.
 
-1. **`Recipes` is a real, live Marinade product.** It is the third Native Staking strategy
-   next to Max Yield and Select. Rewards are swapped and paid out in a different token via a
-   merkle drop. An audience that knows Marinade will expect a talk about that product.
-2. **The food metaphor is retired brand vocabulary.** The brand guide explicitly bans
-   "recipes", "kitchen", "chefs", "cooking up", "secret sauce" as narrative framing.
-   Marinade is moving from DeFi-charm to fintech-clarity.
+## The objection that still holds
 
-**First check whether renaming is even possible.** The original doc marked the title
-_(locked in)_. If the abstract is already on solanasummit.rs or in the printed program,
-the program line is fixed and the rest of this section applies to the deck only.
+**`Recipes` is a real, live Marinade product.** It is the third Native Staking strategy next to
+Max Yield and Select. Rewards are swapped and paid out in a different token via a merkle drop.
+Anyone in the room who knows Marinade reads "The Marinade Recipe" and expects a talk about *that*
+product, so the first minute is spent correcting an expectation the program created.
 
-**Recommended, if the title is still open:**
+## The objection that turned out weaker than it looked
 
-> # Staking is the easy part
-> ### Everything that happens after you click stake
+The original note claimed the food metaphor was retired brand vocabulary, full stop. The brand
+guide does ban "recipes", "kitchen", "chefs", "cooking up", "secret sauce" **in copy**. But
+sourcing artwork for this deck turned up the fact that marinade.finance's own hero images are
+literally chefs in kitchens, and its OpenGraph card is a cow in a chef's hat. **The ban is on
+vocabulary, not imagery.**
 
-Why this one:
+Consequence for this deck: the paintings are fine and on-brand. The words are the thing to watch.
+Note the agenda heading currently reads *"What we are going to cook through"*, which is in the
+banned register. It is kept as a deliberate exception because it pairs with the artwork, but it
+is an exception, not a default.
 
-- It states the thesis of the talk instead of labelling the topic. The whole deck argues
-  that the stake instruction is trivial and the interesting engineering is everything around it.
-- It works on both halves of a mixed room. A regulator understands it. A Rust developer
-  hears a promise of depth.
-- No product-name collision, no retired metaphor, sentence case, no superlatives.
-- It survives being read out loud, and it gives the closing slide something to pay off.
+## Preferred replacement, chosen 2026-08-15
 
-Marinade is not in the title. Conference programs list speaker affiliation, so it shows up
-anyway. If it must be explicit, swap the subtitle for *Inside Marinade's staking stack*.
+> # Inside Marinade's staking stack
+> ### Liquid, native, and getting out early
 
-**Fallbacks, in order:**
+Chosen over the alternatives because it names the company and the three sections, has nothing to
+misread, and promises exactly what the deck now delivers. The trade accepted knowingly: it reads
+as a session title rather than a thesis, and it is the least distinctive of the options
+considered in a 50-speaker program.
 
-| Title | When to prefer it |
-|---|---|
-| *Inside Marinade: the stack behind Solana staking* | If a plain, zero-risk, descriptive line is wanted |
-| *One SOL, end to end* | If the deck locks to the follow-one-SOL narrative and the program shows a description under the title |
+If it is used, the cover subtitle changes from *Building staking infrastructure on Solana* to
+*Liquid, native, and getting out early*.
 
-**Rejected:**
+## Rejected
 
-- *What it takes to stake N million SOL.* Brand loves a number-first line, but a number in a
-  title has to be current on the day, needs a public source, and dates the deck the moment it
-  is reused. Keep numbers on slides where they can be updated.
-- *Where does your stake actually go?* Good question, wrong venue. At a summit with other
-  staking providers in the room, "actually" reads as a dig.
-
-Decision still open. See "Open questions".
+- *Staking is the easy part / Everything that happens after you click stake.* Was the standing
+  recommendation until 2026-08-15. Dropped because it promises a talk about the user journey and
+  the deck is product internals. Wrong promise for the content.
+- *Three products, three constraints.* Strong and it matches the real spine of the research,
+  every product being an answer to something the chain makes hard. Riskier, because the title
+  then owes the room exactly three and they had better land.
+- *One SOL, end to end.* **Withdrawn.** Its premise was the follow-one-SOL narrative that the
+  product-tour restructure replaced. It no longer describes the talk.
+- *What it takes to stake N million SOL.* A number in a title has to be current on the day, needs
+  a public source, and dates the deck the moment it is reused. Keep numbers on slides.
+- *Where does your stake actually go?* Good question, wrong venue. At a summit with other staking
+  providers in the room, "actually" reads as a dig.
 
 ## Content
 
@@ -382,8 +386,13 @@ intent from the planning session. This is the working outline now.
 - Layout: product name, then its one-line shout-out on the next line beside it, then the next
   product indented a step further. A descending staircase.
 - Products to cover: Liquid Staking, Native Staking, Instant Unstake.
-- **Sparse slides get a large Lucide glyph, `.slide-icon`.** The agenda carries `terminal`,
-  anchored in the empty right half, to say "this will be technical" before a word is spoken.
+- **Sparse slides get a large Lucide glyph, `.slide-icon`.** The agenda carries a terminal
+  window, anchored in the empty right half, to say "this will be technical" before a word is
+  spoken. Bare `terminal` was tried first and rejected: two strokes read as an arrow and an
+  underscore unless you already know the reference. `square-terminal` adds the frame that makes
+  it an object, and its second-line underscore is replaced by a filled block cursor that blinks
+  on a 1.2s step-end cycle. The blink is the part that actually sells it, and it is disabled
+  under `prefers-reduced-motion`.
   Inlined as SVG rather than an `<img>` so `stroke="currentColor"` picks up the theme colour.
   Two things to know if you add more: Lucide is drawn for small sizes at stroke-width 2, so at
   300px the markup must carry a much thinner stroke (0.9 here) or it reads as heavy bars; and
@@ -511,18 +520,42 @@ intent from the planning session. This is the working outline now.
 Slides 1 to 5 are sketched in `deck.md` and render clean. Everything from the "A product"
 separator onward is still the old skeleton.
 
-### Fourth point for the "who talks to you" slide, still open
+### "Who talks to you" slide, settled 2026-08-15
 
-Two candidates were considered and both are rejected:
+Name and handle now lead the block: **Ondra Chaloupka @_chalda**, set at H3 beside the helmet
+avatar. It was missing entirely, which is a bad thing for an intro slide to be missing.
 
-- **SPL Governance Deep Dive** (https://docs.realms.today/spl-governance). Real, but it belongs
-  *inside* the Realms contributor line, not beside it. It was written for a DAO conference
-  audience, and this is not one. Fold it into the Realms point as supporting evidence, do not
-  give it its own bullet.
+Four points, in order:
+
+1. **Backend developer** at [Marinade](https://marinade.finance). Highlighted, with Marinade and
+   Solana marks.
+2. Before that, [Java engineer](https://jbossts.blogspot.com/2018/01/narayana-periodic-recovery-of-xa.html)
+   at Red Hat, with the Red Hat mark.
+3. Came for distributed systems, [stayed for Solana](https://blog.chalda.cz/).
+4. Contributor to Realms, and author of its
+   [SPL Governance deep dive](https://docs.realms.today/developer-resources/spl-governance),
+   with the Realms mark.
+
+The handle links to https://x.com/_chalda.
+
+**On point 3.** The original read "Distributed systems are my thing", and that was dropped as an
+overclaim: the interest predates Marinade and is not currently backed by work or side projects,
+and a room of engineers can smell that. The past-tense arc is the honest version and it does more
+work, because it explains how the speaker got to Solana instead of just asserting a taste. It
+sits directly under the Red Hat line, where the Narayana recovery post is the evidence for it.
+
+**Dropped:** "These days, building mostly with AI" was tried as a closing bullet and cut as
+filler.
+
+**Link styling.** Bio links keep the body colour and carry a thin teal rule underneath rather
+than taking the default light-teal link colour. With the role and the handle already accented,
+coloured links would have put four teal fragments on one line.
+
+Rejected earlier, for the record:
+
+- **SPL Governance Deep Dive** as its own bullet. Real, but folded *into* the Realms line. It was
+  written for a DAO conference audience and this is not one.
 - **Vote Aggregator plugin.** Out completely. Private project, since decommissioned.
-
-So the slide currently has three points: backend developer, ex-Red Hat Java engineer, Realms
-contributor. A fourth is still wanted to balance the layout. Nothing obvious yet.
 
 ### Recommended structure: follow one SOL (superseded 2026-08-12, kept for its material)
 

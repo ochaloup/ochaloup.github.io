@@ -541,6 +541,21 @@
 	opacity: 0.55;
 }
 
+/* A block cursor that does not blink is just a rectangle. */
+.reveal .slide-icon .cursor {
+	animation: mn-blink 1.2s step-end infinite;
+}
+
+@keyframes mn-blink {
+	0%,
+	100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0;
+	}
+}
+
 /* ---- agenda --------------------------------------------------------- */
 /* Flat list, one indent level. Its shout-out sits below and inset. */
 
@@ -604,6 +619,21 @@
 	box-shadow: none;
 }
 
+.reveal .bio-name {
+	margin: 0 0 28px 0;
+	font-size: var(--mn-h3);
+	font-weight: 600;
+	color: var(--mn-fg-strong);
+	line-height: 1.1;
+}
+
+.reveal .bio-handle {
+	font-size: var(--mn-body-sm);
+	font-weight: 400;
+	color: var(--mn-accent);
+	margin-left: 16px;
+}
+
 .reveal .bio ul {
 	margin: 0;
 	list-style: none;
@@ -616,6 +646,20 @@
 
 .reveal .bio strong {
 	color: var(--mn-accent);
+}
+
+/*
+ * Links keep the body colour and carry a rule instead. The default teal would
+ * collide with the accented role and handle, leaving four teal fragments a line.
+ */
+.reveal .bio a {
+	color: inherit;
+	text-decoration: none;
+	border-bottom: 1px solid var(--mn-rule);
+}
+
+.reveal .bio a:hover {
+	border-bottom-color: var(--mn-accent);
 }
 
 .reveal .bio-icon {
@@ -972,5 +1016,9 @@
 @media (prefers-reduced-motion: reduce) {
 	.reveal .slides section {
 		transition: none !important;
+	}
+
+	.reveal .slide-icon .cursor {
+		animation: none;
 	}
 }

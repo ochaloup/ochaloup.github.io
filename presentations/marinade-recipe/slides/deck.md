@@ -20,11 +20,13 @@ Conference name deliberately absent, the audience knows where they are.
 
 ## What we are going to cook through
 
-<!-- Lucide "terminal", inlined so currentColor picks up the theme.
-     Swap the paths for another glyph from lucide.dev if a different signal is wanted,
-     monitor and cpu were the other candidates. -->
+<!-- Lucide "square-terminal" geometry, with its second-line underscore replaced by a
+     filled block cursor. Inlined so currentColor picks up the theme. The frame is what
+     makes it read as an object rather than two marks. -->
 <svg class="slide-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-<path d="M12 19h8"/><path d="m4 17 6-6-6-6"/>
+<rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
+<path d="m7 11 2-2-2-2"/>
+<rect class="cursor" x="10.8" y="7.3" width="3.6" height="3.4" rx="0.3" fill="currentColor" stroke="none"/>
 </svg>
 
 <div class="agenda">
@@ -62,21 +64,24 @@ Do not read the shout-outs out loud, they are there to be scanned.
 
 <div class="bio">
 <img class="bio-avatar" src="images/helmet.jpg" alt="">
+<div>
+<p class="bio-name">Ondra Chaloupka <span class="bio-handle"><a href="https://x.com/_chalda">@_chalda</a></span></p>
 <ul>
-<li><strong>Backend developer</strong> at Marinade
+<li><strong>Backend developer</strong> at <a href="https://marinade.finance">Marinade</a>
 <img class="bio-icon" src="images/marinade-white.svg" alt="">
 <img class="bio-icon" src="images/solana-logo.svg" alt=""></li>
-<li>Before that, Java engineer at Red Hat
+<li>Before that, <a href="https://jbossts.blogspot.com/2018/01/narayana-periodic-recovery-of-xa.html">Java engineer</a> at Red Hat
 <img class="bio-icon" src="images/logos/redhat.svg" alt=""></li>
-<li>Distributed systems are my thing <span class="note">[TODO reword, punchier]</span></li>
-<li>Contributor to Realms, and author of its SPL Governance deep dive
+<li>Came for distributed systems, <a href="https://blog.chalda.cz/">stayed for Solana</a></li>
+<li>Contributor to Realms, and author of its <a href="https://docs.realms.today/developer-resources/spl-governance">SPL Governance deep dive</a>
 <img class="bio-icon" src="images/logos/realms.png" alt=""></li>
 </ul>
 </div>
+</div>
 
 Note:
-[TODO] Fourth point still open, see README. Realms line now carries the deep dive
-rather than giving it its own bullet.
+The distributed systems line is deliberately past tense. It is the honest version,
+it explains how I got here rather than claiming an active practice.
 
 ---
 
