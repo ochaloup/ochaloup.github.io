@@ -382,6 +382,14 @@ intent from the planning session. This is the working outline now.
 - Layout: product name, then its one-line shout-out on the next line beside it, then the next
   product indented a step further. A descending staircase.
 - Products to cover: Liquid Staking, Native Staking, Instant Unstake.
+- **Sparse slides get a large Lucide glyph, `.slide-icon`.** The agenda carries `terminal`,
+  anchored in the empty right half, to say "this will be technical" before a word is spoken.
+  Inlined as SVG rather than an `<img>` so `stroke="currentColor"` picks up the theme colour.
+  Two things to know if you add more: Lucide is drawn for small sizes at stroke-width 2, so at
+  300px the markup must carry a much thinner stroke (0.9 here) or it reads as heavy bars; and
+  `.slide-icon` is excluded from the `.slide-body` wrap in `index.html`.
+  A retro CRT drawing was considered and dropped in favour of the brand's own icon set. Note the
+  real Windows "My Computer" icon is Microsoft's and must not go on a public deck.
 - **The agenda stays at three products.** Native's three strategies were tried nested underneath
   and pulled back out on 2026-08-15: six items to read when the room only needs three, and no
   context yet for what Select or Recipes mean. The block is parked in a comment in `deck.md` and

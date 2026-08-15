@@ -20,6 +20,13 @@ Conference name deliberately absent, the audience knows where they are.
 
 ## What we are going to cook through
 
+<!-- Lucide "terminal", inlined so currentColor picks up the theme.
+     Swap the paths for another glyph from lucide.dev if a different signal is wanted,
+     monitor and cpu were the other candidates. -->
+<svg class="slide-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<path d="M12 19h8"/><path d="m4 17 6-6-6-6"/>
+</svg>
+
 <div class="agenda">
 <div>
 <span class="agenda-name">Liquid staking</span>

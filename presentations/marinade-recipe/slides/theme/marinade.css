@@ -523,6 +523,24 @@
 	color: var(--mn-heading-teal);
 }
 
+/* ---- large slide glyph ---------------------------------------------- */
+/*
+ * Anchors the empty half of a sparse slide and sets the register.
+ * Lucide is drawn for small sizes at stroke-width 2; blown up to 320px that
+ * reads as heavy bars, so the markup carries a much thinner stroke instead.
+ */
+
+.reveal .slide-icon {
+	position: absolute;
+	top: 50%;
+	right: calc(var(--mn-margin-x) + 110px);
+	transform: translateY(-50%);
+	width: 300px;
+	height: 300px;
+	color: var(--mn-accent);
+	opacity: 0.55;
+}
+
 /* ---- agenda --------------------------------------------------------- */
 /* Flat list, one indent level. Its shout-out sits below and inset. */
 
