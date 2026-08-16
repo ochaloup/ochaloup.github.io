@@ -243,24 +243,66 @@ Leaves the question: so who does get the stake, and on what basis?
 
 ---
 
-<!-- .slide: data-stage="bond" -->
+<!-- .slide: data-stage="stake" -->
 
-## Validators put up collateral
+## A stake account cannot move sideways
 
-<div class="columns">
-<div class="card">
-<h3>Before any stake arrives</h3>
-<p>To take Marinade stake, a validator funds a bond on chain.</p>
-</div>
-<div class="card">
-<h3>Protected Staking Rewards</h3>
-<p>Down means no votes. No votes means no rewards. The bond covers the gap.</p>
-</div>
+<div class="cycle">
+<svg viewBox="0 0 1000 460" aria-hidden="true">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#308D8A"/></marker></defs>
+<g fill="none" stroke="#308D8A" stroke-width="2" marker-end="url(#ah)">
+<path d="M623.1 51.4 A360 190 0 0 1 838.4 165.0"/>
+<path d="M838.4 295.0 A360 190 0 0 1 623.1 408.6"/>
+<path d="M376.9 408.6 A360 190 0 0 1 161.6 295.0"/>
+<path d="M161.6 165.0 A360 190 0 0 1 376.9 51.4"/>
+</g>
+</svg>
+<div class="cycle-node" style="left:500px;top:40px"><h3>Active</h3><span>earning</span></div>
+<div class="cycle-node" style="left:860px;top:230px"><h3>Deactivating</h3><span>still earning</span></div>
+<div class="cycle-node cost" style="left:500px;top:420px"><h3>Inactive</h3><span>earning nothing</span></div>
+<div class="cycle-node cost" style="left:140px;top:230px"><h3>Activating</h3><span>earning nothing</span></div>
+<span class="cycle-edge" style="left:790px;top:78px">deactivate</span>
+<span class="cycle-edge" style="left:790px;top:390px">epoch</span>
+<span class="cycle-edge" style="left:215px;top:390px">delegate</span>
+<span class="cycle-edge" style="left:215px;top:78px">epoch</span>
 </div>
 
-<p class="slide-foot">Solana has no way for a validator to pay you a share of its priority fees. So how do we get you more than the protocol pays?</p>
+<p class="slide-foot">There is no arrow across the middle. Solana never enabled redelegation.</p>
 
 Note:
+Names are Solana's own: Active, Deactivating, Inactive, Activating.
+THE CORRECTION WORTH KNOWING: Deactivating still earns. The stake stays effective
+for that epoch. Inactive and Activating are the ones that pay nothing, and from a
+rewards point of view they are the same thing. That is the yellow half of the ring.
+Also: Inactive to Activating can happen in the SAME epoch. You do not wait an extra
+epoch to re-delegate. So the cost is not four epochs, it is the yellow arc.
+THIS IS THE SLIDE FOR THE HARD PART. A validator goes down, or quietly raises its
+commission against our stakers. The obvious move is to pull the stake now. There is
+no sideways. The account has to go all the way round, and half that circle pays the
+staker nothing.
+So every rebalance is a trade: yield lost going round, against yield lost by staying
+put. React to every wobble and you cost the stakers more than the wobbles do. That
+is why the auction emits priorities rather than a bare target, and why the program
+caps how much can move per epoch.
+Leaves the question: fine, so who is even worth moving to?
+
+---
+
+<!-- .slide: data-stage="bond" class="center-text" -->
+
+<img class="figure" src="images/bond-chips.png" alt="">
+
+<p class="punch">Validators back their word with their own SOL.</p>
+
+Note:
+One line under the picture, and it is deliberately on the validator's side. An
+earlier version read "their bad days come out of the deposit", which framed
+validators as the problem. They are not. They are partners who choose to put
+collateral up so that we can promise stakers a floor without asking anyone to
+trust us.
+SAY OUT LOUD, do not slide it: this is also the setup for the auction. Solana has
+no way for a validator to pay a staker a share of its priority fees, so how do we
+get you more than the protocol pays?
 Say "slash" ONCE here, then correct it immediately: on Solana slashing means the
 protocol destroys staked principal. We cannot do that and do not. We take from a
 bond the validator posted, to cover rewards you did not get. Principal is never
@@ -277,6 +319,13 @@ Leaves the question: so how DO you get me more?
 <!-- .slide: data-stage="auction" -->
 
 ## Validators bid for your stake
+
+<div class="ladder" aria-hidden="true">
+<svg viewBox="0 0 400 300">
+<rect x="8" y="30" width="22" height="250"/><rect x="40" y="48" width="22" height="232"/><rect x="72" y="66" width="22" height="214"/><rect x="104" y="82" width="22" height="198"/><rect x="136" y="100" width="22" height="180"/><rect x="168" y="118" width="22" height="162"/><rect x="200" y="134" width="22" height="146"/><rect x="232" y="152" width="22" height="128"/><rect x="264" y="170" width="22" height="110"/><rect x="296" y="186" width="22" height="94"/><rect x="328" y="204" width="22" height="76"/><rect x="360" y="220" width="22" height="60"/>
+<line x1="0" y1="152" x2="400" y2="152"/>
+</svg>
+</div>
 
 <div class="steps">
 <div><div class="step-num">1</div><h3>Bid</h3>A validator offers a share of its rewards.</div>
@@ -303,23 +352,120 @@ wallet?
 
 ## From promise to payment
 
-<div class="steps">
-<div><div class="step-num">1</div><h3>Measure</h3>End of epoch, read what actually happened.</div>
-<div><div class="step-num">2</div><h3>Calculate</h3>What each validator owes, bids and PSR.</div>
-<div><div class="step-num">3</div><h3>Settle</h3>Written on chain, out of the bonds.</div>
-<div><div class="step-num">4</div><h3>Claim</h3>Permissionless. Nobody needs us to release it.</div>
+<div class="split-media">
+<!-- Callback to the "You staked. Now what?" slide. Same duck, now doing the paperwork. -->
+<img class="figure" src="images/settle-payout.webp" alt="">
+<ol class="beats">
+<li><strong>Measure</strong> End of epoch, read what happened.</li>
+<li><strong>Calculate</strong> What each validator owes.</li>
+<li><strong>Settle</strong> Written on chain, out of the bonds.</li>
+<li><strong>Claim</strong> Bids and covered losses reach the stakers.</li>
+</ol>
 </div>
 
-<p class="slide-foot">Every epoch, for every validator, whether anyone is watching or not.</p>
+<p class="slide-foot">Until SIMD-0123 is live, Solana has no native way to pass priority fees to stakers.</p>
 
 Note:
 Deliberately light. No six-stage pipeline diagram, no merkle-tree detail unless
-somebody asks. The point is the shape: measured, calculated, settled on chain, and
-claimable by anyone.
+somebody asks. The point is the shape, and WHAT MOVES: the auction bids a validator
+promised, and the rewards PSR covers when it underperformed. Both come out of the
+same bond and end up with the staker.
+Claiming is permissionless, but that is a footnote, not the headline. Say it only
+if somebody asks who runs the payout.
 If asked how: snapshot the chain state, a distribution CLI computes the settlement,
 merkle trees go on chain, claims are made against them.
 Leaves the question, and it opens the next section: all of this is an ON-CHAIN
 PROGRAM holding your SOL. What if you do not want a program at all?
+
+---
+
+<!-- .slide: data-background-image="images/brand-art/p-security.jpg" class="cover art vcenter statement" -->
+
+# Native staking
+
+Note:
+Section break. The question the Liquid section left open: all of that is an
+ON-CHAIN PROGRAM holding your SOL. What if you do not want a program at all?
+
+---
+
+## Not everyone wants a program holding their SOL
+
+<div class="grid-3">
+<div class="card">
+<h3>No contract risk</h3>
+<p>The SOL never leaves your own stake account.</p>
+</div>
+<div class="card">
+<h3>No token</h3>
+<p>Nothing to hold, swap, or explain to an auditor.</p>
+</div>
+<div class="card">
+<h3>Just the delegation</h3>
+<p>Someone to pick the validators. Nothing else.</p>
+</div>
+</div>
+
+<p class="slide-foot">Launched July 2023. Rewards land straight in your account each epoch, so it compounds without anyone doing anything.</p>
+
+Note:
+The why, and it is a real one. Some people are simply not comfortable with a
+program custodying funds, and plenty of stakers do not want a liquid token at all.
+They want the delegation managed and nothing more.
+Institutions have the same requirement for a different reason: no token means
+nothing to account for, and no program means a much shorter audit conversation.
+Worth saying: you can always reclaim the stake authority and withdraw with the
+Solana CLI, without us. That is documented publicly in the how-to-native-staking
+repository.
+Leaves the question: so how do you manage my stake without ever holding it?
+
+---
+
+## Solana splits the keys
+
+```rust
+pub struct Authorized {
+    pub staker: Pubkey,     // may delegate
+    pub withdrawer: Pubkey, // may take the money
+}
+```
+
+<p class="slide-foot">Two fields. Marinade only ever holds the first one.</p>
+
+Note:
+This is the whole product in one struct, straight out of the Solana stake program.
+The comments are mine, the fields are theirs.
+The staker authority can delegate, split, merge and deactivate. It cannot move a
+single lamport out. The withdrawer can. The user keeps the withdrawer, always.
+That is why "no smart contract risk" is a mechanical claim here, not a marketing
+one. There is no program holding the balance, only an authority pointing at it.
+Leaves the question: fine, but who exactly holds that staker key?
+
+---
+
+## Not a hot wallet
+
+<div class="columns">
+<div class="card">
+<h3>Only the owner can rotate it</h3>
+<p>If our key leaked, every user would have to re-assign it themselves, on every stake account they own.</p>
+</div>
+<div class="card">
+<h3>So it is a PDA</h3>
+<p>An address with no private key. Nothing to lose, nothing to leak.</p>
+</div>
+</div>
+
+<p class="slide-foot">And the DAO can change who operates it, without touching a single user's stake account.</p>
+
+Note:
+This is the nicest security argument in the deck and it is not the obvious one.
+The obvious answer is "a hot wallet cannot steal, so it is fine". The real problem
+is recovery: only the OWNER can assign or revoke the staking authority, so a leaked
+key cannot be rotated by us. Every single user would have to act, individually, for
+every account. That is unfixable at our end, so the key must not exist.
+Hence a proxy program with a PDA. No private key exists to be lost.
+Leaves the question: delegating works. What about getting out?
 
 ---
 

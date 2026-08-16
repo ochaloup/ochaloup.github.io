@@ -454,6 +454,31 @@ Two safe routes, both already used:
 If a genuine meme is still wanted, source one with a clear licence and log it in
 `resources/README.md` like every other asset.
 
+**Meme wanted: the settlement slide.** `slides/deck.md`, "From promise to payment". Holding
+`brand-art/p-security.jpg` as a placeholder, which Ondra finds too generic. The joke should be
+about **inevitability** or **everybody getting paid**, not money in general, because the slide's
+claim is *this runs every epoch whether anyone is watching or not, and the claim needs nobody's
+permission*. Shortlist:
+
+**Settled 2026-08-16: the Scrooge callback**, `slides/images/settle-payout.webp`. Same duck as
+the "You staked. Now what?" slide, now at a desk counting and stacking the money. Superhero ideas
+were offered and rejected, Ondra is not a fan; the alternatives considered were Fantasia's
+marching brooms (for a process that runs while the operator sleeps), Disney's Robin Hood handing
+out coins, and Gringotts goblins.
+
+The callback is the reason it works: first appearance he is the staker dreaming about the money,
+second appearance he is the one doing the paperwork that actually pays it out. Two slides, one
+running joke, and it costs no explanation.
+
+**The bond slide image is settled**, 2026-08-16. `slides/images/bond-chips.png`, a poker buy-in,
+supplied by Ondra. It was the top recommendation of the six candidates because it is the only one
+carrying *both* halves of the idea: money on the table before you play, **and** losses coming out
+of your own pile rather than the house's. The other five (swear jar, Gandalf, bouncer, Fry, a
+Scrooge callback) each covered one half.
+
+The source lives at `resources/images/chipin2.png` and is copied into `slides/images/` because
+vite serves from `slides/`, so a `../resources/...` path would not resolve.
+
 **Slide copy rules, added 2026-08-15. These are hard.**
 
 - **Never name a competitor on a slide.** Jito, Helius, Sanctum and the rest stay off the screen
@@ -597,7 +622,33 @@ deliberate: each slide creates the question the next one answers.
 | L1 | **What an LST is, and who was first** | Program in, token out, still staked, still earning, tradeable. Marinade first on Solana, 2021, two hackathon teams. One slide, fast. |
 | L2 | **Somebody has to choose the validators** | Watch, Judge, Move. The message is the *machinery*: we collect data off Solana, work out where the best yield and better decentralisation are, and move stake there, continuously. Not "a choice exists" but "we built the thing that keeps making it". |
 | L3 | **The loop** | The crank cycle each epoch. `update_price`, `stake_delta`, `merge_stakes`. mSOL price rises, nothing is distributed. **Say the permissionless claim precisely, see below.** |
-| L4 | **Validators put up collateral** | Bond funded before any stake arrives. PSR covers the gap when a validator goes down. Foot line poses the question: Solana cannot share priority fees, so how do we pay you more? |
+| L3b | **A stake account cannot move sideways** | The four states drawn as a **ring**, because it is a cycle. Active → Deactivating → Inactive → Activating → Active. Carries the rebalancing problem. |
+
+**Two corrections to that diagram, made 2026-08-15 and worth not undoing:**
+
+- **Deactivating still earns.** The stake stays effective for that epoch. The first version marked
+  it as winding down toward nothing, which is wrong.
+- **Inactive and Activating are the same from a rewards point of view: both pay nothing.** So the
+  yellow is *half the ring*, not one box. And **Inactive can go to Activating in the same epoch**,
+  no extra wait, which is why a line diagram misled and a circle does not.
+| L4 | *(no heading)* | Poker buy-in picture, one line under it: *Validators back their word with their own SOL.* Nothing else on the slide. |
+
+**L4 has no heading on purpose, 2026-08-16.** It used to carry *"No bond, no stake."* above the
+picture, which said the same thing twice and did it in the gatekeeping register this slide had
+already moved away from. Picture plus one line is the whole slide.
+
+**L6 does not reuse the horizontal step strip.** Three `.steps` diagrams in a row read as one
+long diagram, so the settlement beats moved to `.split-media`: painting on the left, a vertical
+numbered list on the right. Same four beats, different shape, and it breaks the run.
+
+**Tone note on L4, 2026-08-15.** An earlier line read *"Their bad days come out of the deposit"*
+and was cut for framing validators as the problem. They are not: they are partners who choose to
+post collateral so Marinade can promise stakers a floor without asking anyone to trust it. Keep
+this slide on the validator's side. The bond is a commitment, not a punishment.
+
+The priority-fee question that sets up the auction (*Solana has no way for a validator to pay you
+a share of its priority fees, so how do we get you more?*) moved to the **speaker notes**. It is
+said aloud, not printed, so the slide stays at one sentence.
 | L5 | **Validators bid for your stake** | The answer. Bid, allocate highest first, last winner clears. Yield decomposition (`inflation + MEV + bid`) is **spoken**, not a slide. |
 | L6 | **From promise to payment** | Measure, calculate, settle on chain, permissionless claim. Deliberately light: no six-stage pipeline, no merkle detail unless asked. |
 
@@ -721,7 +772,34 @@ validator posted, and principal is never touched. Saying the imprecision out lou
 in the room does converts an objection into a point in your favour. Full suggested wording in
 `research/liquid-staking-system-and-bonds.md`.
 
-**Native Staking**
+**Native staking: slides built 2026-08-16**
+
+| # | Slide | Carries |
+|---|---|---|
+| N0 | *Native staking* section break | On the vault painting. Answers the question L6 left open. |
+| N1 | **Not everyone wants a program holding their SOL** | Three cards: no contract risk, no token, just the delegation. Foot: launched July 2023, compounds by itself. |
+| N2 | **Solana splits the keys** | The real `Authorized` struct as printed Rust. Two fields. Marinade only ever holds `staker`. |
+| N3 | **Not a hot wallet** | Why the staking authority is a PDA and not a key. |
+| N4 | *(next)* Getting out | The exit machinery. Not built yet. |
+
+**Both the proxy and the undelegation story are in, deliberately.** They answer different
+questions and each is worth one slide. The proxy answers *who holds the key you gave us*; the
+exit machinery answers *what happens when you want to leave*. Dropping either leaves an obvious
+hole, and the proxy is cheap because its argument is one non-obvious sentence.
+
+**The proxy argument is the good one, and it is not the obvious one.** The obvious defence is "a
+hot wallet cannot steal anything, so it is fine". The real problem is **recovery**: only the
+*owner* can assign or revoke the staking authority, so a leaked Marinade key could not be rotated
+by Marinade. Every user would have to act individually, on every stake account they own. That is
+unfixable from our side, so the key must not exist at all. Hence a PDA. Source:
+`native-staking/programs/marinade-native-proxy/README.md`.
+
+**On the code slide.** `pub struct Authorized { staker, withdrawer }` is the whole custody model
+in two fields, from `solana/sdk/program/src/stake/state.rs`. The comments on the slide are ours,
+the fields are Solana's. Highlight.js was recoloured from monokai into the brand palette, because
+stock pink-and-lime reads as somebody else's deck.
+
+**Native Staking (original capture)**
 
 - Lead with why. Native staking exists because some people are afraid of on-chain program code,
   and because plenty of stakers want yield without touching web3 finance or holding mSOL.
