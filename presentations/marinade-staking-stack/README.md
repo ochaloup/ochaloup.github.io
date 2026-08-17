@@ -780,7 +780,19 @@ in the room does converts an objection into a point in your favour. Full suggest
 | N1 | **Not everyone wants a program holding their SOL** | Three cards: no contract risk, no token, just the delegation. Foot: launched July 2023, compounds by itself. |
 | N2 | **Solana splits the keys** | The real `Authorized` struct as printed Rust. Two fields. Marinade only ever holds `staker`. |
 | N3 | **Not a hot wallet** | Why the staking authority is a PDA and not a key. |
-| N4 | *(next)* Getting out | The exit machinery. Not built yet. |
+| N4 | **Getting out is the hard part** | Pick, Move, Deactivate, Merge. The exit authority marks an account as leaving, so the authority *is* the state. Foot: a hundred validators does not fit in one transaction. |
+| I0 | *Instant unstake* section break | On the gold-coin painting. |
+| I1 | **Somebody buys your stake account** | Atomic swap, one transaction, both legs or neither. Works on any stake account, even ones Marinade never touched. |
+
+**Rails are now per section**, `RAILS` in `index.html`, selected with `data-rail`:
+
+- `liquid`: Stake, Bond, Auction, **Settle**. Exit was removed on 2026-08-16, there is no exit
+  content in the Liquid section.
+- `native`: Stake, Exit.
+- `instant`: Stake, Exit. Kept as its own entry rather than sharing `native`, so the two can
+  diverge without surprising anybody.
+
+A slide with no `data-rail` falls back to `liquid`.
 
 **Both the proxy and the undelegation story are in, deliberately.** They answer different
 questions and each is worth one slide. The proxy answers *who holds the key you gave us*; the

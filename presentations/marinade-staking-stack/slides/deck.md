@@ -389,6 +389,8 @@ ON-CHAIN PROGRAM holding your SOL. What if you do not want a program at all?
 
 ---
 
+<!-- .slide: data-rail="native" data-stage="stake" -->
+
 ## Not everyone wants a program holding their SOL
 
 <div class="grid-3">
@@ -421,7 +423,17 @@ Leaves the question: so how do you manage my stake without ever holding it?
 
 ---
 
+<!-- .slide: data-rail="native" data-stage="stake" -->
+
 ## Solana splits the keys
+
+```rust
+pub struct Meta {
+    pub rent_exempt_reserve: u64,
+    pub authorized: Authorized,  // the keys
+    pub lockup: Lockup,
+}
+```
 
 ```rust
 pub struct Authorized {
@@ -442,6 +454,8 @@ one. There is no program holding the balance, only an authority pointing at it.
 Leaves the question: fine, but who exactly holds that staker key?
 
 ---
+
+<!-- .slide: data-rail="native" data-stage="stake" -->
 
 ## Not a hot wallet
 
@@ -466,6 +480,72 @@ key cannot be rotated by us. Every single user would have to act, individually, 
 every account. That is unfixable at our end, so the key must not exist.
 Hence a proxy program with a PDA. No private key exists to be lost.
 Leaves the question: delegating works. What about getting out?
+
+---
+
+<!-- .slide: data-rail="native" data-stage="exit" -->
+
+## Getting out is the hard part
+
+<div class="steps">
+<div><div class="step-num">1</div><h3>Pick</h3>Which accounts add up to what you asked for.</div>
+<div><div class="step-num">2</div><h3>Move</h3>To the exit authority. Now they are leaving.</div>
+<div><div class="step-num">3</div><h3>Deactivate</h3>Across many transactions, in the background.</div>
+<div><div class="step-num">4</div><h3>Merge</h3>One account. One withdrawal.</div>
+</div>
+
+<p class="slide-foot">Your stake sits on a hundred validators. That does not fit in one transaction.</p>
+
+Note:
+THE ENGINEERING SLIDE OF THIS SECTION. Delegating is easy. Un-delegating is where
+the work is.
+The problem: good decentralisation means your SOL is spread across a hundred
+validators, so it is a hundred stake accounts. Ask to withdraw a specific amount and
+we have to find which subset adds up to it, deactivate each one, and none of that
+fits in a single transaction. So it becomes a background pipeline that builds
+transactions asynchronously.
+THE DESIGN DETAIL: there are two stake authorities. One for accounts we keep
+delegating, and a separate EXIT authority. Moving an account under the exit
+authority is what marks it as on its way out of the Marinade system. The authority
+IS the state, so there is no status field anywhere to fall out of sync.
+Contrast with the Liquid section on purpose: there we kept our own mirror of state
+and an outsider could break it. Here the on-chain object carries the state itself.
+Leaves the question, and it opens the last section: you still wait an epoch for the
+withdrawal. What if I want the SOL right now?
+
+---
+
+<!-- .slide: data-background-image="images/brand-art/p-liquidity.jpg" class="cover art vcenter statement" -->
+
+# Instant unstake
+
+Note:
+Section break. The question Native left open: even after all that machinery, Solana
+still makes you wait out the cooldown. What if you want the SOL now?
+
+---
+
+<!-- .slide: data-rail="instant" data-stage="exit" -->
+
+## Somebody buys your stake account
+
+<div class="flow">
+<div>You hand over the stake account</div>
+<div>They hand over SOL</div>
+</div>
+
+<p class="slide-foot">One transaction. Both sides settle, or neither does. No liquid token, no cooldown, and it works on any stake account, even ones Marinade never touched.</p>
+
+Note:
+The mechanism is simpler than people expect: an atomic swap. Your stake account
+goes to a buyer, their SOL comes to you, in the same transaction. Both legs or
+nothing, so there is no partial fill and no counterparty risk.
+Solana still makes somebody wait the cooldown. That somebody is now the buyer, and
+the price they quote is what they charge for waiting.
+Worth saying: it auto-detects natively staked SOL across any validator, so you can
+exit a stake account that was never delegated through us.
+[TODO] Ondra wants to research the RFQ side, unstake-taker-client, before the next
+slide. See ../README.md.
 
 ---
 

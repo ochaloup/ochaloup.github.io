@@ -52,19 +52,26 @@
 			});
 
 			// The SOL's journey. A slide opts in with data-stage="auction", or "all".
+			// One rail per section, so each product shows only the stages it actually has.
 			// Bond before Auction: a validator has to fund a bond before it can bid.
-			const STAGES = ["Stake", "Bond", "Auction", "Settle", "Exit"];
+			const RAILS = {
+				liquid: ["Stake", "Bond", "Auction", "Settle"],
+				native: ["Stake", "Exit"],
+				instant: ["Stake", "Exit"],
+			};
 
 			function addJourney(section) {
 				const stage = section.dataset.stage;
 				if (!stage) return;
-				const current = STAGES.findIndex((s) => s.toLowerCase() === stage.toLowerCase());
+				const stages = RAILS[section.dataset.rail || "liquid"];
+				if (!stages) return;
+				const current = stages.findIndex((s) => s.toLowerCase() === stage.toLowerCase());
 				if (current < 0 && stage !== "all") return;
 
 				const rail = document.createElement("nav");
 				rail.className = stage === "all" ? "journey all" : "journey";
 				rail.setAttribute("aria-hidden", "true");
-				for (const [i, name] of STAGES.entries()) {
+				for (const [i, name] of stages.entries()) {
 					const node = document.createElement("span");
 					node.className = `j ${i < current ? "past" : i === current ? "now" : "next"}`;
 					node.textContent = name;

@@ -1434,22 +1434,34 @@
 
 /* ---- chrome -------------------------------------------------------- */
 
-/* Code has to survive a projector, so it runs bigger than the cookbook caption. */
+/*
+ * Code has to survive a projector, so it runs bigger than the cookbook caption.
+ * Block with fit-content, not inline-block: inline-block picks up baseline
+ * leading and two stacked blocks end up overlapping.
+ */
 .reveal pre {
 	box-shadow: none;
 	border: 1px solid var(--mn-rule);
 	border-radius: 12px;
-	font-size: 30px;
+	font-size: 28px;
 	line-height: 1.45;
-	width: auto;
+	display: block;
+	width: fit-content;
 	max-width: 100%;
-	display: inline-block;
+	margin: 0 auto;
 	text-align: left;
+	overflow: hidden;
+}
+
+.reveal pre + pre {
+	margin-top: 32px;
 }
 
 .reveal pre code {
-	padding: 28px 36px;
+	display: block;
+	padding: 24px 34px;
 	max-height: none;
+	overflow: visible;
 }
 
 /*
