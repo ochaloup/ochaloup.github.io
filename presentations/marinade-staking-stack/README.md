@@ -14,7 +14,7 @@ Slide content gets drafted here first, then moved into `slides/deck.md`.
 | **Host** | Superteam Balkan |
 | **Scale** | 1,000+ attendees, 50+ speakers, 50+ companies |
 | **Entry** | Free, Luma registration required |
-| **Duration** | 25 minutes |
+| **Duration** | 20 minutes (cut from 25, confirmed 2026-08-18) |
 | **Links** | [luma](https://luma.com/solana-summit-serbia) · [solanasummit.rs](https://solanasummit.rs/) · [Belgrade Blockchain Week](https://belgradeblockchainweek.com/) |
 
 Audience is mixed: developers, founders, investors, banks, regulators, government.
@@ -391,6 +391,43 @@ PDF export name aligned with the programme while still saying what the talk cont
   providers in the room, "actually" reads as a dig.
 
 ## Content
+
+### Timing budget, 20 minute slot (2026-08-18)
+
+The slot was cut from 25 to 20 minutes. Assume **17 minutes on stage, 3 for questions**, until the
+organizers say whether Q&A sits inside the slot or after it.
+
+17 minutes is 1020 seconds. Rehearsed estimate for the current 22 slides:
+
+| Block | Slides | Seconds |
+|---|---|---|
+| Cover, agenda, who talks to you | 3 | 95 |
+| Liquid staking, break plus 7 | 8 | 470 |
+| Native staking, break plus 4 | 5 | 268 |
+| Instant unstake, break plus 3 | 4 | 138 |
+| Closing | 1 | 20 |
+| **Total** | **22** | **991, about 16.5 min** |
+
+**So the deck is already full.** A rehearsal estimate runs 20 to 30% short of the real delivery,
+which puts 22 slides at 20 to 21 minutes on the day. **One cut from the shortlist below is already
+owed**, and it was taken on knowingly when Instant unstake grew from one slide to three.
+
+Rules that follow from this:
+
+- **Appendix slides are free.** They sit after the closing and only get shown if somebody asks, so
+  delinquent stake and canonical stake cost nothing in the budget. Build them.
+- **Anything added before the closing has to be paid for.** New slide in means a slide out, or an
+  existing one gets faster.
+- **Cutting happens after the deck is complete**, not while writing it. Decided 2026-08-18: finish
+  the whole idea first, then remove parts. A half-built section cannot be judged against a full one.
+
+Parked cut candidates, in the order they would go. Not decided, just the shortlist:
+
+1. **N3 "Not a hot wallet"** folds into N2 as one spoken sentence. The recovery argument is strong
+   but it is one non-obvious sentence, not a slide. Saves about 60s.
+2. **"Who talks to you"** trimmed to a 20 second read rather than four spoken points. Saves 15s.
+3. **L3b the state ring** becomes one line on the crank slide. Saves 70s, and it is the most
+   painful of the three because the ring is the best diagram in the deck.
 
 ### Deck plan as of 2026-08-12 (current, supersedes "follow one SOL" below)
 
@@ -783,6 +820,17 @@ in the room does converts an objection into a point in your favour. Full suggest
 | N4 | **Getting out is the hard part** | Pick, Move, Deactivate, Merge. The exit authority marks an account as leaving, so the authority *is* the state. Foot: a hundred validators does not fit in one transaction. |
 | I0 | *Instant unstake* section break | On the gold-coin painting. |
 | I1 | **Somebody buys your stake account** | Atomic swap, one transaction, both legs or neither. Works on any stake account, even ones Marinade never touched. |
+| I2 | **Somebody has to want it** | Now, Less, Why. The price is the discount, and the discount is what the waiting is worth to somebody else. Marinade charges the unstaker nothing. |
+| I3 | **Everyone waits. The only question is who.** | Statement slide, no rail, no picture. Closes both exits at once and hands off to the closing. |
+
+**On I2 and I3, added 2026-08-18, and on what is deliberately not there.** The three Instant unstake
+repositories are private, so the slides and these notes carry only what marinade.finance already
+states publicly. The archived product page says "buyer" once and never says "auction", so the deck
+does not either. Two mechanics beats **are** said on stage and are deliberately written nowhere in
+this repo, speaker notes included, because the notes are public too. They live in the private talk
+note under `$K`, `marinade-staking-stack--instant-unstake-mechanics--INVESTIGATION.md`.
+
+I3 must never print an epoch length, per the standing rule. "About two days" spoken is fine.
 
 **Rails are now per section**, `RAILS` in `index.html`, selected with `data-rail`:
 
@@ -1166,6 +1214,12 @@ Ordered by how much they block the next step.
 - 2026-08-12 — Brand artwork sourced from marinade.finance video posters. Cover, closing, and
   three section breaks now carry painterly illustrations under a teal scrim. Verified all 20
   slides render with no overflow and no console errors.
+- 2026-08-18 — Slot cut to 20 minutes, confirmed. Timing budget added above. Order of work
+  unchanged: finish Instant unstake, the Native strategies slide, the appendix and the QR code
+  first, then cut against the budget.
+- 2026-08-18 — Instant unstake grew to three content slides, I1 to I3. Deck is 22 slides, verified
+  headless: no overflow, no console errors. The section's engineering detail stays spoken, because
+  its source repositories are private and this repo is not.
 
 ## Conversation notes
 

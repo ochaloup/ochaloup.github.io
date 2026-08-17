@@ -428,29 +428,36 @@ Leaves the question: so how do you manage my stake without ever holding it?
 ## Solana splits the keys
 
 ```rust
-pub struct Meta {
-    pub rent_exempt_reserve: u64,
-    pub authorized: Authorized,  // the keys
-    pub lockup: Lockup,
+pub enum StakeStateV2 {
+    Uninitialized,
+    Initialized(Meta),
+    Stake(Meta, Stake, StakeFlags), // a delegated account
+    RewardsPool,
 }
 ```
 
 ```rust
-pub struct Authorized {
+pub struct Authorized {   // lives in Meta
     pub staker: Pubkey,     // may delegate
     pub withdrawer: Pubkey, // may take the money
 }
 ```
 
-<p class="slide-foot">Two fields. Marinade only ever holds the first one.</p>
+<p class="slide-foot">Custody sits in Meta. Where the SOL sits is in Stake. Marinade only ever holds one field of the first.</p>
 
 Note:
-This is the whole product in one struct, straight out of the Solana stake program.
-The comments are mine, the fields are theirs.
-The staker authority can delegate, split, merge and deactivate. It cannot move a
-single lamport out. The withdrawer can. The user keeps the withdrawer, always.
-That is why "no smart contract risk" is a mechanical claim here, not a marketing
-one. There is no program holding the balance, only an authority pointing at it.
+The account itself is an enum, and the variant is the state. A delegated one is
+Stake(Meta, Stake, StakeFlags), and that is the whole object: Meta is custody,
+Stake is delegation. The comments are mine, the fields are Solana's.
+THE POINT IS STILL CUSTODY. The staker authority can delegate, split, merge and
+deactivate. It cannot move a single lamport out. The withdrawer can, and the user
+keeps the withdrawer, always. So "no smart contract risk" is mechanical here, not
+marketing: no program holds the balance, only an authority points at it.
+NOT ON THE SLIDE, said only if it helps: the other half is
+Stake { delegation: Delegation, credits_observed }, and Delegation carries
+voter_pubkey, stake, activation_epoch and deactivation_epoch. Good CALLBACK if the
+ring slide survives the cut: the ring is not a status field anybody maintains, it is
+those two epoch numbers against the current epoch.
 Leaves the question: fine, but who exactly holds that staker key?
 
 ---
@@ -544,8 +551,63 @@ Solana still makes somebody wait the cooldown. That somebody is now the buyer, a
 the price they quote is what they charge for waiting.
 Worth saying: it auto-detects natively staked SOL across any validator, so you can
 exit a stake account that was never delegated through us.
-[TODO] Ondra wants to research the RFQ side, unstake-taker-client, before the next
-slide. See ../README.md.
+Leaves the question: fine, but why would anybody buy it, and what does that cost me?
+
+---
+
+<!-- .slide: data-rail="instant" data-stage="exit" -->
+
+## Somebody has to want it
+
+<div class="grid-3">
+<div class="card">
+<h3>Now</h3>
+<p>SOL in your wallet, in one transaction.</p>
+</div>
+<div class="card">
+<h3>Less</h3>
+<p>A little under what the account holds.</p>
+</div>
+<div class="card">
+<h3>Why</h3>
+<p>That gap is what the waiting is worth to somebody else.</p>
+</div>
+</div>
+
+<p class="slide-foot">Marinade charges you nothing to unstake. The discount is the price, and you see it before you sign.</p>
+
+Note:
+THE PRICE SLIDE. The previous slide was the mechanism, this one is what it costs you.
+You are not paid face value. You take a discount, and that discount is the price of
+not waiting.
+Say plainly that we charge the unstaker no fee. What you give up goes to whoever
+agrees to sit through the cooldown in your place.
+ON STAGE ONLY, deliberately not written here: two beats on how a buyer commits to
+the trade. The source repositories are private, so nothing about them goes in this
+public repo. They are in the private talk note, marinade-staking-stack--
+instant-unstake-mechanics--INVESTIGATION.
+Leaves the question: hold on, so who is actually doing the waiting?
+
+---
+
+<!-- .slide: class="statement vcenter" -->
+<!-- No rail and no picture: the line is the whole slide. -->
+
+<span class="label">The honest version</span>
+
+## Everyone waits.
+## The only question is who.
+
+<p class="slide-foot">The cooldown is not optional. Instant means somebody took your staked position and is waiting in your place.</p>
+
+Note:
+THE LINE OF THE SECTION, and it works for both exits. Solana's cooldown cannot be
+skipped by anyone, so "instant" never means the wait went away. It means it moved.
+In the liquidity pool it moves to the third parties who fund the pool. Here it moves
+to the buyer. Either way somebody is standing in your queue and charging you for it.
+Do NOT put an epoch length on the slide. Saying "about two days" out loud is fine.
+Then close: three products, and every one of them is a different answer to something
+Solana makes hard.
 
 ---
 
