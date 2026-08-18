@@ -352,7 +352,8 @@ as a sharp foreground image. And the videos exist too, `-transcode.mp4`, about 1
       `slides/images/qr-marinade.svg`, pointing at https://marinade.finance. Version 2 code, 29
       modules including a 2-module quiet zone, dark `#151A1A` on white, rendered at 300px. Kept low
       density on purpose so it scans from the back of a room. **Not machine-verified**: no decoder
-      is installed on this machine, so scan it once with a phone before the talk. Regenerate with
+      is installed on this machine, but **Ondra scanned it on 2026-08-18 and it resolves correctly**.
+      Regenerate with
       `qrencode -t SVG -o slides/images/qr-marinade.svg -m 2 -s 8 --foreground=151A1A --background=FFFFFF "https://marinade.finance"`
 - [ ] Decide on a Solana Summit / Superteam Balkan logo on the cover slide.
 - [ ] "Getting out" and "What I would take away" section breaks have no artwork. Either find
@@ -443,14 +444,15 @@ organizers say whether Q&A sits inside the slot or after it.
 | Cover, agenda, who talks to you | 3 | 95 |
 | Liquid staking, no break, 8 slides | 8 | 470 |
 | Native staking, no break, 5 slides | 5 | 305 |
-| Instant unstake, no break, 3 slides | 3 | 130 |
+| Instant unstake, no break, 2 slides | 2 | 105 |
 | Closing | 1 | 20 |
-| **Total** | **20** | **1020, about 17 min** |
+| **Total** | **19** | **995, about 16.5 min** |
 
-**So the deck is over.** A rehearsal estimate runs 20 to 30% short of the real delivery, which puts
-this at 21 to 22 minutes on the day against a 17 minute stage budget. Folding the Liquid and Native
-section breaks into their first content slides bought two slides back, and Instant unstake plus the
-Native strategies slide spent three. **Two cuts from the shortlist below are now owed.**
+**Still slightly over.** A rehearsal estimate runs 20 to 30% short of the real delivery, which puts
+this at about 20 minutes on the day against a 17 minute stage budget. Folding all three section
+breaks bought three slides back, Instant unstake and the Native strategies slide spent three, and
+cutting the "Everyone waits" statement paid one back. **One cut from the shortlist below is still
+owed.**
 
 Rules that follow from this:
 
@@ -866,7 +868,18 @@ in the room does converts an objection into a point in your favour. Full suggest
 | N4 | **Getting out is the hard part** | The exit funnel: twelve accounts, three deactivating batches, one withdrawal. The exit authority marks an account as leaving, so the authority *is* the state. |
 | I1 | **Somebody buys your stake account** | Opens the section itself, `label` plus the gold-coin painting. Atomic swap, one transaction, both legs or neither. Works on any stake account, even ones Marinade never touched. |
 | I2 | **Somebody has to want it** | Now, Less, Why. The price is the discount, and the discount is what the waiting is worth to somebody else. Marinade charges the unstaker nothing. |
-| I3 | **Everyone waits. The only question is who.** | Statement slide, no rail, no picture. Closes both exits at once and hands off to the closing. |
+**I3 "Everyone waits. The only question is who." was cut on 2026-08-18**, Ondra's call and the right
+one. It carried no information: a phrase, not a slide, spending 25 seconds saying what the room had
+already worked out. The line survives as the spoken close of I2, where it does more work because it
+can name both exits at once, the liquidity pool in Liquid and the buyer here. First cut paid against
+the 17 minute budget.
+
+**What I2 is for**, since it was asked. I1 is the mechanism, I2 is the price, and without it the room
+hears Instant unstake as free magic. Somebody buys your account because they are happy to wait; the
+cooldown is not optional, so the buyer takes it on and charges for it; you get slightly less than the
+account holds, right now, and that gap is the price of not waiting. Marinade takes no fee from the
+unstaker, so the discount goes to whoever does the waiting. It is also where the two private-repo
+beats are spoken.
 
 **All three section breaks are gone, 2026-08-18.** Each used to spend a whole slide on a product name
 over a painting. Now the first content slide of each section carries the painting plus the section
@@ -1349,6 +1362,8 @@ Ordered by how much they block the next step.
 - 2026-08-18 — N2 gained the coin picture on its right via `side-art`, duotoned into the palette. The
   long `// the two keys...` comment came off the `Authorized` block to make the room: it repeated the
   footnote and was what made that block 1322px wide.
+- 2026-08-18 — "Everyone waits" statement slide cut, its line moved into I2's speaker notes. Deck is
+  19 slides, verified headless: no overflow, no errors.
 - 2026-08-18 — The two `epoch` labels on the state ring set bold, Ondra's call. They are the cost of
   the cycle, so they carry the weight.
 - 2026-08-18 — N4 rebuilt as the exit funnel, a drawn many-to-one diagram, replacing the four-step

@@ -629,28 +629,14 @@ ON STAGE ONLY, deliberately not written here: two beats on how a buyer commits t
 the trade. The source repositories are private, so nothing about them goes in this
 public repo. They are in the private talk note, marinade-staking-stack--
 instant-unstake-mechanics--INVESTIGATION.
-Leaves the question: hold on, so who is actually doing the waiting?
-
----
-
-<!-- .slide: class="statement vcenter" -->
-<!-- No rail and no picture: the line is the whole slide. -->
-
-<span class="label">The honest version</span>
-
-## Everyone waits.
-## The only question is who.
-
-<p class="slide-foot">The cooldown is not optional. Instant means somebody took your staked position and is waiting in your place.</p>
-
-Note:
-THE LINE OF THE SECTION, and it works for both exits. Solana's cooldown cannot be
-skipped by anyone, so "instant" never means the wait went away. It means it moved.
-In the liquidity pool it moves to the third parties who fund the pool. Here it moves
-to the buyer. Either way somebody is standing in your queue and charging you for it.
-Do NOT put an epoch length on the slide. Saying "about two days" out loud is fine.
-Then close: three products, and every one of them is a different answer to something
-Solana makes hard.
+CLOSE THE SECTION HERE, spoken, no slide of its own: everyone waits, the only
+question is who. Solana's cooldown cannot be skipped by anybody, so "instant" never
+means the wait went away, it means it moved. In Liquid it moves to the third parties
+who fund the liquidity pool. Here it moves to the buyer. Either way somebody is
+standing in your queue and charging you for it, and that is the honest version.
+Saying "about two days" out loud is fine. Never put an epoch length on a slide.
+Then hand off to the closing: three products, and every one of them is a different
+answer to something Solana makes hard.
 
 ---
 
