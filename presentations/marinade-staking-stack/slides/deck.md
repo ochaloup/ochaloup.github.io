@@ -258,9 +258,9 @@ Leaves the question: so who does get the stake, and on what basis?
 <div class="cycle-node cost" style="left:500px;top:420px"><h3>Inactive</h3><span>earning nothing</span></div>
 <div class="cycle-node cost" style="left:140px;top:230px"><h3>Activating</h3><span>earning nothing</span></div>
 <span class="cycle-edge" style="left:790px;top:78px">deactivate</span>
-<span class="cycle-edge" style="left:790px;top:390px">epoch</span>
+<span class="cycle-edge wait" style="left:790px;top:390px">epoch</span>
 <span class="cycle-edge" style="left:215px;top:390px">delegate</span>
-<span class="cycle-edge" style="left:215px;top:78px">epoch</span>
+<span class="cycle-edge wait" style="left:215px;top:78px">epoch</span>
 </div>
 
 <p class="slide-foot">There is no arrow across the middle. Solana never enabled redelegation.</p>
@@ -384,15 +384,15 @@ PROGRAM holding your SOL. What if you do not want a program at all?
 <div class="grid-3">
 <div class="card">
 <h3>No contract risk</h3>
-<p>The SOL never leaves your own stake account.</p>
+<p>The SOL never leaves your possession.</p>
 </div>
 <div class="card">
 <h3>No token</h3>
-<p>Nothing to hold, swap, or explain to an auditor.</p>
+<p>Nothing to hold or explain to an auditor.</p>
 </div>
 <div class="card">
 <h3>Just the delegation</h3>
-<p>Someone to pick the validators. Nothing else.</p>
+<p>Marinade picks the validators, nothing more.</p>
 </div>
 </div>
 
@@ -400,7 +400,7 @@ PROGRAM holding your SOL. What if you do not want a program at all?
 
 Note:
 THIS SLIDE OPENS THE SECTION. There is no separate Native staking break any more:
-the label carries the section name, the painting carries the mood, and the rail
+the stamp carries the section name, the painting carries the mood, and the rail
 switches to the native one here. Answer the question Liquid left open in the first
 sentence, out loud: all of that was an ON-CHAIN PROGRAM holding your SOL, so what if
 you do not want a program at all?
@@ -417,8 +417,6 @@ Leaves the question: so how do you manage my stake without ever holding it?
 ---
 
 <!-- .slide: data-rail="native" data-stage="stake" class="code-sm" -->
-
-<div class="label">Proof of stake, with delegation</div>
 
 ## Solana splits the keys
 
@@ -437,11 +435,13 @@ Stake           delegation, credits_observed
 ```
 
 ```rust
-pub struct Authorized {     // the two keys, and that is the whole custody model
+pub struct Authorized {
     pub staker: Pubkey,     // may delegate
     pub withdrawer: Pubkey, // may take the money
 }
 ```
+
+<div class="side-art"><img src="images/solana-coin.png" alt=""></div>
 
 <p class="slide-foot">One account. Custody is in Meta, the delegation is in Stake, and Marinade only ever holds one field of the first.</p>
 
@@ -462,7 +462,8 @@ CALLBACK, and it is the reason the middle box is worth the room: activation_epoc
 and deactivation_epoch are the ring from the Liquid section. The state is not a
 status field anybody maintains, it is two numbers compared against the current
 epoch.
-THE TERM. People call this delegated proof-of-stake, and you can say it, but know
+THE TERM, SPOKEN ONLY, deliberately not on the slide. People call this delegated
+proof-of-stake, and you can say it, but know
 the exposure before you do: solana.com/staking never uses that phrase. It says Proof
 of Stake, and describes delegation separately as assigning tokens to a validator to
 increase its voting weight. DPoS usually means an elected delegate set, EOS and Tron

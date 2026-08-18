@@ -225,7 +225,17 @@ Each maps to a numbered archetype in the slide-design skill.
 
 Added since: `stamp` (coral starburst carrying a section name, Native only), `qr` (white ground so a
 code actually scans), `code-sm` (three stacked code blocks instead of two, left aligned, last block a
-size up), `funnel` (the many-to-one exit diagram on N4).
+size up), `funnel` (the many-to-one exit diagram on N4), `side-art` (a picture pinned beside the
+content, N2), `cycle-edge.wait` (the two epoch labels on the state ring, set bold because the waiting
+is the cost the slide is about).
+
+**Turning a borrowed photo into a deck asset.** `side-art` expects an image already processed into the
+palette, because a raw photo next to teal reads as a foreign object and a hard rectangle. The recipe
+used for the coin, reproducible with PIL: square crop centred on the subject, greyscale,
+`autocontrast(cutoff=1)`, `colorize(black=#0E1414, white=#BEE0DF)` so shadows land on the slide ground
+and highlights on light teal, then a feathered elliptical alpha mask (`GaussianBlur`, radius about 7%
+of the width) so the edge dissolves instead of ending. Rendered at 80% opacity. Flat greyscale was the
+first instinct and is worse: it reads as a dead grey patch rather than a chosen image.
 
 Inline helpers: `label`, `tag`, `accent` (PT Serif italic), `note`, `highlight`, `step-num`,
 `watermark`, `logo-row`, `lockup`, `icon`, `yes`, `no`, `text-sm`, `text-xs`.
@@ -242,14 +252,25 @@ Both cost time to find, so they are written down rather than rediscovered.
 2. **Sections default to `box-sizing: content-box`.** Slide padding is added on top of the
    1080px canvas height, which pushes content off the bottom and puts absolutely positioned
    elements like the watermark outside the visible area. The theme sets `border-box`.
-3. **Two code blocks per slide is the ceiling, and going over it fails silently.** `.reveal pre`
+3. **A centred `.slide-body` grows into the footnote band, and nothing warns you.** `.slide-foot`
+   is pinned 200px up on any slide carrying the rail, but the body is centred in the whole area
+   below the heading, so a tall stack simply overlaps it. Measured on N2: the last code block ended
+   3px *below* the footnote's top. The body has to reserve that height itself, which is why
+   `section.code-sm > .slide-body` carries `padding-bottom: 150px`. 56px was tried first and was not
+   enough. Measure the gap, do not eyeball it: in puppeteer, compare
+   `foot.getBoundingClientRect().top` with the last `pre`'s `bottom`.
+4. **Two code blocks per slide is the ceiling at full size, and going over it fails silently.** N2
+   runs three, but only because `code-sm` drops them to 21px and 26px and the body reserves the
+   footnote band as above. At 28px the third block breaks the slide. Mechanism: `.reveal pre`
    carries `overflow: hidden`, which makes its automatic minimum size zero inside the flex
    `.slide-body`. A third block does not overflow the section, it makes every block *shrink* and
    clip its own closing brace, and `scrollHeight > clientHeight` stays false so the overflow check
    passes. Measured budget: about 700px of body height, and at 28px with `line-height: 1.45` a
-   block costs 40.6px per line plus 48px padding, plus a 32px gap between blocks. Fix by cutting
-   lines, not by shrinking the type: 28px is already the minimum for the back of the room.
-   Found on the "Solana splits the keys" slide, 2026-08-18. **Always look at the screenshot.**
+   block costs 40.6px per line plus 48px padding, plus a 32px gap between blocks. Prefer cutting
+   lines over shrinking type. 28px is the floor for code the room is meant to *read*; 21px is
+   acceptable only on an anatomy slide, where the small blocks are scanned for shape and the block
+   that matters is set larger. Found on the "Solana splits the keys" slide, 2026-08-18.
+   **Always look at the screenshot, and measure the gaps.**
 
 ### Verified
 
@@ -839,7 +860,7 @@ in the room does converts an objection into a point in your favour. Full suggest
 | # | Slide | Carries |
 |---|---|---|
 | N1 | **Not everyone wants a program holding their SOL** | Opens the section itself. Coral stamp reading "Native staking", the vault painting as background, three cards: no contract risk, no token, just the delegation. Foot: launched July 2023, compounds by itself. |
-| N2 | **Solana splits the keys** | Three boxes, left aligned: the `StakeStateV2` enum, the field tree of the whole account, then `Authorized` on its own at a size up. Two fields, and Marinade only ever holds `staker`. |
+| N2 | **Solana splits the keys** | Coin picture on the right, duotoned into the palette. Three boxes, left aligned: the `StakeStateV2` enum and the field tree at 21px, then `Authorized` at 26px. The two context blocks are deliberately a size under the last one, because the structures are there to be recognised and the last block is there to be read. |
 | N2b | **Three ways to run it** | Max Yield, Select, Recipes. Built 2026-08-18. Foot is the payout list, `$USDG` through `$USDC`. Describes Recipes by its payout rail only, never by delegation target. |
 | N3 | **Not a hot wallet** | Why the staking authority is a PDA and not a key. |
 | N4 | **Getting out is the hard part** | The exit funnel: twelve accounts, three deactivating batches, one withdrawal. The exit authority marks an account as leaving, so the authority *is* the state. |
@@ -920,6 +941,23 @@ hot wallet cannot steal anything, so it is fine". The real problem is **recovery
 by Marinade. Every user would have to act individually, on every stake account they own. That is
 unfixable from our side, so the key must not exist at all. Hence a PDA. Source:
 `native-staking/programs/marinade-native-proxy/README.md`.
+
+**Nothing about the terminology goes on this slide.** Ondra's call, 2026-08-18: it is a talking
+point, not slide copy, so the label that briefly carried it is gone. The research stands and lives in
+the speaker notes.
+
+**On the terminology, checked 2026-08-18.** Ondra asked to name the model "delegated
+proof-of-stake". **solana.com/staking never uses that phrase.** It says "Proof of Stake", and
+describes delegation separately: "Staking is the process by which a SOL token holder assigns some or
+all of their tokens to a particular validator or validators, which helps increase those validators'
+voting weight." DPoS normally implies an elected delegate set, EOS and Tron style, which Solana does
+not have, and someone in a Solana Summit audience will know that. So the slide label reads **Proof of
+stake, with delegation** and the phrase "delegated proof-of-stake" stays a spoken option with the
+caveat in the notes.
+
+That page also hands the slide its best line, and it is Solana's own sentence rather than ours:
+**"Delegating your tokens to a validator does NOT give the validator ownership or control over your
+tokens."** Quote it if the room needs convincing.
 
 **On the code slide.** `pub struct Authorized { staker, withdrawer }` is the whole custody model
 in two fields, from `solana/sdk/program/src/stake/state.rs`. The comments on the slide are ours,
@@ -1304,6 +1342,15 @@ Ordered by how much they block the next step.
   code blocks on that slide left aligned instead of centred.
 - 2026-08-18 — Keys and strategies slides swapped, handoff questions rewritten to match.
 - 2026-08-18 — Instant unstake break folded into I1 with a plain `label`. Deck is 20 slides.
+- 2026-08-18 — N2 context blocks dropped to 21px, and the body now reserves the footnote band, see
+  quirk 3. Gaps then measured and rebalanced: 108px of reserved band gives 38px under the heading and
+  55px above the footnote, in canvas pixels. The terminology label was tried and removed on Ondra's
+  call, after checking that solana.com/staking does not use "delegated proof-of-stake".
+- 2026-08-18 — N2 gained the coin picture on its right via `side-art`, duotoned into the palette. The
+  long `// the two keys...` comment came off the `Authorized` block to make the room: it repeated the
+  footnote and was what made that block 1322px wide.
+- 2026-08-18 — The two `epoch` labels on the state ring set bold, Ondra's call. They are the cost of
+  the cycle, so they carry the weight.
 - 2026-08-18 — N4 rebuilt as the exit funnel, a drawn many-to-one diagram, replacing the four-step
   strip. Three `.steps` diagrams in the deck read as one long diagram, and the merge is the argument.
 

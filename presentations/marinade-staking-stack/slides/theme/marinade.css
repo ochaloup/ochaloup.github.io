@@ -1172,6 +1172,11 @@
 	white-space: nowrap;
 }
 
+/* The two waiting edges are the cost of the cycle, so they carry the weight. */
+.reveal .cycle-edge.wait {
+	font-weight: 600;
+}
+
 /* ---- stake account states, linear variant ---------------------------- */
 
 .reveal .states {
@@ -1545,9 +1550,13 @@
 	font-size: 26px;
 }
 
-/* Keep the stack clear of the footnote band, which is pinned above the rail. */
+/*
+ * Keep the stack clear of the footnote band. .slide-foot is pinned 200px up on a
+ * slide that carries the rail, and the centred body happily grows into it, so the
+ * body has to reserve that height itself. 56px was not enough: measured overlap.
+ */
 .reveal section.code-sm > .slide-body {
-	padding-bottom: 56px;
+	padding-bottom: 108px;
 }
 
 .reveal pre code {
@@ -1665,4 +1674,33 @@
 	font-family: "DM Sans", sans-serif;
 	font-size: 19px;
 	fill: var(--mn-fg-muted);
+}
+
+/* ---- side art ------------------------------------------------------- */
+/*
+ * A picture beside the content rather than behind it. Pinned, so it is excluded
+ * from the .slide-body wrap in index.html and cannot push the stack around.
+ * The source is duotoned into the palette and feathered to an alpha edge, so no
+ * frame lands on the slide.
+ */
+.reveal .side-art {
+	position: absolute;
+	right: var(--mn-margin-x);
+	top: 50%;
+	transform: translateY(-50%);
+	width: 520px;
+	z-index: 0;
+	pointer-events: none;
+	line-height: 0;
+}
+
+.reveal .side-art img {
+	width: 100%;
+	height: auto;
+	margin: 0;
+	border: none;
+	border-radius: 0;
+	box-shadow: none;
+	background: none;
+	opacity: 0.8;
 }
