@@ -223,6 +223,10 @@ Each maps to a numbered archetype in the slide-design skill.
 | table + `mn-col` | 16, comparison table | Teal tint on the Marinade column |
 | `metrics`, `metric`, `metric-label` | 6, three-metric | Teal numbers, muted labels |
 
+Added since: `stamp` (coral starburst carrying a section name, Native only), `qr` (white ground so a
+code actually scans), `code-sm` (three stacked code blocks instead of two, left aligned, last block a
+size up), `funnel` (the many-to-one exit diagram on N4).
+
 Inline helpers: `label`, `tag`, `accent` (PT Serif italic), `note`, `highlight`, `step-num`,
 `watermark`, `logo-row`, `lockup`, `icon`, `yes`, `no`, `text-sm`, `text-xs`.
 Slide modifiers: `light`, `art`, `vcenter`, `center-text`, `compact`, `dense`.
@@ -238,6 +242,14 @@ Both cost time to find, so they are written down rather than rediscovered.
 2. **Sections default to `box-sizing: content-box`.** Slide padding is added on top of the
    1080px canvas height, which pushes content off the bottom and puts absolutely positioned
    elements like the watermark outside the visible area. The theme sets `border-box`.
+3. **Two code blocks per slide is the ceiling, and going over it fails silently.** `.reveal pre`
+   carries `overflow: hidden`, which makes its automatic minimum size zero inside the flex
+   `.slide-body`. A third block does not overflow the section, it makes every block *shrink* and
+   clip its own closing brace, and `scrollHeight > clientHeight` stays false so the overflow check
+   passes. Measured budget: about 700px of body height, and at 28px with `line-height: 1.45` a
+   block costs 40.6px per line plus 48px padding, plus a 32px gap between blocks. Fix by cutting
+   lines, not by shrinking the type: 28px is already the minimum for the back of the room.
+   Found on the "Solana splits the keys" slide, 2026-08-18. **Always look at the screenshot.**
 
 ### Verified
 
@@ -315,6 +327,12 @@ as a sharp foreground image. And the videos exist too, `-transcode.mp4`, about 1
 - [x] Marinade wordmark. No vector lockup ships on the CDN or in `internal-docs`, so the
       `lockup` class rebuilds it the way the OpenGraph card does: `marinade-white.svg` plus
       the word set in DM Sans 600. Vector-crisp at any size, no asset to source.
+- [x] QR code on the closing slide. Generated offline with `qrencode` into
+      `slides/images/qr-marinade.svg`, pointing at https://marinade.finance. Version 2 code, 29
+      modules including a 2-module quiet zone, dark `#151A1A` on white, rendered at 300px. Kept low
+      density on purpose so it scans from the back of a room. **Not machine-verified**: no decoder
+      is installed on this machine, so scan it once with a phone before the talk. Regenerate with
+      `qrencode -t SVG -o slides/images/qr-marinade.svg -m 2 -s 8 --foreground=151A1A --background=FFFFFF "https://marinade.finance"`
 - [ ] Decide on a Solana Summit / Superteam Balkan logo on the cover slide.
 - [ ] "Getting out" and "What I would take away" section breaks have no artwork. Either find
       two more paintings or leave them on the plain teal glow for rhythm.
@@ -402,15 +420,16 @@ organizers say whether Q&A sits inside the slot or after it.
 | Block | Slides | Seconds |
 |---|---|---|
 | Cover, agenda, who talks to you | 3 | 95 |
-| Liquid staking, break plus 7 | 8 | 470 |
-| Native staking, break plus 4 | 5 | 268 |
-| Instant unstake, break plus 3 | 4 | 138 |
+| Liquid staking, no break, 8 slides | 8 | 470 |
+| Native staking, no break, 5 slides | 5 | 305 |
+| Instant unstake, no break, 3 slides | 3 | 130 |
 | Closing | 1 | 20 |
-| **Total** | **22** | **991, about 16.5 min** |
+| **Total** | **20** | **1020, about 17 min** |
 
-**So the deck is already full.** A rehearsal estimate runs 20 to 30% short of the real delivery,
-which puts 22 slides at 20 to 21 minutes on the day. **One cut from the shortlist below is already
-owed**, and it was taken on knowingly when Instant unstake grew from one slide to three.
+**So the deck is over.** A rehearsal estimate runs 20 to 30% short of the real delivery, which puts
+this at 21 to 22 minutes on the day against a 17 minute stage budget. Folding the Liquid and Native
+section breaks into their first content slides bought two slides back, and Instant unstake plus the
+Native strategies slide spent three. **Two cuts from the shortlist below are now owed.**
 
 Rules that follow from this:
 
@@ -656,7 +675,7 @@ deliberate: each slide creates the question the next one answers.
 
 | # | Slide | Carries |
 |---|---|---|
-| L1 | **What an LST is, and who was first** | Program in, token out, still staked, still earning, tradeable. Marinade first on Solana, 2021, two hackathon teams. One slide, fast. |
+| L1 | **You all know what liquid staking is** | Program in, token out, still staked, still earning, tradeable. Marinade first on Solana, 2021, two hackathon teams. One slide, fast. Opens the section itself: `label` "Liquid staking" plus the chef painting, no separate break. Retitled from "What an LST is" on 2026-08-18, because the section name is now on the slide and the acronym did not need to lead. **No stamp here.** Ondra's call, 2026-08-18: the coral burst belongs to Native only, so it stays a surprise instead of becoming the deck's furniture. |
 | L2 | **Somebody has to choose the validators** | Watch, Judge, Move. The message is the *machinery*: we collect data off Solana, work out where the best yield and better decentralisation are, and move stake there, continuously. Not "a choice exists" but "we built the thing that keeps making it". |
 | L3 | **The loop** | The crank cycle each epoch. `update_price`, `stake_delta`, `merge_stakes`. mSOL price rises, nothing is distributed. **Say the permissionless claim precisely, see below.** |
 | L3b | **A stake account cannot move sideways** | The four states drawn as a **ring**, because it is a cycle. Active → Deactivating → Inactive → Activating → Active. Carries the rebalancing problem. |
@@ -688,6 +707,12 @@ a share of its priority fees, so how do we get you more?*) moved to the **speake
 said aloud, not printed, so the slide stays at one sentence.
 | L5 | **Validators bid for your stake** | The answer. Bid, allocate highest first, last winner clears. Yield decomposition (`inflation + MEV + bid`) is **spoken**, not a slide. |
 | L6 | **From promise to payment** | Measure, calculate, settle on chain, permissionless claim. Deliberately light: no six-stage pipeline, no merkle detail unless asked. |
+
+**Order changed 2026-08-18: the keys slide now comes before the strategies slide.** Ondra's call. The
+chain still holds because the handoffs were rewritten: N1 leaves *how do you manage my stake without
+holding it*, N2 answers with the custody model and leaves *the staker authority is ours, so what do
+we do with it*, N2b answers with three policies and leaves *so what is actually holding that key*,
+which is exactly what N3 answers.
 
 **Order changed 2026-08-15: bonds now come before the auction.** It reads better and it is also
 more correct, because a validator has to fund a bond *before* it can bid. The journey rail was
@@ -813,15 +838,57 @@ in the room does converts an objection into a point in your favour. Full suggest
 
 | # | Slide | Carries |
 |---|---|---|
-| N0 | *Native staking* section break | On the vault painting. Answers the question L6 left open. |
-| N1 | **Not everyone wants a program holding their SOL** | Three cards: no contract risk, no token, just the delegation. Foot: launched July 2023, compounds by itself. |
-| N2 | **Solana splits the keys** | The real `Authorized` struct as printed Rust. Two fields. Marinade only ever holds `staker`. |
+| N1 | **Not everyone wants a program holding their SOL** | Opens the section itself. Coral stamp reading "Native staking", the vault painting as background, three cards: no contract risk, no token, just the delegation. Foot: launched July 2023, compounds by itself. |
+| N2 | **Solana splits the keys** | Three boxes, left aligned: the `StakeStateV2` enum, the field tree of the whole account, then `Authorized` on its own at a size up. Two fields, and Marinade only ever holds `staker`. |
+| N2b | **Three ways to run it** | Max Yield, Select, Recipes. Built 2026-08-18. Foot is the payout list, `$USDG` through `$USDC`. Describes Recipes by its payout rail only, never by delegation target. |
 | N3 | **Not a hot wallet** | Why the staking authority is a PDA and not a key. |
-| N4 | **Getting out is the hard part** | Pick, Move, Deactivate, Merge. The exit authority marks an account as leaving, so the authority *is* the state. Foot: a hundred validators does not fit in one transaction. |
-| I0 | *Instant unstake* section break | On the gold-coin painting. |
-| I1 | **Somebody buys your stake account** | Atomic swap, one transaction, both legs or neither. Works on any stake account, even ones Marinade never touched. |
+| N4 | **Getting out is the hard part** | The exit funnel: twelve accounts, three deactivating batches, one withdrawal. The exit authority marks an account as leaving, so the authority *is* the state. |
+| I1 | **Somebody buys your stake account** | Opens the section itself, `label` plus the gold-coin painting. Atomic swap, one transaction, both legs or neither. Works on any stake account, even ones Marinade never touched. |
 | I2 | **Somebody has to want it** | Now, Less, Why. The price is the discount, and the discount is what the waiting is worth to somebody else. Marinade charges the unstaker nothing. |
 | I3 | **Everyone waits. The only question is who.** | Statement slide, no rail, no picture. Closes both exits at once and hands off to the closing. |
+
+**All three section breaks are gone, 2026-08-18.** Each used to spend a whole slide on a product name
+over a painting. Now the first content slide of each section carries the painting plus the section
+name, and the rail switch does the rest of the structural work. Three slides back in a deck that is
+over budget.
+
+**Only Native gets the stamp.** Liquid and Instant unstake carry a plain `label`, which is Ondra's
+call: one coral burst in the deck stays a shock, three make it the deck's furniture. So the pattern
+is "quiet label by default, stamp once".
+
+**The stamp sits under the headline, not above it.** The h2 is the slide's message and the section
+name is context, so the order is heading first, then the burst. In `deck.md` that means the stamp
+div comes *after* the `##` line; it stays pinned because `.stamp` is in the `wrapBody` exclusion
+list, so DOM order is preserved.
+
+**What the stamp is, and why coral.** Ondra asked for something strange, floated a rainbow, and
+asked for a "pow" image. The rainbow is out because inventing colours is the one thing this deck has
+been rigorous about, but the palette already carries category hues that the deck has never used:
+`--mn-cat-coral`, indigo, lavender, rose. A coral comic starburst is therefore **in the palette and
+still a shock** against twenty teal slides. It is drawn here, an original 24-point polygon, so there
+is no third-party artwork on a published deck.
+
+**The burst and its wording are one SVG, and they have to stay that way.** The first attempt put an
+absolutely positioned burst behind HTML text and sized it in percentages. Two failures followed:
+`.stamp` is a flex item, so `display: inline-block` was blockified to the full slide width, and
+`preserveAspectRatio="none"` then stretched the star into a flat streak across the slide. With the
+text inside the SVG, the shape cannot be distorted by whatever the words happen to measure. Set the
+size once, in CSS, on the wrapper.
+
+**The wrapper must be a `<div class="stamp">`.** marked counts `<svg>` as *inline* HTML and wraps it
+in a `<p>`, exactly as it does a bare `<span>`. That `<p>` is not in the `wrapBody` exclusion list,
+so `.slide-body` gets anchored above the heading and the h2 lands **below the cards**. This trap was
+hit twice in one session, once with a span and once with an svg. Anything that must sit above the
+heading is a `div` with an excluded class, and `.stamp` is now on that list in `index.html`.
+
+**A unicorn was offered and declined.** A unicorn reads as mythical or impossible, and the slide's
+claim is the opposite: no program, no token, mechanically real. The whimsy would have argued against
+the message. The burst is strange without being self-undermining. If the section still wants a joke,
+N4 is the better host.
+
+**`section.art .card` went from 66% to 88% opacity.** The art scrim is tuned for text-only slides, so
+a card sitting on the bright part of a painting stopped reading as a card. Only the two section
+openers have cards over art, so the change is contained.
 
 **On I2 and I3, added 2026-08-18, and on what is deliberately not there.** The three Instant unstake
 repositories are private, so the slides and these notes carry only what marinade.finance already
@@ -1217,9 +1284,28 @@ Ordered by how much they block the next step.
 - 2026-08-18 — Slot cut to 20 minutes, confirmed. Timing budget added above. Order of work
   unchanged: finish Instant unstake, the Native strategies slide, the appendix and the QR code
   first, then cut against the budget.
-- 2026-08-18 — Instant unstake grew to three content slides, I1 to I3. Deck is 22 slides, verified
-  headless: no overflow, no console errors. The section's engineering detail stays spoken, because
-  its source repositories are private and this repo is not.
+- 2026-08-18 — Instant unstake grew to three content slides, I1 to I3. The section's engineering
+  detail stays spoken, because its source repositories are private and this repo is not.
+- 2026-08-18 — N2 gained the `StakeStateV2` enum as a frame above `Authorized`, and lost the `Meta`
+  block to pay for it. Two code blocks is the hard ceiling, see quirk 3 above.
+- 2026-08-18 — Native section break folded into N1. Deck is 21 slides, verified headless at
+  1600x900: no overflow, no console errors, only the known favicon 404.
+- 2026-08-18 — The `stamp` replaced both remaining product break slides. Liquid's break folded into
+  L1, which is retitled *You all know what liquid staking is*. Coral, drawn here, palette-legal.
+- 2026-08-18 — N2 rebuilt as three boxes: the enum, the whole account as a field tree, then
+  `Authorized`. Needed `code-sm` at 23px, and `pre` now refuses to shrink so a too-tall code slide
+  fails visibly instead of clipping its own braces.
+- 2026-08-18 — Native strategies slide built as *Three ways to run it*. Recipes described by payout
+  rail only, per the standing constraint.
+- 2026-08-18 — QR code generated offline and placed on the closing slide. Needs one scan test.
+- 2026-08-18 — Liquid's stamp reverted to a plain `label`, and Native's stamp moved under the
+  headline. Both on Ondra's call.
+- 2026-08-18 — `Authorized` on N2 set one size up, 26px against the 23px anatomy above it, and the
+  code blocks on that slide left aligned instead of centred.
+- 2026-08-18 — Keys and strategies slides swapped, handoff questions rewritten to match.
+- 2026-08-18 — Instant unstake break folded into I1 with a plain `label`. Deck is 20 slides.
+- 2026-08-18 — N4 rebuilt as the exit funnel, a drawn many-to-one diagram, replacing the four-step
+  strip. Three `.steps` diagrams in the deck read as one long diagram, and the merge is the argument.
 
 ## Conversation notes
 

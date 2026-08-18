@@ -443,9 +443,17 @@
 	color: var(--mn-chart-teal);
 }
 
-/* Cards need to float over a painting, so they carry their own ground. */
+.reveal section.art .flow > div {
+	background: rgba(21, 26, 26, 0.88);
+}
+
+/*
+ * Cards need to float over a painting, so they carry their own ground. Nearly
+ * opaque, because the scrim is tuned for text-only slides and a card sitting on
+ * the bright part of a painting stops reading as a card.
+ */
 .reveal section.art .card {
-	background: rgba(21, 26, 26, 0.66);
+	background: rgba(21, 26, 26, 0.88);
 	border-color: rgba(148, 201, 200, 0.32);
 }
 
@@ -464,6 +472,61 @@
 
 .reveal section.light .label {
 	color: var(--mn-brand-teal);
+}
+
+/* ---- section stamp -------------------------------------------------- */
+/*
+ * Opens a section from inside its first content slide, so the deck does not
+ * spend a whole slide saying one product name. Coral, rotated, drawn by hand:
+ * the one element allowed to look like it wandered in from another deck. Coral
+ * and the other category hues are in the palette, so this breaks the deck's
+ * habit without breaking the brand.
+ */
+/*
+ * Burst and wording are one SVG, so the spikes cannot be stretched by whatever
+ * the text happens to measure. Sizing the shape from HTML text metrics was tried
+ * first and flattened the star into a streak.
+ */
+/*
+ * The wrapper must be a div. marked counts <svg> as inline HTML and wraps it in
+ * a <p>, and that <p> is not in the wrapBody exclusion list, so .slide-body gets
+ * anchored above the heading and the h2 lands under the content.
+ */
+.reveal .stamp {
+	align-self: flex-start;
+	width: 560px;
+	margin: 8px 0 4px -16px;
+	transform: rotate(-3deg);
+}
+
+.reveal .stamp svg {
+	display: block;
+	width: 100%;
+	height: auto;
+	overflow: visible;
+}
+
+.reveal .stamp polygon {
+	fill: var(--mn-cat-coral);
+}
+
+.reveal .stamp text {
+	font-family: "DM Sans", sans-serif;
+	font-size: 64px;
+	font-weight: 600;
+	fill: var(--mn-dark);
+}
+
+/* ---- QR code -------------------------------------------------------- */
+/* Needs a white quiet zone to scan, so it carries its own ground. */
+.reveal .qr {
+	width: 300px;
+	height: 300px;
+	margin: 0;
+	border: none;
+	border-radius: 8px;
+	box-shadow: none;
+	background: var(--mn-white);
 }
 
 /* ---- journey rail -------------------------------------------------- */
@@ -1451,10 +1514,40 @@
 	margin: 0 auto;
 	text-align: left;
 	overflow: hidden;
+	/*
+	 * Without this, overflow: hidden zeroes the automatic minimum size inside
+	 * the flex .slide-body, so a slide with too much code silently shrinks every
+	 * block and clips its closing brace while the overflow check still passes.
+	 * Refusing to shrink makes that failure visible instead.
+	 */
+	flex-shrink: 0;
 }
 
 .reveal pre + pre {
 	margin-top: 32px;
+}
+
+/*
+ * Anatomy slides, not code slides. Three stacked blocks only fit small, and the
+ * two context blocks are deliberately a size under the last one: the structures
+ * are there to be recognised, the final block is there to be read.
+ */
+.reveal section.code-sm pre {
+	font-size: 21px;
+	margin-left: 0;
+}
+
+.reveal section.code-sm pre + pre {
+	margin-top: 22px;
+}
+
+.reveal section.code-sm pre:last-of-type {
+	font-size: 26px;
+}
+
+/* Keep the stack clear of the footnote band, which is pinned above the rail. */
+.reveal section.code-sm > .slide-body {
+	padding-bottom: 56px;
 }
 
 .reveal pre code {
@@ -1519,4 +1612,57 @@
 	.reveal .ladder rect {
 		animation: none;
 	}
+}
+
+/* ---- exit funnel ---------------------------------------------------- */
+/*
+ * Many accounts becoming one. The merge is the argument of the slide, so it is
+ * drawn rather than listed: four numbered steps in a row said "a process", this
+ * says "a hundred things have to become one thing".
+ */
+.reveal .funnel-wrap {
+	display: flex;
+	justify-content: center;
+}
+
+.reveal .funnel {
+	width: 100%;
+	max-width: 1440px;
+	height: auto;
+}
+
+.reveal .funnel .acct {
+	fill: var(--mn-fill);
+	stroke: var(--mn-rule);
+	stroke-width: 2;
+}
+
+.reveal .funnel .batch {
+	fill: rgba(48, 141, 138, 0.18);
+}
+
+.reveal .funnel .final {
+	fill: rgba(48, 141, 138, 0.3);
+	stroke: var(--mn-light-teal);
+}
+
+.reveal .funnel .arrow {
+	fill: none;
+	stroke: var(--mn-light-teal);
+	stroke-width: 3;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+.reveal .funnel .fn-step {
+	font-family: "DM Sans", sans-serif;
+	font-size: 20px;
+	font-weight: 600;
+	fill: var(--mn-light-teal);
+}
+
+.reveal .funnel .fn-cap {
+	font-family: "DM Sans", sans-serif;
+	font-size: 19px;
+	fill: var(--mn-fg-muted);
 }

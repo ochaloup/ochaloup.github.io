@@ -92,19 +92,11 @@ it explains how I got here rather than claiming an active practice.
 
 ---
 
-<!-- .slide: data-background-image="images/brand-art/p-rewards.jpg" class="cover art vcenter statement" data-stage="stake" -->
+<!-- .slide: data-background-image="images/brand-art/p-rewards.jpg" class="art" data-stage="stake" -->
 
-# Liquid staking
+<div class="label">Liquid staking</div>
 
-Note:
-Section break. The question left open by the bio slide is "so what does this stack
-actually do", and the answer starts with the product that came first.
-
----
-
-<!-- .slide: data-stage="stake" -->
-
-## You all know what an LST is
+## You all know what liquid staking is
 
 <div class="grid-3">
 <div class="card">
@@ -124,6 +116,10 @@ actually do", and the answer starts with the product that came first.
 <p class="slide-foot">First liquid staking protocol on Solana. 2021, out of two hackathon teams.</p>
 
 Note:
+THIS SLIDE OPENS THE SECTION. There is no separate Liquid staking break any more:
+the label carries the product name and the painting carries the mood. Answer the
+question the bio slide left open in the first sentence, out loud: what does this
+stack actually do, and we start with the product that came first.
 Fast, everybody knows this. What to say over the top: the protocol takes ownership
 of your SOL as a whole, and it is wired in that only you can ask your portion back.
 Meanwhile we manage that stake to collect staking rewards and other on-chain
@@ -292,7 +288,7 @@ Leaves the question: fine, so who is even worth moving to?
 
 <img class="figure" src="images/bond-chips.png" alt="">
 
-<p class="punch">Validators back their word with their own SOL.</p>
+<p class="punch">Bonds. Validators back their word with their own SOL.</p>
 
 Note:
 One line under the picture, and it is deliberately on the validator's side. An
@@ -379,19 +375,11 @@ PROGRAM holding your SOL. What if you do not want a program at all?
 
 ---
 
-<!-- .slide: data-background-image="images/brand-art/p-security.jpg" class="cover art vcenter statement" -->
-
-# Native staking
-
-Note:
-Section break. The question the Liquid section left open: all of that is an
-ON-CHAIN PROGRAM holding your SOL. What if you do not want a program at all?
-
----
-
-<!-- .slide: data-rail="native" data-stage="stake" -->
+<!-- .slide: data-background-image="images/brand-art/p-security.jpg" class="art" data-rail="native" data-stage="stake" -->
 
 ## Not everyone wants a program holding their SOL
+
+<div class="stamp"><svg viewBox="-8 -8 616 236" role="img"><title>Native staking</title><polygon points="300,-0 351,41 442,21 451,55 546,59 492,91 606,110 492,129 546,161 451,165 442,199 351,179 300,220 249,179 158,199 149,165 54,161 108,129 -6,110 108,91 54,59 149,55 158,21 249,41"/><text x="300" y="134" text-anchor="middle">Native staking</text></svg></div>
 
 <div class="grid-3">
 <div class="card">
@@ -411,6 +399,11 @@ ON-CHAIN PROGRAM holding your SOL. What if you do not want a program at all?
 <p class="slide-foot">Launched July 2023. Rewards land straight in your account each epoch, so it compounds without anyone doing anything.</p>
 
 Note:
+THIS SLIDE OPENS THE SECTION. There is no separate Native staking break any more:
+the label carries the section name, the painting carries the mood, and the rail
+switches to the native one here. Answer the question Liquid left open in the first
+sentence, out loud: all of that was an ON-CHAIN PROGRAM holding your SOL, so what if
+you do not want a program at all?
 The why, and it is a real one. Some people are simply not comfortable with a
 program custodying funds, and plenty of stakers do not want a liquid token at all.
 They want the delegation managed and nothing more.
@@ -423,42 +416,100 @@ Leaves the question: so how do you manage my stake without ever holding it?
 
 ---
 
-<!-- .slide: data-rail="native" data-stage="stake" -->
+<!-- .slide: data-rail="native" data-stage="stake" class="code-sm" -->
+
+<div class="label">Proof of stake, with delegation</div>
 
 ## Solana splits the keys
 
 ```rust
 pub enum StakeStateV2 {
-    Uninitialized,
-    Initialized(Meta),
-    Stake(Meta, Stake, StakeFlags), // a delegated account
-    RewardsPool,
+    Uninitialized, Initialized(Meta), Stake(Meta, Stake, StakeFlags), RewardsPool,
 }
 ```
 
+```text
+Meta            rent_exempt_reserve, authorized, lockup
+  Authorized    staker, withdrawer
+  Lockup        unix_timestamp, epoch, custodian
+Stake           delegation, credits_observed
+  Delegation    voter_pubkey, stake, activation_epoch, deactivation_epoch
+```
+
 ```rust
-pub struct Authorized {   // lives in Meta
+pub struct Authorized {     // the two keys, and that is the whole custody model
     pub staker: Pubkey,     // may delegate
     pub withdrawer: Pubkey, // may take the money
 }
 ```
 
-<p class="slide-foot">Custody sits in Meta. Where the SOL sits is in Stake. Marinade only ever holds one field of the first.</p>
+<p class="slide-foot">One account. Custody is in Meta, the delegation is in Stake, and Marinade only ever holds one field of the first.</p>
 
 Note:
-The account itself is an enum, and the variant is the state. A delegated one is
-Stake(Meta, Stake, StakeFlags), and that is the whole object: Meta is custody,
-Stake is delegation. The comments are mine, the fields are Solana's.
+Walk the three boxes in order, they are one object seen three ways.
+TOP: the account is an enum, and the variant IS the state. Uninitialized, holding
+only Meta, or fully delegated as Stake(Meta, Stake, StakeFlags).
+MIDDLE: what hangs off that. Meta is custody, and it carries the keys and the
+lockup. Stake is the delegation, and it carries the validator and the two epoch
+numbers. Every field of a stake account is on this slide.
+BOTTOM: the two fields the whole product rests on. The comments are mine, the
+fields are Solana's.
 THE POINT IS STILL CUSTODY. The staker authority can delegate, split, merge and
 deactivate. It cannot move a single lamport out. The withdrawer can, and the user
 keeps the withdrawer, always. So "no smart contract risk" is mechanical here, not
 marketing: no program holds the balance, only an authority points at it.
-NOT ON THE SLIDE, said only if it helps: the other half is
-Stake { delegation: Delegation, credits_observed }, and Delegation carries
-voter_pubkey, stake, activation_epoch and deactivation_epoch. Good CALLBACK if the
-ring slide survives the cut: the ring is not a status field anybody maintains, it is
-those two epoch numbers against the current epoch.
-Leaves the question: fine, but who exactly holds that staker key?
+CALLBACK, and it is the reason the middle box is worth the room: activation_epoch
+and deactivation_epoch are the ring from the Liquid section. The state is not a
+status field anybody maintains, it is two numbers compared against the current
+epoch.
+THE TERM. People call this delegated proof-of-stake, and you can say it, but know
+the exposure before you do: solana.com/staking never uses that phrase. It says Proof
+of Stake, and describes delegation separately as assigning tokens to a validator to
+increase its voting weight. DPoS usually means an elected delegate set, EOS and Tron
+style, which Solana does not have. "Proof of stake, with delegation" is the safe
+phrasing, and the label on the slide says exactly that.
+THE GIFT FROM THAT PAGE, quote it if the room needs convincing, it is Solana's own
+sentence and not ours: "Delegating your tokens to a validator does NOT give the
+validator ownership or control over your tokens." That is this slide in one line,
+written by the people who built the chain.
+Leaves the question: the staker authority is ours, then. So what do we actually do
+with it?
+
+---
+
+<!-- .slide: data-rail="native" data-stage="stake" -->
+
+## Three ways to run it
+
+<div class="grid-3">
+<div class="card">
+<h3>Max Yield</h3>
+<p>The default. Your stake follows the winners of the auction.</p>
+</div>
+<div class="card">
+<h3>Select</h3>
+<p>A curated, identity-verified set. Built for institutions.</p>
+</div>
+<div class="card">
+<h3>Recipes</h3>
+<p>Stake SOL, get paid in something else entirely.</p>
+</div>
+</div>
+
+<p class="slide-foot">Recipes pays out in <span class="token">$USDG</span> <span class="token">$ZBTC</span> <span class="token">$MNDE</span> <span class="token">$BONK</span> <span class="token">$FWOG</span> <span class="token">$NOBODY</span> <span class="token">$TRENCHER</span> <span class="token">$USDC</span></p>
+
+Note:
+What we do with the staker authority. Same custody model in all three, only the
+policy changes.
+MAX YIELD is the retail default: auto-delegation to the validators that won the
+auction, so it inherits everything from the Liquid section.
+SELECT is the institutional one: a curated set, identity-verified operators. This is
+the ETF and treasury conversation.
+RECIPES is the one to have fun with. Your staking rewards get swapped and paid out
+in a different token by merkle drop. Read the list off the slide and let $FWOG and
+$NOBODY land: those are real payout rails on a real product page.
+DESCRIBE RECIPES BY ITS PAYOUT RAIL ONLY. Never by where the stake is delegated.
+Leaves the question: three policies, one key. So what is actually holding that key?
 
 ---
 
@@ -494,14 +545,9 @@ Leaves the question: delegating works. What about getting out?
 
 ## Getting out is the hard part
 
-<div class="steps">
-<div><div class="step-num">1</div><h3>Pick</h3>Which accounts add up to what you asked for.</div>
-<div><div class="step-num">2</div><h3>Move</h3>To the exit authority. Now they are leaving.</div>
-<div><div class="step-num">3</div><h3>Deactivate</h3>Across many transactions, in the background.</div>
-<div><div class="step-num">4</div><h3>Merge</h3>One account. One withdrawal.</div>
-</div>
+<div class="funnel-wrap"><svg class="funnel" viewBox="0 0 900 268" role="img"><title>Many stake accounts are picked, deactivated in batches, then merged into one</title><rect class="acct" x="20" y="58" width="40" height="40" rx="8"/><rect class="acct" x="72" y="58" width="40" height="40" rx="8"/><rect class="acct" x="124" y="58" width="40" height="40" rx="8"/><rect class="acct" x="176" y="58" width="40" height="40" rx="8"/><rect class="acct" x="20" y="110" width="40" height="40" rx="8"/><rect class="acct" x="72" y="110" width="40" height="40" rx="8"/><rect class="acct" x="124" y="110" width="40" height="40" rx="8"/><rect class="acct" x="176" y="110" width="40" height="40" rx="8"/><rect class="acct" x="20" y="162" width="40" height="40" rx="8"/><rect class="acct" x="72" y="162" width="40" height="40" rx="8"/><rect class="acct" x="124" y="162" width="40" height="40" rx="8"/><rect class="acct" x="176" y="162" width="40" height="40" rx="8"/><rect class="acct batch" x="366" y="66" width="86" height="40" rx="8"/><rect class="acct batch" x="366" y="118" width="86" height="40" rx="8"/><rect class="acct batch" x="366" y="170" width="86" height="40" rx="8"/><rect class="acct final" x="560" y="66" width="150" height="144" rx="12"/><path class="arrow" d="M240 138 H326"/><path class="arrow" d="M318 130 l10 8 -10 8"/><path class="arrow" d="M474 138 H546"/><path class="arrow" d="M538 130 l10 8 -10 8"/><text class="fn-step" x="283" y="120" text-anchor="middle">pick, move</text><text class="fn-step" x="510" y="120" text-anchor="middle">merge</text><text class="fn-cap" x="124" y="248" text-anchor="middle">Spread over many validators</text><text class="fn-cap" x="409" y="248" text-anchor="middle">Deactivated in batches</text><text class="fn-cap" x="635" y="248" text-anchor="middle">One withdrawal</text></svg></div>
 
-<p class="slide-foot">Your stake sits on a hundred validators. That does not fit in one transaction.</p>
+<p class="slide-foot">Moving an account to the exit authority is what marks it as leaving, so the authority is the state. A hundred accounts does not fit in one transaction.</p>
 
 Note:
 THE ENGINEERING SLIDE OF THIS SECTION. Delegating is easy. Un-delegating is where
@@ -522,17 +568,9 @@ withdrawal. What if I want the SOL right now?
 
 ---
 
-<!-- .slide: data-background-image="images/brand-art/p-liquidity.jpg" class="cover art vcenter statement" -->
+<!-- .slide: data-background-image="images/brand-art/p-liquidity.jpg" class="art" data-rail="instant" data-stage="exit" -->
 
-# Instant unstake
-
-Note:
-Section break. The question Native left open: even after all that machinery, Solana
-still makes you wait out the cooldown. What if you want the SOL now?
-
----
-
-<!-- .slide: data-rail="instant" data-stage="exit" -->
+<div class="label">Instant unstake</div>
 
 ## Somebody buys your stake account
 
@@ -544,6 +582,10 @@ still makes you wait out the cooldown. What if you want the SOL now?
 <p class="slide-foot">One transaction. Both sides settle, or neither does. No liquid token, no cooldown, and it works on any stake account, even ones Marinade never touched.</p>
 
 Note:
+THIS SLIDE OPENS THE SECTION. No separate Instant unstake break: the label carries
+the name, the gold-coin painting carries the mood. Answer what Native left open in
+the first sentence, out loud: even after all that machinery Solana still makes you
+wait out the cooldown, so what if you want the SOL now?
 The mechanism is simpler than people expect: an atomic swap. Your stake account
 goes to a buyer, their SOL comes to you, in the same transaction. Both legs or
 nothing, so there is no partial fill and no counterparty risk.
@@ -626,7 +668,7 @@ Solana makes hard.
 </div>
 <div>
 
-<span class="note">[TODO] QR code to the repo list.</span>
+<img class="qr" src="images/qr-marinade.svg" alt="marinade.finance">
 
 </div>
 </div>
