@@ -157,8 +157,16 @@ node export-pdf.mjs --notes        # same, with each slide's notes on its own pa
 node export-pdf.mjs --port 8001 --out /tmp/deck.pdf
 ```
 
-It drives the same `?print-pdf` view a manual print would, so the manual route still works: open
-`http://localhost:8000/?print-pdf`, print to PDF, margins none, background graphics on.
+**Use the script, not the browser print dialogue.** Ondra hit this on 2026-08-19: `?print-pdf` looks
+fine on screen and then prints "horribly wrong". Reproduced and diagnosed, and it is not the deck. The
+dialogue defaults to A4 portrait, so every 16:9 slide is letterboxed with white bands top and bottom
+and **cropped on the right**, which is why glyphs pinned to the right edge disappear. The paper size is
+the whole problem.
+
+The manual route only works if the paper matches the canvas: open `http://localhost:8000/?print-pdf`,
+then in the dialogue set a landscape 16:9 paper size, margins none, background graphics on. Chrome
+offers no 1920x1080 preset, which is exactly why `export-pdf.mjs` exists: it sets the page box
+directly.
 
 **The print layout needed fixing first, 2026-08-19.** `?print-pdf` looked like a different deck:
 headings hugging the top edge, no grid margins, content top-aligned instead of optically centred.
