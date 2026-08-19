@@ -383,7 +383,7 @@
 }
 
 .reveal .brand-mark img {
-	height: 168px;
+	height: 216px;
 	margin: 0;
 	border: none;
 	box-shadow: none;
@@ -774,6 +774,15 @@
 }
 
 /* ---- agenda --------------------------------------------------------- */
+/*
+ * Opt out of the optical centring for slides whose content belongs under the
+ * heading rather than in the middle of the slide. The agenda is a list you read
+ * top down, so a gap between the title and the first item reads as a mistake.
+ */
+.reveal section.anchor-top > .slide-body {
+	justify-content: flex-start;
+}
+
 /* Flat list, one indent level. Its shout-out sits below and inset. */
 
 .reveal .agenda {
@@ -1676,6 +1685,21 @@
 	fill: var(--mn-fg-muted);
 }
 
+/* ---- content beside pinned art -------------------------------------- */
+/* Keeps a text column clear of a .side-art picture on the same slide. */
+.reveal section.with-art > .slide-body {
+	max-width: 1080px;
+}
+
+/* The brand hat as the picture: a watermark, so it never fights the text. */
+.reveal .side-art.hat {
+	width: 660px;
+}
+
+.reveal .side-art.hat img {
+	opacity: 0.26;
+}
+
 /* ---- side art ------------------------------------------------------- */
 /*
  * A picture beside the content rather than behind it. Pinned, so it is excluded
@@ -1703,4 +1727,113 @@
 	box-shadow: none;
 	background: none;
 	opacity: 0.8;
+}
+
+/* ---- proof of stake diagram ----------------------------------------- */
+/*
+ * The intro diagram: delegation on the left, stake weight in the middle, an
+ * epoch of slots on the right, rewards looping back. Drawn rather than listed
+ * because the loop is the point, and a list cannot show proportion.
+ */
+.reveal .figure-wide {
+	display: flex;
+	justify-content: center;
+}
+
+.reveal .pos {
+	width: 100%;
+	max-width: 1760px;
+	height: auto;
+}
+
+.reveal .pos .pos-box {
+	fill: var(--mn-fill);
+	stroke: var(--mn-rule);
+	stroke-width: 2;
+}
+
+.reveal .pos .pos-pip {
+	fill: rgba(148, 201, 200, 0.55);
+}
+
+.reveal .pos .pos-slot {
+	fill: var(--mn-fill);
+	stroke: var(--mn-rule);
+	stroke-width: 2;
+}
+
+/* Slot fills carry the weight: validator A holds the most stake. */
+.reveal .pos .pos-slot.a {
+	fill: rgba(48, 141, 138, 0.52);
+}
+
+.reveal .pos .pos-slot.b {
+	fill: rgba(48, 141, 138, 0.26);
+}
+
+.reveal .pos .pos-slot.c {
+	fill: rgba(48, 141, 138, 0.08);
+}
+
+.reveal .pos .pos-arrow {
+	fill: none;
+	stroke: var(--mn-light-teal);
+	stroke-width: 3;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+.reveal .pos .pos-arrow.dashed {
+	stroke-dasharray: 10 9;
+}
+
+.reveal .pos text {
+	font-family: "DM Sans", sans-serif;
+}
+
+.reveal .pos .pos-head {
+	font-size: 24px;
+	font-weight: 600;
+	fill: var(--mn-accent);
+	text-anchor: middle;
+}
+
+.reveal .pos .pos-lbl {
+	font-size: 26px;
+	font-weight: 600;
+	fill: var(--mn-fg);
+	text-anchor: middle;
+}
+
+.reveal .pos .pos-slot-lbl {
+	font-size: 26px;
+	font-weight: 600;
+	fill: var(--mn-fg-strong);
+	text-anchor: middle;
+}
+
+.reveal .pos .pos-note {
+	font-size: 22px;
+	fill: var(--mn-fg-muted);
+	text-anchor: middle;
+}
+
+/* Where each kind of reward ends up. Brighter than a plain box: these are the answer. */
+.reveal .pos .pos-out {
+	fill: rgba(48, 141, 138, 0.22);
+	stroke: var(--mn-light-teal);
+	stroke-width: 2;
+}
+
+.reveal .pos .pos-out-lbl {
+	font-size: 30px;
+	font-weight: 600;
+	fill: var(--mn-fg-strong);
+	text-anchor: middle;
+}
+
+.reveal .pos .pos-out-sub {
+	font-size: 21px;
+	fill: var(--mn-accent);
+	text-anchor: middle;
 }

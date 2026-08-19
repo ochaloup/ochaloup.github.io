@@ -184,7 +184,8 @@ The palette, typography, and voice rules carry over unchanged.
   covered automatically, reveal's own `#/` navigation is untouched, and the `rel` that should
   always accompany `_blank` cannot be forgotten. The point is that clicking a link during the
   talk must never navigate the deck away from the slide you are standing on.
-- **Sparse slides carry a hat-only brand mark, `.brand-mark`.** 96px, bottom-left, 60% opacity,
+- **Sparse slides carry a hat-only brand mark, `.brand-mark`.** 216px since 2026-08-18, bottom-left,
+  60% opacity,
   no wordmark. The cover already showed the full lockup, so later slides only need the mark, and
   dropping the text means the slide gains presence while losing an element rather than adding
   one. Two alternatives were considered and rejected: the hat inside the terminal frame (clever,
@@ -239,7 +240,8 @@ first instinct and is worse: it reads as a dead grey patch rather than a chosen 
 
 Inline helpers: `label`, `tag`, `accent` (PT Serif italic), `note`, `highlight`, `step-num`,
 `watermark`, `logo-row`, `lockup`, `icon`, `yes`, `no`, `text-sm`, `text-xs`.
-Slide modifiers: `light`, `art`, `vcenter`, `center-text`, `compact`, `dense`.
+Slide modifiers: `light`, `art`, `vcenter`, `center-text`, `compact`, `dense`, `anchor-top`,
+`code-sm`.
 Injected at runtime: `journey`, `slide-body`.
 
 ### Two reveal.js quirks the theme has to work around
@@ -432,6 +434,114 @@ PDF export name aligned with the programme while still saying what the talk cont
 
 ## Content
 
+### Introduction block, built 2026-08-19
+
+Ondra tried talking the deck through and the opening was missing. Four changes, and the deck is now
+22 slides:
+
+| # | Slide | Carries |
+|---|---|---|
+| 0 | Cover | Subtitle now reads *An introductory tour of staking infrastructure on Solana*. "Introductory" was Ondra's ask: the room should know this is a tour and not a deep dive, so nobody waits for depth that never comes. It no longer matches the submitted programme line word for word, which is a deliberate trade. |
+| 1 | Agenda | Four lines now. *What is staking* leads, and the last line became *Bonds and instant unstake*, because the auction and the collateral take real time and the old agenda never named them. |
+| 3 | **Who is Marinade** | Deliberate echo of "Who talks to you". Big hat as a watermark, three lines: born in a hackathon in 2021, a DAO with a public forum, a stake automation platform. |
+| 4 | **What is staking** | Three cards: skin in the game, somebody else runs it, the work pays. Foot quotes Solana on delegation not transferring ownership. |
+| 5 | **Stake decides who builds** | The diagram: stakers delegate, validators carry different weight, an epoch of slots follows that weight, rewards loop back. |
+
+**Where the facts come from, all public and quoted rather than paraphrased.**
+
+- *Stake as collateral*: solana.com/docs/references/terminology defines stake as "tokens forfeit to the
+  cluster if malicious validator behavior can be proven".
+- *Delegation keeps ownership*: solana.com/staking, "Delegating your tokens to a validator does NOT
+  give the validator ownership or control over your tokens."
+- *Stake-weighted consensus*: same page, "Validator's consensus votes are stake-weighted."
+- *The leader schedule*: terminology page, "A sequence of validator public keys mapped to slots", and
+  an epoch is "the time, i.e. number of slots, for which a leader schedule is valid".
+- *The two reward kinds*: solana.com/docs/core/fees, "Base fee: per-signature, split 50% burned / 50%
+  to the validator", 5,000 lamports per signature, and "Prioritization fee ... 100% to the
+  validator". Inflation and vote credits from the terminology page.
+- *Marinade's own positioning*: docs.marinade.finance, "a stake automation platform that helps you
+  maximize SOL staking rewards while supporting the decentralization and performance of the Solana
+  network."
+- *DAO history*: Marinade's own education article, born spring 2021 out of two hackathons, MNDE
+  launched 7 October 2021, on-chain governance in 2022, bootstrapped by grants with no venture
+  capital.
+
+**Two accuracy traps in the staking intro, both handled in the speaker notes.**
+
+1. **Do not say Solana slashes stake today.** The terminology page defines stake as forfeitable, but
+   protocol slashing is not live, so in practice backing a bad validator costs you rewards, not
+   principal. The slide says "locking SOL says you care", which is true either way.
+2. **Stake buys slots, not a lottery ticket.** The natural phrasing is "a bigger chance to produce a
+   block", and the mechanism is a leader schedule computed per epoch, stake-weighted. The diagram
+   draws proportional slots for exactly this reason.
+
+**The diagram is drawn, not sourced.** `.pos` in the theme, generated geometry so proportions are
+exact: validator A carries five stake pips and gets five of the nine slots, B three, C one. The
+dashed return arrow is the reward loop, and its first version grazed validator C's box, which is why
+the path drops to y=400 now.
+
+### Speaker notes are the second half of this deck
+
+Every slide carries a `Note:` block, all 22 of them, about 3,400 words in total and a median of 160
+words a slide. Reveal parses them into `aside.notes`.
+
+**Three ways to read them.**
+
+1. **Press `s` in the deck** for the speaker view: current slide, next slide, notes and two timers in
+   a second window. It is a popup, so the browser has to allow one for localhost, and the deck has to
+   be served over HTTP, which `npm start` already does.
+2. **`TALK-TRACK.md`** at the top of this directory, for rehearsing away from the deck. Generated from
+   `deck.md`, see below.
+3. **In the PDF**, with `?print-pdf&showNotes=separate-page`. Verified 2026-08-19: reveal merges
+   query parameters into its config, and that URL renders all 22 note blocks into the print view, one
+   page each. `showNotes` is deliberately **not** set in `index.html`, because turning it on there
+   would also print the notes onto the slides in the live deck.
+
+### `TALK-TRACK.md`, the deck read as a script
+
+`python3 tools/talk-track.py > TALK-TRACK.md` renders the whole deck slide by slide: the heading, the
+slide's classes, and each note broken into its separate points. It opens with **the question chain**,
+a table of what each slide leaves the room asking, extracted from the "Leaves the question" lines.
+
+It is generated, never hand-edited, so it cannot drift from the deck. The chain table is also a
+review tool rather than just a reading aid: an em dash in that column means a slide hands nothing to
+the next one, which for anything except the cover, the agenda, the bio and the closing is a seam to
+go and look at.
+
+Two extraction details worth knowing, both already handled: a note point starts at an ALL-CAPS
+lead-in **only** where the previous line ended a sentence, because a capitalised word wrapping onto
+the next line used to truncate the point; and "Then hand off" counts as a handoff when no explicit
+"Leaves the question" line exists.
+
+The convention that grew here, worth keeping: the notes are not a script to read out. They carry the
+*message* of the slide in caps, then the detail that did not earn slide space, then the question the
+slide hands to the next one. Where something must be said but must not be printed, the note says so
+explicitly, and for the private material it names the file under `$K` instead of repeating it.
+
+### How to introduce Marinade Recipes, answered 2026-08-19
+
+Ondra asked what Recipes actually is, and whether it needs its own slide. **It does not.** One card on
+the strategies slide plus forty seconds of talk covers it, and a whole slide for the third strategy
+would unbalance a section that already runs long. What was missing was the framing, not the space.
+
+**The framing is DCA, and it comes from Marinade's own page**, which says "DCA into token:
+automatically convert your staking rewards into the token you want, bit by bit". So:
+
+> Your principal stays in SOL. Only the yield is converted, epoch after epoch, into a token you chose.
+> It is dollar cost averaging paid for by staking rewards instead of out of your wallet.
+
+That single sentence is what the product is. Three flavours, all named publicly: **stablecoins** for
+yield without market swings, and USDG is the one live today; **utility tokens**, MNDE and zBTC;
+**memecoins**, which is where `$FWOG` and `$NOBODY` come in. The page also advertises a boosted APY
+for subscribers.
+
+Say the caveat, it costs a sentence and buys trust: **the price risk is on the payout token, not on
+the stake.** The SOL principal is untouched.
+
+The card now reads "Your rewards are swapped, epoch by epoch, into a token you pick", which is the DCA
+mechanism in plain words. And the standing constraint still holds: **describe Recipes by its payout
+rail only, never by where the stake is delegated.**
+
 ### Timing budget, 20 minute slot (2026-08-18)
 
 The slot was cut from 25 to 20 minutes. Assume **17 minutes on stage, 3 for questions**, until the
@@ -456,8 +566,8 @@ owed.**
 
 Rules that follow from this:
 
-- **Appendix slides are free.** They sit after the closing and only get shown if somebody asks, so
-  delinquent stake and canonical stake cost nothing in the budget. Build them.
+- **There is no appendix any more.** The war stories were dropped from this deck on 2026-08-18, so
+  the budget below is the whole talk.
 - **Anything added before the closing has to be paid for.** New slide in means a slide out, or an
   existing one gets faster.
 - **Cutting happens after the deck is complete**, not while writing it. Decided 2026-08-18: finish
@@ -676,8 +786,9 @@ of it goes on slides, see "Liquid staking: slide split" below for the structure 
 - **Difference from the standard Solana LST program.** This must be something graspable about
   *how our approach works* versus theirs. Differently calculated fees are not interesting here.
   Claim processing is closer, but still not interesting enough on its own.
-- **Two war stories, moved to an appendix at the end of the deck**, one slide each. They are
-  challenges of being a long-standing OG program while the Solana protocol changes underneath.
+- **Two war stories, now saved for a different talk entirely**, see "Saved for another talk" below.
+  Kept here because the material is good and fully researched. They are challenges of being a
+  long-standing OG program while the Solana protocol changes underneath.
   1. **Delinquent stake.** Solana later shipped a permissionless deactivation instruction. The
      program has its own state machine that outside processing must not be able to break, which
      is how security is preserved. Delinquency did not exist at launch, so when it appeared it
@@ -692,7 +803,7 @@ of it goes on slides, see "Liquid staking: slide split" below for the structure 
 
 **Liquid staking: slide split, proposed 2026-08-15**
 
-Six slides in the main section, two in the appendix. Derived from the flow above plus
+Six slides in the main section. Derived from the flow above plus
 `research/liquid-staking-system-and-bonds.md`. Restructure freely, but note the order is
 deliberate: each slide creates the question the next one answers.
 
@@ -749,8 +860,8 @@ the settlement slide was added. Restore it if the section turns out to have room
 2026-08-15 as builder detail, and that still holds for the *diagram*. What went in is four beats
 of shape only: measured, calculated, settled on chain, claimable by anyone. Merkle trees and the
 distribution CLI stay in the speaker notes.
-| A1 | *Appendix:* delinquent stake | War story 1. |
-| A2 | *Appendix:* canonical stake accounts | War story 2. |
+**No appendix. Decided 2026-08-18.** The two war stories are out of this deck entirely, not parked at
+the end of it. See "Saved for another talk" below.
 
 **On L2, the difference from the SPL stake pool.** This was the open question. Two candidate
 angles, and the recommendation is to lead with the first and use the second only if there is time:
@@ -798,8 +909,8 @@ angles, and the recommendation is to lead with the first and use the second only
    two days, which is where SPL users live permanently.
 2. **The accounting model.** SPL keeps one stake account per validator plus one transient account,
    rigid by construction. Marinade keeps a free list of stake accounts, which is more flexible and
-   is exactly why canonical stake is now being retrofitted. This one sets up appendix slide A2
-   nicely, so it is a good bridge if the appendix is being presented.
+   is exactly why canonical stake is now being retrofitted. It used to be the bridge into the
+   canonical stake war story, which is no longer in this deck.
 
 Explicitly **not** the difference to use: fee calculation. Correct but boring, and the audience
 will not care.
@@ -867,12 +978,21 @@ in the room does converts an objection into a point in your favour. Full suggest
 | N3 | **Not a hot wallet** | Why the staking authority is a PDA and not a key. |
 | N4 | **Getting out is the hard part** | The exit funnel: twelve accounts, three deactivating batches, one withdrawal. The exit authority marks an account as leaving, so the authority *is* the state. |
 | I1 | **Somebody buys your stake account** | Opens the section itself, `label` plus the gold-coin painting. Atomic swap, one transaction, both legs or neither. Works on any stake account, even ones Marinade never touched. |
-| I2 | **Somebody has to want it** | Now, Less, Why. The price is the discount, and the discount is what the waiting is worth to somebody else. Marinade charges the unstaker nothing. |
+| I2 | **Somebody has to want it** | You get, They get, The gap. Named sides rather than abstract nouns: you get SOL now at a little under face value, the buyer gets the account and inherits the cooldown, and the difference is the price of not waiting. Foot: no unstaking fee from Marinade, price shown before you sign. |
 **I3 "Everyone waits. The only question is who." was cut on 2026-08-18**, Ondra's call and the right
 one. It carried no information: a phrase, not a slide, spending 25 seconds saying what the room had
-already worked out. The line survives as the spoken close of I2, where it does more work because it
-can name both exits at once, the liquidity pool in Liquid and the buyer here. First cut paid against
-the 17 minute budget.
+already worked out. First cut paid against the 17 minute budget.
+
+**The line itself is gone too, not just its slide.** It was first moved into I2's speaker notes, and
+Ondra cut it from there as well on the same day: asked what he was meant to say with it, there was no
+answer beyond the sound of it. Recorded in `PUNCHLINES.md` under "Held back deliberately". The general
+lesson is worth keeping: a line that only sounds good is decoration, and speaker notes are not a
+retirement home for it.
+
+**I2's cards were rewritten in the same pass**, because "Now / Less / Why" was not landing. Abstract
+one-word headings made the reader work out who the sentence was about. Naming the two sides, **You
+get** and **They get**, then **The gap**, makes the trade legible without a sentence of setup, and it
+is the same economics the cut line was gesturing at, made concrete.
 
 **What I2 is for**, since it was asked. I1 is the mechanism, I2 is the price, and without it the room
 hears Instant unstake as free magic. Somebody buys your account because they are happy to wait; the
@@ -1039,8 +1159,8 @@ The `<span class="accent">make</span>` puts the one PT Serif italic word on "mak
 
 | Topic | State | Where |
 |---|---|---|
-| Delinquent stake use case | Done and reviewed, accepted 2026-08-12 | `research/liquid-staking-delinquent-stake.md` |
-| Canonical stake use case | Done, open questions listed | `research/liquid-staking-canonical-stake.md` |
+| Delinquent stake use case | Done and reviewed, accepted 2026-08-12. **Not in this deck**, see "Saved for another talk" | `research/liquid-staking-delinquent-stake.md` |
+| Canonical stake use case | Done, open questions listed. **Not in this deck**, see "Saved for another talk" | `research/liquid-staking-canonical-stake.md` |
 | Native staking undelegation, revoke, queues | Done | `research/native-staking-undelegation.md` |
 | Product list and shout-outs for the agenda slide | Done | `research/products-and-positioning.md` |
 | Company positioning for the Marinade slide | Done | `research/products-and-positioning.md` |
@@ -1246,6 +1366,42 @@ which is a private repo, and several of its pages carry an "AI generated, no rev
 
 Public repos under https://github.com/marinade-finance are safe to name and link.
 
+## Saved for another talk
+
+Material that is researched, written up, and deliberately **not** in this deck. Decided 2026-08-18:
+the two war stories do not fit a 20 minute product tour for a mixed audience. Both are debugging
+stories about one program, they need setup the tour never provides, and neither answers a question
+the tour raises. They are the spine of a different talk, not an appendix to this one.
+
+The natural home is a developer-audience session, something like *five years of running an LST while
+the chain changes underneath you*. A Rust Summit or a Solana developer meetup, not a summit main
+stage.
+
+**War story 1: delinquent stake.** `research/liquid-staking-delinquent-stake.md`, reviewed and
+accepted. Solana shipped `DeactivateDelinquent`, permissionless and needing no stake-authority
+signature. A third party could flip a Marinade-owned account to deactivating while Marinade's own
+mirror of the state still said active, so `UpdateDeactivated` subtracted from a bucket the stake was
+never in, underflowed, and stranded the SOL. Nothing was stolen and it was not a break: the state
+machine refused a transition it had no rule for, which is exactly why the money got stuck. Fixed with
+a detector plus a resumable two-phase migration that ends on
+`require_eq!(delinquent_balance_left, 0)`.
+
+The lesson, and the reason it deserves its own talk: **protecting correctness and protecting liveness
+are different jobs**, and a state machine that is right can still strand funds.
+
+**War story 2: canonical stake accounts.** `research/liquid-staking-canonical-stake.md`. One stake
+account per validator at a PDA derived from `[MLIQUID_STATE, validator_vote, b"canonical_stake"]`, so
+the address *is* the information: choosing what to unstake becomes a local derivation instead of an
+RPC round trip per candidate. The motivation is being a good neighbour. Marinade is big enough that
+account count is its own responsibility, not a nice-to-have.
+
+Both notes carry their own sources and open questions, so neither needs re-researching. The open
+verification for the second one is whether canonical stake is live yet: `tx-router` still has the
+fallback path.
+
+Punchlines already written for these, in `PUNCHLINES.md` under "On the appendix war stories", stay
+there for the same reason. Do not delete them.
+
 ## Links
 
 ### Marinade, public
@@ -1364,6 +1520,24 @@ Ordered by how much they block the next step.
   footnote and was what made that block 1322px wide.
 - 2026-08-18 — "Everyone waits" statement slide cut, its line moved into I2's speaker notes. Deck is
   19 slides, verified headless: no overflow, no errors.
+- 2026-08-19 — `tools/talk-track.py` and the generated `TALK-TRACK.md` added, so the speaker notes can
+  be read as one document and the question chain can be reviewed as a table.
+- 2026-08-19 — "Four years on one chain" corrected to five, Ondra's catch. 2021 to 2026. Also fixed in
+  `PUNCHLINES.md` and in the war-story talk title above.
+- 2026-08-19 — Recipes reframed as DCA on the strategies card and in its notes, no separate slide.
+  The Instant unstake technical script and the auction vocabulary went into the private `$K` note,
+  since both are derived from private repositories.
+- 2026-08-19 — Introduction block built: Marinade slide, "What is staking", and the stake-weighted
+  slots diagram. Agenda gained a fourth line and the cover subtitle gained "introductory tour". Deck
+  is 22 slides, verified headless: no overflow, no errors.
+- 2026-08-18 — I2 cards rewritten to You get / They get / The gap, and the "everyone waits" line
+  deleted from the speaker notes as well as the deck.
+- 2026-08-18 — Agenda list anchored under the heading with `anchor-top`, and the chef hat back up to
+  216px. Optical centring is right for cards and diagrams and wrong for a list you read top down: the
+  gap under the title read as a mistake.
+- 2026-08-18 — The two war stories are out of this deck for good, not parked in an appendix. They are
+  a different talk for a developer audience, written up under "Saved for another talk". N3 stays for
+  now, so the deck runs slightly long on purpose.
 - 2026-08-18 — The two `epoch` labels on the state ring set bold, Ondra's call. They are the cost of
   the cycle, so they carry the weight.
 - 2026-08-18 — N4 rebuilt as the exit funnel, a drawn many-to-one diagram, replacing the four-step

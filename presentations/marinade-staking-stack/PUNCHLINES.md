@@ -19,11 +19,6 @@ moment somebody challenges the word "permissionless".
 
 Why bonds exist. It is the whole argument for on-chain collateral in eight words.
 
-> **Everyone waits two days. The only question is who.**
-
-The honest framing of any "instant" unstake. Solana's cooldown is not optional, so somebody is
-always doing the waiting. Works for both the liquid pool and Instant Unstake.
-
 ## On being permissionless
 
 > The mechanism is permissionless. The policy is not.
@@ -168,7 +163,7 @@ The canonical stake story, on why account count matters to the network.
 Then be precise. Works better than defending the simplification.
 
 > We are not the only ones who solved this. We are the ones who solved it first, and then had to
-> live with the consequences for four years.
+> live with the consequences for five years.
 
 On being the OG protocol, without claiming superiority.
 
@@ -184,6 +179,12 @@ Good lines that do **not** go in, recorded so they are not reinvented:
   listener knows what a pool reserve is and the difference between `WithdrawSol` and
   `WithdrawStake`. It failed on a Marinade engineer, so it will fail on the room. Superseded by
   "Everyone waits two days".
+- *"Everyone waits two days. The only question is who."* **Cut 2026-08-18.** It was a favourite here
+  and it had its own slide for a while, and Ondra was right to kill both. It states a fact the room
+  has already worked out by that point, and it does not tell anyone anything they can act on. A line
+  that only sounds good is decoration. The economics it was gesturing at now live on the price slide,
+  where they are concrete: you get SOL now, the buyer gets the wait, and the gap between the two is
+  the price.
 - Anything framing the talk as a thesis about Solana's limitations. The gap-machinery-protocol
   pattern is real and appears in both sections, but it stays spoken connective tissue, never a
   slide and never the headline.

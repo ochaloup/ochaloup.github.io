@@ -4,7 +4,7 @@
 
 # Inside Marinade's staking stack
 
-## Building staking infrastructure on <span class="accent">Solana</span>
+## An introductory tour of staking infrastructure on <span class="accent">Solana</span>
 
 <div class="logo-row">
 <img src="images/solana-logo.svg" alt="Solana">
@@ -19,6 +19,8 @@ the collision would cost the first minute. The subtitle is unchanged, so the roo
 still match this slide to the programme line. Conference name deliberately absent.
 
 ---
+
+<!-- .slide: class="anchor-top" -->
 
 ## What we are going to cook through
 
@@ -38,6 +40,10 @@ still match this slide to the programme line. Conference name deliberately absen
 
 <div class="agenda">
 <div>
+<span class="agenda-name">What is staking</span>
+<span class="agenda-shout">Why a blockchain pays you to lock money up</span>
+</div>
+<div>
 <span class="agenda-name">Liquid staking</span>
 <span class="agenda-shout">The original Solana LST</span>
 </div>
@@ -55,8 +61,8 @@ still match this slide to the programme line. Conference name deliberately absen
 -->
 </div>
 <div>
-<span class="agenda-name">Instant unstake</span>
-<span class="agenda-shout">Skip the two day wait</span>
+<span class="agenda-name">Bonds and instant unstake</span>
+<span class="agenda-shout">Collateral, and skipping the cooldown</span>
 </div>
 </div>
 
@@ -89,6 +95,130 @@ Do not read the shout-outs out loud, they are there to be scanned.
 Note:
 The distributed systems line is deliberately past tense. It is the honest version,
 it explains how I got here rather than claiming an active practice.
+
+---
+
+<!-- .slide: class="with-art anchor-top" -->
+
+## Who is Marinade
+
+<div class="side-art hat"><img src="images/marinade-white.svg" alt=""></div>
+
+<div class="agenda">
+<div>
+<span class="agenda-name">Born in a hackathon, 2021</span>
+<span class="agenda-shout">Two projects merged, and shipped the first liquid staking token on Solana.</span>
+</div>
+<div>
+<span class="agenda-name">A DAO with a public forum</span>
+<span class="agenda-shout">MNDE holders lock their tokens to vote, and proposals are argued in the open.</span>
+</div>
+<div>
+<span class="agenda-name">A stake automation platform</span>
+<span class="agenda-shout">Marinade's own words. Chasing rewards and Solana's decentralisation at once.</span>
+</div>
+</div>
+
+<p class="slide-foot">Five years on one chain, bootstrapped by grants rather than venture capital.</p>
+
+Note:
+Short. This is credibility, not a pitch, so do not sell.
+THE HISTORY: spring 2021, out of two hackathon projects that merged. First liquid
+staking token on Solana. That is the sentence that buys the rest of the talk: we have
+been running this through five years of Solana changing underneath us.
+THE DAO: MNDE launched October 2021 and on-chain governance followed in 2022. Token
+holders lock MNDE to vote, and the forum is public. Say "a DAO and a team", not "a
+company", because both are true and the DAO is the part people do not expect.
+THE POSITIONING, in Marinade's own words from docs.marinade.finance: "a stake
+automation platform that helps you maximize SOL staking rewards while supporting the
+decentralization and performance of the Solana network." Do NOT call it a staking
+protocol, that is off-brand.
+[VERIFY BEFORE THE TALK] the foot line says grants rather than venture capital. That
+comes from Marinade's own education article, written 2022 and updated 2024. Confirm it
+still holds, or drop the line: it is the one claim on this slide that could have aged.
+Leaves the question: fine, but before any of the products, what is staking even doing?
+
+---
+
+<!-- .slide: -->
+
+## What is staking
+
+<!-- Lucide "hand-coins", ISC. Thin stroke because the icon set is drawn for 24px:
+     at this size the stock stroke-width of 2 reads as heavy bars. -->
+<svg class="slide-icon wash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<path d="M11 15h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 17"/>
+<path d="m7 21 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.75-2.91l-4.2 3.9"/>
+<path d="m2 16 6 6"/>
+<circle cx="16" cy="9" r="2.9"/>
+<circle cx="6" cy="5" r="3"/>
+</svg>
+
+<div class="grid-3">
+<div class="card">
+<h3>Backing the network</h3>
+<p>Locked SOL says its security and uptime matter, and the network pays for that.</p>
+</div>
+<div class="card">
+<h3>Validators do the work</h3>
+<p>They run the hardware and vote on blocks, carrying the stake delegated to them.</p>
+</div>
+<div class="card">
+<h3>Two kinds of reward</h3>
+<p>Voting earns inflation. Building blocks earns fees.</p>
+</div>
+</div>
+
+<p class="slide-foot">Solana's own wording: delegating your tokens does not give the validator ownership or control over them.</p>
+
+Note:
+KEEP IT SIMPLE, this is the one slide for the half of the room that does not run a
+node. Three sentences, then the diagram.
+WHY LOCK ANYTHING AT ALL: proof of stake needs money as the signal. Stake says the
+network's security and its uptime matter to whoever locked it, and the protocol pays
+for that signal. That is the whole bargain.
+DELIBERATELY NOT "skin in the game", and this is worth knowing rather than glossing
+over: on Solana there is no protocol slashing today, so a badly chosen validator costs
+rewards, not principal. Nothing gets burned. Solana's terminology page does define
+stake as forfeitable if malicious behaviour can be proven, so the intent is there, but
+do not tell a room of engineers that the chain destroys stake today.
+VALIDATORS, not "somebody": they run the hardware, they vote on every block, and the
+stake delegated to them is what gives their vote weight.
+TWO KINDS OF REWARD, and the next slide draws both. Voting earns inflation, paid per
+epoch against vote credits. Building blocks earns the fees inside them. Keep them
+separate in the room's head, because who ends up with each one is the whole reason the
+auction exists later.
+Leaves the question: so how does the chain decide who builds a block?
+
+---
+
+<!-- .slide: -->
+
+## Stake decides who builds
+
+<div class="figure-wide"><svg class="pos" viewBox="0 0 1600 480" role="img"><title>Stakers delegate to validators. Every validator votes on every block and earns inflation, which flows back to the stakers. Stake also decides how many slots a validator gets, and the fees in those blocks stay with the validator.</title><text class="pos-head" x="95" y="44">Stakers</text><text class="pos-head" x="441" y="44">Validators</text><rect class="pos-box" x="20" y="96" width="150" height="46" rx="10"/><text class="pos-lbl" x="95" y="126">SOL</text><rect class="pos-box" x="20" y="152" width="150" height="46" rx="10"/><text class="pos-lbl" x="95" y="182">SOL</text><rect class="pos-box" x="20" y="208" width="150" height="46" rx="10"/><text class="pos-lbl" x="95" y="238">SOL</text><rect class="pos-box" x="20" y="264" width="150" height="46" rx="10"/><text class="pos-lbl" x="95" y="294">SOL</text><path class="pos-arrow" d="M186 202 H286"/><path class="pos-arrow" d="M278 194 l10 8 -10 8"/><text class="pos-note" x="236" y="184">delegate</text><rect class="pos-box" x="316" y="80" width="250" height="84" rx="12"/><text class="pos-lbl" x="352" y="130">A</text><rect class="pos-pip" x="388" y="112" width="26" height="22" rx="5"/><rect class="pos-pip" x="422" y="112" width="26" height="22" rx="5"/><rect class="pos-pip" x="456" y="112" width="26" height="22" rx="5"/><rect class="pos-pip" x="490" y="112" width="26" height="22" rx="5"/><rect class="pos-pip" x="524" y="112" width="26" height="22" rx="5"/><rect class="pos-box" x="316" y="176" width="250" height="84" rx="12"/><text class="pos-lbl" x="352" y="226">B</text><rect class="pos-pip" x="388" y="208" width="26" height="22" rx="5"/><rect class="pos-pip" x="422" y="208" width="26" height="22" rx="5"/><rect class="pos-pip" x="456" y="208" width="26" height="22" rx="5"/><rect class="pos-box" x="316" y="272" width="250" height="84" rx="12"/><text class="pos-lbl" x="352" y="322">C</text><rect class="pos-pip" x="388" y="304" width="26" height="22" rx="5"/><path class="pos-arrow" d="M580 122 H1308"/><path class="pos-arrow" d="M1300 114 l10 8 -10 8"/><text class="pos-note" x="944" y="104">all of them vote on every block</text><rect class="pos-out" x="1330" y="80" width="250" height="86" rx="12"/><text class="pos-out-lbl" x="1455" y="118">Inflation</text><text class="pos-out-sub" x="1455" y="148">paid every epoch</text><path class="pos-arrow" d="M580 304 H720"/><path class="pos-arrow" d="M712 296 l10 8 -10 8"/><text class="pos-note" x="998" y="252">stake decides how many slots each one gets</text><rect class="pos-slot a" x="740" y="272" width="52" height="64" rx="9"/><text class="pos-slot-lbl" x="766" y="313">A</text><rect class="pos-slot a" x="798" y="272" width="52" height="64" rx="9"/><text class="pos-slot-lbl" x="824" y="313">A</text><rect class="pos-slot a" x="856" y="272" width="52" height="64" rx="9"/><text class="pos-slot-lbl" x="882" y="313">A</text><rect class="pos-slot a" x="914" y="272" width="52" height="64" rx="9"/><text class="pos-slot-lbl" x="940" y="313">A</text><rect class="pos-slot a" x="972" y="272" width="52" height="64" rx="9"/><text class="pos-slot-lbl" x="998" y="313">A</text><rect class="pos-slot b" x="1030" y="272" width="52" height="64" rx="9"/><text class="pos-slot-lbl" x="1056" y="313">B</text><rect class="pos-slot b" x="1088" y="272" width="52" height="64" rx="9"/><text class="pos-slot-lbl" x="1114" y="313">B</text><rect class="pos-slot b" x="1146" y="272" width="52" height="64" rx="9"/><text class="pos-slot-lbl" x="1172" y="313">B</text><rect class="pos-slot c" x="1204" y="272" width="52" height="64" rx="9"/><text class="pos-slot-lbl" x="1230" y="313">C</text><path class="pos-arrow" d="M1268 304 H1308"/><path class="pos-arrow" d="M1300 296 l10 8 -10 8"/><rect class="pos-out" x="1330" y="272" width="250" height="86" rx="12"/><text class="pos-out-lbl" x="1455" y="310">Fees</text><text class="pos-out-sub" x="1455" y="340">in the blocks they build</text><text class="pos-note" x="1455" y="384">stays with the validator</text><path class="pos-arrow dashed" d="M1455 168 H1590 V438 H95 V322"/><path class="pos-arrow" d="M87 330 l8 -10 8 10"/><text class="pos-note" x="790" y="464">inflation lands with the stakers, every epoch</text></svg></div>
+
+<p class="slide-foot">Base fee is 5,000 lamports per signature, half burned and half to the validator. Priority fees go to the validator in full.</p>
+
+Note:
+TWO LANES, and the split is the point of the slide. Walk the left side first, then
+take the top lane, then the bottom one.
+LEFT: stakers delegate, and each validator ends up carrying a different amount of
+stake, drawn as the little blocks inside it.
+TOP LANE, VOTING: every validator votes on every block, all the time, and that is not
+a turn-taking thing. The protocol tallies vote credits and pays inflation each epoch,
+the validator keeps a commission, and the rest lands with the stakers. That is the
+dashed arrow, and it is the part of the picture that is the audience's money.
+BOTTOM LANE, BUILDING: this is where stake decides something. Solana builds a leader
+schedule for the epoch and the number of slots a validator gets follows its stake. A
+slot is its turn to produce a block, so more stake means more turns.
+THE FEES FROM THOSE BLOCKS STAY WITH THE VALIDATOR. Say it plainly and let it sit
+there unresolved: base fee is 5,000 lamports a signature with half burned and half to
+the validator, priority fees all of it, and MEV on top, outside the protocol.
+[THE SEED FOR THE WHOLE TALK, do not resolve it here] there is no in-protocol way for
+a validator to hand a share of that back to the people whose stake earned it. Two
+sections from now, the auction and the bonds are exactly that missing path.
+Leaves the question: fine, so what does Marinade actually build on top of that?
 
 ---
 
@@ -493,7 +623,7 @@ with it?
 </div>
 <div class="card">
 <h3>Recipes</h3>
-<p>Stake SOL, get paid in something else entirely.</p>
+<p>Your rewards are swapped, epoch by epoch, into a token you pick.</p>
 </div>
 </div>
 
@@ -506,9 +636,19 @@ MAX YIELD is the retail default: auto-delegation to the validators that won the
 auction, so it inherits everything from the Liquid section.
 SELECT is the institutional one: a curated set, identity-verified operators. This is
 the ETF and treasury conversation.
-RECIPES is the one to have fun with. Your staking rewards get swapped and paid out
-in a different token by merkle drop. Read the list off the slide and let $FWOG and
-$NOBODY land: those are real payout rails on a real product page.
+RECIPES is the one to have fun with, and the honest way to introduce it is DCA.
+THE SENTENCE THAT EXPLAINS IT: your principal stays in SOL, and only the yield is
+converted, epoch after epoch, into a token you chose. So it is dollar cost averaging
+paid for by staking rewards rather than by your wallet. Marinade's own page calls it
+"DCA into token: automatically convert your staking rewards into the token you want,
+bit by bit."
+THREE FLAVOURS, all off the public page. Stablecoins for people who want yield without
+market swings, USDG being the one that is live. Utility tokens, MNDE and zBTC. And
+memecoins, which is where $FWOG and $NOBODY come in. Read that list off the slide and
+let it land: they are real payout rails on a real product page, and the room will not
+expect it after the institutional Select card.
+SAY THE CAVEAT, it costs one sentence and buys trust: you are taking price risk on
+the payout token, not on your stake. The SOL principal is untouched.
 DESCRIBE RECIPES BY ITS PAYOUT RAIL ONLY. Never by where the stake is delegated.
 Leaves the question: three policies, one key. So what is actually holding that key?
 
@@ -604,37 +744,36 @@ Leaves the question: fine, but why would anybody buy it, and what does that cost
 
 <div class="grid-3">
 <div class="card">
-<h3>Now</h3>
-<p>SOL in your wallet, in one transaction.</p>
+<h3>You get</h3>
+<p>SOL now, a little under what the account holds.</p>
 </div>
 <div class="card">
-<h3>Less</h3>
-<p>A little under what the account holds.</p>
+<h3>They get</h3>
+<p>Your stake account, and the wait that comes with it.</p>
 </div>
 <div class="card">
-<h3>Why</h3>
-<p>That gap is what the waiting is worth to somebody else.</p>
+<h3>The gap</h3>
+<p>The difference between the two is the price of not waiting.</p>
 </div>
 </div>
 
-<p class="slide-foot">Marinade charges you nothing to unstake. The discount is the price, and you see it before you sign.</p>
+<p class="slide-foot">No unstaking fee from Marinade, and you see the price before you sign.</p>
 
 Note:
-THE PRICE SLIDE. The previous slide was the mechanism, this one is what it costs you.
-You are not paid face value. You take a discount, and that discount is the price of
-not waiting.
-Say plainly that we charge the unstaker no fee. What you give up goes to whoever
-agrees to sit through the cooldown in your place.
-ON STAGE ONLY, deliberately not written here: two beats on how a buyer commits to
-the trade. The source repositories are private, so nothing about them goes in this
-public repo. They are in the private talk note, marinade-staking-stack--
+WHY THIS SLIDE EXISTS: the previous slide showed the mechanism, and the room's next
+question is what it costs and why anybody would take the other side.
+Name the two sides out loud. You get SOL immediately, slightly less than the account
+holds. The buyer gets the account and inherits the cooldown, which they are willing
+to sit through. The difference between those two numbers is the whole price, and it
+is a price for time, nothing else.
+Then the reassurance: we do not charge you a fee for unstaking, and the number is on
+screen before you sign anything.
+ON STAGE ONLY, deliberately not written here: the technical layer, including what kind
+of auction this is and how a buyer commits to the trade. The source repositories are
+private, so nothing about them goes in this public repo. The full ninety second
+version, the auction vocabulary, and the line that pairs this auction with the
+validator auction are in the private talk note, marinade-staking-stack--
 instant-unstake-mechanics--INVESTIGATION.
-CLOSE THE SECTION HERE, spoken, no slide of its own: everyone waits, the only
-question is who. Solana's cooldown cannot be skipped by anybody, so "instant" never
-means the wait went away, it means it moved. In Liquid it moves to the third parties
-who fund the liquidity pool. Here it moves to the buyer. Either way somebody is
-standing in your queue and charging you for it, and that is the honest version.
-Saying "about two days" out loud is fine. Never put an epoch length on a slide.
 Then hand off to the closing: three products, and every one of them is a different
 answer to something Solana makes hard.
 
@@ -663,3 +802,61 @@ answer to something Solana makes hard.
 Note:
 Closing line. It is a generic pun on "fake it till you make it", widely used and
 owned by nobody, so no attribution is needed. See the README naming section.
+
+---
+
+<!-- .slide: -->
+
+<div class="label">Appendix, if it comes up</div>
+
+## MEV arrives as a bundle
+
+<div class="grid-3">
+<div class="card">
+<h3>An ordered group</h3>
+<p>Transactions run in the order given, inside one slot, all of them or none.</p>
+</div>
+<div class="card">
+<h3>A tip, not a priority fee</h3>
+<p>Bundles compete on tips to the validator, paid on top of the normal fee.</p>
+</div>
+<div class="card">
+<h3>Split on chain</h3>
+<p>A merkle root per validator per epoch, a capped commission, and stakers claim the rest.</p>
+</div>
+</div>
+
+<p class="slide-foot">Marinade's auction already prices it in: expected MEV is part of what a validator can share back.</p>
+
+Note:
+WHY THIS SLIDE IS AN APPENDIX: MEV is not on any main slide on purpose. It is a
+different subject, the room does not need it to follow the talk, and one bad
+explanation would cost two minutes. But somebody always asks, so have this ready.
+FRAME IT AS TOOLING, NOT AS EXTRACTION. In practice nobody sells this as MEV. It is
+sold as a faster, ordered lane onto the chain for the case where one transaction is
+not enough: you need several instructions to land together, in a set order, or not at
+all.
+WHAT A BUNDLE IS, quoting Jito's own docs: "Transactions in a bundle are guaranteed to
+execute in the order they are listed", a bundle "cannot cross slot boundaries", and
+"if any transaction in a bundle fails, none of the transactions in the bundle will be
+committed to the chain". Nothing guarantees a bundle lands: they compete.
+TIPS ARE NOT PRIORITY FEES. Solana's own docs separate them: a priority fee raises the
+chance the current leader processes your transaction, a tip pays the bundle network to
+take your bundle at all. Jito's docs: bundle tips "are then redistributed to the
+validators and their stakers".
+THE ON-CHAIN PART, and it is the bit worth showing an engineer. Two programs in
+jito-foundation/jito-programs, which is public: tip-payment collects, tip-distribution
+shares out. Per validator per epoch there is a TipDistributionAccount holding an
+optional merkle root, a validator_commission_bps capped by a config value, and an
+expiry after which unclaimed tips stop being claimable. Stakers claim against the
+merkle proof, one CLAIM_STATUS account each.
+THE PARALLEL WORTH DRAWING, because it is our own architecture: that is the same shape
+as the bonds settlement earlier in this talk. Measure off chain, publish a root, let
+anybody claim against it. Two teams reached for the same pattern because per-staker
+payouts do not fit in a program.
+[NAMING] this slide breaks the deck's own rule about never naming another protocol on
+screen. Deliberate, Ondra's call 2026-08-19: this is infrastructure the whole network
+uses rather than a competing product, and the question cannot be answered without the
+name.
+Sources: jito.wtf, docs.jito.wtf/lowlatencytxnsend, solana.com/docs/payments/production-readiness,
+and jito-foundation/jito-programs.
