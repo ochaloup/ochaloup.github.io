@@ -154,6 +154,9 @@ protocol, that is off-brand.
 [VERIFY BEFORE THE TALK] the foot line says grants rather than venture capital. That
 comes from Marinade's own education article, written 2022 and updated 2024. Confirm it
 still holds, or drop the line: it is the one claim on this slide that could have aged.
+LIKE THIS, if the room is not crypto native: a DAO is a co-operative. The members
+hold the token, the token votes, and the arguments happen in public rather than in a
+board room.
 Leaves the question: fine, but before any of the products, what is staking even doing?
 
 ---
@@ -206,6 +209,11 @@ TWO KINDS OF REWARD, and the next slide draws both. Voting earns inflation, paid
 epoch against vote credits. Building blocks earns the fees inside them. Keep them
 separate in the room's head, because who ends up with each one is the whole reason the
 auction exists later.
+LIKE THIS, and it is the analogy to use if the room looks lost: staking is lending
+your weight to a night shift. Somebody else runs the machines, your money is what
+says their signature counts, and the network pays for the shift being covered.
+WHERE IT BREAKS, say it if you use the word deposit: on Solana nothing seizes that
+money. A bad choice costs you the rewards, not the principal.
 Leaves the question: so how does the chain decide who builds a block?
 
 ---
@@ -236,6 +244,9 @@ the validator, priority fees all of it, and MEV on top, outside the protocol.
 [THE SEED FOR THE WHOLE TALK, do not resolve it here] there is no in-protocol way for
 a validator to hand a share of that back to the people whose stake earned it. Two
 sections from now, the auction and the bonds are exactly that missing path.
+LIKE THIS: the leader schedule is a rota. It is drawn up for the whole epoch in
+advance, and the more stake a validator carries the more shifts it gets on the rota.
+Voting is different: everybody signs off on everybody else's shift, all the time.
 Leaves the question: fine, so what does Marinade actually build on top of that?
 
 ---
@@ -274,6 +285,11 @@ Meanwhile we manage that stake to collect staking rewards and other on-chain
 rewards, so the SOL you put in is worth more. And you are holding mSOL the whole
 time, free to use it in DeFi.
 The words that matter later are ON-CHAIN PROGRAM. Say them deliberately.
+LIKE THIS, for anyone who has never held an LST: mSOL is the cloakroom ticket. The
+coat stays in the cloakroom, but you can sell the ticket to somebody else and they
+collect the coat.
+WHERE IT BREAKS: a cloakroom ticket does not get more valuable while you hold it.
+This one does, which is the whole point.
 Leaves the question: fine, but somebody has to decide where all that stake goes.
 
 ---
@@ -339,6 +355,9 @@ only: most pools have a single staker key that names the validator set and can m
 any amount of stake at any time. We put scoring and a per-epoch movement cap in the
 program instead.
 Do NOT mention the auction yet. That is the next slide.
+LIKE THIS: it is a fund manager rebalancing, not a one-off decision. Somebody reads
+the numbers every period and moves the money toward whatever is performing, and the
+reading never stops.
 Leaves the question: so who actually turns all this, and how often?
 
 ---
@@ -384,6 +403,9 @@ So every rebalance is a trade: yield lost going round, against yield lost by sta
 put. React to every wobble and you cost the stakers more than the wobbles do. That
 is why the auction emits priorities rather than a bare target, and why the program
 caps how much can move per epoch.
+LIKE THIS, and this one always lands: it is switching energy supplier. You cannot
+jump straight from one to the other. You give notice, you sit out the notice period,
+and only then do you start with the new one. The notice period is the cost.
 Leaves the question: fine, so who is even worth moving to?
 
 ---
@@ -443,6 +465,9 @@ punish you, because you are paid the clearing price, not your own number. That k
 the auction honest and stops a race to the bottom.
 The yield decomposition is real, it is the RevShare struct:
 totalPmpe = inflationPmpe + mevPmpe + bidPmpe. Say it, do not slide it.
+LIKE THIS: a shop giving you a discount to win your custom. The validator earns more
+with more stake, so it hands back part of that to attract yours. The discount is your
+extra yield.
 Leaves the question: a bid is a promise. How does a promise become money in my
 wallet?
 
@@ -474,6 +499,9 @@ Claiming is permissionless, but that is a footnote, not the headline. Say it onl
 if somebody asks who runs the payout.
 If asked how: snapshot the chain state, a distribution CLI computes the settlement,
 merkle trees go on chain, claims are made against them.
+LIKE THIS: a dividend list. The company works out who is owed what, publishes the
+list, and anybody on it can walk up and collect. Nobody has to be asked twice, and
+the list is public.
 Leaves the question, and it opens the next section: all of this is an ON-CHAIN
 PROGRAM holding your SOL. What if you do not want a program at all?
 
@@ -516,6 +544,9 @@ nothing to account for, and no program means a much shorter audit conversation.
 Worth saying: you can always reclaim the stake authority and withdraw with the
 Solana CLI, without us. That is documented publicly in the how-to-native-staking
 repository.
+LIKE THIS, and it is the cleanest analogy in the talk: a power of attorney. You keep
+the account in your own name, and you sign a limited mandate letting somebody move
+money between products for you. They cannot take it out.
 Leaves the question: so how do you manage my stake without ever holding it?
 
 ---
@@ -577,19 +608,25 @@ THE GIFT FROM THAT PAGE, quote it if the room needs convincing, it is Solana's o
 sentence and not ours: "Delegating your tokens to a validator does NOT give the
 validator ownership or control over your tokens." That is this slide in one line,
 written by the people who built the chain.
+LIKE THIS: two signatures on a bank mandate. One lets somebody manage the money,
+the other lets somebody take it out. Solana keeps them separate at the account level,
+and Marinade is only ever on the first one.
+WHERE IT BREAKS: with a bank you would have lawyers. Here the limit is mechanical,
+which is stronger and also colder.
 Leaves the question: so who, or what, is actually holding that staker key?
 
 ---
 
 <!-- .slide: data-rail="native" data-stage="stake" -->
 
-## Not a hot wallet
+<!-- No heading: the line under the picture says it, and a heading saying the same
+     thing twice was the reason this slide read as annoying. -->
 
-<img class="figure figure-sm" src="images/keys.jpg" alt="Scrooge McDuck locking a vault door covered in padlocks, holding a large bunch of keys">
+<img class="figure figure-xs" src="images/keys.jpg" alt="Scrooge McDuck locking a vault door covered in padlocks, holding a large bunch of keys">
 
 <p class="punch">Nobody at Marinade holds a keyring like this.</p>
 
-<p class="slide-foot">The staking authority is a program address with no private key. If a hot wallet leaked, only the owner could rotate it, so every user would have to act on every account they own. The DAO can change who operates the program without touching a single stake account.</p>
+<p class="slide-foot">The staking authority is a program address.</p>
 
 Note:
 THE PICTURE IS THE THING WE DID NOT BUILD, so say that first or the joke inverts:
@@ -604,6 +641,9 @@ the key must not exist at all.
 HENCE A PDA: a program address with no private key. Nothing to lose, nothing to leak,
 and the DAO can change who operates the program without touching one stake account.
 Source: native-staking/programs/marinade-native-proxy/README.md.
+LIKE THIS, for a room that does not think in keys: there is nothing to steal because
+the authority is a rule rather than an object. A door that opens only when the
+building says so, not when somebody produces the right piece of metal.
 Leaves the question: the key is safe, then. So what does Marinade actually do with
 that authority?
 
@@ -654,6 +694,8 @@ expect it after the institutional Select card.
 SAY THE CAVEAT, it costs one sentence and buys trust: you are taking price risk on
 the payout token, not on your stake. The SOL principal is untouched.
 DESCRIBE RECIPES BY ITS PAYOUT RAIL ONLY. Never by where the stake is delegated.
+LIKE THIS: choosing a savings account. Best rate, screened providers only, or paid
+out in a different currency. Same money, same custody, three policies.
 Leaves the question: three policies, one custody model. So what happens the day I
 want out?
 
@@ -681,6 +723,9 @@ authority is what marks it as on its way out of the Marinade system. The authori
 IS the state, so there is no status field anywhere to fall out of sync.
 Contrast with the Liquid section on purpose: there we kept our own mirror of state
 and an outsider could break it. Here the on-chain object carries the state itself.
+LIKE THIS: closing twenty small savings accounts. Each one has its own notice period,
+you can only file so much paperwork a day, and at the end you consolidate what comes
+back into one account.
 Leaves the question, and it opens the last section: you still wait an epoch for the
 withdrawal. What if I want the SOL right now?
 
@@ -711,6 +756,8 @@ Solana still makes somebody wait the cooldown. That somebody is now the buyer, a
 the price they quote is what they charge for waiting.
 Worth saying: it auto-detects natively staked SOL across any validator, so you can
 exit a stake account that was never delegated through us.
+LIKE THIS: selling a fixed term deposit certificate to somebody else instead of
+breaking it early. The term does not change, the holder does.
 Leaves the question: fine, but why would anybody buy it, and what does that cost me?
 
 ---
@@ -753,6 +800,9 @@ validator auction are in the private talk note, marinade-staking-stack--
 instant-unstake-mechanics--INVESTIGATION.
 Then hand off to the closing: three products, and every one of them is a different
 answer to something Solana makes hard.
+LIKE THIS, and everybody in the room has done it: selling a ticket below face value
+because you need the money before the event. The discount is the price of not
+waiting, and the buyer is being paid to be patient.
 
 ---
 
@@ -876,3 +926,5 @@ uses rather than a competing product, and the question cannot be answered withou
 name.
 Sources: jito.wtf, docs.jito.wtf/lowlatencytxnsend, solana.com/docs/payments/production-readiness,
 and jito-foundation/jito-programs.
+LIKE THIS: a group booking with priority boarding. Everybody in the group gets on
+together or nobody does, and the tip is what buys the group its place in the queue.

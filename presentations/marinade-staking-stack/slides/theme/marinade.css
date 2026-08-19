@@ -1398,6 +1398,11 @@
 	max-height: 460px;
 }
 
+/* Smaller still: a picture with both a punch line under it and the rail below that. */
+.reveal .figure-xs {
+	max-height: 380px;
+}
+
 /* ---- picture beside a list ------------------------------------------ */
 /* Breaks up a run of horizontal step diagrams without losing the steps. */
 
@@ -1752,6 +1757,64 @@
 	stroke-width: 3;
 	stroke-linecap: round;
 	stroke-linejoin: round;
+}
+
+/*
+ * The slide's claim is that leaving takes many rounds and time, so the diagram
+ * grinds: dashes march along each arrow, accounts fade one by one as they are
+ * picked off, and the batches pulse as they deactivate. Slow on purpose, because
+ * a brisk animation would say "this is quick", which is the opposite of the point.
+ */
+.reveal .funnel .flow {
+	fill: none;
+	stroke: var(--mn-light-teal);
+	stroke-width: 4;
+	stroke-linecap: round;
+	stroke-dasharray: 6 14;
+	animation: funnel-flow 1.9s linear infinite;
+}
+
+@keyframes funnel-flow {
+	to {
+		stroke-dashoffset: -40;
+	}
+}
+
+.reveal .funnel .drain {
+	animation: acct-drain 5.2s ease-in-out infinite;
+}
+
+@keyframes acct-drain {
+	0%,
+	62%,
+	100% {
+		opacity: 1;
+	}
+	78% {
+		opacity: 0.22;
+	}
+}
+
+.reveal .funnel .batch {
+	animation: batch-work 5.2s ease-in-out infinite;
+}
+
+@keyframes batch-work {
+	0%,
+	100% {
+		fill: rgba(48, 141, 138, 0.18);
+	}
+	50% {
+		fill: rgba(48, 141, 138, 0.42);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.reveal .funnel .flow,
+	.reveal .funnel .drain,
+	.reveal .funnel .batch {
+		animation: none;
+	}
 }
 
 .reveal .funnel .fn-step {

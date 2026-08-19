@@ -612,6 +612,37 @@ payouts do not fit inside a program.
 infrastructure the whole network uses rather than a competing product, and the question cannot be
 answered without the name. It is also an appendix, so it only appears if somebody asks.
 
+### An analogy on every slide that needs one
+
+Added 2026-08-19, after Ondra's feedback that the deck reads as too technical for a mixed room. Each
+relevant slide's notes now carry a `LIKE THIS` line: one everyday comparison to reach for **if the
+room looks lost**, not a replacement for the technical version. Sixteen of the twenty-three slides
+have one; covers, section openers and the closing do not need one.
+
+The rule that shaped them: **an analogy that quietly lies is worse than no analogy.** So where the
+comparison stops holding, the note says so on the next line, marked `WHERE IT BREAKS`. Three of them
+carry that warning, and they are the three that would otherwise mislead:
+
+- **Staking as a deposit.** Nothing seizes the money on Solana today, so a bad choice costs rewards,
+  not principal.
+- **mSOL as a cloakroom ticket.** A cloakroom ticket does not gain value while you hold it. This one
+  does, which is the entire point of it.
+- **The two authorities as a bank mandate.** With a bank there would be lawyers. Here the limit is
+  mechanical, which is stronger and also colder.
+
+The two that work hardest, on the evidence of how ordinary they are: **the leader schedule is a rota**,
+drawn up an epoch ahead, and more stake means more shifts. And **you cannot move stake sideways is
+switching energy supplier**: give notice, sit out the notice period, then start with the new one. The
+notice period is the cost, which is exactly what the state ring is about.
+
+Everything else in that set: a DAO as a co-operative, validator selection as a fund manager
+rebalancing, the auction as a shop discounting to win custom, settlement as a published dividend list,
+native staking as a power of attorney, the PDA as a door that opens on a rule rather than a key,
+strategies as choosing a savings account, the exit as closing twenty small accounts with their own
+notice periods, instant unstake as selling a fixed-term certificate rather than breaking it, its price
+as selling a ticket below face value because you need the money now, and bundles as a group booking
+with priority boarding.
+
 ### Speaker notes are the second half of this deck
 
 Every slide carries a `Note:` block, all 22 of them, about 3,400 words in total and a median of 160
@@ -1148,8 +1179,8 @@ in the room does converts an objection into a point in your favour. Full suggest
 | N1 | **Not everyone wants a program holding their SOL** | Opens the section itself. Coral stamp reading "Native staking", the vault painting as background, three cards: no contract risk, no token, just the delegation. Foot: launched July 2023, compounds by itself. |
 | N2 | **Solana splits the keys** | Coin picture on the right, duotoned into the palette. Three boxes, left aligned: the `StakeStateV2` enum and the field tree at 21px, then `Authorized` at 26px. The two context blocks are deliberately a size under the last one, because the structures are there to be recognised and the last block is there to be read. |
 | N2b | **Three ways to run it** | Max Yield, Select, Recipes. Built 2026-08-18. Foot is the payout list, `$USDG` through `$USDC`. Describes Recipes by its payout rail only, never by delegation target. |
-| N3 | **Not a hot wallet** | Why the staking authority is a PDA and not a key. |
-| N4 | **Getting out is the hard part** | The exit funnel: twelve accounts, three deactivating batches, one withdrawal. The exit authority marks an account as leaving, so the authority *is* the state. |
+| N3 | *(no heading)* | Scrooge locking a padlocked vault with a fistful of keys, and one line: *nobody at Marinade holds a keyring like this.* Heading removed 2026-08-19: "Not a hot wallet" above a picture of a keyring said the same thing twice, which is what made the slide feel like it was nagging. |
+| N4 | **Getting out is the hard part** | The animated exit funnel: twelve accounts, three deactivating batches, one withdrawal. The exit authority marks an account as leaving, so the authority *is* the state. |
 | I1 | **Somebody buys your stake account** | Opens the section itself, `label` plus the gold-coin painting. Atomic swap, one transaction, both legs or neither. Works on any stake account, even ones Marinade never touched. |
 | I2 | **Somebody has to want it** | You get, They get, The gap. Named sides rather than abstract nouns: you get SOL now at a little under face value, the buyer gets the account and inherits the cooldown, and the difference is the price of not waiting. Foot: no unstaking fee from Marinade, price shown before you sign. |
 **I3 "Everyone waits. The only question is who." was cut on 2026-08-18**, Ondra's call and the right
@@ -1216,6 +1247,33 @@ N4 is the better host.
 **`section.art .card` went from 66% to 88% opacity.** The art scrim is tuned for text-only slides, so
 a card sitting on the bright part of a painting stopped reading as a card. Only the two section
 openers have cards over art, so the change is contained.
+
+**N3 uses its picture as a counterexample, 2026-08-19.** The slide was two cards and Ondra called it
+annoying, which it was: the argument is one non-obvious sentence and it was wearing a layout. It is now
+a picture plus a line. **The picture is the design Marinade did not build**, and that has to be said
+first or the joke inverts: a keyring is a hot wallet, and every key on it is something that can leak.
+The line is *nobody at Marinade holds a keyring like this*, and the foot is one sentence.
+
+A struck-through Lucide key was tried first, with the line "there is no key to steal". It was fine and
+the picture is better. Note the earlier idea of a vault or Scrooge's dime under glass was rejected on
+purpose: both say "one precious thing, guarded", which is exactly the design being argued against.
+
+**The exit funnel animates now, 2026-08-19**, on the same request that produced the gears and the bid
+ladder. Dashes march along both arrows, the twelve accounts fade one at a time on staggered delays, and
+the batches pulse as they deactivate. **Slow on purpose**: the slide's claim is that leaving takes many
+rounds and real time, and a brisk animation would say the opposite. Disabled under
+`prefers-reduced-motion`.
+
+**Three ways to run it has a dial per card, 2026-08-19.** Same instrument, three settings, each needle
+drifting at its own pace. It is deliberately not a fork or a splitting track, which is the obvious
+graphic for "three ways": **a split implies the three strategies send stake to three different places**,
+and where Recipes delegates is the one thing this deck never says. A floating three-gauge panel was
+tried first and collided with the cards at every position.
+
+**Watch out for lost writes.** The funnel animation was written to `theme/marinade.css` twice before it
+stuck: the first attempt anchored on a selector that did not exist in the funnel block, and a second on
+a file another editor had open. When a tool reports success but the behaviour does not change, read the
+file back and check the modification time before re-doing the work.
 
 **On I2 and I3, added 2026-08-18, and on what is deliberately not there.** The three Instant unstake
 repositories are private, so the slides and these notes carry only what marinade.finance already
@@ -1734,6 +1792,15 @@ Ordered by how much they block the next step.
 - 2026-08-19 — Recipes reframed as DCA on the strategies card and in its notes, no separate slide.
   The Instant unstake technical script and the auction vocabulary went into the private `$K` note,
   since both are derived from private repositories.
+- 2026-08-19 — A `LIKE THIS` analogy added to sixteen slides' notes, with a `WHERE IT BREAKS` line on
+  the three that would otherwise mislead. Ondra's ask: stay technical, but have a way to reach a
+  non-technical room mid-slide.
+- 2026-08-19 — N3's heading removed. The picture plus one line is the whole slide.
+- 2026-08-19 — N3 rebuilt around the Scrooge keyring picture as a counterexample, the exit funnel
+  animated, and each strategy card given its own dial. `figure-xs` added, because a picture with a punch
+  line under it and the rail below that needs 380px, not 460.
+- 2026-08-19 — Summary slide reshaped: painting behind it, the hat promoted to a large sign-off mark,
+  and the cards replaced by three plain lines. Ondra's call, and right: a box implies detail inside it.
 - 2026-08-19 — Summary slide added before the closing, lighting the whole rail. The talk's intention is
   recorded above: "Marinade knows how staking works" on screen, and the invitation spoken once, never
   printed. Deck is 23 slides.
