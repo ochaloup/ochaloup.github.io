@@ -444,8 +444,9 @@ Ondra tried talking the deck through and the opening was missing. Four changes, 
 | 0 | Cover | Subtitle now reads *An introductory tour of staking infrastructure on Solana*. "Introductory" was Ondra's ask: the room should know this is a tour and not a deep dive, so nobody waits for depth that never comes. It no longer matches the submitted programme line word for word, which is a deliberate trade. |
 | 1 | Agenda | Four lines now. *What is staking* leads, and the last line became *Bonds and instant unstake*, because the auction and the collateral take real time and the old agenda never named them. |
 | 3 | **Who is Marinade** | Deliberate echo of "Who talks to you". Big hat as a watermark, three lines: born in a hackathon in 2021, a DAO with a public forum, a stake automation platform. |
-| 4 | **What is staking** | Three cards: skin in the game, somebody else runs it, the work pays. Foot quotes Solana on delegation not transferring ownership. |
-| 5 | **Stake decides who builds** | The diagram: stakers delegate, validators carry different weight, an epoch of slots follows that weight, rewards loop back. |
+| 4 | **What is staking** | Three cards: backing the network, validators do the work, two kinds of reward. A big faint Lucide `hand-coins` behind them. Foot quotes Solana on delegation not transferring ownership. |
+| 5 | **Stake decides who builds** | Two-lane diagram. Top lane: all validators vote on every block, that earns inflation, and inflation loops back to the stakers. Bottom lane: stake decides how many slots each validator gets, and the fees in those blocks stay with the validator. |
+| 22 | *Appendix:* **MEV arrives as a bundle** | Q&A insurance, after the closing. Ordered group, tip rather than priority fee, tips split on chain per epoch. |
 
 **Where the facts come from, all public and quoted rather than paraphrased.**
 
@@ -466,19 +467,81 @@ Ondra tried talking the deck through and the opening was missing. Four changes, 
   launched 7 October 2021, on-chain governance in 2022, bootstrapped by grants with no venture
   capital.
 
+**The card wording was reworked on 2026-08-19, and the reasons are worth keeping.**
+
+- **"Skin in the game" was wrong for Solana** and Ondra caught it: the phrase implies the stake is at
+  risk, and there is no protocol slashing here. What a staker actually risks is rewards. The card now
+  says **backing the network**: locked SOL says security and uptime matter, and the network pays for
+  that signal.
+- **"Somebody else runs it" was too vague.** It is **validators**, named as such, and the card says
+  what they do: run the hardware, vote on blocks, carry the stake delegated to them.
+- **The reward card dropped "You get a share of both".** Second person made it a sales line, and worse,
+  it was inaccurate: block fees stay with the validator, which is the gap the auction fills later. The
+  card is now a plain statement of mechanism, **voting earns inflation, building blocks earns fees**.
+
 **Two accuracy traps in the staking intro, both handled in the speaker notes.**
 
 1. **Do not say Solana slashes stake today.** The terminology page defines stake as forfeitable, but
    protocol slashing is not live, so in practice backing a bad validator costs you rewards, not
-   principal. The slide says "locking SOL says you care", which is true either way.
+   principal. The card wording avoids the claim in either direction.
 2. **Stake buys slots, not a lottery ticket.** The natural phrasing is "a bigger chance to produce a
    block", and the mechanism is a leader schedule computed per epoch, stake-weighted. The diagram
    draws proportional slots for exactly this reason.
 
 **The diagram is drawn, not sourced.** `.pos` in the theme, generated geometry so proportions are
-exact: validator A carries five stake pips and gets five of the nine slots, B three, C one. The
-dashed return arrow is the reward loop, and its first version grazed validator C's box, which is why
-the path drops to y=400 now.
+exact: validator A carries five stake pips and gets five of the nine slots, B three, C one.
+
+**It has two lanes since 2026-08-19**, on Ondra's ask that voting appear and not only block building,
+and the split turned out to be the most useful thing on the slide:
+
+- **Voting**: every validator votes on every block, all of them all the time, no turn-taking. That
+  earns inflation, and the dashed arrow carries it back to the stakers. This is the audience's money.
+- **Building**: stake decides how many slots a validator gets, and the fees in those blocks **stay
+  with the validator**, which the diagram says out loud.
+
+That second lane is the seed for the whole talk: there is no in-protocol way to hand block rewards
+back to the stake that earned them, and the auction plus bonds are exactly that missing path. The
+notes say to leave it unresolved here.
+
+Three bugs found by screenshot rather than by the overflow check: the dashed return path grazed
+validator C's box in the first version; the outcome boxes had no CSS at all, so SVG defaults painted
+them solid black with black text; and the first spacing pass left 10px gaps between boxes, which read
+as one solid block rather than four stakers and three validators.
+
+**Undeclared SVG classes fail silently and look deliberate.** Style every class the generator emits.
+
+The spacing rules that came out of the third pass, worth keeping for any future diagram: gaps between
+sibling boxes want to be about half the box height, not a token few pixels; and a routed line needs to
+leave the bounding box of everything it passes, which is why the return path now runs at x=1632 in a
+1680 wide viewBox, outside every box, rather than threading between them.
+
+### Appendix: MEV, built 2026-08-19
+
+MEV is named nowhere in the main deck, deliberately: it is a separate subject, the talk does not need
+it, and a bad half-explanation costs two minutes. But it is the most likely audience question, so
+there is now one slide after the closing.
+
+**Framed as tooling rather than extraction**, which is also how it is actually sold: a fast, ordered
+lane onto the chain for when one transaction is not enough. Quoting Jito's own docs, transactions in a
+bundle "are guaranteed to execute in the order they are listed", a bundle "cannot cross slot
+boundaries", and "if any transaction in a bundle fails, none of the transactions in the bundle will be
+committed to the chain". Nothing guarantees a bundle lands; they compete on tips.
+
+**Tips are not priority fees.** Solana's own docs separate them: a priority fee raises the chance the
+current leader processes your transaction, a tip pays the bundle network to take the bundle at all.
+
+**The on-chain half**, from the public `jito-foundation/jito-programs`: `tip-payment` collects and
+`tip-distribution` shares out. Per validator per epoch a `TipDistributionAccount` holds an optional
+merkle root, a `validator_commission_bps` capped by a config value, and an expiry after which
+unclaimed tips lapse. Stakers claim against a proof, one `CLAIM_STATUS` account each.
+
+**The parallel worth drawing on stage:** that is the same shape as Marinade's bonds settlement.
+Measure off chain, publish a root, let anybody claim. Two teams, same pattern, because per-staker
+payouts do not fit inside a program.
+
+**This slide knowingly breaks the never-name-another-protocol rule.** Ondra's call: this is
+infrastructure the whole network uses rather than a competing product, and the question cannot be
+answered without the name. It is also an appendix, so it only appears if somebody asks.
 
 ### Speaker notes are the second half of this deck
 
@@ -842,11 +905,22 @@ said aloud, not printed, so the slide stays at one sentence.
 | L5 | **Validators bid for your stake** | The answer. Bid, allocate highest first, last winner clears. Yield decomposition (`inflation + MEV + bid`) is **spoken**, not a slide. |
 | L6 | **From promise to payment** | Measure, calculate, settle on chain, permissionless claim. Deliberately light: no six-stage pipeline, no merkle detail unless asked. |
 
-**Order changed 2026-08-18: the keys slide now comes before the strategies slide.** Ondra's call. The
-chain still holds because the handoffs were rewritten: N1 leaves *how do you manage my stake without
-holding it*, N2 answers with the custody model and leaves *the staker authority is ours, so what do
-we do with it*, N2b answers with three policies and leaves *so what is actually holding that key*,
-which is exactly what N3 answers.
+**Order settled 2026-08-19, after two moves.** The Native section runs: why native, the custody model,
+what holds the key, what we do with the authority, how you leave.
+
+`N1 → N2 keys → N3 not a hot wallet → N2b strategies → N4 getting out`
+
+The strategies slide moved before the keys slide on 2026-08-18 and then back behind the custody pair
+on 2026-08-19, both on Ondra's call, and the second move is the right one. **The keys slide and "Not a
+hot wallet" are one argument split across two slides**: the first says Marinade only ever holds the
+staker authority, the second answers who holds it and why it cannot be a key at all. A product menu
+between them interrupts a two-slide argument. Strategies now also sits directly before the exit
+machinery, so the section reads as mechanics, then policy, then leaving.
+
+Handoffs were rewritten to match, and the chain in `TALK-TRACK.md` is the check: N2 leaves *so who, or
+what, is actually holding that staker key*, N3 leaves *the key is safe, so what does Marinade actually
+do with that authority*, N2b leaves *three policies, one custody model, so what happens the day I want
+out*.
 
 **Order changed 2026-08-15: bonds now come before the auction.** It reads better and it is also
 more correct, because a validator has to fund a bond *before* it can bid. The journey rail was
@@ -1520,6 +1594,13 @@ Ordered by how much they block the next step.
   footnote and was what made that block 1322px wide.
 - 2026-08-18 — "Everyone waits" statement slide cut, its line moved into I2's speaker notes. Deck is
   19 slides, verified headless: no overflow, no errors.
+- 2026-08-19 — Native strategies slide moved back behind the custody pair, so "Solana splits the keys"
+  hands straight to "Not a hot wallet". Handoff questions rewritten again.
+- 2026-08-19 — Intro diagram respaced after Ondra found the rows stuck together: real gaps between
+  boxes, and the reward path routed outside every box instead of between them.
+- 2026-08-19 — MEV appendix slide added after the closing, sourced from Jito's docs and the public
+  jito-programs repo. Deck is 23 slides. Staking cards reworded and the intro diagram split into a
+  voting lane and a building lane.
 - 2026-08-19 — `tools/talk-track.py` and the generated `TALK-TRACK.md` added, so the speaker notes can
   be read as one document and the question chain can be reviewed as a table.
 - 2026-08-19 — "Four years on one chain" corrected to five, Ondra's catch. 2021 to 2026. Also fixed in

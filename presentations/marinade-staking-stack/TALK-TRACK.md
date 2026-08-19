@@ -8,7 +8,7 @@ python3 tools/talk-track.py > TALK-TRACK.md
 ```
 
 While presenting, press `s` in the deck for the same notes beside the slide, with a timer.
-Currently 22 slides, 3464 words of notes.
+Currently 23 slides, 3905 words of notes.
 
 ## The question chain
 
@@ -32,13 +32,14 @@ This table is extracted from the notes, so a blank cell is a seam worth looking 
 | 12 | Validators bid for your stake | a bid is a promise. How does a promise become money in my wallet? |
 | 13 | From promise to payment | all of this is an ON-CHAIN PROGRAM holding your SOL. What if you do not want a program at all? |
 | 14 | Not everyone wants a program holding their SOL | so how do you manage my stake without ever holding it? |
-| 15 | Solana splits the keys | the staker authority is ours, then. So what do we actually do with it? |
-| 16 | Three ways to run it | three policies, one key. So what is actually holding that key? |
-| 17 | Not a hot wallet | delegating works. What about getting out? |
+| 15 | Solana splits the keys | so who, or what, is actually holding that staker key? |
+| 16 | Not a hot wallet | the key is safe, then. So what does Marinade actually do with that authority? |
+| 17 | Three ways to run it | three policies, one custody model. So what happens the day I want out? |
 | 18 | Getting out is the hard part | you still wait an epoch for the withdrawal. What if I want the SOL right now? |
 | 19 | Somebody buys your stake account | fine, but why would anybody buy it, and what does that cost me? |
 | 20 | Somebody has to want it | Then hand off to the closing: three products, and every one of them is a different answer to something Solana makes hard. |
 | 21 | Stake it till you make it | — |
+| 22 | MEV arrives as a bundle | — |
 
 ## Slide by slide
 
@@ -72,16 +73,18 @@ This table is extracted from the notes, so a blank cell is a seam worth looking 
 ### 4 · What is staking
 
 - KEEP IT SIMPLE, this is the one slide for the half of the room that does not run a node. Three sentences, then the diagram.
-- WHY LOCK ANYTHING: proof of stake asks for money as the signal. Solana's terminology page defines stake as tokens forfeit to the cluster if malicious validator behaviour can be proven, so the collateral is the point.
-- [BE PRECISE IF ASKED] protocol slashing is not live on Solana today, so in practice the cost of backing a bad validator is the rewards you do not earn, not a burn. Do not claim the chain destroys stake today.
-- THE VALIDATOR: you are not running anything. You assign the weight, an operator runs the hardware, and the SOL stays in your own account the whole time.
-- TWO REWARDS, and the next slide draws them: voting rewards, which are inflation paid per epoch for consensus votes, and block rewards, which are the fees in the blocks the validator builds.
+- WHY LOCK ANYTHING AT ALL: proof of stake needs money as the signal. Stake says the network's security and its uptime matter to whoever locked it, and the protocol pays for that signal. That is the whole bargain.
+- DELIBERATELY NOT "skin in the game", and this is worth knowing rather than glossing over: on Solana there is no protocol slashing today, so a badly chosen validator costs rewards, not principal. Nothing gets burned. Solana's terminology page does define stake as forfeitable if malicious behaviour can be proven, so the intent is there, but do not tell a room of engineers that the chain destroys stake today.
+- VALIDATORS, not "somebody": they run the hardware, they vote on every block, and the stake delegated to them is what gives their vote weight.
+- TWO KINDS OF REWARD, and the next slide draws both. Voting earns inflation, paid per epoch against vote credits. Building blocks earns the fees inside them. Keep them separate in the room's head, because who ends up with each one is the whole reason the auction exists later.
 - Leaves the question: so how does the chain decide who builds a block?
 
 ### 5 · Stake decides who builds
 
-- WALK IT LEFT TO RIGHT, slowly. Stakers delegate. Each validator ends up carrying a different amount of stake, drawn here as the little blocks inside it. Solana then builds a leader schedule for the epoch, and the number of slots a validator gets follows its stake. A slot is its turn to produce a block. SO: more stake, more turns, more blocks, more of both kinds of reward. That is the whole economic loop, and the dashed arrow is the part the audience cares about, because that is their money coming back.
-- THE TWO REWARD KINDS, and this is the technical beat worth landing: Voting rewards are inflation. The validator votes on blocks, collects vote credits, and the protocol pays out per epoch. The validator takes a commission, the rest is yours. Block rewards come from the block itself: the base fee, 5,000 lamports per signature with half of it burned, plus priority fees, which go to the validator in full. There is also MEV, which sits outside the protocol. [SETUP FOR LATER, do not explain yet] block rewards land with the validator, not with you. Getting a share of that back is exactly what the auction and the bonds are for, two sections from now.
+- TWO LANES, and the split is the point of the slide. Walk the left side first, then take the top lane, then the bottom one. LEFT: stakers delegate, and each validator ends up carrying a different amount of stake, drawn as the little blocks inside it.
+- TOP LANE, VOTING: every validator votes on every block, all the time, and that is not a turn-taking thing. The protocol tallies vote credits and pays inflation each epoch, the validator keeps a commission, and the rest lands with the stakers. That is the dashed arrow, and it is the part of the picture that is the audience's money.
+- BOTTOM LANE, BUILDING: this is where stake decides something. Solana builds a leader schedule for the epoch and the number of slots a validator gets follows its stake. A slot is its turn to produce a block, so more stake means more turns.
+- THE FEES FROM THOSE BLOCKS STAY WITH THE VALIDATOR. Say it plainly and let it sit there unresolved: base fee is 5,000 lamports a signature with half burned and half to the validator, priority fees all of it, and MEV on top, outside the protocol. [THE SEED FOR THE WHOLE TALK, do not resolve it here] there is no in-protocol way for a validator to hand a share of that back to the people whose stake earned it. Two sections from now, the auction and the bonds are exactly that missing path.
 - Leaves the question: fine, so what does Marinade actually build on top of that?
 
 ### 6 · You all know what liquid staking is
@@ -164,9 +167,16 @@ This table is extracted from the notes, so a blank cell is a seam worth looking 
 - CALLBACK, and it is the reason the middle box is worth the room: activation_epoch and deactivation_epoch are the ring from the Liquid section. The state is not a status field anybody maintains, it is two numbers compared against the current epoch.
 - THE TERM, SPOKEN ONLY, deliberately not on the slide. People call this delegated proof-of-stake, and you can say it, but know the exposure before you do: solana.com/staking never uses that phrase. It says Proof of Stake, and describes delegation separately as assigning tokens to a validator to increase its voting weight. DPoS usually means an elected delegate set, EOS and Tron style, which Solana does not have. "Proof of stake, with delegation" is the safe phrasing, and the label on the slide says exactly that.
 - THE GIFT FROM THAT PAGE, quote it if the room needs convincing, it is Solana's own sentence and not ours: "Delegating your tokens to a validator does NOT give the validator ownership or control over your tokens." That is this slide in one line, written by the people who built the chain.
-- Leaves the question: the staker authority is ours, then. So what do we actually do with it?
+- Leaves the question: so who, or what, is actually holding that staker key?
 
-### 16 · Three ways to run it
+### 16 · Not a hot wallet
+
+*`data-rail=native`, `data-stage=stake`*
+
+- This is the nicest security argument in the deck and it is not the obvious one. The obvious answer is "a hot wallet cannot steal, so it is fine". The real problem is recovery: only the OWNER can assign or revoke the staking authority, so a leaked key cannot be rotated by us. Every single user would have to act, individually, for every account. That is unfixable at our end, so the key must not exist. Hence a proxy program with a PDA. No private key exists to be lost.
+- Leaves the question: the key is safe, then. So what does Marinade actually do with that authority?
+
+### 17 · Three ways to run it
 
 *`data-rail=native`, `data-stage=stake`*
 
@@ -177,14 +187,7 @@ This table is extracted from the notes, so a blank cell is a seam worth looking 
 - THE SENTENCE THAT EXPLAINS IT: your principal stays in SOL, and only the yield is converted, epoch after epoch, into a token you chose. So it is dollar cost averaging paid for by staking rewards rather than by your wallet. Marinade's own page calls it "DCA into token: automatically convert your staking rewards into the token you want, bit by bit." THREE FLAVOURS, all off the public page. Stablecoins for people who want yield without market swings, USDG being the one that is live. Utility tokens, MNDE and zBTC. And memecoins, which is where $FWOG and $NOBODY come in. Read that list off the slide and let it land: they are real payout rails on a real product page, and the room will not expect it after the institutional Select card.
 - SAY THE CAVEAT, it costs one sentence and buys trust: you are taking price risk on the payout token, not on your stake. The SOL principal is untouched.
 - DESCRIBE RECIPES BY ITS PAYOUT RAIL ONLY. Never by where the stake is delegated.
-- Leaves the question: three policies, one key. So what is actually holding that key?
-
-### 17 · Not a hot wallet
-
-*`data-rail=native`, `data-stage=stake`*
-
-- This is the nicest security argument in the deck and it is not the obvious one. The obvious answer is "a hot wallet cannot steal, so it is fine". The real problem is recovery: only the OWNER can assign or revoke the staking authority, so a leaked key cannot be rotated by us. Every single user would have to act, individually, for every account. That is unfixable at our end, so the key must not exist. Hence a proxy program with a PDA. No private key exists to be lost.
-- Leaves the question: delegating works. What about getting out?
+- Leaves the question: three policies, one custody model. So what happens the day I want out?
 
 ### 18 · Getting out is the hard part
 
@@ -214,3 +217,13 @@ This table is extracted from the notes, so a blank cell is a seam worth looking 
 *`class=cover art vcenter`*
 
 - Closing line. It is a generic pun on "fake it till you make it", widely used and owned by nobody, so no attribution is needed. See the README naming section.
+
+### 22 · MEV arrives as a bundle
+
+- WHY THIS SLIDE IS AN APPENDIX: MEV is not on any main slide on purpose. It is a different subject, the room does not need it to follow the talk, and one bad explanation would cost two minutes. But somebody always asks, so have this ready.
+- FRAME IT AS TOOLING, NOT AS EXTRACTION. In practice nobody sells this as MEV. It is sold as a faster, ordered lane onto the chain for the case where one transaction is not enough: you need several instructions to land together, in a set order, or not at all.
+- WHAT A BUNDLE IS, quoting Jito's own docs: "Transactions in a bundle are guaranteed to execute in the order they are listed", a bundle "cannot cross slot boundaries", and "if any transaction in a bundle fails, none of the transactions in the bundle will be committed to the chain". Nothing guarantees a bundle lands: they compete.
+- TIPS ARE NOT PRIORITY FEES. Solana's own docs separate them: a priority fee raises the chance the current leader processes your transaction, a tip pays the bundle network to take your bundle at all. Jito's docs: bundle tips "are then redistributed to the validators and their stakers".
+- THE ON-CHAIN PART, and it is the bit worth showing an engineer. Two programs in jito-foundation/jito-programs, which is public: tip-payment collects, tip-distribution shares out. Per validator per epoch there is a TipDistributionAccount holding an optional merkle root, a validator_commission_bps capped by a config value, and an expiry after which unclaimed tips stop being claimable. Stakers claim against the merkle proof, one CLAIM_STATUS account each.
+- THE PARALLEL WORTH DRAWING, because it is our own architecture: that is the same shape as the bonds settlement earlier in this talk. Measure off chain, publish a root, let anybody claim against it. Two teams reached for the same pattern because per-staker payouts do not fit in a program.
+- [NAMING] this slide breaks the deck's own rule about never naming another protocol on screen. Deliberate, Ondra's call 2026-08-19: this is infrastructure the whole network uses rather than a competing product, and the question cannot be answered without the name. Sources: jito.wtf, docs.jito.wtf/lowlatencytxnsend, solana.com/docs/payments/production-readiness, and jito-foundation/jito-programs.

@@ -196,7 +196,7 @@ Leaves the question: so how does the chain decide who builds a block?
 
 ## Stake decides who builds
 
-<div class="figure-wide"><svg class="pos" viewBox="0 0 1600 480" role="img"><title>Stakers delegate to validators. Every validator votes on every block and earns inflation, which flows back to the stakers. Stake also decides how many slots a validator gets, and the fees in those blocks stay with the validator.</title><text class="pos-head" x="95" y="44">Stakers</text><text class="pos-head" x="441" y="44">Validators</text><rect class="pos-box" x="20" y="96" width="150" height="46" rx="10"/><text class="pos-lbl" x="95" y="126">SOL</text><rect class="pos-box" x="20" y="152" width="150" height="46" rx="10"/><text class="pos-lbl" x="95" y="182">SOL</text><rect class="pos-box" x="20" y="208" width="150" height="46" rx="10"/><text class="pos-lbl" x="95" y="238">SOL</text><rect class="pos-box" x="20" y="264" width="150" height="46" rx="10"/><text class="pos-lbl" x="95" y="294">SOL</text><path class="pos-arrow" d="M186 202 H286"/><path class="pos-arrow" d="M278 194 l10 8 -10 8"/><text class="pos-note" x="236" y="184">delegate</text><rect class="pos-box" x="316" y="80" width="250" height="84" rx="12"/><text class="pos-lbl" x="352" y="130">A</text><rect class="pos-pip" x="388" y="112" width="26" height="22" rx="5"/><rect class="pos-pip" x="422" y="112" width="26" height="22" rx="5"/><rect class="pos-pip" x="456" y="112" width="26" height="22" rx="5"/><rect class="pos-pip" x="490" y="112" width="26" height="22" rx="5"/><rect class="pos-pip" x="524" y="112" width="26" height="22" rx="5"/><rect class="pos-box" x="316" y="176" width="250" height="84" rx="12"/><text class="pos-lbl" x="352" y="226">B</text><rect class="pos-pip" x="388" y="208" width="26" height="22" rx="5"/><rect class="pos-pip" x="422" y="208" width="26" height="22" rx="5"/><rect class="pos-pip" x="456" y="208" width="26" height="22" rx="5"/><rect class="pos-box" x="316" y="272" width="250" height="84" rx="12"/><text class="pos-lbl" x="352" y="322">C</text><rect class="pos-pip" x="388" y="304" width="26" height="22" rx="5"/><path class="pos-arrow" d="M580 122 H1308"/><path class="pos-arrow" d="M1300 114 l10 8 -10 8"/><text class="pos-note" x="944" y="104">all of them vote on every block</text><rect class="pos-out" x="1330" y="80" width="250" height="86" rx="12"/><text class="pos-out-lbl" x="1455" y="118">Inflation</text><text class="pos-out-sub" x="1455" y="148">paid every epoch</text><path class="pos-arrow" d="M580 304 H720"/><path class="pos-arrow" d="M712 296 l10 8 -10 8"/><text class="pos-note" x="998" y="252">stake decides how many slots each one gets</text><rect class="pos-slot a" x="740" y="272" width="52" height="64" rx="9"/><text class="pos-slot-lbl" x="766" y="313">A</text><rect class="pos-slot a" x="798" y="272" width="52" height="64" rx="9"/><text class="pos-slot-lbl" x="824" y="313">A</text><rect class="pos-slot a" x="856" y="272" width="52" height="64" rx="9"/><text class="pos-slot-lbl" x="882" y="313">A</text><rect class="pos-slot a" x="914" y="272" width="52" height="64" rx="9"/><text class="pos-slot-lbl" x="940" y="313">A</text><rect class="pos-slot a" x="972" y="272" width="52" height="64" rx="9"/><text class="pos-slot-lbl" x="998" y="313">A</text><rect class="pos-slot b" x="1030" y="272" width="52" height="64" rx="9"/><text class="pos-slot-lbl" x="1056" y="313">B</text><rect class="pos-slot b" x="1088" y="272" width="52" height="64" rx="9"/><text class="pos-slot-lbl" x="1114" y="313">B</text><rect class="pos-slot b" x="1146" y="272" width="52" height="64" rx="9"/><text class="pos-slot-lbl" x="1172" y="313">B</text><rect class="pos-slot c" x="1204" y="272" width="52" height="64" rx="9"/><text class="pos-slot-lbl" x="1230" y="313">C</text><path class="pos-arrow" d="M1268 304 H1308"/><path class="pos-arrow" d="M1300 296 l10 8 -10 8"/><rect class="pos-out" x="1330" y="272" width="250" height="86" rx="12"/><text class="pos-out-lbl" x="1455" y="310">Fees</text><text class="pos-out-sub" x="1455" y="340">in the blocks they build</text><text class="pos-note" x="1455" y="384">stays with the validator</text><path class="pos-arrow dashed" d="M1455 168 H1590 V438 H95 V322"/><path class="pos-arrow" d="M87 330 l8 -10 8 10"/><text class="pos-note" x="790" y="464">inflation lands with the stakers, every epoch</text></svg></div>
+<div class="figure-wide"><svg class="pos" viewBox="0 0 1680 520" role="img"><title>Stakers delegate to validators. Every validator votes on every block and earns inflation, which flows back to the stakers. Stake also decides how many slots a validator gets, and the fees in those blocks stay with the validator.</title><text class="pos-head" x="95" y="44">Stakers</text><text class="pos-head" x="441" y="44">Validators</text><rect class="pos-box" x="20" y="100" width="150" height="44" rx="10"/><text class="pos-lbl" x="95" y="129">SOL</text><rect class="pos-box" x="20" y="166" width="150" height="44" rx="10"/><text class="pos-lbl" x="95" y="195">SOL</text><rect class="pos-box" x="20" y="232" width="150" height="44" rx="10"/><text class="pos-lbl" x="95" y="261">SOL</text><rect class="pos-box" x="20" y="298" width="150" height="44" rx="10"/><text class="pos-lbl" x="95" y="327">SOL</text><path class="pos-arrow" d="M186 222 H286"/><path class="pos-arrow" d="M278 214 l10 8 -10 8"/><text class="pos-note" x="236" y="204">delegate</text><rect class="pos-box" x="316" y="76" width="250" height="80" rx="12"/><text class="pos-lbl" x="352" y="124">A</text><rect class="pos-pip" x="388" y="106" width="26" height="22" rx="5"/><rect class="pos-pip" x="422" y="106" width="26" height="22" rx="5"/><rect class="pos-pip" x="456" y="106" width="26" height="22" rx="5"/><rect class="pos-pip" x="490" y="106" width="26" height="22" rx="5"/><rect class="pos-pip" x="524" y="106" width="26" height="22" rx="5"/><rect class="pos-box" x="316" y="186" width="250" height="80" rx="12"/><text class="pos-lbl" x="352" y="234">B</text><rect class="pos-pip" x="388" y="216" width="26" height="22" rx="5"/><rect class="pos-pip" x="422" y="216" width="26" height="22" rx="5"/><rect class="pos-pip" x="456" y="216" width="26" height="22" rx="5"/><rect class="pos-box" x="316" y="296" width="250" height="80" rx="12"/><text class="pos-lbl" x="352" y="344">C</text><rect class="pos-pip" x="388" y="326" width="26" height="22" rx="5"/><path class="pos-arrow" d="M586 116 H1300"/><path class="pos-arrow" d="M1292 108 l10 8 -10 8"/><text class="pos-note" x="940" y="96">all of them vote on every block</text><rect class="pos-out" x="1330" y="76" width="230" height="86" rx="12"/><text class="pos-out-lbl" x="1445" y="114">Inflation</text><text class="pos-out-sub" x="1445" y="144">paid every epoch</text><path class="pos-arrow" d="M586 336 H716"/><path class="pos-arrow" d="M708 328 l10 8 -10 8"/><text class="pos-note" x="1000" y="284">stake decides how many slots each one gets</text><rect class="pos-slot a" x="740" y="304" width="52" height="64" rx="9"/><text class="pos-slot-lbl" x="766" y="345">A</text><rect class="pos-slot a" x="798" y="304" width="52" height="64" rx="9"/><text class="pos-slot-lbl" x="824" y="345">A</text><rect class="pos-slot a" x="856" y="304" width="52" height="64" rx="9"/><text class="pos-slot-lbl" x="882" y="345">A</text><rect class="pos-slot a" x="914" y="304" width="52" height="64" rx="9"/><text class="pos-slot-lbl" x="940" y="345">A</text><rect class="pos-slot a" x="972" y="304" width="52" height="64" rx="9"/><text class="pos-slot-lbl" x="998" y="345">A</text><rect class="pos-slot b" x="1030" y="304" width="52" height="64" rx="9"/><text class="pos-slot-lbl" x="1056" y="345">B</text><rect class="pos-slot b" x="1088" y="304" width="52" height="64" rx="9"/><text class="pos-slot-lbl" x="1114" y="345">B</text><rect class="pos-slot b" x="1146" y="304" width="52" height="64" rx="9"/><text class="pos-slot-lbl" x="1172" y="345">B</text><rect class="pos-slot c" x="1204" y="304" width="52" height="64" rx="9"/><text class="pos-slot-lbl" x="1230" y="345">C</text><path class="pos-arrow" d="M1268 336 H1300"/><path class="pos-arrow" d="M1292 328 l10 8 -10 8"/><rect class="pos-out" x="1330" y="294" width="230" height="86" rx="12"/><text class="pos-out-lbl" x="1445" y="332">Fees</text><text class="pos-out-sub" x="1445" y="362">in the blocks they build</text><text class="pos-note" x="1445" y="410">stays with the validator</text><path class="pos-arrow dashed" d="M1560 119 H1632 V470 H95 V346"/><path class="pos-arrow" d="M87 354 l8 -10 8 10"/><text class="pos-note" x="800" y="500">inflation lands with the stakers, every epoch</text></svg></div>
 
 <p class="slide-foot">Base fee is 5,000 lamports per signature, half burned and half to the validator. Priority fees go to the validator in full.</p>
 
@@ -603,8 +603,36 @@ THE GIFT FROM THAT PAGE, quote it if the room needs convincing, it is Solana's o
 sentence and not ours: "Delegating your tokens to a validator does NOT give the
 validator ownership or control over your tokens." That is this slide in one line,
 written by the people who built the chain.
-Leaves the question: the staker authority is ours, then. So what do we actually do
-with it?
+Leaves the question: so who, or what, is actually holding that staker key?
+
+---
+
+<!-- .slide: data-rail="native" data-stage="stake" -->
+
+## Not a hot wallet
+
+<div class="columns">
+<div class="card">
+<h3>Only the owner can rotate it</h3>
+<p>If our key leaked, every user would have to re-assign it themselves, on every stake account they own.</p>
+</div>
+<div class="card">
+<h3>So it is a PDA</h3>
+<p>An address with no private key. Nothing to lose, nothing to leak.</p>
+</div>
+</div>
+
+<p class="slide-foot">And the DAO can change who operates it, without touching a single user's stake account.</p>
+
+Note:
+This is the nicest security argument in the deck and it is not the obvious one.
+The obvious answer is "a hot wallet cannot steal, so it is fine". The real problem
+is recovery: only the OWNER can assign or revoke the staking authority, so a leaked
+key cannot be rotated by us. Every single user would have to act, individually, for
+every account. That is unfixable at our end, so the key must not exist.
+Hence a proxy program with a PDA. No private key exists to be lost.
+Leaves the question: the key is safe, then. So what does Marinade actually do with
+that authority?
 
 ---
 
@@ -650,35 +678,8 @@ expect it after the institutional Select card.
 SAY THE CAVEAT, it costs one sentence and buys trust: you are taking price risk on
 the payout token, not on your stake. The SOL principal is untouched.
 DESCRIBE RECIPES BY ITS PAYOUT RAIL ONLY. Never by where the stake is delegated.
-Leaves the question: three policies, one key. So what is actually holding that key?
-
----
-
-<!-- .slide: data-rail="native" data-stage="stake" -->
-
-## Not a hot wallet
-
-<div class="columns">
-<div class="card">
-<h3>Only the owner can rotate it</h3>
-<p>If our key leaked, every user would have to re-assign it themselves, on every stake account they own.</p>
-</div>
-<div class="card">
-<h3>So it is a PDA</h3>
-<p>An address with no private key. Nothing to lose, nothing to leak.</p>
-</div>
-</div>
-
-<p class="slide-foot">And the DAO can change who operates it, without touching a single user's stake account.</p>
-
-Note:
-This is the nicest security argument in the deck and it is not the obvious one.
-The obvious answer is "a hot wallet cannot steal, so it is fine". The real problem
-is recovery: only the OWNER can assign or revoke the staking authority, so a leaked
-key cannot be rotated by us. Every single user would have to act, individually, for
-every account. That is unfixable at our end, so the key must not exist.
-Hence a proxy program with a PDA. No private key exists to be lost.
-Leaves the question: delegating works. What about getting out?
+Leaves the question: three policies, one custody model. So what happens the day I
+want out?
 
 ---
 
