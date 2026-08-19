@@ -42,6 +42,23 @@ await page.goto(url, { waitUntil: 'networkidle0' })
 await page.evaluateHandle('document.fonts.ready')
 await new Promise(r => setTimeout(r, 1500))
 
+/*
+ * The art scrim is a pseudo-element so it fades with the painting during slide
+ * transitions, and Chrome's PDF printer drops pseudo-element backgrounds: art
+ * slides exported with white text on an undimmed painting, fine on screen and
+ * unreadable on paper.
+ *
+ * Three fixes failed first, and the reason matters: reveal rebuilds the print view
+ * when printing starts, so anything written into the DOM here is discarded. Only a
+ * stylesheet survives. So the darkening is a filter on the element that carries the
+ * painting, injected for the export alone. Nothing in the deck changes.
+ */
+await page.addStyleTag({
+  content:
+    'html.reveal-print .slide-background.art-bg .slide-background-content{' +
+    'filter:brightness(0.44) saturate(0.8) !important}',
+})
+
 const pages = await page.evaluate(() => document.querySelectorAll('.pdf-page').length)
 const raw = `${out}.raw.pdf`
 await page.pdf({
