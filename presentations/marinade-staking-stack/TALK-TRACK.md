@@ -8,7 +8,7 @@ python3 tools/talk-track.py > TALK-TRACK.md
 ```
 
 While presenting, press `s` in the deck for the same notes beside the slide, with a timer.
-Currently 23 slides, 4111 words of notes.
+Currently 23 slides, 4153 words of notes.
 
 ## The question chain
 
@@ -26,18 +26,18 @@ This table is extracted from the notes, so a blank cell is a seam worth looking 
 | 6 | You all know what liquid staking is | fine, but somebody has to decide where all that stake goes. |
 | 7 | You staked. | so what is actually happening while I do nothing? |
 | 8 | Somebody has to choose the validators | so who actually turns all this, and how often? |
-| 9 | Anyone can turn the crank | so who does get the stake, and on what basis? |
-| 10 | A stake account cannot move sideways | fine, so who is even worth moving to? |
-| 11 | Bonds. Validators back their word with their own SOL.  (picture only) | so how DO you get me more? |
-| 12 | Validators bid for your stake | a bid is a promise. How does a promise become money in my wallet? |
-| 13 | From promise to payment | all of this is an ON-CHAIN PROGRAM holding your SOL. What if you do not want a program at all? |
-| 14 | Not everyone wants a program holding their SOL | so how do you manage my stake without ever holding it? |
-| 15 | Solana splits the keys | so who, or what, is actually holding that staker key? |
-| 16 | Not a hot wallet | the key is safe, then. So what does Marinade actually do with that authority? |
-| 17 | Three ways to run it | three policies, one custody model. So what happens the day I want out? |
-| 18 | Getting out is the hard part | you still wait an epoch for the withdrawal. What if I want the SOL right now? |
-| 19 | Somebody buys your stake account | fine, but why would anybody buy it, and what does that cost me? |
-| 20 | Somebody has to want it | Then hand off to the closing: three products, and every one of them is a different answer to something Solana makes hard. |
+| 9 | A stake account cannot move sideways | fine, so who is even worth moving to? |
+| 10 | Bonds. Validators back their word with their own SOL.  (picture only) | so how DO you get me more? |
+| 11 | Validators bid for your stake | a bid is a promise. How does a promise become money in my wallet? |
+| 12 | From promise to payment | all of this is an ON-CHAIN PROGRAM holding your SOL. What if you do not want a program at all? |
+| 13 | Not everyone wants a program holding their SOL | so how do you manage my stake without ever holding it? |
+| 14 | Solana splits the keys | so who, or what, is actually holding that staker key? |
+| 15 | Not a hot wallet | the key is safe, then. So what does Marinade actually do with that authority? |
+| 16 | Three ways to run it | three policies, one custody model. So what happens the day I want out? |
+| 17 | Getting out is the hard part | you still wait an epoch for the withdrawal. What if I want the SOL right now? |
+| 18 | Somebody buys your stake account | fine, but why would anybody buy it, and what does that cost me? |
+| 19 | Somebody has to want it | Then hand off to the closing: three products, and every one of them is a different answer to something Solana makes hard. |
+| 20 | Marinade knows how this works | nothing. This is the answer. Then the closing slide. |
 | 21 | Stake it till you make it | — |
 | 22 | MEV arrives as a bundle | — |
 
@@ -47,7 +47,7 @@ This table is extracted from the notes, so a blank cell is a seam worth looking 
 
 *`class=cover art vcenter`*
 
-- THE OPENING, first twenty seconds, and it is worth having word for word because the first sentence is the only one nobody talks over. "I am here to talk about staking on Solana, and to walk you through the engineering Marinade puts behind it. All you need to do is press a single button. Everything else is what I want to show you." Then set the shape of the talk in one breath: "Who picks the validators, what keeps them honest, and how you get out again." NOT "the best staking experience", and not any superlative. The brand guide bans them, and other staking providers are in this room, so a claim of best invites an argument in your first ten seconds. The one-button line makes the same point and cannot be challenged.
+- **I am here to talk about staking on Solana, and to walk you through the engineering Marinade puts behind it. All you need to do is press a single button. Everything else is what I want to show you.** THE OPENING, first twenty seconds, and it is worth having word for word because the first sentence is the only one nobody talks over. "I am here to talk about staking on Solana, and to walk you through the engineering Marinade puts behind it. All you need to do is press a single button. Everything else is what I want to show you." Then set the shape of the talk in one breath: "Who picks the validators, what keeps them honest, and how you get out again." NOT "the best staking experience", and not any superlative. The brand guide bans them, and other staking providers are in this room, so a claim of best invites an argument in your first ten seconds. The one-button line makes the same point and cannot be challenged.
 - THEN BUY PERMISSION FOR THE BASICS, one line, because the room is mixed and both halves need to hear it: "Some of you run validators, some of you have never staked anything. I will start from zero and then get technical fast." Then go to the agenda. Do not open by thanking the organisers, do not apologise for the slot length, and do not introduce yourself first: the hook comes before the name. The programme still carries the submitted title, "The Marinade Recipe: Building Staking Infrastructure on Solana". The deck drops it: "Recipes" is a live Marinade product and the collision would cost the first minute. The subtitle now says "an introductory tour", which is also the promise the opening line makes. Conference name deliberately absent.
 
 ### 1 · What we are going to cook through
@@ -111,15 +111,7 @@ This table is extracted from the notes, so a blank cell is a seam worth looking 
 - NEVER name a competitor on a slide. The difference is worth two sentences ON STAGE only: most pools have a single staker key that names the validator set and can move any amount of stake at any time. We put scoring and a per-epoch movement cap in the program instead. Do NOT mention the auction yet. That is the next slide.
 - Leaves the question: so who actually turns all this, and how often?
 
-### 9 · Anyone can turn the crank
-
-*`data-stage=stake`*
-
-- Precision matters here. update, merge and stake_reserve need no authority at all, the signer on some of them is only a rent payer. add_validator, remove_validator and set_validator_score are gated on manager_authority. The line to say out loud: if Marinade disappeared tomorrow, the price would keep updating and you could still unstake, because anyone can turn those cranks. What would stop is the scores. Your money stays safe and liquid, it just stops getting smarter.
-- THE HARD PART, and this is the bit to spend time on out loud rather than in bullets. A validator goes down, or quietly raises its commission against our stakers. The obvious move is to pull the stake immediately. We cannot. Solana never enabled redelegation, so stake cannot move sideways. It has to be deactivated, sit idle earning nothing for an epoch, land back in the reserve, and only then be delegated somewhere else and warm up again. So every rebalance is a trade: the yield lost while the stake is idle against the yield lost by leaving it where it is. Reacting instantly to every wobble would cost the stakers more than the wobble does. That is the engineering problem, and it is why the auction emits priorities rather than just a target. If asked "so you can do whatever you like with my stake?": no, not in one epoch. max_stake_moved_per_epoch is a percentage of everything under control, enforced by the program, reset each epoch. The policy is ours, the program bounds how fast we can apply it. Caveat honestly if pushed: that assumes the program is correct.
-- Leaves the question: so who does get the stake, and on what basis?
-
-### 10 · A stake account cannot move sideways
+### 9 · A stake account cannot move sideways
 
 *`data-stage=stake`*
 
@@ -128,7 +120,7 @@ This table is extracted from the notes, so a blank cell is a seam worth looking 
 - THIS IS THE SLIDE FOR THE HARD PART. A validator goes down, or quietly raises its commission against our stakers. The obvious move is to pull the stake now. There is no sideways. The account has to go all the way round, and half that circle pays the staker nothing. So every rebalance is a trade: yield lost going round, against yield lost by staying put. React to every wobble and you cost the stakers more than the wobbles do. That is why the auction emits priorities rather than a bare target, and why the program caps how much can move per epoch.
 - Leaves the question: fine, so who is even worth moving to?
 
-### 11 · Bonds. Validators back their word with their own SOL.  (picture only)
+### 10 · Bonds. Validators back their word with their own SOL.  (picture only)
 
 *`data-stage=bond`, `class=center-text`*
 
@@ -136,28 +128,28 @@ This table is extracted from the notes, so a blank cell is a seam worth looking 
 - SAY OUT LOUD, do not slide it: this is also the setup for the auction. Solana has no way for a validator to pay a staker a share of its priority fees, so how do we get you more than the protocol pays? Say "slash" ONCE here, then correct it immediately: on Solana slashing means the protocol destroys staked principal. We cannot do that and do not. We take from a bond the validator posted, to cover rewards you did not get. Principal is never touched. Then drop back to "the bond covers the loss". We have to be good to validators too. The bond is not a punishment beating, it is the thing that lets us promise stakers a floor without asking anyone to trust us. The foot line is the setup. SIMD-0096 sent 100% of priority fees to validators. SIMD-0123 will let them share block rewards in protocol, passed governance March 2025, not live yet. Until then there is no native path, so we built one.
 - Leaves the question: so how DO you get me more?
 
-### 12 · Validators bid for your stake
+### 11 · Validators bid for your stake
 
 *`data-stage=auction`*
 
 - Deliberately NOT a mechanism deep-dive. The previous deck did last-price for a SAM-literate room; this one is not that room. The fairness point is the one sentence worth making: bidding aggressively does not punish you, because you are paid the clearing price, not your own number. That keeps the auction honest and stops a race to the bottom. The yield decomposition is real, it is the RevShare struct: totalPmpe = inflationPmpe + mevPmpe + bidPmpe. Say it, do not slide it.
 - Leaves the question: a bid is a promise. How does a promise become money in my wallet?
 
-### 13 · From promise to payment
+### 12 · From promise to payment
 
 *`data-stage=settle`*
 
 - Deliberately light. No six-stage pipeline diagram, no merkle-tree detail unless somebody asks. The point is the shape, and WHAT MOVES: the auction bids a validator promised, and the rewards PSR covers when it underperformed. Both come out of the same bond and end up with the staker. Claiming is permissionless, but that is a footnote, not the headline. Say it only if somebody asks who runs the payout. If asked how: snapshot the chain state, a distribution CLI computes the settlement, merkle trees go on chain, claims are made against them.
 - Leaves the question, and it opens the next section: all of this is an ON-CHAIN PROGRAM holding your SOL. What if you do not want a program at all?
 
-### 14 · Not everyone wants a program holding their SOL
+### 13 · Not everyone wants a program holding their SOL
 
 *`class=art`, `data-rail=native`, `data-stage=stake`*
 
 - THIS SLIDE OPENS THE SECTION. There is no separate Native staking break any more: the stamp carries the section name, the painting carries the mood, and the rail switches to the native one here. Answer the question Liquid left open in the first sentence, out loud: all of that was an ON-CHAIN PROGRAM holding your SOL, so what if you do not want a program at all? The why, and it is a real one. Some people are simply not comfortable with a program custodying funds, and plenty of stakers do not want a liquid token at all. They want the delegation managed and nothing more. Institutions have the same requirement for a different reason: no token means nothing to account for, and no program means a much shorter audit conversation. Worth saying: you can always reclaim the stake authority and withdraw with the Solana CLI, without us. That is documented publicly in the how-to-native-staking repository.
 - Leaves the question: so how do you manage my stake without ever holding it?
 
-### 15 · Solana splits the keys
+### 14 · Solana splits the keys
 
 *`data-rail=native`, `data-stage=stake`, `class=code-sm`*
 
@@ -170,14 +162,14 @@ This table is extracted from the notes, so a blank cell is a seam worth looking 
 - THE GIFT FROM THAT PAGE, quote it if the room needs convincing, it is Solana's own sentence and not ours: "Delegating your tokens to a validator does NOT give the validator ownership or control over your tokens." That is this slide in one line, written by the people who built the chain.
 - Leaves the question: so who, or what, is actually holding that staker key?
 
-### 16 · Not a hot wallet
+### 15 · Not a hot wallet
 
 *`data-rail=native`, `data-stage=stake`*
 
 - This is the nicest security argument in the deck and it is not the obvious one. The obvious answer is "a hot wallet cannot steal, so it is fine". The real problem is recovery: only the OWNER can assign or revoke the staking authority, so a leaked key cannot be rotated by us. Every single user would have to act, individually, for every account. That is unfixable at our end, so the key must not exist. Hence a proxy program with a PDA. No private key exists to be lost.
 - Leaves the question: the key is safe, then. So what does Marinade actually do with that authority?
 
-### 17 · Three ways to run it
+### 16 · Three ways to run it
 
 *`data-rail=native`, `data-stage=stake`*
 
@@ -190,7 +182,7 @@ This table is extracted from the notes, so a blank cell is a seam worth looking 
 - DESCRIBE RECIPES BY ITS PAYOUT RAIL ONLY. Never by where the stake is delegated.
 - Leaves the question: three policies, one custody model. So what happens the day I want out?
 
-### 18 · Getting out is the hard part
+### 17 · Getting out is the hard part
 
 *`data-rail=native`, `data-stage=exit`*
 
@@ -198,20 +190,31 @@ This table is extracted from the notes, so a blank cell is a seam worth looking 
 - THE DESIGN DETAIL: there are two stake authorities. One for accounts we keep delegating, and a separate EXIT authority. Moving an account under the exit authority is what marks it as on its way out of the Marinade system. The authority IS the state, so there is no status field anywhere to fall out of sync. Contrast with the Liquid section on purpose: there we kept our own mirror of state and an outsider could break it. Here the on-chain object carries the state itself.
 - Leaves the question, and it opens the last section: you still wait an epoch for the withdrawal. What if I want the SOL right now?
 
-### 19 · Somebody buys your stake account
+### 18 · Somebody buys your stake account
 
 *`class=art`, `data-rail=instant`, `data-stage=exit`*
 
 - THIS SLIDE OPENS THE SECTION. No separate Instant unstake break: the label carries the name, the gold-coin painting carries the mood. Answer what Native left open in the first sentence, out loud: even after all that machinery Solana still makes you wait out the cooldown, so what if you want the SOL now? The mechanism is simpler than people expect: an atomic swap. Your stake account goes to a buyer, their SOL comes to you, in the same transaction. Both legs or nothing, so there is no partial fill and no counterparty risk. Solana still makes somebody wait the cooldown. That somebody is now the buyer, and the price they quote is what they charge for waiting. Worth saying: it auto-detects natively staked SOL across any validator, so you can exit a stake account that was never delegated through us.
 - Leaves the question: fine, but why would anybody buy it, and what does that cost me?
 
-### 20 · Somebody has to want it
+### 19 · Somebody has to want it
 
 *`data-rail=instant`, `data-stage=exit`*
 
 - WHY THIS SLIDE EXISTS: the previous slide showed the mechanism, and the room's next question is what it costs and why anybody would take the other side. Name the two sides out loud. You get SOL immediately, slightly less than the account holds. The buyer gets the account and inherits the cooldown, which they are willing to sit through. The difference between those two numbers is the whole price, and it is a price for time, nothing else. Then the reassurance: we do not charge you a fee for unstaking, and the number is on screen before you sign anything.
 - ON STAGE ONLY, deliberately not written here: the technical layer, including what kind of auction this is and how a buyer commits to the trade. The source repositories are private, so nothing about them goes in this public repo. The full ninety second version, the auction vocabulary, and the line that pairs this auction with the validator auction are in the private talk note, marinade-staking-stack-- instant-unstake-mechanics--INVESTIGATION.
 - Then hand off to the closing: three products, and every one of them is a different answer to something Solana makes hard.
+
+### 20 · Marinade knows how this works
+
+*`data-rail=all`, `data-stage=all`*
+
+- THE SUMMARY, and the whole rail is lit for the first and only time: everything on it was covered. Point at it.
+- THE MESSAGE, say it plainly and then stop: Marinade knows how this works. Not the biggest, not the best, nothing that invites an argument. Knowing how it works is the thing being offered.
+- EARN IT WITH THE THREE CARDS, each one a callback to something they just watched, so the claim is evidence rather than a boast. Watching is the gears and the crank. Enforceable is the bond and the settlement. Getting out is the funnel and the buyer.
+- THE PUNCH LINE IS DELIBERATELY SHORT, so it needs you to finish it: we build the machinery where Solana has a gap, and we delete it when the protocol catches up. It is the pattern the talk kept running into: priority fees the protocol cannot share, stake that cannot move sideways, a hundred accounts that do not fit in one transaction. Every one of those is scaffolding around a gap, and when SIMD-0123 lands or transaction limits rise, the scaffolding goes. Say that we would rather delete code than defend it.
+- THE CLOSE, spoken and never printed: if you are deciding who manages your stake, pick the people who can explain it to you. That is the offer. A team that understands the ecosystem and works at this level of detail, rather than a promise of a bigger number. Do NOT turn this into a pitch. The room has just watched twenty minutes of evidence, so one sentence is enough and anything more sounds like doubt.
+- Leaves the question: nothing. This is the answer. Then the closing slide.
 
 ### 21 · Stake it till you make it
 

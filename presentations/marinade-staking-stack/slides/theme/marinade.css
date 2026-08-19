@@ -1464,6 +1464,88 @@
 	color: var(--mn-fg-strong);
 }
 
+/* A glyph that is negated: the slide's point is that the thing does not exist. */
+.reveal .slide-icon.struck .strike {
+	stroke-width: 0.9;
+	stroke: var(--mn-cat-coral);
+	opacity: 0.9;
+}
+
+/* ---- strategy dials -------------------------------------------------- */
+/*
+ * One dial per card: same instrument, three settings. Deliberately not a fork or
+ * a split, which would imply the three strategies send stake to three different
+ * places, and where Recipes delegates is the one thing this deck never says.
+ * A floating panel was tried first and collided with the cards at every size.
+ */
+.reveal .card-dial {
+	display: block;
+	width: 92px;
+	height: 55px;
+	margin-bottom: 14px;
+	overflow: visible;
+}
+
+.reveal .card-dial .dial-arc {
+	fill: none;
+	stroke: var(--mn-rule);
+	stroke-width: 5;
+	stroke-linecap: round;
+}
+
+.reveal .card-dial .dial-needle {
+	stroke: var(--mn-light-teal);
+	stroke-width: 6;
+	stroke-linecap: round;
+	transform-origin: 50px 52px;
+	animation: dial-drift 7s ease-in-out infinite alternate;
+}
+
+.reveal .card-dial .dial-hub {
+	fill: var(--mn-light-teal);
+}
+
+.reveal .card-dial.d-mid .dial-needle {
+	animation-duration: 9s;
+	animation-delay: -3s;
+}
+
+.reveal .card-dial.d-low .dial-needle {
+	animation-duration: 11s;
+	animation-delay: -6s;
+}
+
+/* The needle drifts a few degrees so the panel reads as live rather than printed. */
+@keyframes dial-drift {
+	from {
+		transform: rotate(-6deg);
+	}
+	to {
+		transform: rotate(6deg);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.reveal .card-dial .dial-needle {
+		animation: none;
+	}
+}
+
+/* ---- claims ---------------------------------------------------------- */
+/* Three statements carrying a summary. No cards: a box implies detail inside. */
+.reveal .claims p {
+	margin: 0 0 26px 0;
+	font-size: var(--mn-h3);
+	font-weight: 600;
+	line-height: 1.2;
+	color: var(--mn-accent);
+}
+
+/* The hat earns more presence here than on the company slide: it is the sign-off. */
+.reveal .side-art.hat.sign-off img {
+	opacity: 0.4;
+}
+
 /* ---- inline text utilities ----------------------------------------- */
 
 .reveal .accent {
@@ -1836,4 +1918,24 @@
 	font-size: 21px;
 	fill: var(--mn-accent);
 	text-anchor: middle;
+}
+
+/* ---- print and PDF export ------------------------------------------- */
+/*
+ * reveal's print rules are scoped to html.reveal-print rather than @media print,
+ * because ?print-pdf shows the print layout on screen. They force padding: 0 and
+ * display: block onto every section with !important, which drops the 12-column
+ * grid margins and disables the flex column that .slide-body centring depends on,
+ * so the export reads as a different and worse deck. Matching their selector
+ * exactly and winning on source order is the only thing that puts it back:
+ * a plain @media print block never applies here, and lower specificity loses.
+ */
+html.reveal-print .reveal .slides section {
+	display: flex !important;
+	flex-direction: column !important;
+	padding: var(--mn-margin-y) var(--mn-margin-x) !important;
+}
+
+html.reveal-print .reveal .slides section.vcenter {
+	justify-content: center !important;
 }

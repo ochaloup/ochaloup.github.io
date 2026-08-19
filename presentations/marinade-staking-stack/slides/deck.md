@@ -585,26 +585,25 @@ Leaves the question: so who, or what, is actually holding that staker key?
 
 ## Not a hot wallet
 
-<div class="columns">
-<div class="card">
-<h3>Only the owner can rotate it</h3>
-<p>If our key leaked, every user would have to re-assign it themselves, on every stake account they own.</p>
-</div>
-<div class="card">
-<h3>So it is a PDA</h3>
-<p>An address with no private key. Nothing to lose, nothing to leak.</p>
-</div>
-</div>
+<img class="figure figure-sm" src="images/keys.jpg" alt="Scrooge McDuck locking a vault door covered in padlocks, holding a large bunch of keys">
 
-<p class="slide-foot">And the DAO can change who operates it, without touching a single user's stake account.</p>
+<p class="punch">Nobody at Marinade holds a keyring like this.</p>
+
+<p class="slide-foot">The staking authority is a program address with no private key. If a hot wallet leaked, only the owner could rotate it, so every user would have to act on every account they own. The DAO can change who operates the program without touching a single stake account.</p>
 
 Note:
-This is the nicest security argument in the deck and it is not the obvious one.
-The obvious answer is "a hot wallet cannot steal, so it is fine". The real problem
-is recovery: only the OWNER can assign or revoke the staking authority, so a leaked
-key cannot be rotated by us. Every single user would have to act, individually, for
-every account. That is unfixable at our end, so the key must not exist.
-Hence a proxy program with a PDA. No private key exists to be lost.
+THE PICTURE IS THE THING WE DID NOT BUILD, so say that first or the joke inverts:
+that is a hot wallet, a keyring somebody has to carry, and every key on it is
+something that can leak.
+THE ARGUMENT, and it is the good one, not the obvious one. The obvious defence is
+that a staking authority cannot steal anything, so a hot key would be survivable.
+The real problem is recovery: only the OWNER can assign or revoke the staking
+authority, so if our key leaked we could not rotate it. Every user would have to act
+individually, on every stake account they hold. That is unfixable from our side, so
+the key must not exist at all.
+HENCE A PDA: a program address with no private key. Nothing to lose, nothing to leak,
+and the DAO can change who operates the program without touching one stake account.
+Source: native-staking/programs/marinade-native-proxy/README.md.
 Leaves the question: the key is safe, then. So what does Marinade actually do with
 that authority?
 
@@ -616,14 +615,17 @@ that authority?
 
 <div class="grid-3">
 <div class="card">
+<svg class="card-dial d-max" viewBox="0 0 100 60" aria-hidden="true"><path class="dial-arc" d="M10 52 A40 40 0 0 1 90 52"/><path class="dial-needle" d="M50 52 L80 42"/><circle class="dial-hub" cx="50" cy="52" r="5"/></svg>
 <h3>Max Yield</h3>
 <p>The default. Your stake follows the winners of the auction.</p>
 </div>
 <div class="card">
+<svg class="card-dial d-mid" viewBox="0 0 100 60" aria-hidden="true"><path class="dial-arc" d="M10 52 A40 40 0 0 1 90 52"/><path class="dial-needle" d="M50 52 L50 20"/><circle class="dial-hub" cx="50" cy="52" r="5"/></svg>
 <h3>Select</h3>
 <p>A curated, identity-verified set. Built for institutions.</p>
 </div>
 <div class="card">
+<svg class="card-dial d-low" viewBox="0 0 100 60" aria-hidden="true"><path class="dial-arc" d="M10 52 A40 40 0 0 1 90 52"/><path class="dial-needle" d="M50 52 L20 42"/><circle class="dial-hub" cx="50" cy="52" r="5"/></svg>
 <h3>Recipes</h3>
 <p>Your rewards are swapped, epoch by epoch, into a token you pick.</p>
 </div>
@@ -661,7 +663,7 @@ want out?
 
 ## Getting out is the hard part
 
-<div class="funnel-wrap"><svg class="funnel" viewBox="0 0 900 268" role="img"><title>Many stake accounts are picked, deactivated in batches, then merged into one</title><rect class="acct" x="20" y="58" width="40" height="40" rx="8"/><rect class="acct" x="72" y="58" width="40" height="40" rx="8"/><rect class="acct" x="124" y="58" width="40" height="40" rx="8"/><rect class="acct" x="176" y="58" width="40" height="40" rx="8"/><rect class="acct" x="20" y="110" width="40" height="40" rx="8"/><rect class="acct" x="72" y="110" width="40" height="40" rx="8"/><rect class="acct" x="124" y="110" width="40" height="40" rx="8"/><rect class="acct" x="176" y="110" width="40" height="40" rx="8"/><rect class="acct" x="20" y="162" width="40" height="40" rx="8"/><rect class="acct" x="72" y="162" width="40" height="40" rx="8"/><rect class="acct" x="124" y="162" width="40" height="40" rx="8"/><rect class="acct" x="176" y="162" width="40" height="40" rx="8"/><rect class="acct batch" x="366" y="66" width="86" height="40" rx="8"/><rect class="acct batch" x="366" y="118" width="86" height="40" rx="8"/><rect class="acct batch" x="366" y="170" width="86" height="40" rx="8"/><rect class="acct final" x="560" y="66" width="150" height="144" rx="12"/><path class="arrow" d="M240 138 H326"/><path class="arrow" d="M318 130 l10 8 -10 8"/><path class="arrow" d="M474 138 H546"/><path class="arrow" d="M538 130 l10 8 -10 8"/><text class="fn-step" x="283" y="120" text-anchor="middle">pick, move</text><text class="fn-step" x="510" y="120" text-anchor="middle">merge</text><text class="fn-cap" x="124" y="248" text-anchor="middle">Spread over many validators</text><text class="fn-cap" x="409" y="248" text-anchor="middle">Deactivated in batches</text><text class="fn-cap" x="635" y="248" text-anchor="middle">One withdrawal</text></svg></div>
+<div class="funnel-wrap"><svg class="funnel" viewBox="0 0 900 268" role="img"><title>Many stake accounts are picked, deactivated in batches, then merged into one</title><rect class="acct drain" style="animation-delay:0.00s" x="20" y="58" width="40" height="40" rx="8"/><rect class="acct drain" style="animation-delay:0.34s" x="72" y="58" width="40" height="40" rx="8"/><rect class="acct drain" style="animation-delay:0.68s" x="124" y="58" width="40" height="40" rx="8"/><rect class="acct drain" style="animation-delay:1.02s" x="176" y="58" width="40" height="40" rx="8"/><rect class="acct drain" style="animation-delay:1.36s" x="20" y="110" width="40" height="40" rx="8"/><rect class="acct drain" style="animation-delay:1.70s" x="72" y="110" width="40" height="40" rx="8"/><rect class="acct drain" style="animation-delay:2.04s" x="124" y="110" width="40" height="40" rx="8"/><rect class="acct drain" style="animation-delay:2.38s" x="176" y="110" width="40" height="40" rx="8"/><rect class="acct drain" style="animation-delay:2.72s" x="20" y="162" width="40" height="40" rx="8"/><rect class="acct drain" style="animation-delay:3.06s" x="72" y="162" width="40" height="40" rx="8"/><rect class="acct drain" style="animation-delay:3.40s" x="124" y="162" width="40" height="40" rx="8"/><rect class="acct drain" style="animation-delay:3.74s" x="176" y="162" width="40" height="40" rx="8"/><rect class="acct batch" style="animation-delay:0.0s" x="366" y="66" width="86" height="40" rx="8"/><rect class="acct batch" style="animation-delay:0.8s" x="366" y="118" width="86" height="40" rx="8"/><rect class="acct batch" style="animation-delay:1.6s" x="366" y="170" width="86" height="40" rx="8"/><rect class="acct final" x="560" y="66" width="150" height="144" rx="12"/><path class="arrow" d="M240 138 H326"/><path class="arrow head" d="M318 130 l10 8 -10 8"/><path class="flow" d="M240 138 H316"/><path class="arrow" d="M474 138 H546"/><path class="arrow head" d="M538 130 l10 8 -10 8"/><path class="flow" d="M474 138 H536"/><text class="fn-step" x="283" y="120" text-anchor="middle">pick, move</text><text class="fn-step" x="510" y="120" text-anchor="middle">merge</text><text class="fn-cap" x="124" y="248" text-anchor="middle">Spread over many validators</text><text class="fn-cap" x="409" y="248" text-anchor="middle">Deactivated in batches</text><text class="fn-cap" x="635" y="248" text-anchor="middle">One withdrawal</text></svg></div>
 
 <p class="slide-foot">Moving an account to the exit authority is what marks it as leaving, so the authority is the state. A hundred accounts does not fit in one transaction.</p>
 
@@ -751,6 +753,45 @@ validator auction are in the private talk note, marinade-staking-stack--
 instant-unstake-mechanics--INVESTIGATION.
 Then hand off to the closing: three products, and every one of them is a different
 answer to something Solana makes hard.
+
+---
+
+<!-- .slide: data-background-image="images/brand-art/p-rewards.jpg" class="art with-art" data-rail="all" data-stage="all" -->
+
+## Marinade knows how this works
+
+<div class="side-art hat sign-off"><img src="images/marinade-white.svg" alt=""></div>
+
+<div class="claims">
+<p>We watch every validator, every epoch.</p>
+<p>We turn a promise into collateral you can read.</p>
+<p>We get you out again.</p>
+</div>
+
+<p class="punch">The machinery is temporary. That is the point.</p>
+
+Note:
+THE SUMMARY, and the whole rail is lit for the first and only time: everything on it
+was covered. Point at it.
+THE MESSAGE, say it plainly and then stop: Marinade knows how this works. Not the
+biggest, not the best, nothing that invites an argument. Knowing how it works is the
+thing being offered.
+EARN IT WITH THE THREE CARDS, each one a callback to something they just watched, so
+the claim is evidence rather than a boast. Watching is the gears and the crank.
+Enforceable is the bond and the settlement. Getting out is the funnel and the buyer.
+THE PUNCH LINE IS DELIBERATELY SHORT, so it needs you to finish it: we build the
+machinery where Solana has a gap, and we delete it when the protocol catches up. It is
+the pattern the talk kept running into:
+priority fees the protocol cannot share, stake that cannot move sideways, a hundred
+accounts that do not fit in one transaction. Every one of those is scaffolding around
+a gap, and when SIMD-0123 lands or transaction limits rise, the scaffolding goes. Say
+that we would rather delete code than defend it.
+THE CLOSE, spoken and never printed: if you are deciding who manages your stake, pick
+the people who can explain it to you. That is the offer. A team that understands the
+ecosystem and works at this level of detail, rather than a promise of a bigger number.
+Do NOT turn this into a pitch. The room has just watched twenty minutes of evidence,
+so one sentence is enough and anything more sounds like doubt.
+Leaves the question: nothing. This is the answer. Then the closing slide.
 
 ---
 

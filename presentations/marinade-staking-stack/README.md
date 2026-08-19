@@ -111,6 +111,43 @@ is the same as with 5.x. Override with `npm start --port=8001`.
 
 `deck.md` is loaded over HTTP, so opening `index.html` from the filesystem will not work.
 
+### Packing the deck for the conference
+
+```sh
+cd slides
+node bundle.mjs            # dev server running in another terminal
+```
+
+Writes `~/Downloads/marinade-deck/` and a zip of it. **1.2 MB unpacked, 0.8 MB zipped.** Double click
+`index.html` and it presents. Nothing else is in there: no speaker view, no notes, no plugins, no
+tooling.
+
+Verified from a `file://` URL: 22 slides, **zero external requests**, DM Sans and PT Serif both loaded,
+syntax highlighting intact, journey rails and body wrappers present, art scrim applied, no console
+errors.
+
+**How it gets from 7.7 MB to 0.8 MB**, since the first attempt was a straight folder copy:
+
+1. **The markdown is pre-rendered.** The bundler drives the real deck in a browser, lets reveal build
+   it, then serialises the result. Rails, `.slide-body` wrappers and highlight.js output are all baked
+   into the markup, so the markdown, highlight and notes plugins are not shipped at all. It also means
+   `deck.md` does not need fetching, which is what breaks a copied folder opened from `file://`.
+2. **The base theme's fonts are stripped.** `dist/theme/black.css` is 575 kB, almost all of it base64
+   Source Sans Pro, and the Marinade overlay replaces that typeface entirely. Removing the `@font-face`
+   blocks with `data:` URIs takes it to about 15 kB.
+3. **Only referenced images are copied**, taken from the serialised markup rather than from the folder,
+   and anything over 120 kB is re-encoded to webp. `bond-chips.png` goes 1.8 MB to 84 kB, `solana-coin`
+   230 kB to 33 kB, and the references are rewritten to match.
+
+Two things the bundle needs that are easy to lose. Reveal's per-slide state has to be stripped before
+serialising, or the copy opens with slides stuck hidden by inline styles. And the art scrim rides the
+background element, which reveal recreates on init, so the four-line `ready` handler that re-tags it is
+the only script in the bundle beyond `Reveal.initialize`.
+
+For presenting from your own laptop, `npm start` in `slides/` is still the setup everything here was
+verified against. The bundle is for a machine without node, for a USB stick, and for handing to
+organisers.
+
 PDF export, one command with the dev server running:
 
 ```sh
@@ -122,6 +159,18 @@ node export-pdf.mjs --port 8001 --out /tmp/deck.pdf
 
 It drives the same `?print-pdf` view a manual print would, so the manual route still works: open
 `http://localhost:8000/?print-pdf`, print to PDF, margins none, background graphics on.
+
+**The print layout needed fixing first, 2026-08-19.** `?print-pdf` looked like a different deck:
+headings hugging the top edge, no grid margins, content top-aligned instead of optically centred.
+The cause is that reveal's print rules are scoped to `html.reveal-print` rather than `@media print`,
+because `?print-pdf` shows the print layout on screen, and they force `padding: 0` and
+`display: block` onto every section with `!important`. That kills the 80/82px margins and the flex
+column the `.slide-body` centring depends on.
+
+Two failed attempts before the fix landed, both worth remembering: a plain `@media print` block never
+applies at all, and a lower-specificity selector loses even with `!important`. The theme now matches
+reveal's own selector exactly, `html.reveal-print .reveal .slides section`, and wins on source order
+because the theme is linked last. Verified: 82px top and 80px sides restored, `display: flex` back.
 
 Three things the script gets right that a hurried manual print does not. The page box is set to
 1920x1080 to match the deck's own canvas, otherwise reveal's print layout scales every slide down and
@@ -625,67 +674,35 @@ The card now reads "Your rewards are swapped, epoch by epoch, into a token you p
 mechanism in plain words. And the standing constraint still holds: **describe Recipes by its payout
 rail only, never by where the stake is delegated.**
 
-### Rehearsing, and getting the flow reviewed
+### Reviewing a run-through
 
-**Timing, which needs no setup.** Run the deck as `http://localhost:8000/?rehearse=1`. A small clock
-appears bottom right showing total elapsed and seconds on the current slide, and every slide change is
-timed.
+The timing instrumentation that briefly lived in `index.html` is **gone**, on Ondra's call, 2026-08-19:
+it was custom code sitting on top of standard reveal.js, and the deck is not the place for it. Nothing
+above plain reveal processing remains except the layout helpers the theme genuinely needs, which are
+the journey rail, the `.slide-body` wrap, the art scrim and the new-tab links.
 
-**The log saves itself.** Nobody should have to remember a keystroke straight after finishing a talk,
-so `rehearsal.json` is written when you reach the closing slide, when the tab is closed, when
-navigation has stopped for ten minutes, or when `r` is pressed. The file records which of those fired,
-so a partial run is recognisable as one rather than being read as a suspiciously fast talk. The closing
-slide is detected by the QR code on it, because the MEV appendix sits after it.
+What is left for reviewing a run-through is the recording, which needs no code in the deck:
 
-**Two bugs from the first real rehearsal, 2026-08-19, both fixed and both worth remembering.**
-
-1. **The idle timeout was two minutes, and two minutes on one slide is a normal slide.** It fired in the
-   middle of the Liquid opener and saved a file nobody asked for. Now ten minutes, which only a
-   genuinely finished talk reaches.
-2. **Saving ended the current slide's measurement.** The autosave closed the open entry at exactly
-   120.0s and then set `current` to null, so the rest of that slide vanished from the log entirely, and a
-   `saved` flag blocked every later autosave so the second half of the run was never written. Saving now
-   takes a snapshot and leaves the clock running, marking the open slide with `"open": true` so the
-   report can say its time is a lower bound. There is no one-save guard, only a five second debounce.
-
-If several files end up in the downloads folder, **the newest one is the truth**: each save contains the
-whole run so far.
-
-The flag is the whole guard: without it `index.html` behaves exactly as before, which is verified
-rather than assumed.
-
-Then:
-
-```
-python3 tools/rehearsal-report.py ~/Downloads/rehearsal.json
+```sh
+arecord -D default -f S16_LE -c1 -r16000 -t wav ~/Downloads/rehearsal.wav     # ctrl-c to stop
+uv run --no-project --with faster-whisper python tools/transcribe.py ~/Downloads/rehearsal.wav > ~/Downloads/rehearsal.txt
 ```
 
-It reports total against the 17 minute stage budget, time per section derived from the deck's own
-rails, the slowest slides, anything over 95 seconds (overstuffed, or being read aloud) and anything
-under 12 seconds (passed over rather than delivered). Repeat visits to one slide are merged, since
-going back and forth is navigation rather than delivery.
+`uv` is already on this machine, which matters because Ubuntu 24.04 is PEP 668 managed: a plain
+`pip install` fails with `externally-managed-environment`, and `python3 -m venv` fails too because
+`python3-venv` is not installed. `uv run --with` builds a throwaway environment and needs neither.
 
-**Words, which needs a decision.** There is no speech to text on this machine, only `ffmpeg` and
-`arecord`. Recording a run is easy:
+**The transcript never comes into this repository.** The talk says things out loud that are
+deliberately unwritten here, so it belongs in `$K` or the downloads folder. The tool's own docstring
+says so.
 
-```
-arecord -f cd -t wav ~/Downloads/rehearsal.wav
-```
+What a review checks, in order: timing against the budget, whether each handoff question in
+`TALK-TRACK.md` was actually said, claims that drift from what is verified (an epoch length, "best"
+anything, Solana slashing stake today, Recipes by delegation target), whether the private material
+stayed spoken, and the opening and closing.
 
-Reviewing the *words* then needs either a local model installed, for example `pip install
-faster-whisper`, which pulls a model over the network once, or the speaker simply saying what felt
-wrong. Both work; the second is faster and often more accurate about where the talk sagged.
-
-**What a review actually checks**, so it is a checklist rather than an opinion:
-
-1. Timing per section against the budget, and whether the overrun is where the content is.
-2. Whether each slide's handoff question was actually said out loud. The chain in `TALK-TRACK.md` is
-   the reference, and a skipped handoff is where a talk starts feeling like a list.
-3. Claims that drift from what is verified: an epoch length on screen or in speech, "best" anything,
-   Solana slashing stake today, MEV explained before the appendix, Recipes described by delegation
-   target rather than payout rail.
-4. Whether the private-repo material stayed spoken.
-5. The opening and the closing, which are the two places a rehearsal usually reveals a stumble.
+Timing from a first run, for reference: **22 minutes 24 seconds** of audio against a 17 minute budget,
+with the first six slides taking 5 minutes 18 seconds of it.
 
 ### Timing budget, 20 minute slot (2026-08-18)
 
@@ -1522,6 +1539,33 @@ which is a private repo, and several of its pages carry an "AI generated, no rev
 
 Public repos under https://github.com/marinade-finance are safe to name and link.
 
+### The summary slide, and what the talk is actually for
+
+Built 2026-08-19, immediately before the closing. Ondra named the intention only at this point, and
+it is worth writing down because every earlier decision was made without it:
+
+> **On the slide: Marinade knows how staking works.**
+> **Never on a slide, said once at the end: if you are deciding who manages your stake, pick the people
+> who can explain it to you.**
+
+The slide earns the claim rather than asserting it. Three cards, each a callback to something the room
+just watched: *we watch* is the gears and the crank, *we make promises enforceable* is the bond and the
+settlement, *we get you out* is the exit funnel and the buyer. Evidence, in the order it was shown.
+
+**The whole journey rail is lit, for the first and only time.** `data-rail="all"` with
+`data-stage="all"` uses a feature that had been in `index.html` since the beginning and never used, and
+a `RAILS.all` entry listing every stage the talk covers. It is the cheapest possible "we covered all of
+this" and it needs no explanation from the stage.
+
+**The punch line is deliberately unfinished:** *The machinery is temporary. That is the point.* The
+first version spelled it out, ran to two lines at heading size, and drowned the cards. Short makes the
+room wait for the speaker to finish it, which is what the notes are for: we build where Solana has a
+gap, and delete it when the protocol catches up. Priority fees the protocol cannot share, stake that
+cannot move sideways, a hundred accounts that do not fit in one transaction. Every one of those is
+scaffolding, and SIMD-0123 or a bigger transaction limit takes it away. **This is where the chain-limits
+motif finally surfaces**, as a payoff rather than a thesis, which is what the 2026-08-15 decision asked
+for.
+
 ## Saved for another talk
 
 Material that is researched, written up, and deliberately **not** in this deck. Decided 2026-08-18:
@@ -1690,6 +1734,9 @@ Ordered by how much they block the next step.
 - 2026-08-19 — Recipes reframed as DCA on the strategies card and in its notes, no separate slide.
   The Instant unstake technical script and the auction vocabulary went into the private `$K` note,
   since both are derived from private repositories.
+- 2026-08-19 — Summary slide added before the closing, lighting the whole rail. The talk's intention is
+  recorded above: "Marinade knows how staking works" on screen, and the invitation spoken once, never
+  printed. Deck is 23 slides.
 - 2026-08-19 — Introduction block built: Marinade slide, "What is staking", and the stake-weighted
   slots diagram. Agenda gained a fourth line and the cover subtitle gained "introductory tour". Deck
   is 22 slides, verified headless: no overflow, no errors.
