@@ -8,7 +8,7 @@ python3 tools/talk-track.py > TALK-TRACK.md
 ```
 
 While presenting, press `s` in the deck for the same notes beside the slide, with a timer.
-Currently 23 slides, 3905 words of notes.
+Currently 23 slides, 4111 words of notes.
 
 ## The question chain
 
@@ -47,7 +47,8 @@ This table is extracted from the notes, so a blank cell is a seam worth looking 
 
 *`class=cover art vcenter`*
 
-- The programme still carries the submitted title, "The Marinade Recipe: Building Staking Infrastructure on Solana". The deck drops it: "Recipes" is a live Marinade product and the collision would cost the first minute. The subtitle is unchanged, so the room can still match this slide to the programme line. Conference name deliberately absent.
+- THE OPENING, first twenty seconds, and it is worth having word for word because the first sentence is the only one nobody talks over. "I am here to talk about staking on Solana, and to walk you through the engineering Marinade puts behind it. All you need to do is press a single button. Everything else is what I want to show you." Then set the shape of the talk in one breath: "Who picks the validators, what keeps them honest, and how you get out again." NOT "the best staking experience", and not any superlative. The brand guide bans them, and other staking providers are in this room, so a claim of best invites an argument in your first ten seconds. The one-button line makes the same point and cannot be challenged.
+- THEN BUY PERMISSION FOR THE BASICS, one line, because the room is mixed and both halves need to hear it: "Some of you run validators, some of you have never staked anything. I will start from zero and then get technical fast." Then go to the agenda. Do not open by thanking the organisers, do not apologise for the slot length, and do not introduce yourself first: the hook comes before the name. The programme still carries the submitted title, "The Marinade Recipe: Building Staking Infrastructure on Solana". The deck drops it: "Recipes" is a live Marinade product and the collision would cost the first minute. The subtitle now says "an introductory tour", which is also the promise the opening line makes. Conference name deliberately absent.
 
 ### 1 · What we are going to cook through
 

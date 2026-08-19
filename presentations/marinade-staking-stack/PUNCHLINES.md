@@ -5,6 +5,57 @@ any slide, because a sentence lands harder when the screen is not already saying
 
 Grouped by when you would use them. Everything here is backed by something in `research/`.
 
+## Openings
+
+The one in the cover slide's notes is the recommended version. These are the alternatives, kept
+because a room can change what you want to open with.
+
+> I am here to talk about staking on Solana, and to walk you through the engineering Marinade puts
+> behind it. All you need to do is press a single button. Everything else is what I want to show you.
+
+**The recommended opening**, Ondra's own words throughout. The middle sentence is his: an earlier draft
+read "all of it stays one button on yours", which was tighter but not in his voice, and a line the
+speaker would never have written himself is a line that comes out stiff on stage. Only the grammar
+moved: "all you need to do **is** press", not "to press". The third sentence carries the handoff into
+the agenda, which is why this is three sentences rather than one long one.
+
+Four earlier fixes to the same opening, kept so they do not come back: "technicalities" became "the
+engineering", because technicalities means pedantic small print; "introduce you through" became "walk
+you through"; and **"the best staking experience" came out entirely.** Superlatives are banned by the
+brand guide, "Solana" was in the sentence twice, and claiming best in a room containing other staking
+providers invites an argument in the first ten seconds. The one-button clause makes the same promise
+and nobody can dispute it.
+
+> Staking on Solana looks like one button. I spend my working life on what happens after you press
+> it.
+
+**The alternative hook**, more personal and slightly more modest. Same framing, but it puts the speaker
+before the company.
+
+> Who decides which validator your SOL ends up on?
+
+**The question opening**, and it suits the deck's own principle of every slide raising the next
+question. Risk: a rhetorical question invites someone to answer it out loud, and at a staking summit
+someone will.
+
+> This is a tour, not a deep dive. In twenty minutes I want you to leave knowing what happens to your
+> SOL between pressing stake and getting paid.
+
+**The honest-scope opening.** Least memorable of the three, and the most protective: it stops an
+engineer waiting for depth that is not coming, and stops a newcomer bracing for depth they do not
+want.
+
+> I work on the part of staking nobody puts in a pitch deck.
+
+**The self-deprecating one.** Good energy, and it lands with builders. Use it only if the room is
+already warm, because it needs a beat of laughter to work and a cold room will not give you one.
+
+> Marinade has been staking SOL since the summer of 2021. Long enough to have broken things and fixed
+> them, and that is the part worth talking about.
+
+**The credibility opening.** Strong, but it opens on the company rather than on the audience's money.
+Better used on the "Who is Marinade" slide than as the first sentence.
+
 ## The ones to actually land
 
 The three worth memorising.
