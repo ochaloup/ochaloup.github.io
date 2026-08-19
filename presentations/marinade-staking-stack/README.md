@@ -111,6 +111,31 @@ is the same as with 5.x. Override with `npm start --port=8001`.
 
 `deck.md` is loaded over HTTP, so opening `index.html` from the filesystem will not work.
 
+### Nothing to build, and where the deck is published
+
+**There is no build step.** `slides/index.html` loads `deck.md` over HTTP at runtime, so editing
+`deck.md` is the whole workflow: `npm start` picks it up immediately, and a commit makes it live. The
+repo is the GitHub Pages source for **https://chalda.cz**, served from `master` at the root, so the
+deck is at:
+
+**https://chalda.cz/presentations/marinade-staking-stack/slides/**
+
+Verified live on 2026-08-19: the page serves and carries the current document title. Everything it
+needs is tracked already, `dist`, `theme`, `fonts`, `images` and `deck.md`, and `node_modules` is not.
+
+The only situation that needs a build is a copy opened from `file://`, where the browser blocks the
+`deck.md` fetch. That is what `bundle.mjs` is for, and it writes to `~/Downloads` rather than into the
+repo on purpose: `deck.md` stays the single source of truth, and there is never a second inlined copy
+of the slides drifting out of step inside `index.html`.
+
+**What to refresh after editing `deck.md`**, none of it required for the live site:
+
+```sh
+python3 tools/talk-track.py > TALK-TRACK.md   # the walkthrough and question chain
+cd slides && node export-pdf.mjs              # the PDF
+cd slides && node bundle.mjs                  # the offline zip
+```
+
 ### Packing the deck for the conference
 
 ```sh
@@ -167,6 +192,20 @@ The manual route only works if the paper matches the canvas: open `http://localh
 then in the dialogue set a landscape 16:9 paper size, margins none, background graphics on. Chrome
 offers no 1920x1080 preset, which is exactly why `export-pdf.mjs` exists: it sets the page box
 directly.
+
+**The export recompresses the PDF, added 2026-08-19**, because a viewer took seconds to open it.
+Diagnosed rather than guessed: Chrome passes JPEG sources through untouched but re-encodes PNG and webp
+**losslessly**, so `bond-chips.png` arrived as a 1448x1086 uncompressed bitmap weighing 2.5 MB of a
+4.4 MB file, with `settle-payout.webp` adding another 579 kB. `pdfimages -list` shows it at a glance:
+look for rows with `enc image` rather than `enc jpeg`.
+
+The export now pipes the result through ghostscript with `/printer` and forced `DCTEncode`, which
+re-encodes those bitmaps as JPEG at unchanged resolution: **4.4 MB to 1.1 MB, no visible difference**,
+checked by rendering the worst page before and after. `--raw` skips it, and a missing ghostscript is
+not fatal, it just leaves the file as Chrome produced it.
+
+The lasting lesson for assets: **feed JPEG where there is no transparency.** A PNG photograph costs
+nothing on screen and multiplies in the PDF.
 
 **The print layout needed fixing first, 2026-08-19.** `?print-pdf` looked like a different deck:
 headings hugging the top edge, no grid margins, content top-aligned instead of optically centred.
