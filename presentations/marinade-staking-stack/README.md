@@ -111,7 +111,27 @@ is the same as with 5.x. Override with `npm start --port=8001`.
 
 `deck.md` is loaded over HTTP, so opening `index.html` from the filesystem will not work.
 
-PDF export: append `?print-pdf` to the URL, then print to PDF.
+PDF export, one command with the dev server running:
+
+```sh
+cd slides
+node export-pdf.mjs                # -> ~/Downloads/inside-marinades-staking-stack.pdf, 23 pages
+node export-pdf.mjs --notes        # same, with each slide's notes on its own page
+node export-pdf.mjs --port 8001 --out /tmp/deck.pdf
+```
+
+It drives the same `?print-pdf` view a manual print would, so the manual route still works: open
+`http://localhost:8000/?print-pdf`, print to PDF, margins none, background graphics on.
+
+Three things the script gets right that a hurried manual print does not. The page box is set to
+1920x1080 to match the deck's own canvas, otherwise reveal's print layout scales every slide down and
+leaves a white margin. It waits on `document.fonts.ready`, because the fonts are self-hosted and a
+print fired too early lands with fallback type. And it defaults to writing outside the repository,
+since a 4MB binary in here gets committed by accident.
+
+`--notes` uses `showNotes=separate-page`, which pairs each slide with a page of its speaker notes.
+That version is a handout, not a deck: the notes carry the "say this, not that" instructions, so do not
+send it to anybody outside the team.
 
 Notable 6.x differences from 5.2.1:
 - Plugins live under `dist/plugin/`, not `plugin/`.
@@ -604,6 +624,68 @@ the stake.** The SOL principal is untouched.
 The card now reads "Your rewards are swapped, epoch by epoch, into a token you pick", which is the DCA
 mechanism in plain words. And the standing constraint still holds: **describe Recipes by its payout
 rail only, never by where the stake is delegated.**
+
+### Rehearsing, and getting the flow reviewed
+
+**Timing, which needs no setup.** Run the deck as `http://localhost:8000/?rehearse=1`. A small clock
+appears bottom right showing total elapsed and seconds on the current slide, and every slide change is
+timed.
+
+**The log saves itself.** Nobody should have to remember a keystroke straight after finishing a talk,
+so `rehearsal.json` is written when you reach the closing slide, when the tab is closed, when
+navigation has stopped for ten minutes, or when `r` is pressed. The file records which of those fired,
+so a partial run is recognisable as one rather than being read as a suspiciously fast talk. The closing
+slide is detected by the QR code on it, because the MEV appendix sits after it.
+
+**Two bugs from the first real rehearsal, 2026-08-19, both fixed and both worth remembering.**
+
+1. **The idle timeout was two minutes, and two minutes on one slide is a normal slide.** It fired in the
+   middle of the Liquid opener and saved a file nobody asked for. Now ten minutes, which only a
+   genuinely finished talk reaches.
+2. **Saving ended the current slide's measurement.** The autosave closed the open entry at exactly
+   120.0s and then set `current` to null, so the rest of that slide vanished from the log entirely, and a
+   `saved` flag blocked every later autosave so the second half of the run was never written. Saving now
+   takes a snapshot and leaves the clock running, marking the open slide with `"open": true` so the
+   report can say its time is a lower bound. There is no one-save guard, only a five second debounce.
+
+If several files end up in the downloads folder, **the newest one is the truth**: each save contains the
+whole run so far.
+
+The flag is the whole guard: without it `index.html` behaves exactly as before, which is verified
+rather than assumed.
+
+Then:
+
+```
+python3 tools/rehearsal-report.py ~/Downloads/rehearsal.json
+```
+
+It reports total against the 17 minute stage budget, time per section derived from the deck's own
+rails, the slowest slides, anything over 95 seconds (overstuffed, or being read aloud) and anything
+under 12 seconds (passed over rather than delivered). Repeat visits to one slide are merged, since
+going back and forth is navigation rather than delivery.
+
+**Words, which needs a decision.** There is no speech to text on this machine, only `ffmpeg` and
+`arecord`. Recording a run is easy:
+
+```
+arecord -f cd -t wav ~/Downloads/rehearsal.wav
+```
+
+Reviewing the *words* then needs either a local model installed, for example `pip install
+faster-whisper`, which pulls a model over the network once, or the speaker simply saying what felt
+wrong. Both work; the second is faster and often more accurate about where the talk sagged.
+
+**What a review actually checks**, so it is a checklist rather than an opinion:
+
+1. Timing per section against the budget, and whether the overrun is where the content is.
+2. Whether each slide's handoff question was actually said out loud. The chain in `TALK-TRACK.md` is
+   the reference, and a skipped handoff is where a talk starts feeling like a list.
+3. Claims that drift from what is verified: an epoch length on screen or in speech, "best" anything,
+   Solana slashing stake today, MEV explained before the appendix, Recipes described by delegation
+   target rather than payout rail.
+4. Whether the private-repo material stayed spoken.
+5. The opening and the closing, which are the two places a rehearsal usually reveals a stumble.
 
 ### Timing budget, 20 minute slot (2026-08-18)
 

@@ -111,6 +111,99 @@
 				}
 			}
 
+			/*
+			 * Rehearsal timing, opt in with ?rehearse=1 so the live deck is untouched.
+			 * Records how long each slide was actually on screen, because the thing that
+			 * overruns is never the slide you expect.
+			 */
+			function rehearsalTiming() {
+				if (!new URLSearchParams(location.search).has("rehearse")) return;
+
+				const log = [];
+				let current = null;
+				let lastSave = 0;
+
+				const hud = document.createElement("div");
+				hud.style.cssText =
+					"position:fixed;right:12px;bottom:10px;z-index:60;font:600 20px/1 'DM Sans',sans-serif;" +
+					"color:#94c9c8;background:rgba(21,26,26,.8);padding:8px 12px;border-radius:8px";
+				document.body.appendChild(hud);
+
+				const headingOf = (section) =>
+					(section.querySelector("h1, h2")?.textContent || "(picture)").trim();
+
+				const seconds = (from, to) => Math.round((to - from) / 100) / 10;
+
+				function open(section) {
+					const now = performance.now();
+					if (current) {
+						log.push({ n: current.n, heading: current.heading, seconds: seconds(current.start, now) });
+					}
+					current = { n: Reveal.getIndices(section).h, heading: headingOf(section), start: now };
+				}
+
+				/*
+				 * Saving must never end the current slide's measurement. An earlier version
+				 * closed the entry, so an autosave in the middle of a long slide truncated it
+				 * at exactly the idle timeout and lost the rest of that slide entirely.
+				 */
+				function save(reason) {
+					const now = performance.now();
+					if (now - lastSave < 5000) return;
+					lastSave = now;
+					const slides = current
+						? [...log, { n: current.n, heading: current.heading, seconds: seconds(current.start, now), open: true }]
+						: [...log];
+					if (!slides.length) return;
+					const blob = new Blob([JSON.stringify({ reason, slides }, null, 2)], {
+						type: "application/json",
+					});
+					const link = document.createElement("a");
+					link.href = URL.createObjectURL(blob);
+					link.download = "rehearsal.json";
+					link.click();
+					hud.dataset.saved = reason;
+				}
+
+				const started = performance.now();
+				setInterval(() => {
+					const total = Math.round((performance.now() - started) / 1000);
+					const here = current ? Math.round((performance.now() - current.start) / 1000) : 0;
+					const mm = String(Math.floor(total / 60)).padStart(2, "0");
+					const ss = String(total % 60).padStart(2, "0");
+					const saved = hud.dataset.saved ? `  ·  saved: ${hud.dataset.saved}` : "";
+					hud.textContent = `${mm}:${ss}  ·  slide ${here}s${saved}`;
+				}, 500);
+
+				// A talk that has genuinely finished stops navigating for a long time. Ten
+				// minutes, not two: two minutes on one slide is a normal slide, not the end.
+				let idle;
+				function armIdle() {
+					clearTimeout(idle);
+					idle = setTimeout(() => save("went quiet"), 600000);
+				}
+
+				Reveal.on("slidechanged", (event) => {
+					open(event.currentSlide);
+					armIdle();
+					// The closing slide is where a run-through ends: the appendix after it is
+					// optional, so waiting for the deck's real last slide would miss the moment.
+					const closing = !!event.currentSlide.querySelector(".qr");
+					const last = Reveal.getIndices(event.currentSlide).h === Reveal.getTotalSlides() - 1;
+					if (closing || last) save(closing ? "reached the closing slide" : "reached the end");
+				});
+				open(Reveal.getCurrentSlide());
+				armIdle();
+
+				// Best effort when the tab goes away, so a run is not lost by closing it.
+				addEventListener("pagehide", () => save("tab closed"));
+
+				document.addEventListener("keydown", (event) => {
+					if (event.key !== "r" || event.metaKey || event.ctrlKey || event.altKey) return;
+					save("pressed r");
+				});
+			}
+
 			Reveal.on("ready", () => {
 				for (const section of document.querySelectorAll(".reveal .slides section")) {
 					wrapBody(section);
@@ -118,6 +211,7 @@
 					markArtBackground(section);
 				}
 				externalLinksInNewTab();
+				rehearsalTiming();
 			});
 		</script>
 	</body>

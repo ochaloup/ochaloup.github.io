@@ -345,50 +345,6 @@ Leaves the question: so who actually turns all this, and how often?
 
 <!-- .slide: data-stage="stake" -->
 
-## Anyone can turn the crank
-
-<div class="steps">
-<div><div class="step-num">1</div><h3>Update</h3>Book rewards. <span class="token">mSOL</span> gets worth more.</div>
-<div><div class="step-num">2</div>
-<div class="split">
-<div><h3>Stake</h3>Reserve out to validators.</div>
-<div><h3>Unstake</h3>Validators back to reserve.</div>
-</div>
-</div>
-<div><div class="step-num">3</div><h3>Merge</h3>Fewer stake accounts.</div>
-<div><div class="step-num">4</div><h3>Repeat</h3>Every epoch. Forever.</div>
-</div>
-
-<p class="slide-foot">Nobody needs permission for any of this. Only Marinade writes the scores.</p>
-
-Note:
-Precision matters here. update, merge and stake_reserve need no authority at all,
-the signer on some of them is only a rent payer. add_validator, remove_validator
-and set_validator_score are gated on manager_authority.
-The line to say out loud: if Marinade disappeared tomorrow, the price would keep
-updating and you could still unstake, because anyone can turn those cranks. What
-would stop is the scores. Your money stays safe and liquid, it just stops getting
-smarter.
-THE HARD PART, and this is the bit to spend time on out loud rather than in
-bullets. A validator goes down, or quietly raises its commission against our
-stakers. The obvious move is to pull the stake immediately. We cannot. Solana never
-enabled redelegation, so stake cannot move sideways. It has to be deactivated,
-sit idle earning nothing for an epoch, land back in the reserve, and only then be
-delegated somewhere else and warm up again.
-So every rebalance is a trade: the yield lost while the stake is idle against the
-yield lost by leaving it where it is. Reacting instantly to every wobble would cost
-the stakers more than the wobble does. That is the engineering problem, and it is
-why the auction emits priorities rather than just a target.
-If asked "so you can do whatever you like with my stake?": no, not in one epoch.
-max_stake_moved_per_epoch is a percentage of everything under control, enforced by
-the program, reset each epoch. The policy is ours, the program bounds how fast we
-can apply it. Caveat honestly if pushed: that assumes the program is correct.
-Leaves the question: so who does get the stake, and on what basis?
-
----
-
-<!-- .slide: data-stage="stake" -->
-
 ## A stake account cannot move sideways
 
 <div class="cycle">
