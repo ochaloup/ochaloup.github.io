@@ -426,12 +426,18 @@
 	content: "";
 	position: absolute;
 	inset: 0;
-	background-image: linear-gradient(to top, rgba(21, 26, 26, 0.88) 0%, transparent 30%),
+	/*
+	 * Darkened 2026-08-19: at 0.7 on the right the painting still competed with the
+	 * copy, and on a projector and in the PDF that reads as unreadable rather than
+	 * atmospheric. The painting is texture, the text has to win everywhere on the
+	 * slide, so no stop goes below 0.85.
+	 */
+	background-image: linear-gradient(to top, rgba(21, 26, 26, 0.9) 0%, transparent 34%),
 		linear-gradient(
 			100deg,
-			rgba(21, 26, 26, 0.95) 0%,
-			rgba(25, 69, 68, 0.88) 50%,
-			rgba(25, 69, 68, 0.7) 100%
+			rgba(21, 26, 26, 0.97) 0%,
+			rgba(25, 69, 68, 0.93) 50%,
+			rgba(25, 69, 68, 0.86) 100%
 		);
 }
 
