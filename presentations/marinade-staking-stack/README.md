@@ -89,6 +89,7 @@ marinade-staking-stack/
       solana-logo.svg
       brand-backgrounds/  <- teal-gradient, deep-teal-solid, light-teal-solid
   PUNCHLINES.md      <- lines to say out loud, or keep ready for Q&A. Not slide copy.
+  WALKTHROUGH.md     <- rehearsal plan, hand written: goal, ask, deep per slide
   research/          <- my summaries of code and product research, one file per topic
   resources/         <- original sources: downloaded articles, screenshots, exports
 ```
