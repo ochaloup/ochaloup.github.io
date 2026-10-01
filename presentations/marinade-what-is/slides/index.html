@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+		/>
+
+		<!-- Browser tab and PDF export name. Carries the descriptive line the cover does not. -->
+		<title>Inside Marinade's staking stack: liquid, native, and getting out early</title>
+
+		<link rel="stylesheet" href="dist/reset.css" />
+		<link rel="stylesheet" href="dist/reveal.css" />
+		<link rel="stylesheet" href="dist/theme/black.css" />
+		<link rel="stylesheet" href="theme/marinade.css" />
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="dist/plugin/highlight/monokai.css" />
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section
+					data-markdown="deck.md"
+					data-separator="^\r?\n---\r?\n$"
+					data-separator-vertical="^\r?\n--\r?\n$"
+					data-separator-notes="^Note:"
+					data-charset="utf-8"
+				></section>
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="dist/plugin/notes.js"></script>
+		<script src="dist/plugin/markdown.js"></script>
+		<script src="dist/plugin/highlight.js"></script>
+		<script>
+			Reveal.initialize({
+				// Canonical Marinade slide size, keeps the cookbook's pt scale honest.
+				width: 1920,
+				height: 1080,
+				// Zero, because the theme's own 80px grid margin is the breathing room.
+				// Any canvas margin shows as a band around full-bleed backgrounds.
+				margin: 0,
+				// Archetypes anchor the title upper-left, so no vertical centering by default.
+				center: false,
+				hash: true,
+				slideNumber: false,
+				transition: "fade",
+				plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
+			});
+
+			// The SOL's journey. A slide opts in with data-stage="auction", or "all".
+			// One rail per section, so each product shows only the stages it actually has.
+			// Bond before Auction: a validator has to fund a bond before it can bid.
+			const RAILS = {
+				liquid: ["Stake", "Bond", "Auction", "Settle"],
+				native: ["Stake", "Exit"],
+				instant: ["Stake", "Exit"],
+				// Every stage the talk covered, lit at once by the summary slide.
+				all: ["Stake", "Bond", "Auction", "Settle", "Exit"],
+			};
+
+			function addJourney(section) {
+				const stage = section.dataset.stage;
+				if (!stage) return;
+				const stages = RAILS[section.dataset.rail || "liquid"];
+				if (!stages) return;
+				const current = stages.findIndex((s) => s.toLowerCase() === stage.toLowerCase());
+				if (current < 0 && stage !== "all") return;
+
+				const rail = document.createElement("nav");
+				rail.className = stage === "all" ? "journey all" : "journey";
+				rail.setAttribute("aria-hidden", "true");
+				for (const [i, name] of stages.entries()) {
+					const node = document.createElement("span");
+					node.className = `j ${i < current ? "past" : i === current ? "now" : "next"}`;
+					node.textContent = name;
+					rail.append(node);
+				}
+				section.prepend(rail);
+				section.classList.add("has-journey");
+			}
+
+			// Heading stays pinned top, everything under it becomes one centreable block.
+			function wrapBody(section) {
+				if (section.matches(".vcenter, .cover")) return;
+				const body = [...section.children].filter(
+					(el) =>
+						!el.matches(
+							"aside.notes, .journey, h1, h2, .label, .stamp, .side-art, .dials, .watermark, .slide-icon, .lockup, .brand-mark, .slide-foot, .gears, .ladder",
+						),
+				);
+				if (!body.length) return;
+				const wrapper = document.createElement("div");
+				wrapper.className = "slide-body";
+				section.insertBefore(wrapper, body[0]);
+				wrapper.append(...body);
+			}
+
+			// The art scrim belongs to the background, so it does not fade with the text.
+			function markArtBackground(section) {
+				if (!section.classList.contains("art")) return;
+				Reveal.getSlideBackground(section)?.classList.add("art-bg");
+			}
+
+			// Never navigate the deck away mid-talk. Reveal's own #/ links are left alone.
+			function externalLinksInNewTab() {
+				for (const link of document.querySelectorAll('.reveal a[href^="http"]')) {
+					link.target = "_blank";
+					link.rel = "noopener noreferrer";
+				}
+			}
+
+			Reveal.on("ready", () => {
+				for (const section of document.querySelectorAll(".reveal .slides section")) {
+					wrapBody(section);
+					addJourney(section);
+					markArtBackground(section);
+				}
+				externalLinksInNewTab();
+			});
+		</script>
+	</body>
+</html>

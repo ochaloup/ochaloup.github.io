@@ -1,0 +1,2004 @@
+/*
+ * Marinade theme for reveal.js 6.x
+ * Overlay on dist/theme/black.css. Load it AFTER the base theme.
+ *
+ * Rules from marinade-finance/internal-docs:
+ *   .claude/skills/marinade-brand/SKILL.md        palette, typography, voice
+ *   .claude/skills/marinade-slide-design/SKILL.md archetypes, type scale, grid
+ *
+ * Dark is the default surface here. Add class="light" plus
+ * data-background-color="#FFFFFF" to a slide to flip it.
+ */
+
+/*
+ * Fonts are self-hosted from ../fonts so the deck does not need the network.
+ * Subsets and unicode-ranges copied from the Google Fonts css2 response.
+ * DM Sans is a variable font, so 400 and 600 share one file per subset.
+ * DM Sans has no Cyrillic subset, non-Latin text will fall back.
+ */
+
+@font-face {
+	font-family: "DM Sans";
+	font-style: normal;
+	font-weight: 400;
+	font-display: block;
+	src: url("../fonts/dm-sans-latin.woff2") format("woff2");
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+		U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+		U+FEFF, U+FFFD;
+}
+
+@font-face {
+	font-family: "DM Sans";
+	font-style: normal;
+	font-weight: 600;
+	font-display: block;
+	src: url("../fonts/dm-sans-latin.woff2") format("woff2");
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+		U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+		U+FEFF, U+FFFD;
+}
+
+@font-face {
+	font-family: "DM Sans";
+	font-style: normal;
+	font-weight: 400;
+	font-display: block;
+	src: url("../fonts/dm-sans-latin-ext.woff2") format("woff2");
+	unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+		U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0,
+		U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+	font-family: "DM Sans";
+	font-style: normal;
+	font-weight: 600;
+	font-display: block;
+	src: url("../fonts/dm-sans-latin-ext.woff2") format("woff2");
+	unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+		U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0,
+		U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+	font-family: "DM Sans";
+	font-style: italic;
+	font-weight: 400;
+	font-display: block;
+	src: url("../fonts/dm-sans-italic-latin.woff2") format("woff2");
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+		U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+		U+FEFF, U+FFFD;
+}
+
+@font-face {
+	font-family: "DM Sans";
+	font-style: italic;
+	font-weight: 400;
+	font-display: block;
+	src: url("../fonts/dm-sans-italic-latin-ext.woff2") format("woff2");
+	unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+		U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0,
+		U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+	font-family: "PT Serif";
+	font-style: italic;
+	font-weight: 400;
+	font-display: block;
+	src: url("../fonts/pt-serif-italic-latin.woff2") format("woff2");
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+		U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+		U+FEFF, U+FFFD;
+}
+
+@font-face {
+	font-family: "PT Serif";
+	font-style: italic;
+	font-weight: 400;
+	font-display: block;
+	src: url("../fonts/pt-serif-italic-latin-ext.woff2") format("woff2");
+	unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+		U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0,
+		U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+:root {
+	/* Brand palette. Exhaustive, never add a color. */
+	--mn-dark: #151a1a;
+	--mn-white: #ffffff;
+	--mn-deep-teal: #194544;
+	--mn-brand-teal: #308d8a;
+	--mn-medium-teal: #2b8784;
+	--mn-muted-teal: #447579;
+	--mn-light-teal: #94c9c8;
+	--mn-soft-teal: #59a9a7;
+	--mn-body-secondary: #323a38;
+	--mn-dark-teal-text: #325856;
+	--mn-heading-teal: #1f6260;
+	--mn-muted-text: #7f7f7f;
+	--mn-chart-teal: #82b7b7;
+	--mn-near-white: #f3f3f3;
+	--mn-dark-card: #232329;
+	--mn-highlight: #fef29d;
+
+	--mn-cat-teal: #308d8a;
+	--mn-cat-indigo: #818cf8;
+	--mn-cat-coral: #cf7b63;
+	--mn-cat-lavender: #a794d4;
+	--mn-cat-rose: #d4789b;
+
+	/*
+	 * Type scale. The cookbook specifies points on a 20in slide.
+	 * Rendered here as px at 96 DPI, so 1pt = 1.333px.
+	 */
+	--mn-display: 240px; /* 180pt */
+	--mn-h1: 96px; /* 72pt  */
+	--mn-h2: 72px; /* 54pt  */
+	--mn-h3: 48px; /* 36pt  */
+	--mn-body: 40px; /* 30pt  */
+	--mn-body-sm: 32px; /* 24pt  */
+	--mn-label: 32px; /* 24pt  */
+	--mn-caption: 24px; /* 18pt  */
+
+	/* Grid. 0.83in of a 20in slide, 0.85in of 11.25in. */
+	--mn-margin-x: 80px;
+	--mn-margin-y: 82px;
+
+	/* Semantic surface tokens, swapped by .light */
+	--mn-surface: var(--mn-dark);
+	--mn-fg: var(--mn-near-white);
+	--mn-fg-strong: var(--mn-white);
+	--mn-fg-muted: var(--mn-muted-text);
+	--mn-accent: var(--mn-light-teal);
+	--mn-accent-strong: var(--mn-brand-teal);
+	/* Both are strong enough to survive a projector in a lit room. */
+	--mn-rule: rgba(48, 141, 138, 0.45);
+	--mn-fill: rgba(48, 141, 138, 0.1);
+
+	/* reveal overrides */
+	--r-background-color: #151a1a;
+	--r-main-font: "DM Sans", "Helvetica Neue", Helvetica, sans-serif;
+	--r-main-font-size: var(--mn-body);
+	--r-main-color: var(--mn-fg);
+	--r-heading-font: "DM Sans", "Helvetica Neue", Helvetica, sans-serif;
+	--r-heading-color: var(--mn-fg-strong);
+	--r-heading-text-transform: none; /* brand is sentence case, black.css uppercases */
+	--r-heading-font-weight: 600;
+	--r-heading-line-height: 1.15;
+	--r-heading-margin: 0 0 48px 0;
+	--r-heading1-size: 2.4em;
+	--r-heading2-size: 1.8em;
+	--r-heading3-size: 1.2em;
+	--r-heading4-size: 0.8em;
+	--r-block-margin: 28px;
+	--r-link-color: var(--mn-light-teal);
+	--r-link-color-dark: var(--mn-soft-teal);
+	--r-link-color-hover: var(--mn-white);
+	--r-selection-background-color: var(--mn-brand-teal);
+	--r-selection-color: var(--mn-white);
+	--r-code-font: "Geist Mono", "JetBrains Mono", ui-monospace, monospace;
+}
+
+.reveal {
+	-webkit-font-smoothing: antialiased;
+	font-variant-numeric: tabular-nums;
+}
+
+/* Depth instead of a flat fill. Both stops interpolate palette colors. */
+.reveal-viewport {
+	background-color: var(--mn-dark);
+	background-image: radial-gradient(
+			ellipse 120% 80% at 15% -10%,
+			rgba(25, 69, 68, 0.85),
+			transparent 60%
+		),
+		radial-gradient(ellipse 90% 70% at 100% 110%, rgba(48, 141, 138, 0.18), transparent 65%);
+}
+
+/* Archetypes put the title upper-left, so slides start at the top, not centred. */
+.reveal .slides {
+	text-align: left;
+}
+
+/* reveal sizes sections to the canvas, so padding has to sit inside it. */
+/* reveal assigns display:block as an inline style, so this has to shout. */
+.reveal .slides section {
+	box-sizing: border-box;
+	padding: var(--mn-margin-y) var(--mn-margin-x);
+	overflow: hidden;
+	display: flex !important;
+	flex-direction: column;
+	height: 100%;
+}
+
+/*
+ * index.html wraps everything below the heading in .slide-body at ready time,
+ * so content can be optically centred while the heading baseline stays put.
+ */
+.reveal .slides section > .slide-body {
+	flex: 1 1 auto;
+	min-height: 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4 {
+	overflow-wrap: anywhere;
+}
+
+.reveal p,
+.reveal li {
+	line-height: 1.4;
+}
+
+.reveal ul,
+.reveal ol {
+	margin-left: 1.1em;
+}
+
+.reveal li + li {
+	margin-top: 0.4em;
+}
+
+/* ---- light slides -------------------------------------------------- */
+/* Pair with data-background-color="#FFFFFF" so the canvas matches. */
+
+.reveal .slides section.light {
+	--mn-surface: var(--mn-white);
+	--mn-fg: var(--mn-body-secondary);
+	--mn-fg-strong: var(--mn-deep-teal);
+	--mn-fg-muted: var(--mn-muted-text);
+	--mn-accent: var(--mn-brand-teal);
+	--mn-accent-strong: var(--mn-deep-teal);
+	--mn-rule: rgba(48, 141, 138, 0.15);
+	--mn-fill: rgba(48, 141, 138, 0.04);
+	color: var(--mn-fg);
+}
+
+.reveal section.light h1,
+.reveal section.light h2,
+.reveal section.light h3,
+.reveal section.light h4 {
+	color: var(--mn-fg-strong);
+}
+
+.reveal section.light a {
+	color: var(--mn-heading-teal);
+}
+
+/* ---- layout helpers ------------------------------------------------ */
+/* These carry .slides so they outrank reveal's own .reveal .slides>section rules. */
+
+/* reveal assigns display:block as an inline style, so this has to shout. */
+.reveal .slides section.vcenter {
+	display: flex !important;
+	flex-direction: column;
+	justify-content: center;
+	height: 100%;
+}
+
+.reveal .slides section.center-text {
+	text-align: center;
+}
+
+.reveal .slides section.center-text ul,
+.reveal .slides section.center-text ol {
+	display: inline-block;
+	text-align: left;
+}
+
+/* Density variants, mirroring the cookbook's compact/dense Marp classes. */
+.reveal .slides section.compact {
+	font-size: var(--mn-body-sm);
+}
+
+.reveal .slides section.dense {
+	font-size: var(--mn-caption);
+}
+
+/* ---- archetype 1: cover -------------------------------------------- */
+
+.reveal section.cover .lockup {
+	align-self: flex-start;
+	margin-bottom: 72px;
+}
+
+.reveal section.cover h1 {
+	font-size: var(--mn-h1);
+	margin-bottom: 24px;
+}
+
+.reveal section.cover h2 {
+	font-size: var(--mn-h3);
+	font-weight: 400;
+	color: var(--mn-accent);
+	margin-bottom: 72px;
+}
+
+.reveal .watermark {
+	position: absolute;
+	top: var(--mn-margin-y);
+	right: var(--mn-margin-x);
+	width: 180px;
+	opacity: 0.12;
+	margin: 0;
+	border: none;
+	box-shadow: none;
+	background: none;
+}
+
+.reveal .logo-row {
+	display: flex;
+	align-items: center;
+	gap: 40px;
+}
+
+.reveal .logo-row img {
+	height: 64px;
+	margin: 0;
+	border: none;
+	box-shadow: none;
+	background: none;
+}
+
+/*
+ * Icon + text lockup, rebuilt from the hat and DM Sans because no vector
+ * wordmark ships with the brand assets. Matches the OpenGraph card.
+ */
+.reveal .lockup {
+	display: inline-flex;
+	align-items: center;
+	gap: 20px;
+	font-size: 44px;
+	font-weight: 600;
+	letter-spacing: -0.01em;
+	color: var(--mn-fg-strong);
+}
+
+.reveal .lockup img {
+	height: 46px;
+	margin: 0;
+	border: none;
+	box-shadow: none;
+	background: none;
+}
+
+/*
+ * Hat-only brand mark, pinned bottom-left. No wordmark: the cover already showed
+ * the full lockup, so this can be a mark rather than a signature.
+ */
+.reveal .brand-mark {
+	position: absolute;
+	left: var(--mn-margin-x);
+	bottom: var(--mn-margin-y);
+	z-index: 1;
+	line-height: 0;
+}
+
+.reveal .brand-mark img {
+	height: 216px;
+	margin: 0;
+	border: none;
+	box-shadow: none;
+	background: none;
+	opacity: 0.6;
+}
+
+/* ---- archetype 4: statement / section break ------------------------ */
+
+.reveal .slides section.statement {
+	text-align: center;
+	background-image: radial-gradient(
+		ellipse 70% 55% at 50% 42%,
+		rgba(48, 141, 138, 0.16),
+		transparent 70%
+	);
+}
+
+.reveal section.statement h2 {
+	font-size: var(--mn-h2);
+	max-width: 22em;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* ---- art slides ---------------------------------------------------- */
+/*
+ * Pairs with data-background-image. reveal paints the painting, the section
+ * paints this scrim over it, text sits on top. Same treatment as the
+ * marinade.finance OpenGraph card. Declared after .statement so it wins.
+ */
+
+/*
+ * The scrim rides the background element, not the section. On the section it
+ * faded out with the text on slide exit and flashed the raw painting.
+ * index.html tags the matching background with .art-bg at ready time.
+ * Bottom layer first: keeps the journey rail off the bright parts of a painting.
+ */
+.reveal .slide-background.art-bg .slide-background-content::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background-image: linear-gradient(to top, rgba(21, 26, 26, 0.88) 0%, transparent 30%),
+		linear-gradient(
+			100deg,
+			rgba(21, 26, 26, 0.95) 0%,
+			rgba(25, 69, 68, 0.88) 50%,
+			rgba(25, 69, 68, 0.7) 100%
+		);
+}
+
+.reveal section.art .label {
+	color: var(--mn-light-teal);
+}
+
+.reveal section.art .note {
+	color: var(--mn-chart-teal);
+}
+
+.reveal section.art .flow > div {
+	background: rgba(21, 26, 26, 0.88);
+}
+
+/*
+ * Cards need to float over a painting, so they carry their own ground. Nearly
+ * opaque, because the scrim is tuned for text-only slides and a card sitting on
+ * the bright part of a painting stops reading as a card.
+ */
+.reveal section.art .card {
+	background: rgba(21, 26, 26, 0.88);
+	border-color: rgba(148, 201, 200, 0.32);
+}
+
+.reveal section.art .slide-foot {
+	color: var(--mn-chart-teal);
+}
+
+/* Category label above a statement, frames the takeaway before it lands. */
+.reveal .label {
+	display: block;
+	font-size: var(--mn-label);
+	font-weight: 600;
+	color: var(--mn-accent-strong);
+	margin-bottom: 24px;
+}
+
+.reveal section.light .label {
+	color: var(--mn-brand-teal);
+}
+
+/* ---- section stamp -------------------------------------------------- */
+/*
+ * Opens a section from inside its first content slide, so the deck does not
+ * spend a whole slide saying one product name. Coral, rotated, drawn by hand:
+ * the one element allowed to look like it wandered in from another deck. Coral
+ * and the other category hues are in the palette, so this breaks the deck's
+ * habit without breaking the brand.
+ */
+/*
+ * Burst and wording are one SVG, so the spikes cannot be stretched by whatever
+ * the text happens to measure. Sizing the shape from HTML text metrics was tried
+ * first and flattened the star into a streak.
+ */
+/*
+ * The wrapper must be a div. marked counts <svg> as inline HTML and wraps it in
+ * a <p>, and that <p> is not in the wrapBody exclusion list, so .slide-body gets
+ * anchored above the heading and the h2 lands under the content.
+ */
+.reveal .stamp {
+	align-self: flex-start;
+	width: 560px;
+	margin: 8px 0 4px -16px;
+	transform: rotate(-3deg);
+}
+
+.reveal .stamp svg {
+	display: block;
+	width: 100%;
+	height: auto;
+	overflow: visible;
+}
+
+.reveal .stamp polygon {
+	fill: var(--mn-cat-coral);
+}
+
+.reveal .stamp text {
+	font-family: "DM Sans", sans-serif;
+	font-size: 64px;
+	font-weight: 600;
+	fill: var(--mn-dark);
+}
+
+/* ---- QR code -------------------------------------------------------- */
+/* Needs a white quiet zone to scan, so it carries its own ground. */
+.reveal .qr {
+	width: 300px;
+	height: 300px;
+	margin: 0;
+	border: none;
+	border-radius: 8px;
+	box-shadow: none;
+	background: var(--mn-white);
+}
+
+/* ---- journey rail -------------------------------------------------- */
+/* Built by index.html from data-stage. Stage order lives there, not here. */
+
+.reveal .slides section.has-journey {
+	padding-bottom: 190px;
+}
+
+.reveal .journey {
+	position: absolute;
+	left: var(--mn-margin-x);
+	right: var(--mn-margin-x);
+	bottom: 60px;
+	display: grid;
+	grid-auto-flow: column;
+	grid-auto-columns: 1fr;
+	font-size: var(--mn-caption);
+	text-align: left;
+}
+
+.reveal .journey::before {
+	content: "";
+	position: absolute;
+	top: 5px;
+	left: 0;
+	right: 0;
+	height: 1px;
+	background: var(--mn-rule);
+}
+
+.reveal .journey .j {
+	position: relative;
+	padding-top: 32px;
+	color: var(--mn-fg-muted);
+}
+
+.reveal .journey .j::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 11px;
+	height: 11px;
+	border-radius: 50%;
+	background: var(--mn-surface);
+	box-shadow: inset 0 0 0 2px var(--mn-muted-text);
+}
+
+.reveal .journey .past {
+	color: var(--mn-muted-teal);
+}
+
+.reveal .journey .past::before {
+	background: var(--mn-brand-teal);
+	box-shadow: none;
+}
+
+.reveal .journey .now {
+	color: var(--mn-light-teal);
+	font-weight: 600;
+}
+
+.reveal .journey .now::before {
+	top: -3px;
+	left: -3px;
+	width: 17px;
+	height: 17px;
+	background: var(--mn-light-teal);
+	box-shadow: 0 0 0 7px rgba(148, 201, 200, 0.14);
+}
+
+/* The infra section spans every stage, so it lights the whole rail evenly. */
+.reveal .journey.all .j {
+	color: var(--mn-light-teal);
+}
+
+.reveal .journey.all .j::before {
+	background: var(--mn-brand-teal);
+	box-shadow: none;
+}
+
+.reveal section.light .journey .j {
+	color: var(--mn-muted-text);
+}
+
+.reveal section.light .journey .now {
+	color: var(--mn-heading-teal);
+}
+
+/* ---- large slide glyph ---------------------------------------------- */
+/*
+ * Anchors the empty half of a sparse slide and sets the register.
+ * Lucide is drawn for small sizes at stroke-width 2; blown up to 320px that
+ * reads as heavy bars, so the markup carries a much thinner stroke instead.
+ */
+
+.reveal .slide-icon {
+	position: absolute;
+	top: 50%;
+	right: calc(var(--mn-margin-x) + 110px);
+	transform: translateY(-50%);
+	width: 300px;
+	height: 300px;
+	color: var(--mn-accent);
+	opacity: 0.55;
+	z-index: 0;
+}
+
+/* Wash variant: big enough to read as a backdrop, faint enough to sit behind copy. */
+.reveal .slide-icon.wash {
+	width: 780px;
+	height: 780px;
+	right: -120px;
+	opacity: 0.13;
+}
+
+/*
+ * Content is static, the glyph is positioned, so the text needs lifting above it.
+ * .lockup is deliberately absent: giving it position:relative would break the
+ * absolutely-pinned .lockup-sm variant.
+ */
+.reveal .slides section > h1,
+.reveal .slides section > h2,
+.reveal .slides section > .slide-body {
+	position: relative;
+	z-index: 1;
+}
+
+/* ---- auction wash ----------------------------------------------------- */
+/*
+ * A bid ladder: bars sorted high to low with the clearing line across them.
+ * Same placement idea as the gears, bleeding off the right, sitting behind copy.
+ * The bars breathe on staggered delays so it reads as a live book.
+ */
+
+.reveal .ladder {
+	position: absolute;
+	top: 50%;
+	right: -90px;
+	transform: translateY(-50%);
+	width: 780px;
+	height: 585px;
+	color: var(--mn-accent);
+	opacity: 0.16;
+	z-index: 0;
+	pointer-events: none;
+}
+
+.reveal .ladder svg {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+.reveal .ladder rect {
+	fill: currentColor;
+	transform-box: fill-box;
+	transform-origin: bottom;
+	animation: mn-bid 4.2s ease-in-out infinite;
+}
+
+.reveal .ladder rect:nth-child(2n) {
+	animation-delay: -1.4s;
+}
+
+.reveal .ladder rect:nth-child(3n) {
+	animation-delay: -2.8s;
+}
+
+.reveal .ladder rect:nth-child(5n) {
+	animation-delay: -0.7s;
+}
+
+.reveal .ladder line {
+	stroke: currentColor;
+	stroke-width: 3;
+	stroke-dasharray: 10 8;
+}
+
+@keyframes mn-bid {
+	0%,
+	100% {
+		transform: scaleY(1);
+	}
+	50% {
+		transform: scaleY(0.86);
+	}
+}
+
+/* ---- machinery wash -------------------------------------------------- */
+/* Interlocking cogs behind a slide. Original drawing, no borrowed artwork. */
+
+.reveal .gears {
+	position: absolute;
+	top: 50%;
+	right: -160px;
+	transform: translateY(-50%);
+	width: 840px;
+	height: 840px;
+	color: var(--mn-accent);
+	opacity: 0.15;
+	z-index: 0;
+	pointer-events: none;
+}
+
+.reveal .gear {
+	position: absolute;
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 1;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	animation: mn-spin 26s linear infinite;
+}
+
+.reveal .gear-b {
+	animation-duration: 17s;
+	animation-direction: reverse;
+}
+
+.reveal .gear-c {
+	animation-duration: 11s;
+}
+
+@keyframes mn-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+/* A block cursor that does not blink is just a rectangle. */
+.reveal .slide-icon .cursor {
+	animation: mn-blink 1.2s step-end infinite;
+}
+
+@keyframes mn-blink {
+	0%,
+	100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0;
+	}
+}
+
+/* ---- agenda --------------------------------------------------------- */
+/*
+ * Opt out of the optical centring for slides whose content belongs under the
+ * heading rather than in the middle of the slide. The agenda is a list you read
+ * top down, so a gap between the title and the first item reads as a mistake.
+ */
+.reveal section.anchor-top > .slide-body {
+	justify-content: flex-start;
+}
+
+/* Flat list, one indent level. Its shout-out sits below and inset. */
+
+.reveal .agenda {
+	display: flex;
+	flex-direction: column;
+	gap: 44px;
+}
+
+.reveal .agenda > div {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.reveal .agenda-name {
+	font-size: var(--mn-h3);
+	font-weight: 600;
+	color: var(--mn-fg-strong);
+}
+
+.reveal .agenda-shout {
+	font-size: var(--mn-body-sm);
+	color: var(--mn-accent);
+	margin-left: 56px;
+}
+
+.reveal .agenda-sub {
+	list-style: none;
+	margin: 14px 0 0 56px;
+	font-size: var(--mn-caption);
+	color: var(--mn-fg-muted);
+	border-left: 2px solid var(--mn-rule);
+	padding-left: 28px;
+}
+
+.reveal .agenda-sub li + li {
+	margin-top: 8px;
+}
+
+.reveal .agenda-sub strong {
+	color: var(--mn-fg);
+	font-weight: 600;
+	margin-right: 12px;
+}
+
+/* ---- bio slide ----------------------------------------------------- */
+
+.reveal .bio {
+	display: flex;
+	align-items: flex-start;
+	gap: 64px;
+}
+
+.reveal .bio-avatar {
+	flex: 0 0 300px;
+	width: 300px;
+	border-radius: 50%;
+	margin: 0;
+	border: 2px solid var(--mn-rule);
+	box-shadow: none;
+}
+
+.reveal .bio-name {
+	margin: 0 0 28px 0;
+	font-size: var(--mn-h3);
+	font-weight: 600;
+	color: var(--mn-fg-strong);
+	line-height: 1.1;
+}
+
+.reveal .bio-handle {
+	font-size: var(--mn-body-sm);
+	font-weight: 400;
+	color: var(--mn-accent);
+	margin-left: 16px;
+}
+
+.reveal .bio ul {
+	margin: 0;
+	list-style: none;
+	font-size: var(--mn-body-sm);
+}
+
+.reveal .bio li + li {
+	margin-top: 28px;
+}
+
+.reveal .bio strong {
+	color: var(--mn-accent);
+}
+
+/*
+ * Links keep the body colour and carry a rule instead. The default teal would
+ * collide with the accented role and handle, leaving four teal fragments a line.
+ */
+.reveal .bio a {
+	color: inherit;
+	text-decoration: none;
+	border-bottom: 1px solid var(--mn-rule);
+}
+
+.reveal .bio a:hover {
+	border-bottom-color: var(--mn-accent);
+}
+
+.reveal .bio-icon {
+	height: 0.95em;
+	margin: 0 0 0 12px;
+	vertical-align: baseline;
+	border: none;
+	box-shadow: none;
+	background: none;
+}
+
+/* ---- metrics ------------------------------------------------------- */
+
+.reveal .metrics {
+	display: flex;
+	gap: 96px;
+	flex-wrap: wrap;
+}
+
+.reveal .metric {
+	font-size: var(--mn-h2);
+	font-weight: 600;
+	line-height: 1;
+	color: var(--mn-accent);
+}
+
+.reveal .metric-label {
+	font-size: var(--mn-body-sm);
+	color: var(--mn-fg-muted);
+	margin-top: 12px;
+}
+
+/* ---- cards and columns --------------------------------------------- */
+
+.reveal .columns,
+.reveal .columns-3,
+.reveal .grid-3 {
+	display: grid;
+	gap: 48px;
+	align-items: stretch;
+}
+
+.reveal .columns {
+	grid-template-columns: 1fr 1fr;
+}
+
+.reveal .columns-3 {
+	grid-template-columns: repeat(3, 1fr);
+}
+
+.reveal .grid-3 {
+	grid-template-columns: repeat(3, 1fr);
+	grid-auto-rows: 1fr;
+}
+
+.reveal .card {
+	padding: 28px 32px;
+	border-radius: 12px;
+	background: var(--mn-fill);
+	border: 1px solid var(--mn-rule);
+	font-size: var(--mn-body-sm);
+	overflow: hidden;
+	word-break: break-word;
+	overflow-wrap: anywhere;
+}
+
+.reveal .card h3 {
+	font-size: var(--mn-h3);
+	color: var(--mn-accent);
+	margin: 0 0 12px 0;
+}
+
+.reveal .card p {
+	margin: 0;
+	color: var(--mn-fg-muted);
+}
+
+.reveal .step-num {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 56px;
+	height: 56px;
+	border-radius: 50%;
+	font-size: var(--mn-body-sm);
+	font-weight: 600;
+	background: var(--mn-brand-teal);
+	color: var(--mn-white);
+	margin-bottom: 16px;
+}
+
+/* ---- archetype 8: step process ------------------------------------- */
+
+.reveal .steps {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 32px;
+	position: relative;
+}
+
+.reveal .steps::before {
+	content: "";
+	position: absolute;
+	top: 28px;
+	left: 10%;
+	right: 10%;
+	height: 2px;
+	background: rgba(48, 141, 138, 0.2);
+}
+
+.reveal .steps > div {
+	position: relative;
+	font-size: var(--mn-body-sm);
+}
+
+.reveal .steps h3 {
+	font-size: var(--mn-h3);
+	margin: 0 0 8px 0;
+}
+
+/* One step that is really two, stacked. Stake and unstake are the same crank. */
+.reveal .steps .split {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.reveal .steps .split > div {
+	padding: 14px 18px;
+	border-radius: 10px;
+	background: var(--mn-fill);
+	border: 1px solid var(--mn-rule);
+}
+
+.reveal .steps .split h3 {
+	font-size: var(--mn-body-sm);
+	color: var(--mn-accent);
+	margin: 0 0 2px 0;
+}
+
+/* ---- archetype 11: timeline ---------------------------------------- */
+
+.reveal .timeline {
+	display: grid;
+	grid-auto-flow: column;
+	grid-auto-columns: 1fr;
+	gap: 24px;
+	position: relative;
+	font-size: var(--mn-body-sm);
+}
+
+.reveal .timeline::before {
+	content: "";
+	position: absolute;
+	top: 15px;
+	left: 0;
+	right: 0;
+	height: 2px;
+	background: rgba(48, 141, 138, 0.2);
+}
+
+.reveal .timeline > div {
+	position: relative;
+	padding-top: 56px;
+}
+
+.reveal .timeline > div::before {
+	content: "";
+	position: absolute;
+	top: 8px;
+	left: 0;
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	background: var(--mn-brand-teal);
+}
+
+.reveal .timeline > div:nth-child(even)::before {
+	background: var(--mn-light-teal);
+}
+
+.reveal .timeline .when {
+	display: block;
+	color: var(--mn-accent-strong);
+	font-weight: 600;
+}
+
+/* ---- archetype 15: flow diagram ------------------------------------ */
+
+.reveal .flow {
+	display: flex;
+	align-items: stretch;
+	gap: 0;
+	font-size: var(--mn-body-sm);
+}
+
+.reveal .flow > div {
+	flex: 1;
+	padding: 24px 20px;
+	border-radius: 12px;
+	border: 2px solid var(--mn-rule);
+	background: var(--mn-fill);
+	text-align: center;
+}
+
+.reveal .flow > div + div {
+	margin-left: 56px;
+	position: relative;
+}
+
+.reveal .flow > div + div::before {
+	content: "";
+	position: absolute;
+	left: -44px;
+	top: 50%;
+	width: 32px;
+	height: 2px;
+	background: var(--mn-brand-teal);
+}
+
+.reveal .flow > div + div::after {
+	content: "";
+	position: absolute;
+	left: -18px;
+	top: 50%;
+	transform: translateY(-50%);
+	border-left: 10px solid var(--mn-brand-teal);
+	border-top: 6px solid transparent;
+	border-bottom: 6px solid transparent;
+}
+
+/* ---- stake account state cycle --------------------------------------- */
+/*
+ * The four states a Solana stake account cycles through. Names are agave's own:
+ * Active, Deactivating, Inactive, Activating. Drawn as a ring because it is a
+ * cycle, not a line: Inactive can go straight to Activating in the same epoch.
+ * `.cost` marks the two states that pay the staker nothing.
+ */
+
+.reveal .cycle {
+	position: relative;
+	width: 1000px;
+	height: 460px;
+	margin: 0 auto;
+}
+
+.reveal .cycle svg {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+.reveal .cycle-node {
+	position: absolute;
+	transform: translate(-50%, -50%);
+	width: 230px;
+	padding: 16px 12px;
+	border-radius: 12px;
+	border: 2px solid var(--mn-rule);
+	background: var(--mn-surface);
+	text-align: center;
+}
+
+.reveal .cycle-node h3 {
+	font-size: var(--mn-body-sm);
+	color: var(--mn-fg-strong);
+	margin: 0 0 4px 0;
+}
+
+.reveal .cycle-node span {
+	display: block;
+	font-size: var(--mn-caption);
+	color: var(--mn-fg-muted);
+}
+
+.reveal .cycle-node.cost {
+	border-color: var(--mn-highlight);
+	background: rgba(254, 242, 157, 0.09);
+}
+
+.reveal .cycle-node.cost h3,
+.reveal .cycle-node.cost span {
+	color: var(--mn-highlight);
+}
+
+.reveal .cycle-edge {
+	position: absolute;
+	transform: translate(-50%, -50%);
+	font-size: var(--mn-caption);
+	color: var(--mn-accent);
+	white-space: nowrap;
+}
+
+/* The two waiting edges are the cost of the cycle, so they carry the weight. */
+.reveal .cycle-edge.wait {
+	font-weight: 600;
+}
+
+/* ---- stake account states, linear variant ---------------------------- */
+
+.reveal .states {
+	display: flex;
+	align-items: stretch;
+	gap: 0;
+}
+
+.reveal .states > div {
+	flex: 1;
+	padding: 24px 16px;
+	border-radius: 12px;
+	border: 2px solid var(--mn-rule);
+	background: var(--mn-fill);
+	text-align: center;
+}
+
+.reveal .states > div + div {
+	margin-left: 52px;
+	position: relative;
+}
+
+.reveal .states > div + div::before {
+	content: "";
+	position: absolute;
+	left: -42px;
+	top: 50%;
+	width: 30px;
+	height: 2px;
+	background: var(--mn-brand-teal);
+}
+
+.reveal .states > div + div::after {
+	content: "";
+	position: absolute;
+	left: -16px;
+	top: 50%;
+	transform: translateY(-50%);
+	border-left: 10px solid var(--mn-brand-teal);
+	border-top: 6px solid transparent;
+	border-bottom: 6px solid transparent;
+}
+
+.reveal .states h3 {
+	font-size: var(--mn-body-sm);
+	color: var(--mn-fg-strong);
+	margin: 0 0 6px 0;
+}
+
+.reveal .states span {
+	display: block;
+	font-size: var(--mn-caption);
+	color: var(--mn-fg-muted);
+}
+
+/* The dead spot. Uses the palette's highlight yellow, not an invented colour. */
+.reveal .states .cost {
+	border-color: var(--mn-highlight);
+	background: rgba(254, 242, 157, 0.09);
+}
+
+.reveal .states .cost h3 {
+	color: var(--mn-highlight);
+}
+
+.reveal .states .cost span {
+	color: var(--mn-highlight);
+	opacity: 0.75;
+}
+
+/* ---- archetype 9: bar chart ---------------------------------------- */
+
+.reveal .bar-chart {
+	display: flex;
+	align-items: flex-end;
+	gap: 80px;
+	height: 400px;
+}
+
+.reveal .bar-chart .bar {
+	flex: 1;
+	background: var(--mn-light-teal);
+	border-radius: 8px 8px 0 0;
+	position: relative;
+}
+
+.reveal .bar-chart .bar-label {
+	position: absolute;
+	top: -48px;
+	width: 100%;
+	text-align: center;
+	font-size: var(--mn-body-sm);
+	color: var(--mn-chart-teal);
+}
+
+.reveal .bar-chart .bar-cat {
+	position: absolute;
+	bottom: -48px;
+	width: 100%;
+	text-align: center;
+	font-size: var(--mn-caption);
+	color: var(--mn-chart-teal);
+}
+
+/* ---- archetype 16: comparison table -------------------------------- */
+
+.reveal table {
+	font-variant-numeric: tabular-nums;
+	font-size: var(--mn-body-sm);
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.reveal table th {
+	color: var(--mn-accent);
+	font-weight: 600;
+	border-bottom: 2px solid var(--mn-brand-teal);
+	padding: 16px 20px;
+	text-align: left;
+}
+
+.reveal table td {
+	border-bottom: 1px solid rgba(48, 141, 138, 0.1);
+	padding: 16px 20px;
+}
+
+/* Marinade's own column gets the teal tint, per the cookbook. */
+.reveal table .mn-col {
+	background: rgba(48, 141, 138, 0.12);
+}
+
+.reveal table th.mn-col {
+	background: var(--mn-brand-teal);
+	color: var(--mn-white);
+}
+
+.reveal .yes {
+	color: var(--mn-light-teal);
+}
+
+.reveal .no {
+	color: var(--mn-fg-muted);
+}
+
+/* ---- footnote pinned to the bottom of a slide ----------------------- */
+/* Small asides belong out of the reading flow, not trailing the content. */
+
+.reveal .slide-foot {
+	position: absolute;
+	left: var(--mn-margin-x);
+	right: var(--mn-margin-x);
+	bottom: var(--mn-margin-y);
+	z-index: 1;
+	margin: 0;
+	font-size: var(--mn-caption);
+	color: var(--mn-fg-muted);
+}
+
+/* Clear the journey rail on slides that carry one. */
+.reveal section.has-journey .slide-foot {
+	bottom: 200px;
+}
+
+/* ---- token names ---------------------------------------------------- */
+/* mSOL and friends: consistent, quieter than bold, still unmistakable. */
+
+/*
+ * A chip, not bold. Bolding every mention gets noisy, and inside a card heading
+ * that is already accent-coloured a colour change would not read at all.
+ */
+.reveal .token {
+	background: rgba(148, 201, 200, 0.16);
+	color: var(--mn-fg-strong);
+	border-radius: 6px;
+	padding: 0.04em 0.28em;
+	font-weight: 600;
+	letter-spacing: 0.01em;
+}
+
+/* ---- icon sitting inline with text ---------------------------------- */
+
+.reveal .inline-icon {
+	width: 1.05em;
+	height: 1.05em;
+	vertical-align: -0.14em;
+	margin-right: 0.35em;
+	stroke: currentColor;
+	fill: none;
+	stroke-width: 2;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+/* ---- figure --------------------------------------------------------- */
+/* A picture that is the point of the slide, rather than a background. */
+
+.reveal .figure {
+	display: block;
+	margin: 0 auto;
+	max-height: 560px;
+	max-width: 100%;
+	width: auto;
+	border-radius: 16px;
+	border: 1px solid var(--mn-rule);
+	box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+}
+
+/* Smaller variant, for a picture slide that still carries the journey rail. */
+.reveal .figure-sm {
+	max-height: 460px;
+}
+
+/* Smaller still: a picture with both a punch line under it and the rail below that. */
+.reveal .figure-xs {
+	max-height: 380px;
+}
+
+/* ---- picture beside a list ------------------------------------------ */
+/* Breaks up a run of horizontal step diagrams without losing the steps. */
+
+.reveal .split-media {
+	display: grid;
+	grid-template-columns: 1fr 1.15fr;
+	gap: 72px;
+	align-items: center;
+}
+
+.reveal .split-media .figure {
+	max-height: 470px;
+}
+
+.reveal .beats {
+	list-style: none;
+	margin: 0;
+	counter-reset: beat;
+}
+
+.reveal .beats li {
+	counter-increment: beat;
+	position: relative;
+	padding-left: 76px;
+	font-size: var(--mn-body-sm);
+	color: var(--mn-fg-muted);
+}
+
+.reveal .beats li + li {
+	margin-top: 30px;
+}
+
+.reveal .beats li::before {
+	content: counter(beat);
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 50px;
+	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	background: var(--mn-brand-teal);
+	color: var(--mn-white);
+	font-weight: 600;
+	font-size: var(--mn-body-sm);
+}
+
+.reveal .beats strong {
+	display: block;
+	color: var(--mn-fg-strong);
+	font-size: var(--mn-h3);
+	font-weight: 600;
+	margin-bottom: 2px;
+}
+
+/* The line that lands after the picture, at heading weight. */
+.reveal .punch {
+	margin: 40px 0 0 0;
+	font-size: var(--mn-h2);
+	font-weight: 600;
+	line-height: 1.15;
+	color: var(--mn-fg-strong);
+}
+
+/* A glyph that is negated: the slide's point is that the thing does not exist. */
+.reveal .slide-icon.struck .strike {
+	stroke-width: 0.9;
+	stroke: var(--mn-cat-coral);
+	opacity: 0.9;
+}
+
+/* ---- strategy dials -------------------------------------------------- */
+/*
+ * One dial per card: same instrument, three settings. Deliberately not a fork or
+ * a split, which would imply the three strategies send stake to three different
+ * places, and where Recipes delegates is the one thing this deck never says.
+ * A floating panel was tried first and collided with the cards at every size.
+ */
+.reveal .card-dial {
+	display: block;
+	width: 92px;
+	height: 55px;
+	margin-bottom: 14px;
+	overflow: visible;
+}
+
+.reveal .card-dial .dial-arc {
+	fill: none;
+	stroke: var(--mn-rule);
+	stroke-width: 5;
+	stroke-linecap: round;
+}
+
+.reveal .card-dial .dial-needle {
+	stroke: var(--mn-light-teal);
+	stroke-width: 6;
+	stroke-linecap: round;
+	transform-origin: 50px 52px;
+	animation: dial-drift 7s ease-in-out infinite alternate;
+}
+
+.reveal .card-dial .dial-hub {
+	fill: var(--mn-light-teal);
+}
+
+.reveal .card-dial.d-mid .dial-needle {
+	animation-duration: 9s;
+	animation-delay: -3s;
+}
+
+.reveal .card-dial.d-low .dial-needle {
+	animation-duration: 11s;
+	animation-delay: -6s;
+}
+
+/* The needle drifts a few degrees so the panel reads as live rather than printed. */
+@keyframes dial-drift {
+	from {
+		transform: rotate(-6deg);
+	}
+	to {
+		transform: rotate(6deg);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.reveal .card-dial .dial-needle {
+		animation: none;
+	}
+}
+
+/* ---- claims ---------------------------------------------------------- */
+/* Three statements carrying a summary. No cards: a box implies detail inside. */
+.reveal .claims p {
+	margin: 0 0 26px 0;
+	font-size: var(--mn-h3);
+	font-weight: 600;
+	line-height: 1.2;
+	color: var(--mn-accent);
+}
+
+/* The hat earns more presence here than on the company slide: it is the sign-off. */
+.reveal .side-art.hat.sign-off img {
+	opacity: 0.4;
+}
+
+/* ---- inline text utilities ----------------------------------------- */
+
+.reveal .accent {
+	font-family: "PT Serif", serif;
+	font-style: italic;
+	font-weight: 400;
+}
+
+.reveal .note {
+	font-size: var(--mn-caption);
+	color: var(--mn-fg-muted);
+}
+
+.reveal .highlight {
+	color: var(--mn-highlight);
+}
+
+.reveal .tag {
+	display: inline-block;
+	padding: 6px 18px;
+	border-radius: 6px;
+	font-size: var(--mn-caption);
+	font-weight: 600;
+	background: rgba(48, 141, 138, 0.18);
+	border: 1px solid var(--mn-rule);
+	color: var(--mn-accent);
+}
+
+.reveal .text-sm {
+	font-size: var(--mn-body-sm);
+}
+
+.reveal .text-xs {
+	font-size: var(--mn-caption);
+}
+
+.reveal .icon {
+	width: 40px;
+	height: 40px;
+	stroke: var(--mn-accent-strong);
+	stroke-width: 1.5;
+	fill: none;
+	vertical-align: middle;
+}
+
+/* ---- chrome -------------------------------------------------------- */
+
+/*
+ * Code has to survive a projector, so it runs bigger than the cookbook caption.
+ * Block with fit-content, not inline-block: inline-block picks up baseline
+ * leading and two stacked blocks end up overlapping.
+ */
+.reveal pre {
+	box-shadow: none;
+	border: 1px solid var(--mn-rule);
+	border-radius: 12px;
+	font-size: 28px;
+	line-height: 1.45;
+	display: block;
+	width: fit-content;
+	max-width: 100%;
+	margin: 0 auto;
+	text-align: left;
+	overflow: hidden;
+	/*
+	 * Without this, overflow: hidden zeroes the automatic minimum size inside
+	 * the flex .slide-body, so a slide with too much code silently shrinks every
+	 * block and clips its closing brace while the overflow check still passes.
+	 * Refusing to shrink makes that failure visible instead.
+	 */
+	flex-shrink: 0;
+}
+
+.reveal pre + pre {
+	margin-top: 32px;
+}
+
+/*
+ * Anatomy slides, not code slides. Three stacked blocks only fit small, and the
+ * two context blocks are deliberately a size under the last one: the structures
+ * are there to be recognised, the final block is there to be read.
+ */
+.reveal section.code-sm pre {
+	font-size: 21px;
+	margin-left: 0;
+}
+
+.reveal section.code-sm pre + pre {
+	margin-top: 22px;
+}
+
+.reveal section.code-sm pre:last-of-type {
+	font-size: 26px;
+}
+
+/*
+ * Keep the stack clear of the footnote band. .slide-foot is pinned 200px up on a
+ * slide that carries the rail, and the centred body happily grows into it, so the
+ * body has to reserve that height itself. 56px was not enough: measured overlap.
+ */
+.reveal section.code-sm > .slide-body {
+	padding-bottom: 108px;
+}
+
+.reveal pre code {
+	display: block;
+	padding: 24px 34px;
+	max-height: none;
+	overflow: visible;
+}
+
+/*
+ * Recolour highlight.js from monokai into the brand palette. The stock theme is
+ * pink and lime, which reads as a different deck.
+ */
+.reveal .hljs {
+	background: rgba(48, 141, 138, 0.08);
+	color: var(--mn-fg);
+}
+
+.reveal .hljs-keyword,
+.reveal .hljs-literal,
+.reveal .hljs-built_in {
+	color: var(--mn-light-teal);
+}
+
+.reveal .hljs-title,
+.reveal .hljs-type,
+.reveal .hljs-class .hljs-title {
+	color: var(--mn-white);
+	font-weight: 600;
+}
+
+.reveal .hljs-comment {
+	color: var(--mn-muted-text);
+	font-style: italic;
+}
+
+.reveal .hljs-string,
+.reveal .hljs-number {
+	color: var(--mn-chart-teal);
+}
+
+.reveal code {
+	border-radius: 6px;
+}
+
+.reveal .progress {
+	color: var(--mn-brand-teal);
+	height: 4px;
+}
+
+.reveal .controls {
+	color: var(--mn-muted-teal);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.reveal .slides section {
+		transition: none !important;
+	}
+
+	.reveal .slide-icon .cursor,
+	.reveal .gear,
+	.reveal .ladder rect {
+		animation: none;
+	}
+}
+
+/* ---- exit funnel ---------------------------------------------------- */
+/*
+ * Many accounts becoming one. The merge is the argument of the slide, so it is
+ * drawn rather than listed: four numbered steps in a row said "a process", this
+ * says "a hundred things have to become one thing".
+ */
+.reveal .funnel-wrap {
+	display: flex;
+	justify-content: center;
+}
+
+.reveal .funnel {
+	width: 100%;
+	max-width: 1440px;
+	height: auto;
+}
+
+.reveal .funnel .acct {
+	fill: var(--mn-fill);
+	stroke: var(--mn-rule);
+	stroke-width: 2;
+}
+
+.reveal .funnel .batch {
+	fill: rgba(48, 141, 138, 0.18);
+}
+
+.reveal .funnel .final {
+	fill: rgba(48, 141, 138, 0.3);
+	stroke: var(--mn-light-teal);
+}
+
+.reveal .funnel .arrow {
+	fill: none;
+	stroke: var(--mn-light-teal);
+	stroke-width: 3;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+/*
+ * The slide's claim is that leaving takes many rounds and time, so the diagram
+ * grinds: dashes march along each arrow, accounts fade one by one as they are
+ * picked off, and the batches pulse as they deactivate. Slow on purpose, because
+ * a brisk animation would say "this is quick", which is the opposite of the point.
+ */
+.reveal .funnel .flow {
+	fill: none;
+	stroke: var(--mn-light-teal);
+	stroke-width: 4;
+	stroke-linecap: round;
+	stroke-dasharray: 6 14;
+	animation: funnel-flow 1.9s linear infinite;
+}
+
+@keyframes funnel-flow {
+	to {
+		stroke-dashoffset: -40;
+	}
+}
+
+.reveal .funnel .drain {
+	animation: acct-drain 5.2s ease-in-out infinite;
+}
+
+@keyframes acct-drain {
+	0%,
+	62%,
+	100% {
+		opacity: 1;
+	}
+	78% {
+		opacity: 0.22;
+	}
+}
+
+.reveal .funnel .batch {
+	animation: batch-work 5.2s ease-in-out infinite;
+}
+
+@keyframes batch-work {
+	0%,
+	100% {
+		fill: rgba(48, 141, 138, 0.18);
+	}
+	50% {
+		fill: rgba(48, 141, 138, 0.42);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.reveal .funnel .flow,
+	.reveal .funnel .drain,
+	.reveal .funnel .batch {
+		animation: none;
+	}
+}
+
+.reveal .funnel .fn-step {
+	font-family: "DM Sans", sans-serif;
+	font-size: 20px;
+	font-weight: 600;
+	fill: var(--mn-light-teal);
+}
+
+.reveal .funnel .fn-cap {
+	font-family: "DM Sans", sans-serif;
+	font-size: 19px;
+	fill: var(--mn-fg-muted);
+}
+
+/* ---- content beside pinned art -------------------------------------- */
+/* Keeps a text column clear of a .side-art picture on the same slide. */
+.reveal section.with-art > .slide-body {
+	max-width: 1080px;
+}
+
+/* The brand hat as the picture: a watermark, so it never fights the text. */
+.reveal .side-art.hat {
+	width: 660px;
+}
+
+.reveal .side-art.hat img {
+	opacity: 0.26;
+}
+
+/* ---- side art ------------------------------------------------------- */
+/*
+ * A picture beside the content rather than behind it. Pinned, so it is excluded
+ * from the .slide-body wrap in index.html and cannot push the stack around.
+ * The source is duotoned into the palette and feathered to an alpha edge, so no
+ * frame lands on the slide.
+ */
+.reveal .side-art {
+	position: absolute;
+	right: var(--mn-margin-x);
+	top: 50%;
+	transform: translateY(-50%);
+	width: 520px;
+	z-index: 0;
+	pointer-events: none;
+	line-height: 0;
+}
+
+.reveal .side-art img {
+	width: 100%;
+	height: auto;
+	margin: 0;
+	border: none;
+	border-radius: 0;
+	box-shadow: none;
+	background: none;
+	opacity: 0.8;
+}
+
+/* ---- proof of stake diagram ----------------------------------------- */
+/*
+ * The intro diagram: delegation on the left, stake weight in the middle, an
+ * epoch of slots on the right, rewards looping back. Drawn rather than listed
+ * because the loop is the point, and a list cannot show proportion.
+ */
+.reveal .figure-wide {
+	display: flex;
+	justify-content: center;
+}
+
+.reveal .pos {
+	width: 100%;
+	max-width: 1760px;
+	height: auto;
+}
+
+.reveal .pos .pos-box {
+	fill: var(--mn-fill);
+	stroke: var(--mn-rule);
+	stroke-width: 2;
+}
+
+.reveal .pos .pos-pip {
+	fill: rgba(148, 201, 200, 0.55);
+}
+
+.reveal .pos .pos-slot {
+	fill: var(--mn-fill);
+	stroke: var(--mn-rule);
+	stroke-width: 2;
+}
+
+/* Slot fills carry the weight: validator A holds the most stake. */
+.reveal .pos .pos-slot.a {
+	fill: rgba(48, 141, 138, 0.52);
+}
+
+.reveal .pos .pos-slot.b {
+	fill: rgba(48, 141, 138, 0.26);
+}
+
+.reveal .pos .pos-slot.c {
+	fill: rgba(48, 141, 138, 0.08);
+}
+
+.reveal .pos .pos-arrow {
+	fill: none;
+	stroke: var(--mn-light-teal);
+	stroke-width: 3;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+.reveal .pos .pos-arrow.dashed {
+	stroke-dasharray: 10 9;
+}
+
+.reveal .pos text {
+	font-family: "DM Sans", sans-serif;
+}
+
+.reveal .pos .pos-head {
+	font-size: 24px;
+	font-weight: 600;
+	fill: var(--mn-accent);
+	text-anchor: middle;
+}
+
+.reveal .pos .pos-lbl {
+	font-size: 26px;
+	font-weight: 600;
+	fill: var(--mn-fg);
+	text-anchor: middle;
+}
+
+.reveal .pos .pos-slot-lbl {
+	font-size: 26px;
+	font-weight: 600;
+	fill: var(--mn-fg-strong);
+	text-anchor: middle;
+}
+
+.reveal .pos .pos-note {
+	font-size: 22px;
+	fill: var(--mn-fg-muted);
+	text-anchor: middle;
+}
+
+/* Where each kind of reward ends up. Brighter than a plain box: these are the answer. */
+.reveal .pos .pos-out {
+	fill: rgba(48, 141, 138, 0.22);
+	stroke: var(--mn-light-teal);
+	stroke-width: 2;
+}
+
+.reveal .pos .pos-out-lbl {
+	font-size: 30px;
+	font-weight: 600;
+	fill: var(--mn-fg-strong);
+	text-anchor: middle;
+}
+
+.reveal .pos .pos-out-sub {
+	font-size: 21px;
+	fill: var(--mn-accent);
+	text-anchor: middle;
+}
+
+/* ---- print and PDF export ------------------------------------------- */
+/*
+ * reveal's print rules are scoped to html.reveal-print rather than @media print,
+ * because ?print-pdf shows the print layout on screen. They force padding: 0 and
+ * display: block onto every section with !important, which drops the 12-column
+ * grid margins and disables the flex column that .slide-body centring depends on,
+ * so the export reads as a different and worse deck. Matching their selector
+ * exactly and winning on source order is the only thing that puts it back:
+ * a plain @media print block never applies here, and lower specificity loses.
+ */
+html.reveal-print .reveal .slides section {
+	display: flex !important;
+	flex-direction: column !important;
+	padding: var(--mn-margin-y) var(--mn-margin-x) !important;
+}
+
+html.reveal-print .reveal .slides section.vcenter {
+	justify-content: center !important;
+}
