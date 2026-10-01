@@ -19,7 +19,7 @@ const run = promisify(execFile)
 const args = process.argv.slice(2)
 const flag = (n, d) => (args.indexOf(`--${n}`) === -1 ? d : args[args.indexOf(`--${n}`) + 1])
 const port = flag('port', '8000')
-const out = path.resolve(flag('out', `${process.env.HOME}/Downloads/marinade-deck`))
+const out = path.resolve(flag('out', `${process.env.HOME}/Downloads/marinade-building-blocks`))
 
 const browser = await puppeteer.launch({ args: ['--no-sandbox'] })
 const page = await browser.newPage()

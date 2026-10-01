@@ -1,0 +1,341 @@
+openapi: "3.1.0"
+info:
+  title: Historical marinade.finance information
+  version: 1.0.0
+servers:
+  - url: https://api.marinade.finance
+paths:
+  /msol/apy/{period}:
+    description: Actual mSOL APY calculated for the closest to desired period of time
+    get:
+      parameters:
+        - in: path
+          name: period
+          required: true
+          schema:
+            type: string
+          examples:
+            days:
+              value: 7d
+            weeks:
+              value: 2w
+            years:
+              value: 1y
+        - in: query
+          name: time
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  value:
+                    type: number
+                    description:
+                      APY in absolute value
+                  start_time:
+                    type: string
+                    format: date-time
+                  start_price:
+                    type: number
+                  end_time:
+                    type: string
+                    format: date-time
+                  end_price:
+                    type: number
+  /lp/apy/{period}:
+    description: Actual mSOL-SOL LP APY calculated for the closest to desired period of time
+    get:
+      parameters:
+        - in: path
+          name: period
+          required: true
+          schema:
+            type: string
+          examples:
+            days:
+              value: 7d
+            weeks:
+              value: 2w
+            years:
+              value: 1y
+        - in: query
+          name: time
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  value:
+                    type: number
+                    description:
+                      APY in absolute value
+                  start_time:
+                    type: string
+                    format: date-time
+                  start_price:
+                    type: number
+                  end_time:
+                    type: string
+                    format: date-time
+                  end_price:
+                    type: number
+  /lp/price:
+    description: mSOL-SOL LP price in SOL
+    get:
+      parameters:
+        - in: query
+          name: time
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        200:
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: number
+  /msol/supply:
+    description: Total mSOL supply in lamports
+    get:
+      parameters:
+        - in: query
+          name: time
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        200:
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: number
+  /msol/price_sol:
+    description: mSOL price in SOL
+    get:
+      parameters:
+        - in: query
+          name: time
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        200:
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: number
+  /msol/price_usd:
+    description: mSOL price in USD
+    get:
+      responses:
+        200:
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: number
+  /farm/{token}:
+    description: Internal farm stats
+    get:
+      parameters:
+        - in: path
+          name: token
+          required: true
+          schema:
+            type: string
+            enum: ["mSoLzYCxHdYgdzU16g5QSh3i5K3z3KZK7ytfqcJm7So", "LPmSozJJ8Jh69ut2WP3XmVohTjL4ipR18yiCzxrUmVj"]
+        - in: query
+          name: time
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  last_update:
+                    type: string
+                    format: date-time
+                  annual_rewards_rate:
+                    type: number
+                    description: Amount of rewards distributed to the quarry per year in lamports
+                  total_tokens_deposited:
+                    type: number
+                    description: Total number of tokens deposited into the quarry in lamports
+                  num_miners:
+                    type: number
+                    description: Number of miners
+                  rewards_per_token_stored:
+                    type: number
+                    description: Rewards per token stored in the quarry
+  /tlv/history:
+    description: Daily TLV snapshots in SOL for a given date range
+    get:
+      parameters:
+        - in: query
+          name: from
+          required: true
+          schema:
+            type: string
+            format: date-time
+          example: "2026-01-01T00:00:00Z"
+        - in: query
+          name: to
+          required: true
+          schema:
+            type: string
+            format: date-time
+          example: "2026-04-09T00:00:00Z"
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    time:
+                      type: string
+                      format: date-time
+                      description: Snapshot timestamp
+                    staked_sol:
+                      type: number
+                      description: Staked in SOL
+                    liquidity_sol:
+                      type: number
+                      description: SOL liquidity in mSOL-SOL pool
+                    total_sol:
+                      type: number
+                      description: Total value locked in SOL (staked + liquidity + native + select + recipe USDG), excludes single validator (direct staking)
+                    self_staked_sol:
+                      type: number
+                      description: Self-staked SOL
+                    standard_staked_sol:
+                      type: number
+                      description: Standard staked SOL (staked minus self-staked)
+                    total_virtual_staked_sol:
+                      type: number
+                      description: Total virtual staked SOL
+                    marinade_native_stake_sol:
+                      type: number
+                      description: Marinade Native stake in SOL
+                    marinade_select_stake_sol:
+                      type: number
+                      description: Marinade Select stake in SOL
+                    single_validator_stake_sol:
+                      type: number
+                      description: Marinade Single Validator (direct staking) stake in SOL
+                    recipe_usdg_sol:
+                      type: number
+                      description: Stake on the recipe validator, in SOL. Covers every recipe, not only USDG; excludes stake already reported in another bucket.
+  /tlv:
+    description: Total Value Locked
+    get:
+      parameters:
+        - in: query
+          name: time
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  staked_sol:
+                    type: number
+                    description: Staked in SOL
+                  staked_usd:
+                    type: number
+                    description: Staked in USD
+                  msol_directed_stake_sol:
+                    type: number
+                    description: mSOL directed stake in SOL
+                  msol_directed_stake_msol:
+                    type: number
+                    description: mSOL directed stake in mSOL
+                  liquidity_sol:
+                    type: number
+                    description: SOL liquidity in mSOL-SOL pool
+                  liquidity_usd:
+                    type: number
+                    description: SOL liquidity in mSOL-SOL pool in USD
+                  total_sol:
+                    type: number
+                    description: Total value locked in SOL (staked + liquidity + native + select + recipe USDG), excludes single validator (direct staking)
+                  total_usd:
+                    type: number
+                    description: Total value locked in USD, excludes single validator (direct staking)
+                  self_staked_sol:
+                    type: number
+                    description: Self-staked SOL
+                  self_staked_usd:
+                    type: number
+                    description: Self-staked in USD
+                  standard_staked_sol:
+                    type: number
+                    description: Standard staked SOL (staked minus self-staked)
+                  standard_staked_usd:
+                    type: number
+                    description: Standard staked in USD
+                  total_virtual_staked_sol:
+                    type: number
+                    description: Total virtual staked SOL
+                  total_virtual_staked_usd:
+                    type: number
+                    description: Total virtual staked in USD
+                  marinade_native_stake_sol:
+                    type: number
+                    description: Marinade Native stake in SOL
+                  marinade_native_stake_usd:
+                    type: number
+                    description: Marinade Native stake in USD
+                  marinade_select_stake_sol:
+                    type: number
+                    description: Marinade Select stake in SOL
+                  marinade_select_stake_usd:
+                    type: number
+                    description: Marinade Select stake in USD
+                  single_validator_stake_sol:
+                    type: number
+                    description: Marinade Single Validator (direct staking) stake in SOL
+                  single_validator_stake_usd:
+                    type: number
+                    description: Marinade Single Validator (direct staking) stake in USD
+                  recipe_usdg_sol:
+                    type: number
+                    description: Stake on the recipe validator, in SOL. Covers every recipe, not only USDG; excludes stake already reported in another bucket.
+                  recipe_usdg_usd:
+                    type: number
+                    description: Stake on the recipe validator, in USD. Covers every recipe, not only USDG; excludes stake already reported in another bucket.

@@ -922,10 +922,17 @@
 
 .reveal .columns,
 .reveal .columns-3,
-.reveal .grid-3 {
+.reveal .grid-3,
+.reveal .grid-4 {
 	display: grid;
 	gap: 48px;
 	align-items: stretch;
+}
+
+.reveal .grid-4 {
+	grid-template-columns: repeat(4, 1fr);
+	grid-auto-rows: 1fr;
+	gap: 32px;
 }
 
 .reveal .columns {

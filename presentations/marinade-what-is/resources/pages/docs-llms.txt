@@ -1,0 +1,77 @@
+# Marinade Documentation
+
+## English
+
+- [Welcome to Marinade](https://docs.marinade.finance/readme.md): The best place to stake your SOL.
+- [Marinade DAO](https://docs.marinade.finance/marinade-dao.md): Marinade.finance is governed and built by the community. Owning MNDE tokens or actively engaging in the community makes you a member of Marinade DAO. Let's see what this means.
+- [Contributors](https://docs.marinade.finance/marinade-dao/contributors.md): You will find here the internal structure of the mDAO and its team members.
+- [The MNDE token](https://docs.marinade.finance/the-mnde-token.md): Marinade’s MNDE token lets holders participate in the protocol's governance. This includes control of the DAO’s fees and treasury.
+- [MNDE Governance](https://docs.marinade.finance/governance.md): Marinade is governed by people that lock MNDE and obtain veMNDE.
+- [Official Links](https://docs.marinade.finance/official-links.md): If you want to join us, here is where you can find us!
+- [Protocol Overview](https://docs.marinade.finance/marinade-protocol/protocol-overview.md): Marinade Finance was built to bring to life a vision. A non-custodial liquid staking solution on Solana, decentralizing the network.
+- [Marinade Native](https://docs.marinade.finance/marinade-protocol/protocol-overview/marinade-native.md): Marinade native is a tool to have your staked SOL managed and optimized automatically by Marinade's delegation strategy.
+- [Marinade Native: API & SDK](https://docs.marinade.finance/marinade-protocol/protocol-overview/marinade-native/marinade-native-api-and-sdk.md)
+- [Marinade Select](https://docs.marinade.finance/marinade-protocol/protocol-overview/marinade-select.md): Marinade Select is a curated set of trusted Solana validators offering secure, decentralized, and capital-efficient staking.
+- [Marinade Recipes](https://docs.marinade.finance/marinade-protocol/protocol-overview/marinade-recipes.md): Stake SOL and receive your rewards in a token of your choice instead of more SOL. Principal stays in SOL. Also called Customized Rewards.
+- [Marinade Liquid](https://docs.marinade.finance/marinade-protocol/protocol-overview/marinade-liquid.md)
+- [What is mSOL?](https://docs.marinade.finance/marinade-protocol/protocol-overview/marinade-liquid/what-is-msol.md): mSOL represents your staked SOL in the Marinade stake pool. Here's what that means and how it unlocks your liquidity.
+- [mSOL Token](https://docs.marinade.finance/marinade-protocol/protocol-overview/marinade-liquid/msol-token.md)
+- [Bot operations](https://docs.marinade.finance/marinade-protocol/protocol-overview/marinade-liquid/bot-operations.md)
+- [Marinade Borrow](https://docs.marinade.finance/marinade-protocol/protocol-overview/marinade-borrow.md): Borrow against mSOL collateral that keeps earning staking rewards while your loan is open.
+- [Marinade Instant Unstake](https://docs.marinade.finance/marinade-protocol/protocol-overview/marinade-instant-unstake.md): Learn how Instant Unstake works, when to use it, and how it differs from delayed unstaking.
+- [USDC Earn Vault](https://docs.marinade.finance/marinade-protocol/protocol-overview/usdc-earn-vault.md): Learn how to deposit USDC, earn yield automatically, and withdraw anytime with no lockup. This guide covers how the USDC Vault works, fees, and risks
+- [mTransactions](https://docs.marinade.finance/marinade-protocol/protocol-overview/mtransactions.md): mTransactions is an exploration of a bandwidth marketplace for transactions on the Solana blockchain
+- [Protected Staking Rewards](https://docs.marinade.finance/marinade-protocol/protocol-overview/protected-staking-rewards.md): Marinade introduces Protected Staking Rewards to provide stakers protection from any unforseen performance losses in the validator delegation set.
+- [Stake Auction Market (SAM)](https://docs.marinade.finance/marinade-protocol/protocol-overview/stake-auction-market.md): Marinade distributes 100% of its TVL through the Stake Auction Marketplace, where validators compete by bidding to offer the highest yield to stakers.
+- [SAM Onboarding Guide](https://docs.marinade.finance/marinade-protocol/protocol-overview/stake-auction-market/sam-onboarding-guide.md): Step-by-step onboarding for validators joining the Marinade Stake Auction Marketplace.
+- [Eligibility Criteria](https://docs.marinade.finance/marinade-protocol/protocol-overview/stake-auction-market/eligibility-criteria.md): Requirements a validator must meet to receive stake from SAM, and how to exit cleanly.
+- [Stake Distribution and Decentralization](https://docs.marinade.finance/marinade-protocol/protocol-overview/stake-auction-market/stake-distribution-and-decentralization.md): How Marinade allocates stake each epoch, how it reduces stake when needed, and the constraints that protect network decentralization.
+- [Blacklist Policy](https://docs.marinade.finance/marinade-protocol/protocol-overview/stake-auction-market/blacklist-policy.md): Grounds for blacklisting a validator from the Marinade Stake Auction Marketplace, and the process for removal from the blacklist.
+- [Dynamic Bids](https://docs.marinade.finance/marinade-protocol/protocol-overview/stake-auction-market/dynamic-bids.md): How dynamic commission bids work and how to configure them in the validator bonds CLI.
+- [maxStakeWanted Parameter](https://docs.marinade.finance/marinade-protocol/protocol-overview/stake-auction-market/maxstakewanted-parameter.md): Cap the maximum amount of Marinade stake a validator wants to receive through SAM.
+- [Stake Matching](https://docs.marinade.finance/marinade-protocol/protocol-overview/stake-auction-market/stake-matching.md): Marinade matches a portion of a validator's external stake with additional delegation, with no Protected Staking Rewards (PSR) slashable bond required on the matched portion.
+- [Bonds Settlements](https://docs.marinade.finance/marinade-protocol/protocol-overview/stake-auction-market/bonds-settlements.md): How Marinade settles validator bids each epoch, with formula, worked example, and where to view settlements.
+- [Bid Reduction Penalty](https://docs.marinade.finance/marinade-protocol/protocol-overview/stake-auction-market/bid-reduction-penalty.md): Penalty mechanics for validators who reduce their bid after receiving stake.
+- [Activating Stake Fee](https://docs.marinade.finance/marinade-protocol/protocol-overview/stake-auction-market/activating-stake-fee.md): One-time fee charged when new stake activates, scaled by how far the validator bid above the auction clearing rate.
+- [Bond Risk Reduction Mechanism](https://docs.marinade.finance/marinade-protocol/protocol-overview/stake-auction-market/bond-risk-reduction-mechanism.md): Covers the Bond Risk Reduction Mechanism: what triggers it, how the fee is calculated, and what validators need to do to avoid it.
+- [Bond Notifications](https://docs.marinade.finance/marinade-protocol/protocol-overview/stake-auction-market/bond-notifications.md): How validators are notified of bond-related events including underfunding, auction status changes, and announcements.
+- [SAM Resources](https://docs.marinade.finance/marinade-protocol/protocol-overview/stake-auction-market/sam-resources.md): Dashboards, repositories, APIs, and technical reference for SAM participants.
+- [Staking Rewards Report](https://docs.marinade.finance/marinade-protocol/protocol-overview/staking-rewards-report.md): Learn how to use the Staking Rewards Report to view and export your Marinade native staking rewards by epoch, and understand what the data represents.
+- [Fees and Pricing](https://docs.marinade.finance/marinade-protocol/protocol-overview/fees-and-pricing.md): A single reference for every fee across Marinade products: what each fee is, how it is calculated, whether it is fixed or variable, and which costs come from third parties rather than from Marinade.
+- [FAQ](https://docs.marinade.finance/marinade-protocol/faq.md): You'll find the answers to most of your questions here! If something is not yet answered, reach out to us on our Discord.
+- [Glossary](https://docs.marinade.finance/marinade-protocol/glossary.md)
+- [Security](https://docs.marinade.finance/marinade-protocol/security.md): Security has always been a primary concern for Marinade. We are doing everything we can to set a high standard for security in our protocol and in the Solana ecosystem.
+- [Audits](https://docs.marinade.finance/marinade-protocol/security/audits.md): You'll find here the list of our audits and code review reports.
+- [Principal Service Commitments and System Requirements](https://docs.marinade.finance/marinade-protocol/security/principal-service-commitments-and-system-requirements.md): An overview of Marinade Finance’s key commitments and technical controls to ensure security, availability, and compliance with SOC 2 standards.
+- [Multisig governance](https://docs.marinade.finance/marinade-protocol/security/multisig-governance.md): Marinade's on-chain authority is not a single multisig. It is split across four layers, and each layer authorizes different actions on different programs. Knowing which layer controls what is the poin
+- [Legal](https://docs.marinade.finance/marinade-protocol/legal.md)
+- [Terms of Use and Privacy Policy](https://docs.marinade.finance/marinade-protocol/legal/terms-of-use-and-privacy-policy.md): Terms of Use, Privacy Policy, and the legal terms governing use of the Marinade website and Services.
+- [Risks](https://docs.marinade.finance/marinade-protocol/legal/risks.md): Key risks associated with using the Marinade website and Services, including smart contract, validator, market, and third-party protocol risk.
+- [Disclaimer](https://docs.marinade.finance/marinade-protocol/legal/disclaimer.md): Disclaimers governing the use of the Marinade website and Services, provided on an as-is basis without warranties.
+- [Marinade Ts/Js SDK](https://docs.marinade.finance/developers/marinade-ts-js-sdk.md): This is a marinade typescript and anchor based SDK to interact with Marinade from any Front-End App
+- [Marinade Rust SDK](https://docs.marinade.finance/developers/marinade-rust-sdk.md): There is no supported standalone Rust SDK. If you are building in Rust, use one of the two routes below.
+- [Anchor IDL](https://docs.marinade.finance/developers/anchor-idl.md)
+- [Bug Bounty](https://docs.marinade.finance/developers/bug-bounty.md): Marinade is dedicated to improve the security of its users. For this reason, we are holding a bug bounty program to help strengthen our protocol even more.
+- [Contracts & Tokens Addresses](https://docs.marinade.finance/developers/contract-addresses.md): Here is a list of the smart contracts and tokens created by Marinade as well as details on their authorities
+- [Mint your NFT project in mSOL](https://docs.marinade.finance/developers/mint-your-nft-project-in-msol.md): We know how cool NFTs are, so we made it possible to mint NFTs using mSOL!
+- [Stake to Marinade via SPL governance](https://docs.marinade.finance/developers/stake-to-marinade-via-spl-governance.md)
+- [Stake to Marinade via Fireblocks](https://docs.marinade.finance/developers/stake-to-marinade-via-fireblocks.md)
+- [Become our Partner](https://docs.marinade.finance/partnerships/become-our-partner.md)
+- [Marinade Press Kit](https://docs.marinade.finance/partnerships/marinade-press-kit.md): Please find official Marinade imagery below for your use. For additional info or media inquiries, contact press@marinade.finance
+- [Marinade Referral Program](https://docs.marinade.finance/partnerships/marinade-referral-program.md): Earn rewards by supporting Marinade’s mission to decentralize Solana. Marinade shares fees with both the referring partner and the staker, creating a win-win incentive.
+
+
+---
+
+# Agent Instructions
+This documentation is published with GitBook. GitBook is the documentation platform designed so that both humans and AI agents can read, navigate, and reason over technical content effectively. Learn more at gitbook.com.
+
+## Querying This Documentation
+If you need additional information, you can query the documentation dynamically by asking a question.
+Perform an HTTP GET request on a page URL with the `ask` query parameter:
+```
+GET https://docs.marinade.finance/readme.md?ask=<question>
+```
+The question should be specific, self-contained, and written in natural language.
+The response will contain a direct answer to the question and relevant excerpts and sources from the documentation.
+Use this mechanism when the answer is not explicitly present in the current page, you need clarification or additional context, or you want to retrieve related documentation sections.

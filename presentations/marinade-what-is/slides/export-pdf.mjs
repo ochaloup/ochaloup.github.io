@@ -3,7 +3,7 @@
  * reveal.js devDependency, so a bare import only resolves from inside slides/.
  *
  *   npm start                                  # in another terminal
- *   node export-pdf.mjs                        # -> inside-marinades-staking-stack.pdf
+ *   node export-pdf.mjs                        # -> marinade-building-blocks.pdf
  *   node export-pdf.mjs --notes                # notes on their own pages
  *   node export-pdf.mjs --port 8001 --out x.pdf
  *   node export-pdf.mjs --raw                  # skip the ghostscript recompression
@@ -22,7 +22,7 @@ const flag = (name, fallback) => {
 }
 const port = flag('port', '8000')
 // Defaults outside the repo: a 4MB binary in here would get committed by accident.
-const out = flag('out', `${process.env.HOME}/Downloads/inside-marinades-staking-stack.pdf`)
+const out = flag('out', `${process.env.HOME}/Downloads/marinade-building-blocks.pdf`)
 const notes = args.includes('--notes')
 
 // The page size has to match the deck's own canvas, or reveal's print layout
