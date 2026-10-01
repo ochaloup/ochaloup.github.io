@@ -1,14 +1,14 @@
 //#region \0rolldown/runtime.js
-var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescriptor, r = Object.getOwnPropertyNames, i = Object.getPrototypeOf, a = Object.prototype.hasOwnProperty, o = (e, t) => () => (t || e((t = { exports: {} }).exports, t), t.exports), s = (e, i, o, s) => {
+var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescriptor, r = Object.getOwnPropertyNames, i = Object.getPrototypeOf, a = Object.prototype.hasOwnProperty, o = (e, t) => () => (t || (e((t = { exports: {} }).exports, t), e = null), t.exports), s = (e, i, o, s) => {
 	if (i && typeof i == "object" || typeof i == "function") for (var c = r(i), l = 0, u = c.length, d; l < u; l++) d = c[l], !a.call(e, d) && d !== o && t(e, d, {
 		get: ((e) => i[e]).bind(null, d),
 		enumerable: !(s = n(i, d)) || s.enumerable
 	});
 	return e;
-}, c = (n, r, a) => (a = n == null ? {} : e(i(n)), s(r || !n || !n.__esModule ? t(a, "default", {
+}, c = (n, r, o) => (o = n == null ? {} : e(i(n)), s(r || !n || !n.__esModule || !a.call(n, "default") ? t(o, "default", {
 	value: n,
 	enumerable: !0
-}) : a, n)), l = /* @__PURE__ */ o(((e, t) => {
+}) : o, n)), l = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return e instanceof Map ? e.clear = e.delete = e.set = function() {
 			throw Error("map is read-only");
@@ -158,7 +158,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		let n = e && e.exec(t);
 		return n && n.index === 0;
 	}
-	var S = /\[(?:[^\\\]]|\\.)*\]|\(\??|\\([1-9][0-9]*)|\\./;
+	var S = new RegExp(y(/\[(?:[^\\\]]|\\.)*\]/, /\(\?<(?![=!])[^>]+>/, /\(\?'[^']+'/, /\(\??/, /\\([1-9][0-9]*)/, /\\./));
 	function C(e, { joinWith: t }) {
 		let n = 0;
 		return e.map((e) => {
@@ -170,7 +170,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					i += r;
 					break;
 				}
-				i += r.substring(0, e.index), r = r.substring(e.index + e[0].length), e[0][0] === "\\" && e[1] ? i += "\\" + String(Number(e[1]) + t) : (i += e[0], e[0] === "(" && n++);
+				i += r.substring(0, e.index), r = r.substring(e.index + e[0].length), e[0][0] === "\\" && e[1] ? i += "\\" + String(Number(e[1]) + t) : (i += e[0], (e[0] === "(" || /^\(\?[<']/.test(e[0])) && n++);
 			}
 			return i;
 		}).map((e) => `(${e})`).join(t);
@@ -217,49 +217,24 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		});
 		let i = y("I", "a", "is", "so", "us", "to", "at", "if", "in", "it", "on", /[A-Za-z]+['](d|ve|re|ll|t|s|n)/, /[A-Za-z]+[-][a-z]+/, /[A-Za-z][a-z]{2,}/);
 		return r.contains.push({ begin: _(/[ ]+/, "(", i, /[.]?[:]?([.][ ]|[ ])/, "){3}") }), r;
-	}, L = I("//", "$"), R = I("/\\*", "\\*/"), z = I("#", "$"), B = {
-		scope: "number",
-		begin: D,
-		relevance: 0
-	}, ee = {
-		scope: "number",
-		begin: O,
-		relevance: 0
-	}, te = {
-		scope: "number",
-		begin: k,
-		relevance: 0
-	}, V = {
-		scope: "regexp",
-		begin: /\/(?=[^/\n]*\/)/,
-		end: /\/[gimuy]*/,
-		contains: [M, {
-			begin: /\[/,
-			end: /\]/,
-			relevance: 0,
-			contains: [M]
-		}]
-	}, ne = {
-		scope: "title",
-		begin: T,
-		relevance: 0
-	}, H = {
-		scope: "title",
-		begin: E,
-		relevance: 0
-	}, U = {
-		begin: "\\.\\s*" + E,
-		relevance: 0
-	}, W = /* @__PURE__ */ Object.freeze({
+	}, L = I("//", "$"), R = I("/\\*", "\\*/"), z = I("#", "$"), B = /*#__PURE__*/ Object.freeze({
 		__proto__: null,
 		APOS_STRING_MODE: N,
 		BACKSLASH_ESCAPE: M,
-		BINARY_NUMBER_MODE: te,
+		BINARY_NUMBER_MODE: {
+			scope: "number",
+			begin: k,
+			relevance: 0
+		},
 		BINARY_NUMBER_RE: k,
 		COMMENT: I,
 		C_BLOCK_COMMENT_MODE: R,
 		C_LINE_COMMENT_MODE: L,
-		C_NUMBER_MODE: ee,
+		C_NUMBER_MODE: {
+			scope: "number",
+			begin: O,
+			relevance: 0
+		},
 		C_NUMBER_RE: O,
 		END_SAME_AS_BEGIN: function(e) {
 			return Object.assign(e, {
@@ -274,40 +249,65 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		HASH_COMMENT_MODE: z,
 		IDENT_RE: T,
 		MATCH_NOTHING_RE: w,
-		METHOD_GUARD: U,
-		NUMBER_MODE: B,
+		METHOD_GUARD: {
+			begin: "\\.\\s*[a-zA-Z_]\\w*",
+			relevance: 0
+		},
+		NUMBER_MODE: {
+			scope: "number",
+			begin: D,
+			relevance: 0
+		},
 		NUMBER_RE: D,
 		PHRASAL_WORDS_MODE: F,
 		QUOTE_STRING_MODE: P,
-		REGEXP_MODE: V,
+		REGEXP_MODE: {
+			scope: "regexp",
+			begin: /\/(?=[^/\n]*\/)/,
+			end: /\/[gimuy]*/,
+			contains: [M, {
+				begin: /\[/,
+				end: /\]/,
+				relevance: 0,
+				contains: [M]
+			}]
+		},
 		RE_STARTERS_RE: A,
 		SHEBANG: j,
-		TITLE_MODE: ne,
+		TITLE_MODE: {
+			scope: "title",
+			begin: T,
+			relevance: 0
+		},
 		UNDERSCORE_IDENT_RE: E,
-		UNDERSCORE_TITLE_MODE: H
+		UNDERSCORE_TITLE_MODE: {
+			scope: "title",
+			begin: E,
+			relevance: 0
+		}
 	});
-	function G(e, t) {
+	function V(e, t) {
 		e.input[e.index - 1] === "." && t.ignoreMatch();
 	}
-	function re(e, t) {
+	function ee(e, t) {
 		e.className !== void 0 && (e.scope = e.className, delete e.className);
 	}
-	function ie(e, t) {
-		t && e.beginKeywords && (e.begin = "\\b(" + e.beginKeywords.split(" ").join("|") + ")(?!\\.)(?=\\b|\\s)", e.__beforeBegin = G, e.keywords = e.keywords || e.beginKeywords, delete e.beginKeywords, e.relevance === void 0 && (e.relevance = 0));
+	function H(e, t) {
+		t && e.beginKeywords && (e.begin = "\\b(" + e.beginKeywords.split(" ").join("|") + ")(?!\\.)(?=\\b|\\s)", e.__beforeBegin = V, e.keywords = e.keywords || e.beginKeywords, delete e.beginKeywords, e.relevance === void 0 && (e.relevance = 0));
 	}
-	function K(e, t) {
+	function te(e, t) {
 		Array.isArray(e.illegal) && (e.illegal = y(...e.illegal));
 	}
-	function ae(e, t) {
+	function ne(e, t) {
 		if (e.match) {
 			if (e.begin || e.end) throw Error("begin & end are not supported with match");
 			e.begin = e.match, delete e.match;
 		}
 	}
-	function oe(e, t) {
+	function U(e, t) {
 		e.relevance === void 0 && (e.relevance = 1);
 	}
-	var se = (e, t) => {
+	var W = (e, t) => {
 		if (!e.beforeMatch) return;
 		if (e.starts) throw Error("beforeMatch cannot be used with starts");
 		let n = Object.assign({}, e);
@@ -317,7 +317,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			relevance: 0,
 			contains: [Object.assign(n, { endsParent: !0 })]
 		}, e.relevance = 0, delete n.beforeMatch;
-	}, ce = [
+	}, G = [
 		"of",
 		"and",
 		"for",
@@ -329,58 +329,58 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		"parent",
 		"list",
 		"value"
-	], le = "keyword";
-	function q(e, t, n = le) {
+	], re = "keyword";
+	function K(e, t, n = re) {
 		let r = Object.create(null);
 		return typeof e == "string" ? i(n, e.split(" ")) : Array.isArray(e) ? i(n, e) : Object.keys(e).forEach(function(n) {
-			Object.assign(r, q(e[n], t, n));
+			Object.assign(r, K(e[n], t, n));
 		}), r;
 		function i(e, n) {
 			t && (n = n.map((e) => e.toLowerCase())), n.forEach(function(t) {
 				let n = t.split("|");
-				r[n[0]] = [e, ue(n[0], n[1])];
+				r[n[0]] = [e, q(n[0], n[1])];
 			});
 		}
 	}
-	function ue(e, t) {
-		return t ? Number(t) : +!de(e);
+	function q(e, t) {
+		return t ? Number(t) : +!ie(e);
 	}
-	function de(e) {
-		return ce.includes(e.toLowerCase());
+	function ie(e) {
+		return G.includes(e.toLowerCase());
 	}
-	var fe = {}, J = (e) => {
+	var ae = {}, J = (e) => {
 		console.error(e);
-	}, pe = (e, ...t) => {
+	}, oe = (e, ...t) => {
 		console.log(`WARN: ${e}`, ...t);
 	}, Y = (e, t) => {
-		fe[`${e}/${t}`] || (console.log(`Deprecated as of ${e}. ${t}`), fe[`${e}/${t}`] = !0);
+		ae[`${e}/${t}`] || (console.log(`Deprecated as of ${e}. ${t}`), ae[`${e}/${t}`] = !0);
 	}, X = /* @__PURE__ */ Error();
-	function me(e, t, { key: n }) {
+	function se(e, t, { key: n }) {
 		let r = 0, i = e[n], a = {}, o = {};
 		for (let e = 1; e <= t.length; e++) o[e + r] = i[e], a[e + r] = !0, r += b(t[e - 1]);
 		e[n] = o, e[n]._emit = a, e[n]._multi = !0;
 	}
-	function he(e) {
+	function ce(e) {
 		if (Array.isArray(e.begin)) {
 			if (e.skip || e.excludeBegin || e.returnBegin) throw J("skip, excludeBegin, returnBegin not compatible with beginScope: {}"), X;
 			if (typeof e.beginScope != "object" || e.beginScope === null) throw J("beginScope must be object"), X;
-			me(e, e.begin, { key: "beginScope" }), e.begin = C(e.begin, { joinWith: "" });
+			se(e, e.begin, { key: "beginScope" }), e.begin = C(e.begin, { joinWith: "" });
 		}
 	}
-	function ge(e) {
+	function le(e) {
 		if (Array.isArray(e.end)) {
 			if (e.skip || e.excludeEnd || e.returnEnd) throw J("skip, excludeEnd, returnEnd not compatible with endScope: {}"), X;
 			if (typeof e.endScope != "object" || e.endScope === null) throw J("endScope must be object"), X;
-			me(e, e.end, { key: "endScope" }), e.end = C(e.end, { joinWith: "" });
+			se(e, e.end, { key: "endScope" }), e.end = C(e.end, { joinWith: "" });
 		}
 	}
-	function _e(e) {
+	function ue(e) {
 		e.scope && typeof e.scope == "object" && e.scope !== null && (e.beginScope = e.scope, delete e.scope);
 	}
-	function ve(e) {
-		_e(e), typeof e.beginScope == "string" && (e.beginScope = { _wrap: e.beginScope }), typeof e.endScope == "string" && (e.endScope = { _wrap: e.endScope }), he(e), ge(e);
+	function de(e) {
+		ue(e), typeof e.beginScope == "string" && (e.beginScope = { _wrap: e.beginScope }), typeof e.endScope == "string" && (e.endScope = { _wrap: e.endScope }), ce(e), le(e);
 	}
-	function ye(e) {
+	function fe(e) {
 		function t(t, n) {
 			return new RegExp(p(t), "m" + (e.case_insensitive ? "i" : "") + (e.unicodeRegex ? "u" : "") + (n ? "g" : ""));
 		}
@@ -392,7 +392,9 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				t.position = this.position++, this.matchIndexes[this.matchAt] = t, this.regexes.push([t, e]), this.matchAt += b(e) + 1;
 			}
 			compile() {
-				this.regexes.length === 0 && (this.exec = () => null), this.matcherRe = t(C(this.regexes.map((e) => e[1]), { joinWith: "|" }), !0), this.lastIndex = 0;
+				this.regexes.length === 0 && (this.exec = () => null);
+				let e = this.regexes.map((e) => e[1]);
+				this.matcherRe = t(C(e, { joinWith: "|" }), !0), this.lastIndex = 0;
 			}
 			exec(e) {
 				this.matcherRe.lastIndex = this.lastIndex;
@@ -442,18 +444,18 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			let a = n;
 			if (n.isCompiled) return a;
 			[
-				re,
-				ae,
-				ve,
-				se
+				ee,
+				ne,
+				de,
+				W
 			].forEach((e) => e(n, r)), e.compilerExtensions.forEach((e) => e(n, r)), n.__beforeBegin = null, [
-				ie,
-				K,
-				oe
+				H,
+				te,
+				U
 			].forEach((e) => e(n, r)), n.isCompiled = !0;
 			let s = null;
-			return typeof n.keywords == "object" && n.keywords.$pattern && (n.keywords = Object.assign({}, n.keywords), s = n.keywords.$pattern, delete n.keywords.$pattern), s ||= /\w+/, n.keywords &&= q(n.keywords, e.case_insensitive), a.keywordPatternRe = t(s, !0), r && (n.begin ||= /\B|\b/, a.beginRe = t(a.begin), !n.end && !n.endsWithParent && (n.end = /\B|\b/), n.end && (a.endRe = t(a.end)), a.terminatorEnd = p(a.end) || "", n.endsWithParent && r.terminatorEnd && (a.terminatorEnd += (n.end ? "|" : "") + r.terminatorEnd)), n.illegal && (a.illegalRe = t(n.illegal)), n.contains ||= [], n.contains = [].concat(...n.contains.map(function(e) {
-				return xe(e === "self" ? n : e);
+			return typeof n.keywords == "object" && n.keywords.$pattern && (n.keywords = Object.assign({}, n.keywords), s = n.keywords.$pattern, delete n.keywords.$pattern), s ||= /\w+/, n.keywords &&= K(n.keywords, e.case_insensitive), a.keywordPatternRe = t(s, !0), r && (n.begin ||= /\B|\b/, a.beginRe = t(a.begin), !n.end && !n.endsWithParent && (n.end = /\B|\b/), n.end && (a.endRe = t(a.end)), a.terminatorEnd = p(a.end) || "", n.endsWithParent && r.terminatorEnd && (a.terminatorEnd += (n.end ? "|" : "") + r.terminatorEnd)), n.illegal && (a.illegalRe = t(n.illegal)), n.contains ||= [], n.contains = [].concat(...n.contains.map(function(e) {
+				return me(e === "self" ? n : e);
 			})), n.contains.forEach(function(e) {
 				o(e, a);
 			}), n.starts && o(n.starts, r), a.matcher = i(a), a;
@@ -461,19 +463,19 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		if (e.compilerExtensions ||= [], e.contains && e.contains.includes("self")) throw Error("ERR: contains `self` is not supported at the top-level of a language.  See documentation.");
 		return e.classNameAliases = a(e.classNameAliases || {}), o(e);
 	}
-	function be(e) {
-		return e ? e.endsWithParent || be(e.starts) : !1;
+	function pe(e) {
+		return e ? e.endsWithParent || pe(e.starts) : !1;
 	}
-	function xe(e) {
+	function me(e) {
 		return e.variants && !e.cachedVariants && (e.cachedVariants = e.variants.map(function(t) {
 			return a(e, { variants: null }, t);
-		})), e.cachedVariants ? e.cachedVariants : be(e) ? a(e, { starts: e.starts ? a(e.starts) : null }) : Object.isFrozen(e) ? a(e) : e;
+		})), e.cachedVariants ? e.cachedVariants : pe(e) ? a(e, { starts: e.starts ? a(e.starts) : null }) : Object.isFrozen(e) ? a(e) : e;
 	}
-	var Se = "11.11.1", Ce = class extends Error {
+	var he = "11.12.0", ge = class extends Error {
 		constructor(e, t) {
 			super(e), this.name = "HTMLInjectionError", this.html = t;
 		}
-	}, we = i, Te = a, Ee = Symbol("nomatch"), De = 7, Oe = function(e) {
+	}, _e = i, ve = a, ye = Symbol("nomatch"), be = 7, xe = function(e) {
 		let t = Object.create(null), i = Object.create(null), a = [], o = !0, s = "Could not find the language '{}', did you forget to load/include a language module?", c = {
 			disableAutodetect: !0,
 			name: "Plain text",
@@ -497,7 +499,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			let n = l.languageDetectRe.exec(t);
 			if (n) {
 				let t = N(n[1]);
-				return t || (pe(s.replace("{}", n[1])), pe("Falling back to no-highlight mode for this block.", e)), t ? n[1] : "no-highlight";
+				return t || (oe(s.replace("{}", n[1])), oe("Falling back to no-highlight mode for this block.", e)), t ? n[1] : "no-highlight";
 			}
 			return t.split(/\s+/).find((e) => u(e) || N(e));
 		}
@@ -530,7 +532,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					let r = D.case_insensitive ? t[0].toLowerCase() : t[0], i = u(A, r);
 					if (i) {
 						let [e, a] = i;
-						if (M.addText(n), n = "", c[r] = (c[r] || 0) + 1, c[r] <= De && (F += a), e.startsWith("_")) n += t[0];
+						if (M.addText(n), n = "", c[r] = (c[r] || 0) + 1, c[r] <= be && (F += a), e.startsWith("_")) n += t[0];
 						else {
 							let n = D.classNameAliases[e] || e;
 							m(t[0], n);
@@ -596,7 +598,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			}
 			function C(e) {
 				let t = e[0], r = n.substring(e.index), i = _(A, e, r);
-				if (!i) return Ee;
+				if (!i) return ye;
 				let a = A;
 				A.endScope && A.endScope._wrap ? (p(), m(t, A.endScope._wrap)) : A.endScope && A.endScope._multi ? (p(), h(A.endScope, e)) : a.skip ? P += t : (a.returnEnd || a.excludeEnd || (P += t), p(), a.excludeEnd && (P = t));
 				do
@@ -624,17 +626,18 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				if (r.type === "illegal" && !i) {
 					let e = /* @__PURE__ */ Error("Illegal lexeme \"" + a + "\" for mode \"" + (A.scope || "<unnamed>") + "\"");
 					throw e.mode = A, e;
-				} else if (r.type === "end") {
-					let e = C(r);
-					if (e !== Ee) return e;
 				}
-				if (r.type === "illegal" && a === "") return P += "\n", 1;
+				if (r.type === "end") {
+					let e = C(r);
+					if (e !== ye) return e;
+				}
+				if (r.type === "illegal" && a === "") return r.index === n.length || (P += "\n"), 1;
 				if (L > 1e5 && L > r.index * 3) throw /* @__PURE__ */ Error("potential infinite loop, way more iterations than matches");
 				return P += a, a.length;
 			}
 			let D = N(e);
 			if (!D) throw J(s.replace("{}", e)), Error("Unknown language: \"" + e + "\"");
-			let O = ye(D), k = "", A = a || O, j = {}, M = new l.__emitter(l);
+			let O = fe(D), k = "", A = a || O, j = {}, M = new l.__emitter(l);
 			w();
 			let P = "", F = 0, I = 0, L = 0, R = !1;
 			try {
@@ -660,7 +663,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			} catch (t) {
 				if (t.message && t.message.includes("Illegal")) return {
 					language: e,
-					value: we(n),
+					value: _e(n),
 					illegal: !0,
 					relevance: 0,
 					_illegalBy: {
@@ -674,7 +677,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				};
 				if (o) return {
 					language: e,
-					value: we(n),
+					value: _e(n),
 					illegal: !1,
 					relevance: 0,
 					errorRaised: t,
@@ -686,7 +689,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		}
 		function b(e) {
 			let t = {
-				value: we(e),
+				value: _e(e),
 				illegal: !1,
 				relevance: 0,
 				_top: c,
@@ -722,7 +725,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				console.log("Element previously highlighted. To highlight again, first unset `dataset.highlighted`.", e);
 				return;
 			}
-			if (e.children.length > 0 && (l.ignoreUnescapedHTML || (console.warn("One of your code blocks includes unescaped HTML. This is a potentially serious security risk."), console.warn("https://github.com/highlightjs/highlight.js/wiki/security"), console.warn("The element with unescaped HTML:"), console.warn(e)), l.throwUnescapedHTML)) throw new Ce("One of your code blocks includes unescaped HTML.", e.innerHTML);
+			if (e.children.length > 0 && (l.ignoreUnescapedHTML || (console.warn("One of your code blocks includes unescaped HTML. This is a potentially serious security risk."), console.warn("https://github.com/highlightjs/highlight.js/wiki/security"), console.warn("The element with unescaped HTML:"), console.warn(e)), l.throwUnescapedHTML)) throw new ge("One of your code blocks includes unescaped HTML.", e.innerHTML);
 			t = e;
 			let r = t.textContent, i = n ? p(r, {
 				language: n,
@@ -742,7 +745,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			});
 		}
 		function T(e) {
-			l = Te(l, e);
+			l = ve(l, e);
 		}
 		let E = () => {
 			k(), Y("10.6.0", "initHighlighting() deprecated.  Use highlightAll() now.");
@@ -770,7 +773,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				else throw e;
 				i = c;
 			}
-			i.name ||= n, t[n] = i, i.rawDefinition = r.bind(null, e), i.aliases && P(i.aliases, { languageName: n });
+			i.name || (i.name = n), t[n] = i, i.rawDefinition = r.bind(null, e), i.aliases && P(i.aliases, { languageName: n });
 		}
 		function j(e) {
 			delete t[e];
@@ -811,7 +814,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				e[n] && e[n](t);
 			});
 		}
-		function B(e) {
+		function V(e) {
 			return Y("10.7.0", "highlightBlock will be removed entirely in v12.0"), Y("10.7.0", "Please use highlightElement now."), w(e);
 		}
 		Object.assign(e, {
@@ -819,7 +822,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			highlightAuto: S,
 			highlightAll: k,
 			highlightElement: w,
-			highlightBlock: B,
+			highlightBlock: V,
 			configure: T,
 			initHighlighting: E,
 			initHighlightingOnLoad: D,
@@ -829,24 +832,24 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			getLanguage: N,
 			registerAliases: P,
 			autoDetection: F,
-			inherit: Te,
+			inherit: ve,
 			addPlugin: L,
 			removePlugin: R
 		}), e.debugMode = function() {
 			o = !1;
 		}, e.safeMode = function() {
 			o = !0;
-		}, e.versionString = Se, e.regex = {
+		}, e.versionString = he, e.regex = {
 			concat: _,
 			lookahead: m,
 			either: y,
 			optional: g,
 			anyNumberOfTimes: h
 		};
-		for (let e in W) typeof W[e] == "object" && n(W[e]);
-		return Object.assign(e, W), e;
-	}, Z = Oe({});
-	Z.newInstance = () => Oe({}), t.exports = Z, Z.HighlightJS = Z, Z.default = Z;
+		for (let e in B) typeof B[e] == "object" && n(B[e]);
+		return Object.assign(e, B), e;
+	}, Z = xe({});
+	Z.newInstance = () => xe({}), t.exports = Z, Z.HighlightJS = Z, Z.default = Z;
 })), u = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = "[A-Za-zА-Яа-яёЁ_][A-Za-zА-Яа-яёЁ_0-9]+", n = "далее возврат вызватьисключение выполнить для если и из или иначе иначеесли исключение каждого конецесли конецпопытки конеццикла не новый перейти перем по пока попытка прервать продолжить тогда цикл экспорт ", r = "null истина ложь неопределено", i = e.inherit(e.NUMBER_MODE), a = {
@@ -1147,12 +1150,10 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 	t.exports = n;
 })), m = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
-		let t = "\\d(_|\\d)*";
-		"" + t, t + "", t + "";
-		let n = "[A-Za-z](_?[A-Za-z0-9.])*", r = "[]\\{\\}%#'\"", i = e.COMMENT("--", "$"), a = {
+		let t = "[A-Za-z](_?[A-Za-z0-9.])*", n = "\\{\\}%#'\"", r = e.COMMENT("--", "$"), i = {
 			begin: "\\s+:\\s+",
 			end: "\\s*(:=|;|\\)|=>|$)",
-			illegal: r,
+			illegal: n,
 			contains: [
 				{
 					beginKeywords: "loop for declare others",
@@ -1164,7 +1165,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				},
 				{
 					className: "type",
-					begin: n,
+					begin: t,
 					endsParent: !0,
 					relevance: 0
 				}
@@ -1174,11 +1175,11 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			name: "Ada",
 			case_insensitive: !0,
 			keywords: {
-				keyword: /* @__PURE__ */ "abort.else.new.return.abs.elsif.not.reverse.abstract.end.accept.entry.select.access.exception.of.separate.aliased.exit.or.some.all.others.subtype.and.for.out.synchronized.array.function.overriding.at.tagged.generic.package.task.begin.goto.pragma.terminate.body.private.then.if.procedure.type.case.in.protected.constant.interface.is.raise.use.declare.range.delay.limited.record.when.delta.loop.rem.while.digits.renames.with.do.mod.requeue.xor".split("."),
+				keyword: /* @__PURE__ */ "abort.else.new.return.abs.elsif.not.reverse.abstract.end.accept.entry.select.access.exception.of.separate.aliased.exit.or.some.all.others.subtype.and.for.out.synchronized.array.function.overriding.at.tagged.generic.package.task.begin.goto.pragma.terminate.body.private.then.if.procedure.type.case.in.protected.constant.interface.is.raise.use.declare.range.delay.limited.record.when.delta.loop.rem.while.digits.renames.with.do.mod.requeue.xor.parallel".split("."),
 				literal: ["True", "False"]
 			},
 			contains: [
-				i,
+				r,
 				{
 					className: "string",
 					begin: /"/,
@@ -1199,7 +1200,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				},
 				{
 					className: "symbol",
-					begin: "'" + n
+					begin: "'" + t
 				},
 				{
 					className: "title",
@@ -1208,7 +1209,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					keywords: "package body",
 					excludeBegin: !0,
 					excludeEnd: !0,
-					illegal: r
+					illegal: n
 				},
 				{
 					begin: "(\\b(with|overriding)\\s+)?\\b(function|procedure)\\s+",
@@ -1216,16 +1217,16 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					keywords: "overriding function procedure with is renames return",
 					returnBegin: !0,
 					contains: [
-						i,
+						r,
 						{
 							className: "title",
 							begin: "(\\bwith\\s+)?\\b(function|procedure)\\s+",
 							end: "(\\(|\\s+|$)",
 							excludeBegin: !0,
 							excludeEnd: !0,
-							illegal: r
+							illegal: n
 						},
-						a,
+						i,
 						{
 							className: "type",
 							begin: "\\breturn\\s+",
@@ -1234,7 +1235,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 							excludeBegin: !0,
 							excludeEnd: !0,
 							endsParent: !0,
-							illegal: r
+							illegal: n
 						}
 					]
 				},
@@ -1244,9 +1245,9 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					end: "\\s+",
 					keywords: "type",
 					excludeBegin: !0,
-					illegal: r
+					illegal: n
 				},
-				a
+				i
 			]
 		};
 	}
@@ -1633,10 +1634,10 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 	t.exports = n;
 })), y = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
-		let t = e.regex, n = e.COMMENT("//", "$", { contains: [{ begin: /\\\n/ }] }), r = "decltype\\(auto\\)", i = "[a-zA-Z_]\\w*::", a = "(?!struct)(" + r + "|" + t.optional(i) + "[a-zA-Z_]\\w*" + t.optional("<[^<>]+>") + ")", o = {
+		let t = e.regex, n = e.COMMENT("//", "$", { contains: [{ begin: /\\\n/ }] }), r = "[a-zA-Z_]\\w*::", i = "(?!struct)(decltype\\(auto\\)|" + t.optional(r) + "[a-zA-Z_]\\w*" + t.optional("<[^<>]+>") + ")", a = {
 			className: "type",
 			begin: "\\b[a-z\\d_]*_t\\b"
-		}, s = {
+		}, o = {
 			className: "string",
 			variants: [
 				{
@@ -1651,15 +1652,30 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					illegal: "."
 				},
 				e.END_SAME_AS_BEGIN({
-					begin: /(?:u8?|U|L)?R"([^()\\ ]{0,16})\(/,
-					end: /\)([^()\\ ]{0,16})"/
+					begin: /(?:u8?|U|L)?R"([^()\\\s"]{0,16})\(/,
+					end: /\)([^()\\\s"]{0,16})"/
 				})
 			]
-		}, c = {
+		}, s = {
 			className: "number",
-			variants: [{ begin: "[+-]?(?:(?:[0-9](?:'?[0-9])*\\.(?:[0-9](?:'?[0-9])*)?|\\.[0-9](?:'?[0-9])*)(?:[Ee][+-]?[0-9](?:'?[0-9])*)?|[0-9](?:'?[0-9])*[Ee][+-]?[0-9](?:'?[0-9])*|0[Xx](?:[0-9A-Fa-f](?:'?[0-9A-Fa-f])*(?:\\.(?:[0-9A-Fa-f](?:'?[0-9A-Fa-f])*)?)?|\\.[0-9A-Fa-f](?:'?[0-9A-Fa-f])*)[Pp][+-]?[0-9](?:'?[0-9])*)(?:[Ff](?:16|32|64|128)?|(BF|bf)16|[Ll]|)" }, { begin: "[+-]?\\b(?:0[Bb][01](?:'?[01])*|0[Xx][0-9A-Fa-f](?:'?[0-9A-Fa-f])*|0(?:'?[0-7])*|[1-9](?:'?[0-9])*)(?:[Uu](?:LL?|ll?)|[Uu][Zz]?|(?:LL?|ll?)[Uu]?|[Zz][Uu]|)" }],
+			variants: [{ begin: "[+-]?(?:(?:\\b[0-9](?:'?[0-9])*\\.(?:[0-9](?:'?[0-9])*)?|\\.[0-9](?:'?[0-9])*)(?:[Ee][+-]?[0-9](?:'?[0-9])*)?|\\b[0-9](?:'?[0-9])*[Ee][+-]?[0-9](?:'?[0-9])*|\\b0[Xx](?:[0-9A-Fa-f](?:'?[0-9A-Fa-f])*(?:\\.(?:[0-9A-Fa-f](?:'?[0-9A-Fa-f])*)?)?|\\.[0-9A-Fa-f](?:'?[0-9A-Fa-f])*)[Pp][+-]?[0-9](?:'?[0-9])*)(?:[Ff](?:16|32|64|128)?|(BF|bf)16|[Ll]|)" }, { begin: "[+-]?\\b(?:0[Bb][01](?:'?[01])*|0[Xx][0-9A-Fa-f](?:'?[0-9A-Fa-f])*|0(?:'?[0-7])*|[1-9](?:'?[0-9])*)(?:[Uu](?:LL?|ll?)|[Uu][Zz]?|(?:LL?|ll?)[Uu]?|[Zz][Uu]|)" }],
 			relevance: 0
-		}, l = {
+		}, c = [{
+			scope: "meta",
+			begin: /#\s*include\b/,
+			end: /$/,
+			keywords: { keyword: "include" },
+			contains: [
+				{ begin: /\\\n/ },
+				o,
+				{
+					scope: "string",
+					begin: /<.*?>/
+				},
+				n,
+				e.C_BLOCK_COMMENT_MODE
+			]
+		}, {
 			className: "meta",
 			begin: /#\s*[a-z]+\b/,
 			end: /$/,
@@ -1669,19 +1685,15 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					begin: /\\\n/,
 					relevance: 0
 				},
-				e.inherit(s, { className: "string" }),
-				{
-					className: "string",
-					begin: /<.*?>/
-				},
+				e.inherit(o, { className: "string" }),
 				n,
 				e.C_BLOCK_COMMENT_MODE
 			]
-		}, u = {
+		}], l = {
 			className: "title",
-			begin: t.optional(i) + e.IDENT_RE,
+			begin: t.optional(r) + e.IDENT_RE,
 			relevance: 0
-		}, d = t.optional(i) + e.IDENT_RE + "\\s*\\(", f = /* @__PURE__ */ "alignas.alignof.and.and_eq.asm.atomic_cancel.atomic_commit.atomic_noexcept.auto.bitand.bitor.break.case.catch.class.co_await.co_return.co_yield.compl.concept.const_cast|10.consteval.constexpr.constinit.continue.decltype.default.delete.do.dynamic_cast|10.else.enum.explicit.export.extern.false.final.for.friend.goto.if.import.inline.module.mutable.namespace.new.noexcept.not.not_eq.nullptr.operator.or.or_eq.override.private.protected.public.reflexpr.register.reinterpret_cast|10.requires.return.sizeof.static_assert.static_cast|10.struct.switch.synchronized.template.this.thread_local.throw.transaction_safe.transaction_safe_dynamic.true.try.typedef.typeid.typename.union.using.virtual.volatile.while.xor.xor_eq".split("."), p = [
+		}, u = t.optional(r) + e.IDENT_RE + "\\s*\\(", d = /* @__PURE__ */ "alignas.alignof.and.and_eq.asm.atomic_cancel.atomic_commit.atomic_noexcept.auto.bitand.bitor.break.case.catch.class.co_await.co_return.co_yield.compl.concept.const_cast|10.consteval.constexpr.constinit.continue.decltype.default.delete.do.dynamic_cast|10.else.enum.explicit.export.extern.false.final.for.friend.goto.if.import.inline.module.mutable.namespace.new.noexcept.not.not_eq.nullptr.operator.or.or_eq.override.private.protected.public.reflexpr.register.reinterpret_cast|10.requires.return.sizeof.static_assert.static_cast|10.struct.switch.synchronized.template.this.thread_local.throw.transaction_safe.transaction_safe_dynamic.true.try.typedef.typeid.typename.union.using.virtual.volatile.while.xor.xor_eq".split("."), f = [
 			"bool",
 			"char",
 			"char16_t",
@@ -1698,9 +1710,9 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			"signed",
 			"const",
 			"static"
-		], m = /* @__PURE__ */ "any.auto_ptr.barrier.binary_semaphore.bitset.complex.condition_variable.condition_variable_any.counting_semaphore.deque.false_type.flat_map.flat_set.future.imaginary.initializer_list.istringstream.jthread.latch.lock_guard.multimap.multiset.mutex.optional.ostringstream.packaged_task.pair.promise.priority_queue.queue.recursive_mutex.recursive_timed_mutex.scoped_lock.set.shared_future.shared_lock.shared_mutex.shared_timed_mutex.shared_ptr.stack.string_view.stringstream.timed_mutex.thread.true_type.tuple.unique_lock.unique_ptr.unordered_map.unordered_multimap.unordered_multiset.unordered_set.variant.vector.weak_ptr.wstring.wstring_view".split("."), h = /* @__PURE__ */ "abort.abs.acos.apply.as_const.asin.atan.atan2.calloc.ceil.cerr.cin.clog.cos.cosh.cout.declval.endl.exchange.exit.exp.fabs.floor.fmod.forward.fprintf.fputs.free.frexp.fscanf.future.invoke.isalnum.isalpha.iscntrl.isdigit.isgraph.islower.isprint.ispunct.isspace.isupper.isxdigit.labs.launder.ldexp.log.log10.make_pair.make_shared.make_shared_for_overwrite.make_tuple.make_unique.malloc.memchr.memcmp.memcpy.memset.modf.move.pow.printf.putchar.puts.realloc.scanf.sin.sinh.snprintf.sprintf.sqrt.sscanf.std.stderr.stdin.stdout.strcat.strchr.strcmp.strcpy.strcspn.strlen.strncat.strncmp.strncpy.strpbrk.strrchr.strspn.strstr.swap.tan.tanh.terminate.to_underlying.tolower.toupper.vfprintf.visit.vprintf.vsprintf".split("."), g = {
-			type: p,
-			keyword: f,
+		], p = /* @__PURE__ */ "any.auto_ptr.barrier.binary_semaphore.bitset.complex.condition_variable.condition_variable_any.counting_semaphore.deque.false_type.flat_map.flat_set.future.imaginary.initializer_list.istringstream.jthread.latch.lock_guard.multimap.multiset.mutex.optional.ostringstream.packaged_task.pair.promise.priority_queue.queue.recursive_mutex.recursive_timed_mutex.scoped_lock.set.shared_future.shared_lock.shared_mutex.shared_timed_mutex.shared_ptr.stack.string_view.stringstream.timed_mutex.thread.true_type.tuple.unique_lock.unique_ptr.unordered_map.unordered_multimap.unordered_multiset.unordered_set.variant.vector.weak_ptr.wstring.wstring_view".split("."), m = /* @__PURE__ */ "abort.abs.acos.apply.as_const.asin.atan.atan2.calloc.ceil.cerr.cin.clog.cos.cosh.cout.declval.endl.exchange.exit.exp.fabs.floor.fmod.forward.fprintf.fputs.free.frexp.fscanf.future.invoke.isalnum.isalpha.iscntrl.isdigit.isgraph.islower.isprint.ispunct.isspace.isupper.isxdigit.labs.launder.ldexp.log.log10.make_pair.make_shared.make_shared_for_overwrite.make_tuple.make_unique.malloc.memchr.memcmp.memcpy.memset.modf.move.pow.printf.putchar.puts.realloc.scanf.sin.sinh.snprintf.sprintf.sqrt.sscanf.std.stderr.stdin.stdout.strcat.strchr.strcmp.strcpy.strcspn.strlen.strncat.strncmp.strncpy.strpbrk.strrchr.strspn.strstr.swap.tan.tanh.terminate.to_underlying.tolower.toupper.vfprintf.visit.vprintf.vsprintf".split("."), h = {
+			type: f,
+			keyword: d,
 			literal: [
 				"NULL",
 				"false",
@@ -1709,21 +1721,21 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				"true"
 			],
 			built_in: ["_Pragma"],
-			_type_hints: m
-		}, _ = {
+			_type_hints: p
+		}, g = {
 			className: "function.dispatch",
 			relevance: 0,
-			keywords: { _hint: h },
-			begin: t.concat(/\b/, /(?!decltype)/, /(?!if)/, /(?!for)/, /(?!switch)/, /(?!while)/, e.IDENT_RE, t.lookahead(/(<[^<>]+>|)\s*\(/))
-		}, v = [
-			_,
-			l,
-			o,
+			keywords: { _hint: m },
+			begin: t.concat(/\b/, `(?!${d.join("|")})`, e.IDENT_RE, t.lookahead(/(<[^<>]+>|)\s*\(/))
+		}, _ = [
+			g,
+			...c,
+			a,
 			n,
 			e.C_BLOCK_COMMENT_MODE,
-			c,
-			s
-		], y = {
+			s,
+			o
+		], v = {
 			variants: [
 				{
 					begin: /=/,
@@ -1738,33 +1750,33 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					end: /;/
 				}
 			],
-			keywords: g,
-			contains: v.concat([{
+			keywords: h,
+			contains: _.concat([{
 				begin: /\(/,
 				end: /\)/,
-				keywords: g,
-				contains: v.concat(["self"]),
+				keywords: h,
+				contains: _.concat(["self"]),
 				relevance: 0
 			}]),
 			relevance: 0
-		}, b = {
+		}, y = {
 			className: "function",
-			begin: "(" + a + "[\\*&\\s]+)+" + d,
+			begin: "(" + i + "[\\*&\\s]+){1,12}" + u,
 			returnBegin: !0,
 			end: /[{;=]/,
 			excludeEnd: !0,
-			keywords: g,
+			keywords: h,
 			illegal: /[^\w\s\*&:<>.]/,
 			contains: [
 				{
-					begin: r,
-					keywords: g,
+					begin: "decltype\\(auto\\)",
+					keywords: h,
 					relevance: 0
 				},
 				{
-					begin: d,
+					begin: u,
 					returnBegin: !0,
-					contains: [u],
+					contains: [l],
 					relevance: 0
 				},
 				{
@@ -1774,7 +1786,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				{
 					begin: /:/,
 					endsWithParent: !0,
-					contains: [s, c]
+					contains: [o, s]
 				},
 				{
 					relevance: 0,
@@ -1784,34 +1796,34 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					className: "params",
 					begin: /\(/,
 					end: /\)/,
-					keywords: g,
+					keywords: h,
 					relevance: 0,
 					contains: [
 						n,
 						e.C_BLOCK_COMMENT_MODE,
-						s,
-						c,
 						o,
+						s,
+						a,
 						{
 							begin: /\(/,
 							end: /\)/,
-							keywords: g,
+							keywords: h,
 							relevance: 0,
 							contains: [
 								"self",
 								n,
 								e.C_BLOCK_COMMENT_MODE,
+								o,
 								s,
-								c,
-								o
+								a
 							]
 						}
 					]
 				},
-				o,
+				a,
 				n,
 				e.C_BLOCK_COMMENT_MODE,
-				l
+				...c
 			]
 		};
 		return {
@@ -1825,20 +1837,20 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				"hxx",
 				"cxx"
 			],
-			keywords: g,
+			keywords: h,
 			illegal: "</",
 			classNameAliases: { "function.dispatch": "built_in" },
-			contains: [].concat(y, b, _, v, [
-				l,
+			contains: [].concat(v, y, g, _, [
+				...c,
 				{
 					begin: "\\b(deque|list|queue|priority_queue|pair|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array|tuple|optional|variant|function|flat_map|flat_set)\\s*<(?!<)",
 					end: ">",
-					keywords: g,
-					contains: ["self", o]
+					keywords: h,
+					contains: ["self", a]
 				},
 				{
 					begin: e.IDENT_RE + "::",
-					keywords: g
+					keywords: h
 				},
 				{
 					match: [
@@ -2066,7 +2078,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					starts: {
 						end: /<\/style>/,
 						returnEnd: !0,
-						subLanguage: ["css", "xml"]
+						subLanguage: "css"
 					}
 				},
 				{
@@ -2078,11 +2090,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					starts: {
 						end: /<\/script>/,
 						returnEnd: !0,
-						subLanguage: [
-							"javascript",
-							"handlebars",
-							"xml"
-						]
+						subLanguage: "javascript"
 					}
 				},
 				{
@@ -3020,10 +3028,10 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 	t.exports = n;
 })), N = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
-		let t = e.regex, n = e.COMMENT("//", "$", { contains: [{ begin: /\\\n/ }] }), r = "decltype\\(auto\\)", i = "[a-zA-Z_]\\w*::", a = "(" + r + "|" + t.optional(i) + "[a-zA-Z_]\\w*" + t.optional("<[^<>]+>") + ")", o = {
+		let t = e.regex, n = e.COMMENT("//", "$", { contains: [{ begin: /\\\n/ }] }), r = "[a-zA-Z_]\\w*::", i = "(decltype\\(auto\\)|" + t.optional(r) + "[a-zA-Z_]\\w*" + t.optional("<[^<>]+>") + ")", a = {
 			className: "type",
-			variants: [{ begin: "\\b[a-z\\d_]*_t\\b" }, { match: /\batomic_[a-z]{3,6}\b/ }]
-		}, s = {
+			variants: [{ begin: "\\b[a-z\\d_]*_t\\b" }, { match: t.concat(/\batomic_/, t.either("bool", "char", "schar", "uchar", "short", "ushort", "int", "uint", "long", "ulong", "llong", "ullong", "char16_t", "char32_t", "wchar_t", "int_least8_t", "uint_least8_t", "int_least16_t", "uint_least16_t", "int_least32_t", "uint_least32_t", "int_least64_t", "uint_least64_t", "int_fast8_t", "uint_fast8_t", "int_fast16_t", "uint_fast16_t", "int_fast32_t", "uint_fast32_t", "int_fast64_t", "uint_fast64_t", "intptr_t", "uintptr_t", "size_t", "ptrdiff_t", "intmax_t", "uintmax_t"), /\b/) }]
+		}, o = {
 			className: "string",
 			variants: [
 				{
@@ -3038,11 +3046,11 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					illegal: "."
 				},
 				e.END_SAME_AS_BEGIN({
-					begin: /(?:u8?|U|L)?R"([^()\\ ]{0,16})\(/,
-					end: /\)([^()\\ ]{0,16})"/
+					begin: /(?:u8?|U|L)?R"([^()\\\s"]{0,16})\(/,
+					end: /\)([^()\\\s"]{0,16})"/
 				})
 			]
-		}, c = {
+		}, s = {
 			className: "number",
 			variants: [
 				{ match: /\b(0b[01']+)/ },
@@ -3051,6 +3059,21 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				{ match: /(-?)\b\d+(?:'\d+)*(?:\.\d*(?:'\d*)*)?(?:[eE][-+]?\d+)?/ }
 			],
 			relevance: 0
+		}, c = {
+			scope: "meta",
+			begin: /#\s*include\b/,
+			end: /$/,
+			keywords: { keyword: "include" },
+			contains: [
+				{ begin: /\\\n/ },
+				o,
+				{
+					scope: "string",
+					begin: /<.*?>/
+				},
+				n,
+				e.C_BLOCK_COMMENT_MODE
+			]
 		}, l = {
 			className: "meta",
 			begin: /#\s*[a-z]+\b/,
@@ -3061,31 +3084,27 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					begin: /\\\n/,
 					relevance: 0
 				},
-				e.inherit(s, { className: "string" }),
-				{
-					className: "string",
-					begin: /<.*?>/
-				},
+				e.inherit(o, { className: "string" }),
 				n,
 				e.C_BLOCK_COMMENT_MODE
 			]
-		}, u = {
+		}, u = [c, l], d = {
 			className: "title",
-			begin: t.optional(i) + e.IDENT_RE,
+			begin: t.optional(r) + e.IDENT_RE,
 			relevance: 0
-		}, d = t.optional(i) + e.IDENT_RE + "\\s*\\(", f = {
+		}, f = t.optional(r) + e.IDENT_RE + "\\s*\\(", p = {
 			keyword: /* @__PURE__ */ "asm.auto.break.case.continue.default.do.else.enum.extern.for.fortran.goto.if.inline.register.restrict.return.sizeof.typeof.typeof_unqual.struct.switch.typedef.union.volatile.while._Alignas._Alignof._Atomic._Generic._Noreturn._Static_assert._Thread_local.alignas.alignof.noreturn.static_assert.thread_local._Pragma".split("."),
 			type: /* @__PURE__ */ "float.double.signed.unsigned.int.short.long.char.void._Bool._BitInt._Complex._Imaginary._Decimal32._Decimal64._Decimal96._Decimal128._Decimal64x._Decimal128x._Float16._Float32._Float64._Float128._Float32x._Float64x._Float128x.const.static.constexpr.complex.bool.imaginary".split("."),
 			literal: "true false NULL",
 			built_in: "std string wstring cin cout cerr clog stdin stdout stderr stringstream istringstream ostringstream auto_ptr deque list queue stack vector map set pair bitset multiset multimap unordered_set unordered_map unordered_multiset unordered_multimap priority_queue make_pair array shared_ptr abort terminate abs acos asin atan2 atan calloc ceil cosh cos exit exp fabs floor fmod fprintf fputs free frexp fscanf future isalnum isalpha iscntrl isdigit isgraph islower isprint ispunct isspace isupper isxdigit tolower toupper labs ldexp log10 log malloc realloc memchr memcmp memcpy memset modf pow printf putchar puts scanf sinh sin snprintf sprintf sqrt sscanf strcat strchr strcmp strcpy strcspn strlen strncat strncmp strncpy strpbrk strrchr strspn strstr tanh tan vfprintf vprintf vsprintf endl initializer_list unique_ptr"
-		}, p = [
-			l,
-			o,
+		}, m = [
+			...u,
+			a,
 			n,
 			e.C_BLOCK_COMMENT_MODE,
-			c,
-			s
-		], m = {
+			s,
+			o
+		], h = {
 			variants: [
 				{
 					begin: /=/,
@@ -3100,32 +3119,32 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					end: /;/
 				}
 			],
-			keywords: f,
-			contains: p.concat([{
+			keywords: p,
+			contains: m.concat([{
 				begin: /\(/,
 				end: /\)/,
-				keywords: f,
-				contains: p.concat(["self"]),
+				keywords: p,
+				contains: m.concat(["self"]),
 				relevance: 0
 			}]),
 			relevance: 0
-		}, h = {
-			begin: "(" + a + "[\\*&\\s]+)+" + d,
+		}, g = {
+			begin: "(" + i + "[\\*&\\s]+){1,12}" + f,
 			returnBegin: !0,
 			end: /[{;=]/,
 			excludeEnd: !0,
-			keywords: f,
+			keywords: p,
 			illegal: /[^\w\s\*&:<>.]/,
 			contains: [
 				{
-					begin: r,
-					keywords: f,
+					begin: "decltype\\(auto\\)",
+					keywords: p,
 					relevance: 0
 				},
 				{
-					begin: d,
+					begin: f,
 					returnBegin: !0,
-					contains: [e.inherit(u, { className: "title.function" })],
+					contains: [e.inherit(d, { className: "title.function" })],
 					relevance: 0
 				},
 				{
@@ -3136,47 +3155,47 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					className: "params",
 					begin: /\(/,
 					end: /\)/,
-					keywords: f,
+					keywords: p,
 					relevance: 0,
 					contains: [
 						n,
 						e.C_BLOCK_COMMENT_MODE,
-						s,
-						c,
 						o,
+						s,
+						a,
 						{
 							begin: /\(/,
 							end: /\)/,
-							keywords: f,
+							keywords: p,
 							relevance: 0,
 							contains: [
 								"self",
 								n,
 								e.C_BLOCK_COMMENT_MODE,
+								o,
 								s,
-								c,
-								o
+								a
 							]
 						}
 					]
 				},
-				o,
+				a,
 				n,
 				e.C_BLOCK_COMMENT_MODE,
-				l
+				...u
 			]
 		};
 		return {
 			name: "C",
 			aliases: ["h"],
-			keywords: f,
+			keywords: p,
 			disableAutodetect: !0,
 			illegal: "</",
-			contains: [].concat(m, h, p, [
-				l,
+			contains: [].concat(h, g, m, [
+				...u,
 				{
 					begin: e.IDENT_RE + "::",
-					keywords: f
+					keywords: p
 				},
 				{
 					className: "class",
@@ -3187,8 +3206,8 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			]),
 			exports: {
 				preprocessor: l,
-				strings: s,
-				keywords: f
+				strings: o,
+				keywords: p
 			}
 		};
 	}
@@ -3459,13 +3478,13 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 	t.exports = n;
 })), R = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
-		let t = "[#]?[a-zA-Z_\\-!.?+*=<>&'][a-zA-Z_\\-!.?+*=<>&'0-9/;:$#]*", n = "def defonce defprotocol defstruct defmulti defmethod defn- defn defmacro deftype defrecord", r = {
-			$pattern: t,
-			built_in: n + " cond apply if-not if-let if not not= =|0 <|0 >|0 <=|0 >=|0 ==|0 +|0 /|0 *|0 -|0 rem quot neg? pos? delay? symbol? keyword? true? false? integer? empty? coll? list? set? ifn? fn? associative? sequential? sorted? counted? reversible? number? decimal? class? distinct? isa? float? rational? reduced? ratio? odd? even? char? seq? vector? string? map? nil? contains? zero? instance? not-every? not-any? libspec? -> ->> .. . inc compare do dotimes mapcat take remove take-while drop letfn drop-last take-last drop-while while intern condp case reduced cycle split-at split-with repeat replicate iterate range merge zipmap declare line-seq sort comparator sort-by dorun doall nthnext nthrest partition eval doseq await await-for let agent atom send send-off release-pending-sends add-watch mapv filterv remove-watch agent-error restart-agent set-error-handler error-handler set-error-mode! error-mode shutdown-agents quote var fn loop recur throw try monitor-enter monitor-exit macroexpand macroexpand-1 for dosync and or when when-not when-let comp juxt partial sequence memoize constantly complement identity assert peek pop doto proxy first rest cons cast coll last butlast sigs reify second ffirst fnext nfirst nnext meta with-meta ns in-ns create-ns import refer keys select-keys vals key val rseq name namespace promise into transient persistent! conj! assoc! dissoc! pop! disj! use class type num float double short byte boolean bigint biginteger bigdec print-method print-dup throw-if printf format load compile get-in update-in pr pr-on newline flush read slurp read-line subvec with-open memfn time re-find re-groups rand-int rand mod locking assert-valid-fdecl alias resolve ref deref refset swap! reset! set-validator! compare-and-set! alter-meta! reset-meta! commute get-validator alter ref-set ref-history-count ref-min-history ref-max-history ensure sync io! new next conj set! to-array future future-call into-array aset gen-class reduce map filter find empty hash-map hash-set sorted-map sorted-map-by sorted-set sorted-set-by vec vector seq flatten reverse assoc dissoc list disj get union difference intersection extend extend-type extend-protocol int nth delay count concat chunk chunk-buffer chunk-append chunk-first chunk-rest max min dec unchecked-inc-int unchecked-inc unchecked-dec-inc unchecked-dec unchecked-negate unchecked-add-int unchecked-add unchecked-subtract-int unchecked-subtract chunk-next chunk-cons chunked-seq? prn vary-meta lazy-seq spread list* str find-keyword keyword symbol gensym force rationalize"
-		}, i = {
-			begin: t,
-			relevance: 0
+		let t = "a-zA-Z_\\-!.?+*=<>&'", n = "[#]?[" + t + "][" + t + "0-9/;:$#]*", r = "def defonce defprotocol defstruct defmulti defmethod defn- defn defmacro deftype defrecord", i = {
+			$pattern: n,
+			built_in: r + " " + "cond apply if-not if-let if not not= =|0 <|0 >|0 <=|0 >=|0 ==|0 +|0 /|0 *|0 -|0 rem " + "quot neg? pos? delay? symbol? keyword? true? false? integer? empty? coll? list? " + "set? ifn? fn? associative? sequential? sorted? counted? reversible? number? decimal? " + "class? distinct? isa? float? rational? reduced? ratio? odd? even? char? seq? vector? " + "string? map? nil? contains? zero? instance? not-every? not-any? libspec? -> ->> .. . " + "inc compare do dotimes mapcat take remove take-while drop letfn drop-last take-last " + "drop-while while intern condp case reduced cycle split-at split-with repeat replicate " + "iterate range merge zipmap declare line-seq sort comparator sort-by dorun doall nthnext " + "nthrest partition eval doseq await await-for let agent atom send send-off release-pending-sends " + "add-watch mapv filterv remove-watch agent-error restart-agent set-error-handler error-handler " + "set-error-mode! error-mode shutdown-agents quote var fn loop recur throw try monitor-enter " + "monitor-exit macroexpand macroexpand-1 for dosync and or " + "when when-not when-let comp juxt partial sequence memoize constantly complement identity assert " + "peek pop doto proxy first rest cons cast coll last butlast " + "sigs reify second ffirst fnext nfirst nnext meta with-meta ns in-ns create-ns import " + "refer keys select-keys vals key val rseq name namespace promise into transient persistent! conj! " + "assoc! dissoc! pop! disj! use class type num float double short byte boolean bigint biginteger " + "bigdec print-method print-dup throw-if printf format load compile get-in update-in pr pr-on newline " + "flush read slurp read-line subvec with-open memfn time re-find re-groups rand-int rand mod locking " + "assert-valid-fdecl alias resolve ref deref refset swap! reset! set-validator! compare-and-set! alter-meta! " + "reset-meta! commute get-validator alter ref-set ref-history-count ref-min-history ref-max-history ensure sync io! " + "new next conj set! to-array future future-call into-array aset gen-class reduce map filter find empty " + "hash-map hash-set sorted-map sorted-map-by sorted-set sorted-set-by vec vector seq flatten reverse assoc dissoc list " + "disj get union difference intersection extend extend-type extend-protocol int nth delay count concat chunk chunk-buffer " + "chunk-append chunk-first chunk-rest max min dec unchecked-inc-int unchecked-inc unchecked-dec-inc unchecked-dec unchecked-negate " + "unchecked-add-int unchecked-add unchecked-subtract-int unchecked-subtract chunk-next chunk-cons chunked-seq? prn vary-meta " + "lazy-seq spread list* str find-keyword keyword symbol gensym force rationalize"
 		}, a = {
+			begin: n,
+			relevance: 0
+		}, o = {
 			scope: "number",
 			relevance: 0,
 			variants: [
@@ -3476,7 +3495,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				{ match: /[-+]?[0-9]+((\.[0-9]*([eE][+-]?[0-9]+)?M?)|([eE][+-]?[0-9]+M?|M))/ },
 				{ match: /[-+]?([1-9][0-9]*|0)N?/ }
 			]
-		}, o = {
+		}, s = {
 			scope: "character",
 			variants: [
 				{ match: /\\o[0-3]?[0-7]{1,2}/ },
@@ -3487,83 +3506,83 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					relevance: 0
 				}
 			]
-		}, s = {
+		}, c = {
 			scope: "regex",
 			begin: /#"/,
 			end: /"/,
 			contains: [e.BACKSLASH_ESCAPE]
-		}, c = e.inherit(e.QUOTE_STRING_MODE, { illegal: null }), l = {
+		}, l = e.inherit(e.QUOTE_STRING_MODE, { illegal: null }), u = {
 			scope: "punctuation",
 			match: /,/,
 			relevance: 0
-		}, u = e.COMMENT(";", "$", { relevance: 0 }), d = {
+		}, d = e.COMMENT(";", "$", { relevance: 0 }), f = {
 			className: "literal",
 			begin: /\b(true|false|nil)\b/
-		}, f = {
-			begin: "\\[|(#::?" + t + ")?\\{",
+		}, p = {
+			begin: "\\[|(#::?" + n + ")?\\{",
 			end: "[\\]\\}]",
 			relevance: 0
-		}, p = {
-			className: "symbol",
-			begin: "[:]{1,2}" + t
 		}, m = {
+			className: "symbol",
+			begin: "[:]{1,2}" + n
+		}, h = {
 			begin: "\\(",
 			end: "\\)"
-		}, h = {
+		}, g = {
 			endsWithParent: !0,
 			relevance: 0
-		}, g = {
-			keywords: r,
+		}, _ = {
+			keywords: i,
 			className: "name",
-			begin: t,
+			begin: n,
 			relevance: 0,
-			starts: h
-		}, _ = [
-			l,
-			m,
-			o,
+			starts: g
+		}, v = [
+			u,
+			h,
 			s,
 			c,
-			u,
-			p,
-			f,
-			a,
+			l,
 			d,
-			i
+			m,
+			p,
+			o,
+			f,
+			a
 		];
-		return m.contains = [
+		return h.contains = [
 			{
-				beginKeywords: n,
+				beginKeywords: r,
 				keywords: {
-					$pattern: t,
-					keyword: n
+					$pattern: n,
+					keyword: r
 				},
 				end: "(\\[|#|\\d|\"|:|\\{|\\)|\\(|$)",
 				contains: [{
 					className: "title",
-					begin: t,
+					begin: n,
 					relevance: 0,
 					excludeEnd: !0,
 					endsParent: !0
-				}].concat(_)
+				}].concat(v)
 			},
-			g,
-			h
-		], h.contains = _, f.contains = _, {
+			_,
+			g
+		], g.contains = v, p.contains = v, {
 			name: "Clojure",
 			aliases: ["clj", "edn"],
 			illegal: /\S/,
 			contains: [
-				l,
-				m,
-				o,
+				u,
+				h,
 				s,
 				c,
-				u,
+				l,
+				d,
+				m,
 				p,
-				f,
-				a,
-				d
+				o,
+				f
 			]
 		};
 	}
@@ -3589,7 +3608,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			name: "CMake",
 			aliases: ["cmake.in"],
 			case_insensitive: !0,
-			keywords: { keyword: "break cmake_host_system_information cmake_minimum_required cmake_parse_arguments cmake_policy configure_file continue elseif else endforeach endfunction endif endmacro endwhile execute_process file find_file find_library find_package find_path find_program foreach function get_cmake_property get_directory_property get_filename_component get_property if include include_guard list macro mark_as_advanced math message option return separate_arguments set_directory_properties set_property set site_name string unset variable_watch while add_compile_definitions add_compile_options add_custom_command add_custom_target add_definitions add_dependencies add_executable add_library add_link_options add_subdirectory add_test aux_source_directory build_command create_test_sourcelist define_property enable_language enable_testing export fltk_wrap_ui get_source_file_property get_target_property get_test_property include_directories include_external_msproject include_regular_expression install link_directories link_libraries load_cache project qt_wrap_cpp qt_wrap_ui remove_definitions set_source_files_properties set_target_properties set_tests_properties source_group target_compile_definitions target_compile_features target_compile_options target_include_directories target_link_directories target_link_libraries target_link_options target_sources try_compile try_run ctest_build ctest_configure ctest_coverage ctest_empty_binary_directory ctest_memcheck ctest_read_custom_files ctest_run_script ctest_sleep ctest_start ctest_submit ctest_test ctest_update ctest_upload build_name exec_program export_library_dependencies install_files install_programs install_targets load_command make_directory output_required_files remove subdir_depends subdirs use_mangled_mesa utility_source variable_requires write_file qt5_use_modules qt5_use_package qt5_wrap_cpp on off true false and or not command policy target test exists is_newer_than is_directory is_symlink is_absolute matches less greater equal less_equal greater_equal strless strgreater strequal strless_equal strgreater_equal version_less version_greater version_equal version_less_equal version_greater_equal in_list defined" },
+			keywords: { keyword: "block break cmake_host_system_information cmake_minimum_required cmake_parse_arguments cmake_policy configure_file continue elseif else endblock endforeach endfunction endif endmacro endwhile execute_process file find_file find_library find_package find_path find_program foreach function get_cmake_property get_directory_property get_filename_component get_property if include include_guard list macro mark_as_advanced math message option return separate_arguments set_directory_properties set_property set site_name string unset variable_watch while add_compile_definitions add_compile_options add_custom_command add_custom_target add_definitions add_dependencies add_executable add_library add_link_options add_subdirectory add_test aux_source_directory build_command create_test_sourcelist define_property enable_language enable_testing export fltk_wrap_ui get_source_file_property get_target_property get_test_property include_directories include_external_msproject include_regular_expression install link_directories link_libraries load_cache project qt_wrap_cpp qt_wrap_ui remove_definitions set_source_files_properties set_target_properties set_tests_properties source_group target_compile_definitions target_compile_features target_compile_options target_include_directories target_link_directories target_link_libraries target_link_options target_sources try_compile try_run ctest_build ctest_configure ctest_coverage ctest_empty_binary_directory ctest_memcheck ctest_read_custom_files ctest_run_script ctest_sleep ctest_start ctest_submit ctest_test ctest_update ctest_upload build_name exec_program export_library_dependencies install_files install_programs install_targets load_command make_directory output_required_files remove subdir_depends subdirs use_mangled_mesa utility_source variable_requires write_file qt5_use_modules qt5_use_package qt5_wrap_cpp on off true false and or not command policy target test exists is_newer_than is_directory is_symlink is_absolute matches less greater equal less_equal greater_equal strless strgreater strequal strless_equal strgreater_equal version_less version_greater version_equal version_less_equal version_greater_equal in_list defined" },
 			contains: [
 				{
 					className: "variable",
@@ -3599,12 +3618,16 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				e.COMMENT(/#\[\[/, /]]/),
 				e.HASH_COMMENT_MODE,
 				e.QUOTE_STRING_MODE,
-				e.NUMBER_MODE
+				{
+					scope: "number",
+					begin: /\b\d+(\.\d+)?\b/,
+					relevance: 0
+				}
 			]
 		};
 	}
 	t.exports = n;
-})), ee = /* @__PURE__ */ o(((e, t) => {
+})), V = /* @__PURE__ */ o(((e, t) => {
 	var n = /* @__PURE__ */ "as.in.of.if.for.while.finally.var.new.function.do.return.void.else.break.catch.instanceof.with.throw.case.default.try.switch.continue.typeof.delete.let.yield.const.class.debugger.async.await.static.import.from.export.extends.using".split("."), r = [
 		"true",
 		"false",
@@ -3734,7 +3757,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			}
 		];
 		o.contains = s;
-		let c = e.inherit(e.TITLE_MODE, { begin: a }), l = {
+		let c = e.inherit(e.TITLE_MODE, { begin: a }), l = "(\\(.*\\)\\s*)?\\B[-=]>", u = {
 			className: "params",
 			begin: "\\([^\\(]",
 			returnBegin: !0,
@@ -3744,7 +3767,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				keywords: t,
 				contains: ["self"].concat(s)
 			}]
-		}, u = {
+		}, d = {
 			variants: [{ match: [
 				/class\s+/,
 				a,
@@ -3772,23 +3795,23 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				e.HASH_COMMENT_MODE,
 				{
 					className: "function",
-					begin: "^\\s*" + a + "\\s*=\\s*(\\(.*\\)\\s*)?\\B[-=]>",
+					begin: "^\\s*" + a + "\\s*=\\s*" + l,
 					end: "[-=]>",
 					returnBegin: !0,
-					contains: [c, l]
+					contains: [c, u]
 				},
 				{
 					begin: /[:\(,=]\s*/,
 					relevance: 0,
 					contains: [{
 						className: "function",
-						begin: "(\\(.*\\)\\s*)?\\B[-=]>",
+						begin: l,
 						end: "[-=]>",
 						returnBegin: !0,
-						contains: [l]
+						contains: [u]
 					}]
 				},
-				u,
+				d,
 				{
 					begin: a + ":",
 					end: ":",
@@ -3800,7 +3823,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = a;
-})), te = /* @__PURE__ */ o(((e, t) => {
+})), ee = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "Coq",
@@ -3823,7 +3846,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), V = /* @__PURE__ */ o(((e, t) => {
+})), H = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "Caché Object Script",
@@ -3898,12 +3921,12 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), ne = /* @__PURE__ */ o(((e, t) => {
+})), te = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
-		let t = e.regex, n = e.COMMENT("//", "$", { contains: [{ begin: /\\\n/ }] }), r = "decltype\\(auto\\)", i = "[a-zA-Z_]\\w*::", a = "(?!struct)(" + r + "|" + t.optional(i) + "[a-zA-Z_]\\w*" + t.optional("<[^<>]+>") + ")", o = {
+		let t = e.regex, n = e.COMMENT("//", "$", { contains: [{ begin: /\\\n/ }] }), r = "[a-zA-Z_]\\w*::", i = "(?!struct)(decltype\\(auto\\)|" + t.optional(r) + "[a-zA-Z_]\\w*" + t.optional("<[^<>]+>") + ")", a = {
 			className: "type",
 			begin: "\\b[a-z\\d_]*_t\\b"
-		}, s = {
+		}, o = {
 			className: "string",
 			variants: [
 				{
@@ -3918,15 +3941,30 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					illegal: "."
 				},
 				e.END_SAME_AS_BEGIN({
-					begin: /(?:u8?|U|L)?R"([^()\\ ]{0,16})\(/,
-					end: /\)([^()\\ ]{0,16})"/
+					begin: /(?:u8?|U|L)?R"([^()\\\s"]{0,16})\(/,
+					end: /\)([^()\\\s"]{0,16})"/
 				})
 			]
-		}, c = {
+		}, s = {
 			className: "number",
-			variants: [{ begin: "[+-]?(?:(?:[0-9](?:'?[0-9])*\\.(?:[0-9](?:'?[0-9])*)?|\\.[0-9](?:'?[0-9])*)(?:[Ee][+-]?[0-9](?:'?[0-9])*)?|[0-9](?:'?[0-9])*[Ee][+-]?[0-9](?:'?[0-9])*|0[Xx](?:[0-9A-Fa-f](?:'?[0-9A-Fa-f])*(?:\\.(?:[0-9A-Fa-f](?:'?[0-9A-Fa-f])*)?)?|\\.[0-9A-Fa-f](?:'?[0-9A-Fa-f])*)[Pp][+-]?[0-9](?:'?[0-9])*)(?:[Ff](?:16|32|64|128)?|(BF|bf)16|[Ll]|)" }, { begin: "[+-]?\\b(?:0[Bb][01](?:'?[01])*|0[Xx][0-9A-Fa-f](?:'?[0-9A-Fa-f])*|0(?:'?[0-7])*|[1-9](?:'?[0-9])*)(?:[Uu](?:LL?|ll?)|[Uu][Zz]?|(?:LL?|ll?)[Uu]?|[Zz][Uu]|)" }],
+			variants: [{ begin: "[+-]?(?:(?:\\b[0-9](?:'?[0-9])*\\.(?:[0-9](?:'?[0-9])*)?|\\.[0-9](?:'?[0-9])*)(?:[Ee][+-]?[0-9](?:'?[0-9])*)?|\\b[0-9](?:'?[0-9])*[Ee][+-]?[0-9](?:'?[0-9])*|\\b0[Xx](?:[0-9A-Fa-f](?:'?[0-9A-Fa-f])*(?:\\.(?:[0-9A-Fa-f](?:'?[0-9A-Fa-f])*)?)?|\\.[0-9A-Fa-f](?:'?[0-9A-Fa-f])*)[Pp][+-]?[0-9](?:'?[0-9])*)(?:[Ff](?:16|32|64|128)?|(BF|bf)16|[Ll]|)" }, { begin: "[+-]?\\b(?:0[Bb][01](?:'?[01])*|0[Xx][0-9A-Fa-f](?:'?[0-9A-Fa-f])*|0(?:'?[0-7])*|[1-9](?:'?[0-9])*)(?:[Uu](?:LL?|ll?)|[Uu][Zz]?|(?:LL?|ll?)[Uu]?|[Zz][Uu]|)" }],
 			relevance: 0
-		}, l = {
+		}, c = [{
+			scope: "meta",
+			begin: /#\s*include\b/,
+			end: /$/,
+			keywords: { keyword: "include" },
+			contains: [
+				{ begin: /\\\n/ },
+				o,
+				{
+					scope: "string",
+					begin: /<.*?>/
+				},
+				n,
+				e.C_BLOCK_COMMENT_MODE
+			]
+		}, {
 			className: "meta",
 			begin: /#\s*[a-z]+\b/,
 			end: /$/,
@@ -3936,19 +3974,15 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					begin: /\\\n/,
 					relevance: 0
 				},
-				e.inherit(s, { className: "string" }),
-				{
-					className: "string",
-					begin: /<.*?>/
-				},
+				e.inherit(o, { className: "string" }),
 				n,
 				e.C_BLOCK_COMMENT_MODE
 			]
-		}, u = {
+		}], l = {
 			className: "title",
-			begin: t.optional(i) + e.IDENT_RE,
+			begin: t.optional(r) + e.IDENT_RE,
 			relevance: 0
-		}, d = t.optional(i) + e.IDENT_RE + "\\s*\\(", f = /* @__PURE__ */ "alignas.alignof.and.and_eq.asm.atomic_cancel.atomic_commit.atomic_noexcept.auto.bitand.bitor.break.case.catch.class.co_await.co_return.co_yield.compl.concept.const_cast|10.consteval.constexpr.constinit.continue.decltype.default.delete.do.dynamic_cast|10.else.enum.explicit.export.extern.false.final.for.friend.goto.if.import.inline.module.mutable.namespace.new.noexcept.not.not_eq.nullptr.operator.or.or_eq.override.private.protected.public.reflexpr.register.reinterpret_cast|10.requires.return.sizeof.static_assert.static_cast|10.struct.switch.synchronized.template.this.thread_local.throw.transaction_safe.transaction_safe_dynamic.true.try.typedef.typeid.typename.union.using.virtual.volatile.while.xor.xor_eq".split("."), p = [
+		}, u = t.optional(r) + e.IDENT_RE + "\\s*\\(", d = /* @__PURE__ */ "alignas.alignof.and.and_eq.asm.atomic_cancel.atomic_commit.atomic_noexcept.auto.bitand.bitor.break.case.catch.class.co_await.co_return.co_yield.compl.concept.const_cast|10.consteval.constexpr.constinit.continue.decltype.default.delete.do.dynamic_cast|10.else.enum.explicit.export.extern.false.final.for.friend.goto.if.import.inline.module.mutable.namespace.new.noexcept.not.not_eq.nullptr.operator.or.or_eq.override.private.protected.public.reflexpr.register.reinterpret_cast|10.requires.return.sizeof.static_assert.static_cast|10.struct.switch.synchronized.template.this.thread_local.throw.transaction_safe.transaction_safe_dynamic.true.try.typedef.typeid.typename.union.using.virtual.volatile.while.xor.xor_eq".split("."), f = [
 			"bool",
 			"char",
 			"char16_t",
@@ -3965,9 +3999,9 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			"signed",
 			"const",
 			"static"
-		], m = /* @__PURE__ */ "any.auto_ptr.barrier.binary_semaphore.bitset.complex.condition_variable.condition_variable_any.counting_semaphore.deque.false_type.flat_map.flat_set.future.imaginary.initializer_list.istringstream.jthread.latch.lock_guard.multimap.multiset.mutex.optional.ostringstream.packaged_task.pair.promise.priority_queue.queue.recursive_mutex.recursive_timed_mutex.scoped_lock.set.shared_future.shared_lock.shared_mutex.shared_timed_mutex.shared_ptr.stack.string_view.stringstream.timed_mutex.thread.true_type.tuple.unique_lock.unique_ptr.unordered_map.unordered_multimap.unordered_multiset.unordered_set.variant.vector.weak_ptr.wstring.wstring_view".split("."), h = /* @__PURE__ */ "abort.abs.acos.apply.as_const.asin.atan.atan2.calloc.ceil.cerr.cin.clog.cos.cosh.cout.declval.endl.exchange.exit.exp.fabs.floor.fmod.forward.fprintf.fputs.free.frexp.fscanf.future.invoke.isalnum.isalpha.iscntrl.isdigit.isgraph.islower.isprint.ispunct.isspace.isupper.isxdigit.labs.launder.ldexp.log.log10.make_pair.make_shared.make_shared_for_overwrite.make_tuple.make_unique.malloc.memchr.memcmp.memcpy.memset.modf.move.pow.printf.putchar.puts.realloc.scanf.sin.sinh.snprintf.sprintf.sqrt.sscanf.std.stderr.stdin.stdout.strcat.strchr.strcmp.strcpy.strcspn.strlen.strncat.strncmp.strncpy.strpbrk.strrchr.strspn.strstr.swap.tan.tanh.terminate.to_underlying.tolower.toupper.vfprintf.visit.vprintf.vsprintf".split("."), g = {
-			type: p,
-			keyword: f,
+		], p = /* @__PURE__ */ "any.auto_ptr.barrier.binary_semaphore.bitset.complex.condition_variable.condition_variable_any.counting_semaphore.deque.false_type.flat_map.flat_set.future.imaginary.initializer_list.istringstream.jthread.latch.lock_guard.multimap.multiset.mutex.optional.ostringstream.packaged_task.pair.promise.priority_queue.queue.recursive_mutex.recursive_timed_mutex.scoped_lock.set.shared_future.shared_lock.shared_mutex.shared_timed_mutex.shared_ptr.stack.string_view.stringstream.timed_mutex.thread.true_type.tuple.unique_lock.unique_ptr.unordered_map.unordered_multimap.unordered_multiset.unordered_set.variant.vector.weak_ptr.wstring.wstring_view".split("."), m = /* @__PURE__ */ "abort.abs.acos.apply.as_const.asin.atan.atan2.calloc.ceil.cerr.cin.clog.cos.cosh.cout.declval.endl.exchange.exit.exp.fabs.floor.fmod.forward.fprintf.fputs.free.frexp.fscanf.future.invoke.isalnum.isalpha.iscntrl.isdigit.isgraph.islower.isprint.ispunct.isspace.isupper.isxdigit.labs.launder.ldexp.log.log10.make_pair.make_shared.make_shared_for_overwrite.make_tuple.make_unique.malloc.memchr.memcmp.memcpy.memset.modf.move.pow.printf.putchar.puts.realloc.scanf.sin.sinh.snprintf.sprintf.sqrt.sscanf.std.stderr.stdin.stdout.strcat.strchr.strcmp.strcpy.strcspn.strlen.strncat.strncmp.strncpy.strpbrk.strrchr.strspn.strstr.swap.tan.tanh.terminate.to_underlying.tolower.toupper.vfprintf.visit.vprintf.vsprintf".split("."), h = {
+			type: f,
+			keyword: d,
 			literal: [
 				"NULL",
 				"false",
@@ -3976,21 +4010,21 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				"true"
 			],
 			built_in: ["_Pragma"],
-			_type_hints: m
-		}, _ = {
+			_type_hints: p
+		}, g = {
 			className: "function.dispatch",
 			relevance: 0,
-			keywords: { _hint: h },
-			begin: t.concat(/\b/, /(?!decltype)/, /(?!if)/, /(?!for)/, /(?!switch)/, /(?!while)/, e.IDENT_RE, t.lookahead(/(<[^<>]+>|)\s*\(/))
-		}, v = [
-			_,
-			l,
-			o,
+			keywords: { _hint: m },
+			begin: t.concat(/\b/, `(?!${d.join("|")})`, e.IDENT_RE, t.lookahead(/(<[^<>]+>|)\s*\(/))
+		}, _ = [
+			g,
+			...c,
+			a,
 			n,
 			e.C_BLOCK_COMMENT_MODE,
-			c,
-			s
-		], y = {
+			s,
+			o
+		], v = {
 			variants: [
 				{
 					begin: /=/,
@@ -4005,33 +4039,33 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					end: /;/
 				}
 			],
-			keywords: g,
-			contains: v.concat([{
+			keywords: h,
+			contains: _.concat([{
 				begin: /\(/,
 				end: /\)/,
-				keywords: g,
-				contains: v.concat(["self"]),
+				keywords: h,
+				contains: _.concat(["self"]),
 				relevance: 0
 			}]),
 			relevance: 0
-		}, b = {
+		}, y = {
 			className: "function",
-			begin: "(" + a + "[\\*&\\s]+)+" + d,
+			begin: "(" + i + "[\\*&\\s]+){1,12}" + u,
 			returnBegin: !0,
 			end: /[{;=]/,
 			excludeEnd: !0,
-			keywords: g,
+			keywords: h,
 			illegal: /[^\w\s\*&:<>.]/,
 			contains: [
 				{
-					begin: r,
-					keywords: g,
+					begin: "decltype\\(auto\\)",
+					keywords: h,
 					relevance: 0
 				},
 				{
-					begin: d,
+					begin: u,
 					returnBegin: !0,
-					contains: [u],
+					contains: [l],
 					relevance: 0
 				},
 				{
@@ -4041,7 +4075,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				{
 					begin: /:/,
 					endsWithParent: !0,
-					contains: [s, c]
+					contains: [o, s]
 				},
 				{
 					relevance: 0,
@@ -4051,34 +4085,34 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					className: "params",
 					begin: /\(/,
 					end: /\)/,
-					keywords: g,
+					keywords: h,
 					relevance: 0,
 					contains: [
 						n,
 						e.C_BLOCK_COMMENT_MODE,
-						s,
-						c,
 						o,
+						s,
+						a,
 						{
 							begin: /\(/,
 							end: /\)/,
-							keywords: g,
+							keywords: h,
 							relevance: 0,
 							contains: [
 								"self",
 								n,
 								e.C_BLOCK_COMMENT_MODE,
+								o,
 								s,
-								c,
-								o
+								a
 							]
 						}
 					]
 				},
-				o,
+				a,
 				n,
 				e.C_BLOCK_COMMENT_MODE,
-				l
+				...c
 			]
 		};
 		return {
@@ -4092,20 +4126,20 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				"hxx",
 				"cxx"
 			],
-			keywords: g,
+			keywords: h,
 			illegal: "</",
 			classNameAliases: { "function.dispatch": "built_in" },
-			contains: [].concat(y, b, _, v, [
-				l,
+			contains: [].concat(v, y, g, _, [
+				...c,
 				{
 					begin: "\\b(deque|list|queue|priority_queue|pair|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array|tuple|optional|variant|function|flat_map|flat_set)\\s*<(?!<)",
 					end: ">",
-					keywords: g,
-					contains: ["self", o]
+					keywords: h,
+					contains: ["self", a]
 				},
 				{
 					begin: e.IDENT_RE + "::",
-					keywords: g
+					keywords: h
 				},
 				{
 					match: [
@@ -4122,7 +4156,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), H = /* @__PURE__ */ o(((e, t) => {
+})), ne = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = "group clone ms master location colocation order fencing_topology rsc_ticket acl_target acl_group user role tag xml";
 		return {
@@ -4316,13 +4350,8 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			contains: [{
 				className: "regexp",
 				contains: [e.BACKSLASH_ESCAPE, a],
-				variants: [{
-					begin: "//[a-z]*",
-					relevance: 0
-				}, {
-					begin: "/(?!\\/)",
-					end: "/[a-z]*"
-				}]
+				begin: "/(?!\\/)",
+				end: "/[a-z]*"
 			}],
 			relevance: 0
 		}, f = [
@@ -4358,6 +4387,10 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 						end: "\\|"
 					}
 				],
+				relevance: 0
+			},
+			{
+				begin: /\/\/=?/,
 				relevance: 0
 			},
 			d,
@@ -4492,29 +4525,29 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				"null",
 				"true"
 			]
-		}, i = e.inherit(e.TITLE_MODE, { begin: "[a-zA-Z](\\.?\\w)*" }), a = {
+		}, i = e.inherit(e.TITLE_MODE, { begin: "[a-zA-Z](\\.?\\w)*" }), a = "([uU][lL]?|[lL][uU]?)?", o = {
 			className: "number",
 			variants: [
-				{ begin: "\\b(0b[01']+)" },
-				{ begin: "(-?)\\b([\\d']+(\\.[\\d']*)?|\\.[\\d']+)(u|U|l|L|ul|UL|f|F|b|B)" },
-				{ begin: "(-?)(\\b0[xX][a-fA-F0-9']+|(\\b[\\d']+(\\.[\\d']*)?|\\.[\\d']+)([eE][-+]?[\\d']+)?)" }
+				{ begin: "\\b0[bB]_*[01](_*[01])*" + a },
+				{ begin: "(-?)\\b0[xX]_*[a-fA-F0-9](_*[a-fA-F0-9])*" + a },
+				{ begin: "(-?)(\\b\\d(_*\\d)*(\\.(\\d(_*\\d)*)?)?|\\.\\d(_*\\d)*)([eE][-+]?\\d(_*\\d)*)?([fFdDmM]|[uU][lL]?|[lL][uU]?)?" }
 			],
 			relevance: 0
-		}, o = {
+		}, s = {
 			className: "string",
 			begin: /"""("*)(?!")(.|\n)*?"""\1/,
 			relevance: 1
-		}, s = {
+		}, c = {
 			className: "string",
 			begin: "@\"",
 			end: "\"",
 			contains: [{ begin: "\"\"" }]
-		}, c = e.inherit(s, { illegal: /\n/ }), l = {
+		}, l = e.inherit(c, { illegal: /\n/ }), u = {
 			className: "subst",
 			begin: /\{/,
 			end: /\}/,
 			keywords: r
-		}, u = e.inherit(l, { illegal: /\n/ }), d = {
+		}, d = e.inherit(u, { illegal: /\n/ }), f = {
 			className: "string",
 			begin: /\$"/,
 			end: "\"",
@@ -4523,9 +4556,9 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				{ begin: /\{\{/ },
 				{ begin: /\}\}/ },
 				e.BACKSLASH_ESCAPE,
-				u
+				d
 			]
-		}, f = {
+		}, p = {
 			className: "string",
 			begin: /\$@"/,
 			end: "\"",
@@ -4533,46 +4566,46 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				{ begin: /\{\{/ },
 				{ begin: /\}\}/ },
 				{ begin: "\"\"" },
-				l
+				u
 			]
-		}, p = e.inherit(f, {
+		}, m = e.inherit(p, {
 			illegal: /\n/,
 			contains: [
 				{ begin: /\{\{/ },
 				{ begin: /\}\}/ },
 				{ begin: "\"\"" },
-				u
+				d
 			]
 		});
-		l.contains = [
-			f,
-			d,
-			s,
-			e.APOS_STRING_MODE,
-			e.QUOTE_STRING_MODE,
-			a,
-			e.C_BLOCK_COMMENT_MODE
-		], u.contains = [
+		u.contains = [
 			p,
-			d,
+			f,
 			c,
 			e.APOS_STRING_MODE,
 			e.QUOTE_STRING_MODE,
-			a,
+			o,
+			e.C_BLOCK_COMMENT_MODE
+		], d.contains = [
+			m,
+			f,
+			l,
+			e.APOS_STRING_MODE,
+			e.QUOTE_STRING_MODE,
+			o,
 			e.inherit(e.C_BLOCK_COMMENT_MODE, { illegal: /\n/ })
 		];
-		let m = { variants: [
-			o,
-			f,
-			d,
+		let h = { variants: [
 			s,
+			p,
+			f,
+			c,
 			e.APOS_STRING_MODE,
 			e.QUOTE_STRING_MODE
-		] }, h = {
+		] }, g = {
 			begin: "<",
 			end: ">",
 			contains: [{ beginKeywords: "in out" }, i]
-		}, g = e.IDENT_RE + "(<" + e.IDENT_RE + "(\\s*,\\s*" + e.IDENT_RE + ")*>)?(\\[\\])?", _ = {
+		}, _ = e.IDENT_RE + "(<" + e.IDENT_RE + "(\\s*,\\s*" + e.IDENT_RE + ")*>)?(\\[\\])?", v = {
 			begin: "@" + e.IDENT_RE,
 			relevance: 0
 		};
@@ -4607,8 +4640,8 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					end: "$",
 					keywords: { keyword: "if else elif endif define undef warning error line region endregion pragma checksum" }
 				},
-				m,
-				a,
+				h,
+				o,
 				{
 					beginKeywords: "class interface",
 					relevance: 0,
@@ -4617,7 +4650,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					contains: [
 						{ beginKeywords: "where class" },
 						i,
-						h,
+						g,
 						e.C_LINE_COMMENT_MODE,
 						e.C_BLOCK_COMMENT_MODE
 					]
@@ -4640,7 +4673,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					illegal: /[^\s:]/,
 					contains: [
 						i,
-						h,
+						g,
 						e.C_LINE_COMMENT_MODE,
 						e.C_BLOCK_COMMENT_MODE
 					]
@@ -4663,7 +4696,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				},
 				{
 					className: "function",
-					begin: "(" + g + "\\s+)+" + e.IDENT_RE + "\\s*(<[^=]+>\\s*)?\\(",
+					begin: "(" + _ + "\\s+)+" + e.IDENT_RE + "\\s*(<[^=]+>\\s*)?\\(",
 					returnBegin: !0,
 					end: /\s*[{;=]/,
 					excludeEnd: !0,
@@ -4676,7 +4709,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 						{
 							begin: e.IDENT_RE + "\\s*(<[^=]+>\\s*)?\\(",
 							returnBegin: !0,
-							contains: [e.TITLE_MODE, h],
+							contains: [e.TITLE_MODE, g],
 							relevance: 0
 						},
 						{ match: /\(\)/ },
@@ -4689,8 +4722,8 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 							keywords: r,
 							relevance: 0,
 							contains: [
-								m,
-								a,
+								h,
+								o,
 								e.C_BLOCK_COMMENT_MODE
 							]
 						},
@@ -4698,7 +4731,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 						e.C_BLOCK_COMMENT_MODE
 					]
 				},
-				_
+				v
 			]
 		};
 	}
@@ -4710,28 +4743,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			case_insensitive: !1,
 			keywords: {
 				$pattern: "[a-zA-Z][a-zA-Z0-9_-]*",
-				keyword: [
-					"base-uri",
-					"child-src",
-					"connect-src",
-					"default-src",
-					"font-src",
-					"form-action",
-					"frame-ancestors",
-					"frame-src",
-					"img-src",
-					"manifest-src",
-					"media-src",
-					"object-src",
-					"plugin-types",
-					"report-uri",
-					"sandbox",
-					"script-src",
-					"style-src",
-					"trusted-types",
-					"unsafe-hashes",
-					"worker-src"
-				]
+				keyword: /* @__PURE__ */ "base-uri.child-src.connect-src.default-src.fenced-frame-src.font-src.form-action.frame-ancestors.frame-src.img-src.manifest-src.media-src.object-src.plugin-types.report-to.report-uri.require-trusted-types-for.sandbox.script-src.script-src-attr.script-src-elem.style-src.style-src-attr.style-src-elem.trusted-types.unsafe-hashes.worker-src".split(".")
 			},
 			contains: [{
 				className: "string",
@@ -4756,6 +4768,10 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		HEXCOLOR: {
 			scope: "number",
 			begin: /#(([0-9a-fA-F]{3,4})|(([0-9a-fA-F]{2}){3,4}))\b/
+		},
+		UNICODE_RANGE: {
+			scope: "number",
+			begin: /\b[Uu]\+[0-9A-Fa-f][0-9A-Fa-f?]{0,5}(-[0-9A-Fa-f][0-9A-Fa-f]{0,5})?/
 		},
 		FUNCTION_DISPATCH: {
 			className: "built_in",
@@ -4792,7 +4808,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		"selection",
 		"slotted",
 		"spelling-error"
-	].sort().reverse(), l = (/* @__PURE__ */ "accent-color.align-content.align-items.align-self.alignment-baseline.all.anchor-name.animation.animation-composition.animation-delay.animation-direction.animation-duration.animation-fill-mode.animation-iteration-count.animation-name.animation-play-state.animation-range.animation-range-end.animation-range-start.animation-timeline.animation-timing-function.appearance.aspect-ratio.backdrop-filter.backface-visibility.background.background-attachment.background-blend-mode.background-clip.background-color.background-image.background-origin.background-position.background-position-x.background-position-y.background-repeat.background-size.baseline-shift.block-size.border.border-block.border-block-color.border-block-end.border-block-end-color.border-block-end-style.border-block-end-width.border-block-start.border-block-start-color.border-block-start-style.border-block-start-width.border-block-style.border-block-width.border-bottom.border-bottom-color.border-bottom-left-radius.border-bottom-right-radius.border-bottom-style.border-bottom-width.border-collapse.border-color.border-end-end-radius.border-end-start-radius.border-image.border-image-outset.border-image-repeat.border-image-slice.border-image-source.border-image-width.border-inline.border-inline-color.border-inline-end.border-inline-end-color.border-inline-end-style.border-inline-end-width.border-inline-start.border-inline-start-color.border-inline-start-style.border-inline-start-width.border-inline-style.border-inline-width.border-left.border-left-color.border-left-style.border-left-width.border-radius.border-right.border-right-color.border-right-style.border-right-width.border-spacing.border-start-end-radius.border-start-start-radius.border-style.border-top.border-top-color.border-top-left-radius.border-top-right-radius.border-top-style.border-top-width.border-width.bottom.box-align.box-decoration-break.box-direction.box-flex.box-flex-group.box-lines.box-ordinal-group.box-orient.box-pack.box-shadow.box-sizing.break-after.break-before.break-inside.caption-side.caret-color.clear.clip.clip-path.clip-rule.color.color-interpolation.color-interpolation-filters.color-profile.color-rendering.color-scheme.column-count.column-fill.column-gap.column-rule.column-rule-color.column-rule-style.column-rule-width.column-span.column-width.columns.contain.contain-intrinsic-block-size.contain-intrinsic-height.contain-intrinsic-inline-size.contain-intrinsic-size.contain-intrinsic-width.container.container-name.container-type.content.content-visibility.counter-increment.counter-reset.counter-set.cue.cue-after.cue-before.cursor.cx.cy.direction.display.dominant-baseline.empty-cells.enable-background.field-sizing.fill.fill-opacity.fill-rule.filter.flex.flex-basis.flex-direction.flex-flow.flex-grow.flex-shrink.flex-wrap.float.flood-color.flood-opacity.flow.font.font-display.font-family.font-feature-settings.font-kerning.font-language-override.font-optical-sizing.font-palette.font-size.font-size-adjust.font-smooth.font-smoothing.font-stretch.font-style.font-synthesis.font-synthesis-position.font-synthesis-small-caps.font-synthesis-style.font-synthesis-weight.font-variant.font-variant-alternates.font-variant-caps.font-variant-east-asian.font-variant-emoji.font-variant-ligatures.font-variant-numeric.font-variant-position.font-variation-settings.font-weight.forced-color-adjust.gap.glyph-orientation-horizontal.glyph-orientation-vertical.grid.grid-area.grid-auto-columns.grid-auto-flow.grid-auto-rows.grid-column.grid-column-end.grid-column-start.grid-gap.grid-row.grid-row-end.grid-row-start.grid-template.grid-template-areas.grid-template-columns.grid-template-rows.hanging-punctuation.height.hyphenate-character.hyphenate-limit-chars.hyphens.icon.image-orientation.image-rendering.image-resolution.ime-mode.initial-letter.initial-letter-align.inline-size.inset.inset-area.inset-block.inset-block-end.inset-block-start.inset-inline.inset-inline-end.inset-inline-start.isolation.justify-content.justify-items.justify-self.kerning.left.letter-spacing.lighting-color.line-break.line-height.line-height-step.list-style.list-style-image.list-style-position.list-style-type.margin.margin-block.margin-block-end.margin-block-start.margin-bottom.margin-inline.margin-inline-end.margin-inline-start.margin-left.margin-right.margin-top.margin-trim.marker.marker-end.marker-mid.marker-start.marks.mask.mask-border.mask-border-mode.mask-border-outset.mask-border-repeat.mask-border-slice.mask-border-source.mask-border-width.mask-clip.mask-composite.mask-image.mask-mode.mask-origin.mask-position.mask-repeat.mask-size.mask-type.masonry-auto-flow.math-depth.math-shift.math-style.max-block-size.max-height.max-inline-size.max-width.min-block-size.min-height.min-inline-size.min-width.mix-blend-mode.nav-down.nav-index.nav-left.nav-right.nav-up.none.normal.object-fit.object-position.offset.offset-anchor.offset-distance.offset-path.offset-position.offset-rotate.opacity.order.orphans.outline.outline-color.outline-offset.outline-style.outline-width.overflow.overflow-anchor.overflow-block.overflow-clip-margin.overflow-inline.overflow-wrap.overflow-x.overflow-y.overlay.overscroll-behavior.overscroll-behavior-block.overscroll-behavior-inline.overscroll-behavior-x.overscroll-behavior-y.padding.padding-block.padding-block-end.padding-block-start.padding-bottom.padding-inline.padding-inline-end.padding-inline-start.padding-left.padding-right.padding-top.page.page-break-after.page-break-before.page-break-inside.paint-order.pause.pause-after.pause-before.perspective.perspective-origin.place-content.place-items.place-self.pointer-events.position.position-anchor.position-visibility.print-color-adjust.quotes.r.resize.rest.rest-after.rest-before.right.rotate.row-gap.ruby-align.ruby-position.scale.scroll-behavior.scroll-margin.scroll-margin-block.scroll-margin-block-end.scroll-margin-block-start.scroll-margin-bottom.scroll-margin-inline.scroll-margin-inline-end.scroll-margin-inline-start.scroll-margin-left.scroll-margin-right.scroll-margin-top.scroll-padding.scroll-padding-block.scroll-padding-block-end.scroll-padding-block-start.scroll-padding-bottom.scroll-padding-inline.scroll-padding-inline-end.scroll-padding-inline-start.scroll-padding-left.scroll-padding-right.scroll-padding-top.scroll-snap-align.scroll-snap-stop.scroll-snap-type.scroll-timeline.scroll-timeline-axis.scroll-timeline-name.scrollbar-color.scrollbar-gutter.scrollbar-width.shape-image-threshold.shape-margin.shape-outside.shape-rendering.speak.speak-as.src.stop-color.stop-opacity.stroke.stroke-dasharray.stroke-dashoffset.stroke-linecap.stroke-linejoin.stroke-miterlimit.stroke-opacity.stroke-width.tab-size.table-layout.text-align.text-align-all.text-align-last.text-anchor.text-combine-upright.text-decoration.text-decoration-color.text-decoration-line.text-decoration-skip.text-decoration-skip-ink.text-decoration-style.text-decoration-thickness.text-emphasis.text-emphasis-color.text-emphasis-position.text-emphasis-style.text-indent.text-justify.text-orientation.text-overflow.text-rendering.text-shadow.text-size-adjust.text-transform.text-underline-offset.text-underline-position.text-wrap.text-wrap-mode.text-wrap-style.timeline-scope.top.touch-action.transform.transform-box.transform-origin.transform-style.transition.transition-behavior.transition-delay.transition-duration.transition-property.transition-timing-function.translate.unicode-bidi.user-modify.user-select.vector-effect.vertical-align.view-timeline.view-timeline-axis.view-timeline-inset.view-timeline-name.view-transition-name.visibility.voice-balance.voice-duration.voice-family.voice-pitch.voice-range.voice-rate.voice-stress.voice-volume.white-space.white-space-collapse.widows.width.will-change.word-break.word-spacing.word-wrap.writing-mode.x.y.z-index.zoom".split(".")).sort().reverse();
+	].sort().reverse(), l = (/* @__PURE__ */ "accent-color.align-content.align-items.align-self.alignment-baseline.all.anchor-name.animation.animation-composition.animation-delay.animation-direction.animation-duration.animation-fill-mode.animation-iteration-count.animation-name.animation-play-state.animation-range.animation-range-end.animation-range-start.animation-timeline.animation-timing-function.appearance.aspect-ratio.backdrop-filter.backface-visibility.background.background-attachment.background-blend-mode.background-clip.background-color.background-image.background-origin.background-position.background-position-x.background-position-y.background-repeat.background-size.baseline-shift.block-size.border.border-block.border-block-color.border-block-end.border-block-end-color.border-block-end-style.border-block-end-width.border-block-start.border-block-start-color.border-block-start-style.border-block-start-width.border-block-style.border-block-width.border-bottom.border-bottom-color.border-bottom-left-radius.border-bottom-right-radius.border-bottom-style.border-bottom-width.border-collapse.border-color.border-end-end-radius.border-end-start-radius.border-image.border-image-outset.border-image-repeat.border-image-slice.border-image-source.border-image-width.border-inline.border-inline-color.border-inline-end.border-inline-end-color.border-inline-end-style.border-inline-end-width.border-inline-start.border-inline-start-color.border-inline-start-style.border-inline-start-width.border-inline-style.border-inline-width.border-left.border-left-color.border-left-style.border-left-width.border-radius.border-right.border-right-color.border-right-style.border-right-width.border-spacing.border-start-end-radius.border-start-start-radius.border-style.border-top.border-top-color.border-top-left-radius.border-top-right-radius.border-top-style.border-top-width.border-width.bottom.box-align.box-decoration-break.box-direction.box-flex.box-flex-group.box-lines.box-ordinal-group.box-orient.box-pack.box-shadow.box-sizing.break-after.break-before.break-inside.caption-side.caret-color.clear.clip.clip-path.clip-rule.color.color-interpolation.color-interpolation-filters.color-profile.color-rendering.color-scheme.column-count.column-fill.column-gap.column-rule.column-rule-color.column-rule-style.column-rule-width.column-span.column-width.columns.contain.contain-intrinsic-block-size.contain-intrinsic-height.contain-intrinsic-inline-size.contain-intrinsic-size.contain-intrinsic-width.container.container-name.container-type.content.content-visibility.corner-bottom-left-shape.corner-bottom-right-shape.corner-shape.corner-top-left-shape.corner-top-right-shape.counter-increment.counter-reset.counter-set.cue.cue-after.cue-before.cursor.cx.cy.direction.display.dominant-baseline.empty-cells.enable-background.field-sizing.fill.fill-opacity.fill-rule.filter.flex.flex-basis.flex-direction.flex-flow.flex-grow.flex-shrink.flex-wrap.float.flood-color.flood-opacity.flow.font.font-display.font-family.font-feature-settings.font-kerning.font-language-override.font-optical-sizing.font-palette.font-size.font-size-adjust.font-smooth.font-smoothing.font-stretch.font-style.font-synthesis.font-synthesis-position.font-synthesis-small-caps.font-synthesis-style.font-synthesis-weight.font-variant.font-variant-alternates.font-variant-caps.font-variant-east-asian.font-variant-emoji.font-variant-ligatures.font-variant-numeric.font-variant-position.font-variation-settings.font-weight.forced-color-adjust.gap.glyph-orientation-horizontal.glyph-orientation-vertical.grid.grid-area.grid-auto-columns.grid-auto-flow.grid-auto-rows.grid-column.grid-column-end.grid-column-start.grid-gap.grid-row.grid-row-end.grid-row-start.grid-template.grid-template-areas.grid-template-columns.grid-template-rows.hanging-punctuation.height.hyphenate-character.hyphenate-limit-chars.hyphens.icon.image-orientation.image-rendering.image-resolution.ime-mode.initial-letter.initial-letter-align.inline-size.inset.inset-area.inset-block.inset-block-end.inset-block-start.inset-inline.inset-inline-end.inset-inline-start.isolation.justify-content.justify-items.justify-self.kerning.left.letter-spacing.lighting-color.line-break.line-height.line-height-step.list-style.list-style-image.list-style-position.list-style-type.margin.margin-block.margin-block-end.margin-block-start.margin-bottom.margin-inline.margin-inline-end.margin-inline-start.margin-left.margin-right.margin-top.margin-trim.marker.marker-end.marker-mid.marker-start.marks.mask.mask-border.mask-border-mode.mask-border-outset.mask-border-repeat.mask-border-slice.mask-border-source.mask-border-width.mask-clip.mask-composite.mask-image.mask-mode.mask-origin.mask-position.mask-repeat.mask-size.mask-type.masonry-auto-flow.math-depth.math-shift.math-style.max-block-size.max-height.max-inline-size.max-width.min-block-size.min-height.min-inline-size.min-width.mix-blend-mode.nav-down.nav-index.nav-left.nav-right.nav-up.none.normal.object-fit.object-position.offset.offset-anchor.offset-distance.offset-path.offset-position.offset-rotate.opacity.order.orphans.outline.outline-color.outline-offset.outline-style.outline-width.overflow.overflow-anchor.overflow-block.overflow-clip-margin.overflow-inline.overflow-wrap.overflow-x.overflow-y.overlay.overscroll-behavior.overscroll-behavior-block.overscroll-behavior-inline.overscroll-behavior-x.overscroll-behavior-y.padding.padding-block.padding-block-end.padding-block-start.padding-bottom.padding-inline.padding-inline-end.padding-inline-start.padding-left.padding-right.padding-top.page.page-break-after.page-break-before.page-break-inside.paint-order.pause.pause-after.pause-before.perspective.perspective-origin.place-content.place-items.place-self.pointer-events.position.position-anchor.position-visibility.print-color-adjust.quotes.r.resize.rest.rest-after.rest-before.right.rotate.row-gap.ruby-align.ruby-position.scale.scroll-behavior.scroll-margin.scroll-margin-block.scroll-margin-block-end.scroll-margin-block-start.scroll-margin-bottom.scroll-margin-inline.scroll-margin-inline-end.scroll-margin-inline-start.scroll-margin-left.scroll-margin-right.scroll-margin-top.scroll-padding.scroll-padding-block.scroll-padding-block-end.scroll-padding-block-start.scroll-padding-bottom.scroll-padding-inline.scroll-padding-inline-end.scroll-padding-inline-start.scroll-padding-left.scroll-padding-right.scroll-padding-top.scroll-snap-align.scroll-snap-stop.scroll-snap-type.scroll-timeline.scroll-timeline-axis.scroll-timeline-name.scrollbar-color.scrollbar-gutter.scrollbar-width.shape-image-threshold.shape-margin.shape-outside.shape-rendering.speak.speak-as.src.stop-color.stop-opacity.stroke.stroke-dasharray.stroke-dashoffset.stroke-linecap.stroke-linejoin.stroke-miterlimit.stroke-opacity.stroke-width.tab-size.table-layout.text-align.text-align-all.text-align-last.text-anchor.text-combine-upright.text-decoration.text-decoration-color.text-decoration-line.text-decoration-skip.text-decoration-skip-ink.text-decoration-style.text-decoration-thickness.text-emphasis.text-emphasis-color.text-emphasis-position.text-emphasis-style.text-indent.text-justify.text-orientation.text-overflow.text-rendering.text-shadow.text-size-adjust.text-transform.text-underline-offset.text-underline-position.text-wrap.text-wrap-mode.text-wrap-style.timeline-scope.top.touch-action.transform.transform-box.transform-origin.transform-style.transition.transition-behavior.transition-delay.transition-duration.transition-property.transition-timing-function.translate.unicode-bidi.unicode-range.user-modify.user-select.vector-effect.vertical-align.view-timeline.view-timeline-axis.view-timeline-inset.view-timeline-name.view-transition-name.visibility.voice-balance.voice-duration.voice-family.voice-pitch.voice-range.voice-rate.voice-stress.voice-volume.white-space.white-space-collapse.widows.width.will-change.word-break.word-spacing.word-wrap.writing-mode.x.y.z-index.zoom".split(".")).sort().reverse();
 	function u(e) {
 		let t = e.regex, r = n(e), i = { begin: /-(webkit|moz|ms|o)-(?=[a-z])/ }, u = /@-?\w[\w]*(-\w+)*/, d = [e.APOS_STRING_MODE, e.QUOTE_STRING_MODE];
 		return {
@@ -4833,6 +4849,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 						r.HEXCOLOR,
 						r.IMPORTANT,
 						r.CSS_NUMBER_MODE,
+						r.UNICODE_RANGE,
 						...d,
 						{
 							begin: /(url|data-uri)\(/,
@@ -4885,67 +4902,65 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = u;
-})), ie = /* @__PURE__ */ o(((e, t) => {
+})), K = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = {
 			$pattern: e.UNDERSCORE_IDENT_RE,
 			keyword: "abstract alias align asm assert auto body break byte case cast catch class const continue debug default delete deprecated do else enum export extern final finally for foreach foreach_reverse|10 goto if immutable import in inout int interface invariant is lazy macro mixin module new nothrow out override package pragma private protected public pure ref return scope shared static struct super switch synchronized template this throw try typedef typeid typeof union unittest version void volatile while with __FILE__ __LINE__ __gshared|10 __thread __traits __DATE__ __EOF__ __TIME__ __TIMESTAMP__ __VENDOR__ __VERSION__",
 			built_in: "bool cdouble cent cfloat char creal dchar delegate double dstring float function idouble ifloat ireal long real short string ubyte ucent uint ulong ushort wchar wstring",
 			literal: "false null true"
-		}, n = "(0|[1-9][\\d_]*|\\d[\\d_]*|[\\d_]+?\\d)", r = "([\\da-fA-F][\\da-fA-F_]*|_[\\da-fA-F][\\da-fA-F_]*)";
-		"" + r, "" + n, "" + n, "" + r;
-		let i = "\\\\(['\"\\?\\\\abfnrtv]|u[\\dA-Fa-f]{4}|[0-7]{1,3}|x[\\dA-Fa-f]{2}|U[\\dA-Fa-f]{8})|&[a-zA-Z\\d]{2,};", a = {
+		}, n = "((0|[1-9][\\d_]*)|0[bB][01_]+|0[xX]([\\da-fA-F][\\da-fA-F_]*|_[\\da-fA-F][\\da-fA-F_]*))", r = "\\\\(['\"\\?\\\\abfnrtv]|u[\\dA-Fa-f]{4}|[0-7]{1,3}|x[\\dA-Fa-f]{2}|U[\\dA-Fa-f]{8})|&[a-zA-Z\\d]{2,};", i = {
 			className: "number",
-			begin: "\\b((0|[1-9][\\d_]*)|0[bB][01_]+|0[xX]([\\da-fA-F][\\da-fA-F_]*|_[\\da-fA-F][\\da-fA-F_]*))(L|u|U|Lu|LU|uL|UL)?",
+			begin: "\\b" + n + "(L|u|U|Lu|LU|uL|UL)?",
+			relevance: 0
+		}, a = {
+			className: "number",
+			begin: "\\b(((0[xX](([\\da-fA-F][\\da-fA-F_]*|_[\\da-fA-F][\\da-fA-F_]*)\\.([\\da-fA-F][\\da-fA-F_]*|_[\\da-fA-F][\\da-fA-F_]*)|\\.?([\\da-fA-F][\\da-fA-F_]*|_[\\da-fA-F][\\da-fA-F_]*))[pP][+-]?(0|[1-9][\\d_]*|\\d[\\d_]*|[\\d_]+?\\d))|((0|[1-9][\\d_]*|\\d[\\d_]*|[\\d_]+?\\d)(\\.\\d*|([eE][+-]?(0|[1-9][\\d_]*|\\d[\\d_]*|[\\d_]+?\\d)))|\\d+\\.(0|[1-9][\\d_]*|\\d[\\d_]*|[\\d_]+?\\d)|\\.(0|[1-9][\\d_]*)([eE][+-]?(0|[1-9][\\d_]*|\\d[\\d_]*|[\\d_]+?\\d))?))([fF]|L|i|[fF]i|Li)?|" + n + "(i|[fF]i|Li)" + ")",
 			relevance: 0
 		}, o = {
-			className: "number",
-			begin: "\\b(((0[xX](([\\da-fA-F][\\da-fA-F_]*|_[\\da-fA-F][\\da-fA-F_]*)\\.([\\da-fA-F][\\da-fA-F_]*|_[\\da-fA-F][\\da-fA-F_]*)|\\.?([\\da-fA-F][\\da-fA-F_]*|_[\\da-fA-F][\\da-fA-F_]*))[pP][+-]?(0|[1-9][\\d_]*|\\d[\\d_]*|[\\d_]+?\\d))|((0|[1-9][\\d_]*|\\d[\\d_]*|[\\d_]+?\\d)(\\.\\d*|([eE][+-]?(0|[1-9][\\d_]*|\\d[\\d_]*|[\\d_]+?\\d)))|\\d+\\.(0|[1-9][\\d_]*|\\d[\\d_]*|[\\d_]+?\\d)|\\.(0|[1-9][\\d_]*)([eE][+-]?(0|[1-9][\\d_]*|\\d[\\d_]*|[\\d_]+?\\d))?))([fF]|L|i|[fF]i|Li)?|((0|[1-9][\\d_]*)|0[bB][01_]+|0[xX]([\\da-fA-F][\\da-fA-F_]*|_[\\da-fA-F][\\da-fA-F_]*))(i|[fF]i|Li))",
-			relevance: 0
-		}, s = {
 			className: "string",
-			begin: "'(" + i + "|.)",
+			begin: "'(" + r + "|.)",
 			end: "'",
 			illegal: "."
-		}, c = {
+		}, s = {
 			className: "string",
 			begin: "\"",
 			contains: [{
-				begin: i,
+				begin: r,
 				relevance: 0
 			}],
 			end: "\"[cwd]?"
-		}, l = {
+		}, c = {
 			className: "string",
 			begin: "[rq]\"",
 			end: "\"[cwd]?",
 			relevance: 5
-		}, u = {
+		}, l = {
 			className: "string",
 			begin: "`",
 			end: "`[cwd]?"
-		}, d = {
+		}, u = {
 			className: "string",
 			begin: "x\"[\\da-fA-F\\s\\n\\r]*\"[cwd]?",
 			relevance: 10
-		}, f = {
+		}, d = {
 			className: "string",
 			begin: "q\"\\{",
 			end: "\\}\""
-		}, p = {
+		}, f = {
 			className: "meta",
 			begin: "^#!",
 			end: "$",
 			relevance: 5
-		}, m = {
+		}, p = {
 			className: "meta",
 			begin: "#(line)",
 			end: "$",
 			relevance: 5
-		}, h = {
+		}, m = {
 			className: "keyword",
 			begin: "@[a-zA-Z_][a-zA-Z_\\d]*"
-		}, g = e.COMMENT("\\/\\+", "\\+\\/", {
+		}, h = e.COMMENT("\\/\\+", "\\+\\/", {
 			contains: ["self"],
 			relevance: 10
 		});
@@ -4955,33 +4970,30 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			contains: [
 				e.C_LINE_COMMENT_MODE,
 				e.C_BLOCK_COMMENT_MODE,
-				g,
-				d,
+				h,
+				u,
+				s,
 				c,
 				l,
-				u,
-				f,
-				o,
+				d,
 				a,
-				s,
+				i,
+				o,
+				f,
 				p,
-				m,
-				h
+				m
 			]
 		};
 	}
 	t.exports = n;
-})), K = /* @__PURE__ */ o(((e, t) => {
+})), q = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = e.regex, n = {
 			begin: /<\/?[A-Za-z_]/,
 			end: ">",
 			subLanguage: "xml",
 			relevance: 0
-		}, r = {
-			begin: "^[-\\*]{3,}",
-			end: "$"
-		}, i = {
+		}, r = { match: /^ {0,3}([-*_])[ \t]*(?:\1[ \t]*){2,}$/ }, i = {
 			className: "code",
 			variants: [
 				{ begin: "(`{3,})[^`](.|\\n)*?\\1`*[ ]*" },
@@ -5131,6 +5143,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				},
 				n,
 				a,
+				r,
 				c,
 				l,
 				{
@@ -5140,7 +5153,6 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					end: "$"
 				},
 				i,
-				r,
 				s,
 				o,
 				{
@@ -5151,23 +5163,23 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), ae = /* @__PURE__ */ o(((e, t) => {
+})), ie = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
-		let t = {
+		let t = e.regex, n = {
 			className: "subst",
 			variants: [{ begin: "\\$[A-Za-z0-9_]+" }]
-		}, n = {
+		}, r = {
 			className: "subst",
 			variants: [{
 				begin: /\$\{/,
 				end: /\}/
 			}],
 			keywords: "true false null this is new super"
-		}, r = {
+		}, i = {
 			className: "number",
 			relevance: 0,
 			variants: [{ match: /\b[0-9][0-9_]*(\.[0-9][0-9_]*)?([eE][+-]?[0-9][0-9_]*)?\b/ }, { match: /\b0[xX][0-9A-Fa-f][0-9A-Fa-f_]*\b/ }]
-		}, i = {
+		}, a = {
 			className: "string",
 			variants: [
 				{
@@ -5193,8 +5205,8 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					end: "'''",
 					contains: [
 						e.BACKSLASH_ESCAPE,
-						t,
-						n
+						n,
+						r
 					]
 				},
 				{
@@ -5202,8 +5214,8 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					end: "\"\"\"",
 					contains: [
 						e.BACKSLASH_ESCAPE,
-						t,
-						n
+						n,
+						r
 					]
 				},
 				{
@@ -5212,8 +5224,8 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					illegal: "\\n",
 					contains: [
 						e.BACKSLASH_ESCAPE,
-						t,
-						n
+						n,
+						r
 					]
 				},
 				{
@@ -5222,32 +5234,35 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					illegal: "\\n",
 					contains: [
 						e.BACKSLASH_ESCAPE,
-						t,
-						n
+						n,
+						r
 					]
 				}
 			]
 		};
-		n.contains = [r, i];
-		let a = /* @__PURE__ */ "Comparable.DateTime.Duration.Function.Iterable.Iterator.List.Map.Match.Object.Pattern.RegExp.Set.Stopwatch.String.StringBuffer.StringSink.Symbol.Type.Uri.bool.double.int.num.Element.ElementList".split("."), o = a.map((e) => `${e}?`);
+		r.contains = [i, a];
+		let o = /* @__PURE__ */ "Comparable.DateTime.Duration.Function.Iterable.Iterator.List.Map.Match.Object.Pattern.RegExp.Set.Stopwatch.String.StringBuffer.StringSink.Symbol.Type.Uri.bool.double.int.num.Element.ElementList".split("."), s = o.map((e) => `${e}?`), c = {
+			keyword: /* @__PURE__ */ "abstract.as.assert.async.await.base.break.case.catch.class.const.continue.covariant.default.deferred.do.dynamic.else.enum.export.extends.extension.external.factory.false.final.finally.for.Function.get.hide.if.implements.import.in.interface.is.late.library.mixin.new.null.on.operator.part.required.rethrow.return.sealed.set.show.static.super.switch.sync.this.throw.true.try.typedef.var.void.when.while.with.yield".split("."),
+			built_in: o.concat(s).concat([
+				"Never",
+				"Null",
+				"dynamic",
+				"print",
+				"document",
+				"querySelector",
+				"querySelectorAll",
+				"window"
+			]),
+			$pattern: /[A-Za-z][A-Za-z0-9_]*\??/
+		}, l = {
+			match: t.concat(/\b_?/, t.either(/(?:[A-Z]+[a-z0-9]+)+/, /(?:[A-Z]+[a-z0-9]+)+[A-Z]+/), /(?![A-Za-z0-9_])/),
+			scope: "title.class"
+		};
 		return {
 			name: "Dart",
-			keywords: {
-				keyword: /* @__PURE__ */ "abstract.as.assert.async.await.base.break.case.catch.class.const.continue.covariant.default.deferred.do.dynamic.else.enum.export.extends.extension.external.factory.false.final.finally.for.Function.get.hide.if.implements.import.in.interface.is.late.library.mixin.new.null.on.operator.part.required.rethrow.return.sealed.set.show.static.super.switch.sync.this.throw.true.try.typedef.var.void.when.while.with.yield".split("."),
-				built_in: a.concat(o).concat([
-					"Never",
-					"Null",
-					"dynamic",
-					"print",
-					"document",
-					"querySelector",
-					"querySelectorAll",
-					"window"
-				]),
-				$pattern: /[A-Za-z][A-Za-z0-9_]*\??/
-			},
+			keywords: c,
 			contains: [
-				i,
+				a,
 				e.COMMENT(/\/\*\*(?!\/)/, /\*\//, {
 					subLanguage: "markdown",
 					relevance: 0
@@ -5267,17 +5282,21 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					excludeEnd: !0,
 					contains: [{ beginKeywords: "extends implements" }, e.UNDERSCORE_TITLE_MODE]
 				},
-				r,
+				l,
+				{
+					match: /\b(?!(?:assert|catch|for|if|switch|while)\b)[a-z_][A-Za-z0-9_]*(?=\()/,
+					scope: "title.function"
+				},
+				i,
 				{
 					className: "meta",
 					begin: "@[A-Za-z]+"
-				},
-				{ begin: "=>" }
+				}
 			]
 		};
 	}
 	t.exports = n;
-})), oe = /* @__PURE__ */ o(((e, t) => {
+})), ae = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = /* @__PURE__ */ "exports.register.file.shl.array.record.property.for.mod.while.set.ally.label.uses.raise.not.stored.class.safecall.var.interface.or.private.static.exit.index.inherited.to.else.stdcall.override.shr.asm.far.resourcestring.finalization.packed.virtual.out.and.protected.library.do.xorwrite.goto.near.function.end.div.overload.object.unit.begin.string.on.inline.repeat.until.destructor.write.message.program.with.read.initialization.except.default.nil.if.case.cdecl.in.downto.threadvar.of.try.pascal.const.external.constructor.type.public.then.implementation.finally.published.procedure.absolute.reintroduce.operator.as.is.abstract.alias.assembler.bitpacked.break.continue.cppdecl.cvar.enumerator.experimental.platform.deprecated.unimplemented.dynamic.export.far16.forward.generic.helper.implements.interrupt.iochecks.local.name.nodefault.noreturn.nostackframe.oldfpccall.otherwise.saveregisters.softfloat.specialize.strict.unaligned.varargs".split("."), n = [
 			e.C_LINE_COMMENT_MODE,
@@ -5369,7 +5388,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), se = /* @__PURE__ */ o(((e, t) => {
+})), J = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = e.regex;
 		return {
@@ -5379,7 +5398,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				{
 					className: "meta",
 					relevance: 10,
-					match: t.either(/^@@ +-\d+,\d+ +\+\d+,\d+ +@@/, /^\*\*\* +\d+,\d+ +\*\*\*\*$/, /^--- +\d+,\d+ +----$/)
+					match: t.either(/^@@ +-\d+,\d+ +\+\d+,\d+ +@@/, /^@@ +-\d+ +\+\d+,\d+ +@@/, /^@@ +-\d+,\d+ +\+\d+ +@@/, /^@@ +-\d+ +\+\d+ +@@/, /^\*\*\* +\d+,\d+ +\*\*\*\*$/, /^--- +\d+,\d+ +----$/)
 				},
 				{
 					className: "comment",
@@ -5407,7 +5426,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), ce = /* @__PURE__ */ o(((e, t) => {
+})), oe = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = {
 			begin: /\|[A-Za-z]+:?/,
@@ -5448,32 +5467,77 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), le = /* @__PURE__ */ o(((e, t) => {
+})), Y = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
+		let t = /* @__PURE__ */ "A.AAAA.AFSDB.APL.CAA.CDNSKEY.CDS.CERT.CNAME.DHCID.DLV.DNAME.DNSKEY.DS.HIP.IPSECKEY.KEY.KX.LOC.MX.NAPTR.NS.NSEC.NSEC3.NSEC3PARAM.PTR.RRSIG.RP.SIG.SOA.SRV.SSHFP.TA.TKEY.TLSA.TSIG.TXT".split("."), n = {
+			scope: "char.escape",
+			match: /\\(?:\d{3}|[^\d\n])/
+		}, r = {
+			scope: "punctuation",
+			match: /[()]/
+		}, i = {
+			scope: "string",
+			begin: /"/,
+			end: /"/,
+			illegal: /\n/,
+			contains: [n]
+		};
 		return {
 			name: "DNS Zone",
 			aliases: ["bind", "zone"],
-			keywords: /* @__PURE__ */ "IN.A.AAAA.AFSDB.APL.CAA.CDNSKEY.CDS.CERT.CNAME.DHCID.DLV.DNAME.DNSKEY.DS.HIP.IPSECKEY.KEY.KX.LOC.MX.NAPTR.NS.NSEC.NSEC3.NSEC3PARAM.PTR.RRSIG.RP.SIG.SOA.SRV.SSHFP.TA.TKEY.TLSA.TSIG.TXT".split("."),
+			case_insensitive: !0,
+			keywords: t,
 			contains: [
 				e.COMMENT(";", "$", { relevance: 0 }),
+				{
+					match: [
+						/\bCAA\b/,
+						/[ \t]+/,
+						/\d+/,
+						/[ \t]+/,
+						/\b(?:issuewild|issue|iodef|contactemail|contactphone|issuevmc|issuemail)\b/
+					],
+					scope: {
+						1: "keyword",
+						3: "number",
+						5: "attr"
+					}
+				},
+				i,
+				{
+					match: [
+						/\bTXT\b/,
+						/\s+/,
+						/(?!")(?:\\(?:\d{3}|[^\d\n])|[^\s;"()\\])+/
+					],
+					scope: {
+						1: "keyword",
+						3: "string"
+					}
+				},
 				{
 					className: "meta",
 					begin: /^\$(TTL|GENERATE|INCLUDE|ORIGIN)\b/
 				},
+				r,
 				{
-					className: "number",
-					begin: "((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:)))\\b"
+					scope: "type",
+					match: /\b(?:IN|CH|HS)\b/
 				},
 				{
 					className: "number",
-					begin: "((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]).){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\b"
+					begin: /(?:(?:[0-9A-Fa-f]{1,4}:){7}(?:[0-9A-Fa-f]{1,4}|:)|(?:[0-9A-Fa-f]{1,4}:){6}(?::[0-9A-Fa-f]{1,4}|(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:)|(?:[0-9A-Fa-f]{1,4}:){5}(?:(?::[0-9A-Fa-f]{1,4}){1,2}|:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:)|(?:[0-9A-Fa-f]{1,4}:){4}(?:(?::[0-9A-Fa-f]{1,4}){1,3}|(?::[0-9A-Fa-f]{1,4})?:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:)|(?:[0-9A-Fa-f]{1,4}:){3}(?:(?::[0-9A-Fa-f]{1,4}){1,4}|(?::[0-9A-Fa-f]{1,4}){0,2}:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:)|(?:[0-9A-Fa-f]{1,4}:){2}(?:(?::[0-9A-Fa-f]{1,4}){1,5}|(?::[0-9A-Fa-f]{1,4}){0,3}:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:)|(?:[0-9A-Fa-f]{1,4}:)(?:(?::[0-9A-Fa-f]{1,4}){1,6}|(?::[0-9A-Fa-f]{1,4}){0,4}:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:)|(?::(?:(?::[0-9A-Fa-f]{1,4}){1,7}|(?::[0-9A-Fa-f]{1,4}){0,5}:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:)))(?![0-9A-Fa-f:])/
+				},
+				{
+					className: "number",
+					begin: /(?:(?:25[0-5]|(?:2[0-4]|1?\d)?\d)\.){3}(?:25[0-5]|(?:2[0-4]|1?\d)?\d)\b/
 				},
 				e.inherit(e.NUMBER_MODE, { begin: /\b\d+[dhwm]?/ })
 			]
 		};
 	}
 	t.exports = n;
-})), q = /* @__PURE__ */ o(((e, t) => {
+})), X = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "Dockerfile",
@@ -5506,12 +5570,16 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), ue = /* @__PURE__ */ o(((e, t) => {
+})), se = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = e.COMMENT(/^\s*@?rem\b/, /$/, { relevance: 10 });
 		return {
 			name: "Batch file (DOS)",
-			aliases: ["bat", "cmd"],
+			aliases: [
+				"bat",
+				"batch",
+				"cmd"
+			],
 			case_insensitive: !0,
 			illegal: /\/\*/,
 			keywords: {
@@ -5544,11 +5612,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				},
 				{
 					className: "function",
-					begin: {
-						className: "symbol",
-						begin: "^\\s*[A-Za-z._?][A-Za-z0-9_$#@~.?]*(:|\\s+label)",
-						relevance: 0
-					}.begin,
+					begin: { begin: "^\\s*[A-Za-z._?][A-Za-z0-9_$#@~.?]*(:|\\s+label)" }.begin,
 					end: "goto:eof",
 					contains: [e.inherit(e.TITLE_MODE, { begin: "([_a-zA-Z]\\w*\\.)*([_a-zA-Z]\\w*:)?[_a-zA-Z]\\w*" }), t]
 				},
@@ -5562,7 +5626,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), de = /* @__PURE__ */ o(((e, t) => {
+})), ce = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			keywords: "dsconfig",
@@ -5615,7 +5679,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), fe = /* @__PURE__ */ o(((e, t) => {
+})), le = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = {
 			className: "string",
@@ -5729,7 +5793,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), J = /* @__PURE__ */ o(((e, t) => {
+})), ue = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "Dust",
@@ -5760,7 +5824,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), pe = /* @__PURE__ */ o(((e, t) => {
+})), de = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = e.COMMENT(/\(\*/, /\*\)/);
 		return {
@@ -5798,11 +5862,11 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Y = /* @__PURE__ */ o(((e, t) => {
+})), fe = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = e.regex, n = "[a-zA-Z_][a-zA-Z0-9_.]*(!|\\?)?", r = {
 			$pattern: n,
-			keyword: /* @__PURE__ */ "after.alias.and.case.catch.cond.defstruct.defguard.do.else.end.fn.for.if.import.in.not.or.quote.raise.receive.require.reraise.rescue.try.unless.unquote.unquote_splicing.use.when.with|0".split("."),
+			keyword: /* @__PURE__ */ "after.alias.and.case.catch.cond.defstruct.defguard.defguardp.do.else.end.fn.for.if.import.in.not.or.quote.raise.receive.require.reraise.rescue.try.unless.unquote.unquote_splicing.use.when.with|0".split("."),
 			literal: [
 				"false",
 				"nil",
@@ -5821,7 +5885,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			match: /\\[\s\S]/,
 			scope: "char.escape",
 			relevance: 0
-		}, s = "[/|([{<\"']", c = [
+		}, s = [
 			{
 				begin: /"/,
 				end: /"/
@@ -5854,42 +5918,42 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				begin: /</,
 				end: />/
 			}
-		], l = (e) => ({
+		], c = (e) => ({
 			scope: "char.escape",
 			begin: t.concat(/\\/, e),
 			relevance: 0
-		}), u = {
+		}), l = {
 			className: "string",
-			begin: "~[a-z](?=" + s + ")",
-			contains: c.map((t) => e.inherit(t, { contains: [
-				l(t.end),
+			begin: "~[a-z](?=[/|([{<\"'])",
+			contains: s.map((t) => e.inherit(t, { contains: [
+				c(t.end),
 				o,
 				i
 			] }))
-		}, d = {
+		}, u = {
 			className: "string",
-			begin: "~[A-Z](?=" + s + ")",
-			contains: c.map((t) => e.inherit(t, { contains: [l(t.end)] }))
-		}, f = {
+			begin: "~[A-Z](?=[/|([{<\"'])",
+			contains: s.map((t) => e.inherit(t, { contains: [c(t.end)] }))
+		}, d = {
 			className: "regex",
 			variants: [{
-				begin: "~r(?=" + s + ")",
-				contains: c.map((n) => e.inherit(n, {
+				begin: "~r(?=[/|([{<\"'])",
+				contains: s.map((n) => e.inherit(n, {
 					end: t.concat(n.end, /[uismxfU]{0,7}/),
 					contains: [
-						l(n.end),
+						c(n.end),
 						o,
 						i
 					]
 				}))
 			}, {
-				begin: "~R(?=" + s + ")",
-				contains: c.map((n) => e.inherit(n, {
+				begin: "~R(?=[/|([{<\"'])",
+				contains: s.map((n) => e.inherit(n, {
 					end: t.concat(n.end, /[uismxfU]{0,7}/),
-					contains: [l(n.end)]
+					contains: [c(n.end)]
 				}))
 			}]
-		}, p = {
+		}, f = {
 			className: "string",
 			contains: [e.BACKSLASH_ESCAPE, i],
 			variants: [
@@ -5930,7 +5994,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					end: /"/
 				}
 			]
-		}, m = {
+		}, p = {
 			className: "function",
 			beginKeywords: "def defp defmacro defmacrop",
 			end: /\B\b/,
@@ -5938,23 +6002,28 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				begin: n,
 				endsParent: !0
 			})]
-		}, h = e.inherit(m, {
+		}, m = e.inherit(p, {
 			className: "class",
 			beginKeywords: "defimpl defmodule defprotocol defrecord",
 			end: /\bdo\b|$|;/
-		}), g = [
-			p,
+		}), h = [
+			{
+				scope: "string",
+				match: /\?'/,
+				relevance: 0
+			},
 			f,
 			d,
 			u,
+			l,
 			e.HASH_COMMENT_MODE,
-			h,
 			m,
+			p,
 			{ begin: "::" },
 			{
 				className: "symbol",
 				begin: ":(?![\\s:])",
-				contains: [p, { begin: "[a-zA-Z_]\\w*[!?=]?|[-+~]@|<<|>>|=~|===?|<=>|[<>]=?|\\*\\*|[-/+%^&*~`|]|\\[\\]=?" }],
+				contains: [f, { begin: "[a-zA-Z_]\\w*[!?=]?|[-+~]@|<<|>>|=~|===?|<=>|[<>]=?|\\*\\*|[-/+%^&*~`|]|\\[\\]=?" }],
 				relevance: 0
 			},
 			{
@@ -5973,15 +6042,15 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				begin: "(\\$\\W)|((\\$|@@?)(\\w+))"
 			}
 		];
-		return i.contains = g, {
+		return i.contains = h, {
 			name: "Elixir",
 			aliases: ["ex", "exs"],
 			keywords: r,
-			contains: g
+			contains: h
 		};
 	}
 	t.exports = n;
-})), X = /* @__PURE__ */ o(((e, t) => {
+})), pe = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = { variants: [e.COMMENT("--", "$"), e.COMMENT(/\{-/, /-\}/, { contains: ["self"] })] }, n = {
 			className: "type",
@@ -6088,51 +6157,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				"__ENCODING__"
 			],
 			"variable.language": ["self", "super"],
-			keyword: [
-				"alias",
-				"and",
-				"begin",
-				"BEGIN",
-				"break",
-				"case",
-				"class",
-				"defined",
-				"do",
-				"else",
-				"elsif",
-				"end",
-				"END",
-				"ensure",
-				"for",
-				"if",
-				"in",
-				"module",
-				"next",
-				"not",
-				"or",
-				"redo",
-				"require",
-				"rescue",
-				"retry",
-				"return",
-				"then",
-				"undef",
-				"unless",
-				"until",
-				"when",
-				"while",
-				"yield",
-				...[
-					"include",
-					"extend",
-					"prepend",
-					"public",
-					"private",
-					"protected",
-					"raise",
-					"throw"
-				]
-			],
+			keyword: /* @__PURE__ */ "alias.and.begin.BEGIN.break.case.class.defined.do.else.elsif.end.END.ensure.for.if.in.module.next.not.or.redo.require.rescue.retry.return.then.undef.unless.until.when.while.yield.include.extend.prepend.public.private.protected.raise.throw".split("."),
 			built_in: [
 				"proc",
 				"lambda",
@@ -6294,7 +6319,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				},
 				contains: [p]
 			},
-			{ begin: e.IDENT_RE + "::" },
+			{ begin: "::" },
 			{
 				className: "symbol",
 				begin: e.UNDERSCORE_IDENT_RE + "(!|\\?)?:",
@@ -6440,7 +6465,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 	t.exports = n;
 })), _e = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
-		let t = "[a-z'][a-zA-Z0-9_']*", n = "(" + t + ":[a-z'][a-zA-Z0-9_']*|[a-z'][a-zA-Z0-9_']*)", r = {
+		let t = "[a-z'][a-zA-Z0-9_']*", n = "(" + t + ":" + t + "|" + t + ")", r = {
 			keyword: "after and andalso|10 band begin bnot bor bsl bzr bxor case catch cond div end fun if let not of orelse|10 query receive rem try when xor maybe else",
 			literal: "false true"
 		}, i = e.COMMENT("%", "$"), a = {
@@ -6839,6 +6864,91 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
+})), Z = /* @__PURE__ */ o(((e, t) => {
+	function n(e) {
+		let t = e.regex, n = {
+			scope: "variable",
+			match: /%[a-zA-Z]/
+		}, r = {
+			scope: "string",
+			begin: /"/,
+			end: /"/,
+			contains: [e.BACKSLASH_ESCAPE]
+		}, i = {
+			scope: "comment",
+			begin: /#/,
+			end: /$/
+		}, a = [
+			"Desktop Entry",
+			"Unit",
+			"Service",
+			"Install",
+			"Socket",
+			"Mount",
+			"Automount",
+			"Swap",
+			"Path",
+			"Timer",
+			"Slice",
+			"Scope",
+			"Manager",
+			"connection",
+			"ipv4",
+			"wifi-security",
+			"wifi",
+			"ipv6",
+			"802-11-wireless-security",
+			"802-11-wireless",
+			"802-3-ethernet",
+			"vpn",
+			"Journal",
+			"Bridge",
+			"Desktop Action\\s+[A-Za-z0-9_-]+"
+		];
+		a.sort().reverse();
+		let o = {
+			scope: "section",
+			begin: RegExp("^\\[(" + a.join("|") + ")\\]$")
+		}, s = {
+			scope: "operator",
+			match: /=/
+		}, c = {
+			scope: "literal",
+			match: RegExp("\\b(" + [
+				"Application",
+				"Link",
+				"Directory",
+				"forking",
+				"oneshot",
+				"OneShot",
+				"true",
+				"false",
+				"True",
+				"False"
+			].join("|") + ")\\b")
+		};
+		return {
+			name: "FreeDesktop config",
+			aliases: ["desktop", "systemd"],
+			case_insensitive: !1,
+			contains: [
+				i,
+				o,
+				{
+					begin: t.concat(/^[A-Za-z0-9_-]+(\[[A-Za-z0-9_@.]+\])?/, t.lookahead(/\s*=/)),
+					beginScope: "attr",
+					end: /$/,
+					contains: [
+						s,
+						r,
+						c,
+						n
+					]
+				}
+			]
+		};
+	}
+	t.exports = n;
 })), Se = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return new RegExp(e.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&"), "m");
@@ -6859,6 +6969,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 	function s(...e) {
 		return "(" + (o(e).capture ? "" : "?:") + e.map((e) => r(e)).join("|") + ")";
 	}
+	new RegExp(s(/\[(?:[^\\\]]|\\.)*\]/, /\(\?<(?![=!])[^>]+>/, /\(\?'[^']+'/, /\(\??/, /\\([1-9][0-9]*)/, /\\./));
 	function c(e) {
 		let t = /* @__PURE__ */ "abstract.and.as.assert.base.begin.class.default.delegate.do.done.downcast.downto.elif.else.end.exception.extern.finally.fixed.for.fun.function.global.if.in.inherit.inline.interface.internal.lazy.let.match.member.module.mutable.namespace.new.of.open.or.override.private.public.rec.return.static.struct.then.to.try.type.upcast.use.val.void.when.while.with.yield".split("."), r = {
 			scope: "keyword",
@@ -7475,45 +7586,72 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 	}
 	t.exports = n;
 })), Ee = /* @__PURE__ */ o(((e, t) => {
-	function n(e) {
+	var n = {
+		scope: "variable",
+		begin: /<[^>\s]+>/
+	}, r = /^[ \t]*/;
+	function i(e) {
+		let t = {
+			begin: [r, /\b(?:Given|When|Then|And|But)\b/],
+			beginScope: { 2: "keyword" },
+			end: /$/,
+			contains: [n, e.QUOTE_STRING_MODE]
+		}, i = {
+			begin: [r, /\*(?=[ \t])/],
+			beginScope: { 2: "keyword" },
+			end: /$/,
+			contains: [n, e.QUOTE_STRING_MODE]
+		};
 		return {
 			name: "Gherkin",
 			aliases: ["feature"],
-			keywords: "Feature Background Ability Business Need Scenario Scenarios Scenario Outline Scenario Template Examples Given And Then But When",
 			contains: [
 				{
-					className: "symbol",
-					begin: "\\*",
-					relevance: 0
+					scope: "comment",
+					begin: /^[ \t]*#/,
+					end: /$/
 				},
 				{
-					className: "meta",
-					begin: "@[^@\\s]+"
+					begin: [r, /@[^@\s]+(?:[ \t]+@[^@\s]+)*/],
+					beginScope: { 2: "meta" }
 				},
 				{
-					begin: "\\|",
-					end: "\\|\\w*$",
-					contains: [{
-						className: "string",
-						begin: "[^|]+"
+					scope: "string",
+					variants: [{
+						begin: /^[ \t]*"""\w*/,
+						end: /^[ \t]*"""[ \t]*$/
+					}, {
+						begin: /^[ \t]*```\w*/,
+						end: /^[ \t]*```[ \t]*$/
 					}]
 				},
 				{
-					className: "variable",
-					begin: "<",
-					end: ">"
+					begin: [
+						r,
+						/(Feature|Business Need|Ability|Rule|Examples?|Scenario(?:s| Outline| Template)?|Background)/,
+						/:/
+					],
+					beginScope: {
+						2: "keyword",
+						3: "punctuation"
+					},
+					end: /$/,
+					contains: [n, e.QUOTE_STRING_MODE]
 				},
-				e.HASH_COMMENT_MODE,
+				t,
+				i,
 				{
-					className: "string",
-					begin: "\"\"\"",
-					end: "\"\"\""
-				},
-				e.QUOTE_STRING_MODE
+					begin: /^[ \t]*\|/,
+					end: /$/,
+					contains: [n, {
+						scope: "string",
+						match: /[^|<\n]+/
+					}]
+				}
 			]
 		};
 	}
-	t.exports = n;
+	t.exports = i;
 })), De = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
@@ -7559,7 +7697,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Z = /* @__PURE__ */ o(((e, t) => {
+})), ke = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = {
 			keyword: [
@@ -7670,6 +7808,10 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 							relevance: 0
 						},
 						{
+							match: /-?\b0[bB](_?[01])*i?/,
+							relevance: 0
+						},
+						{
 							match: /-?\.\d(_?\d)*([eE][+-]?\d(_?\d)*)?i?/,
 							relevance: 0
 						},
@@ -7698,7 +7840,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), ke = /* @__PURE__ */ o(((e, t) => {
+})), Ae = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "Golo",
@@ -7722,7 +7864,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Ae = /* @__PURE__ */ o(((e, t) => {
+})), je = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "Gradle",
@@ -7739,7 +7881,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), je = /* @__PURE__ */ o(((e, t) => {
+})), Me = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = e.regex;
 		return {
@@ -7805,12 +7947,27 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Me = /* @__PURE__ */ o(((e, t) => {
-	function n(e, t = {}) {
+})), Ne = /* @__PURE__ */ o(((e, t) => {
+	var n = "[0-9](_*[0-9])*", r = `\\.(${n})`, i = "[0-9a-fA-F](_*[0-9a-fA-F])*", a = {
+		className: "number",
+		variants: [
+			{ begin: `(\\b(${n})((${r})|\\.)?|(${r}))[eE][+-]?(${n})[fFdD]?\\b` },
+			{ begin: `\\b(${n})((${r})[fFdD]?\\b|\\.([fFdD]\\b)?)` },
+			{ begin: `(${r})[fFdD]?\\b` },
+			{ begin: `\\b(${n})[fFdD]\\b` },
+			{ begin: `\\b0[xX]((${i})\\.?|(${i})?\\.(${i}))[pP][+-]?(${n})[fFdD]?\\b` },
+			{ begin: "\\b(0|[1-9](_*[0-9])*)[lL]?\\b" },
+			{ begin: `\\b0[xX](${i})[lL]?\\b` },
+			{ begin: "\\b0(_*[0-7])*[lL]?\\b" },
+			{ begin: "\\b0[bB][01](_*[01])*[lL]?\\b" }
+		],
+		relevance: 0
+	};
+	function o(e, t = {}) {
 		return t.variants = e, t;
 	}
-	function r(e) {
-		let t = e.regex, r = "[A-Za-z0-9_$]+", i = n([
+	function s(e) {
+		let t = e.regex, n = "[A-Za-z0-9_$]+", r = o([
 			e.C_LINE_COMMENT_MODE,
 			e.C_BLOCK_COMMENT_MODE,
 			e.COMMENT("/\\*\\*", "\\*/", {
@@ -7823,11 +7980,11 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					begin: "@[A-Za-z]+"
 				}]
 			})
-		]), a = {
+		]), i = {
 			className: "regexp",
 			begin: /~?\/[^\/\n]+\//,
 			contains: [e.BACKSLASH_ESCAPE]
-		}, o = n([e.BINARY_NUMBER_MODE, e.C_NUMBER_MODE]), s = n([
+		}, s = a, c = o([
 			{
 				begin: /"""/,
 				end: /"""/
@@ -7843,7 +8000,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			},
 			e.APOS_STRING_MODE,
 			e.QUOTE_STRING_MODE
-		], { className: "string" }), c = {
+		], { className: "string" }), l = {
 			match: [
 				/(class|interface|trait|enum|record|extends|implements)/,
 				/\s+/,
@@ -7877,11 +8034,11 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					binary: "groovy",
 					relevance: 10
 				}),
+				r,
+				c,
 				i,
 				s,
-				a,
-				o,
-				c,
+				l,
 				{
 					className: "meta",
 					begin: "@[A-Za-z]+",
@@ -7889,7 +8046,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				},
 				{
 					className: "attr",
-					begin: r + "[ 	]*:",
+					begin: n + "[ 	]*:",
 					relevance: 0
 				},
 				{
@@ -7897,26 +8054,26 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					end: /:/,
 					relevance: 0,
 					contains: [
+						r,
+						c,
 						i,
 						s,
-						a,
-						o,
 						"self"
 					]
 				},
 				{
 					className: "symbol",
-					begin: "^[ 	]*" + t.lookahead(r + ":"),
+					begin: "^[ 	]*" + t.lookahead(n + ":"),
 					excludeBegin: !0,
-					end: r + ":",
+					end: n + ":",
 					relevance: 0
 				}
 			],
 			illegal: /#|<\//
 		};
 	}
-	t.exports = r;
-})), Ne = /* @__PURE__ */ o(((e, t) => {
+	t.exports = s;
+})), Pe = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "HAML",
@@ -8011,7 +8168,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Pe = /* @__PURE__ */ o(((e, t) => {
+})), Fe = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = e.regex, n = {
 			$pattern: /[\w.\/]+/,
@@ -8154,7 +8311,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Fe = /* @__PURE__ */ o(((e, t) => {
+})), Ie = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = "([0-9]_*)+", n = "([0-9a-fA-F]_*)+", r = "([!#$%&*+.\\/<=>?@\\\\^~-]|(?!([(),;\\[\\]`|{}]|[_:\"']))(\\p{S}|\\p{P}))", i = { variants: [e.COMMENT("--+", "$"), e.COMMENT(/\{-/, /-\}/, { contains: ["self"] })] }, a = {
 			className: "meta",
@@ -8231,7 +8388,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					className: "class",
 					begin: "\\b(data|(new)?type)\\b",
 					end: "$",
-					keywords: "data family type newtype deriving",
+					keywords: "data family type newtype deriving where",
 					contains: [
 						a,
 						s,
@@ -8291,7 +8448,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Ie = /* @__PURE__ */ o(((e, t) => {
+})), Le = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "Haxe",
@@ -8432,7 +8589,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Le = /* @__PURE__ */ o(((e, t) => {
+})), Re = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "HSP",
@@ -8476,7 +8633,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Re = /* @__PURE__ */ o(((e, t) => {
+})), ze = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = e.regex, n = "HTTP/([32]|1\\.[01])", r = {
 			className: "attribute",
@@ -8549,79 +8706,79 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), ze = /* @__PURE__ */ o(((e, t) => {
+})), Be = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
-		let t = "[a-zA-Z_\\-!.?+*=<>&#'][a-zA-Z_\\-!.?+*=<>&#'0-9/;:]*", n = {
-			$pattern: t,
+		let t = "a-zA-Z_\\-!.?+*=<>&#'", n = "[" + t + "][" + t + "0-9/;:]*", r = {
+			$pattern: n,
 			built_in: "!= % %= & &= * ** **= *= *map + += , --build-class-- --import-- -= . / // //= /= < << <<= <= = > >= >> >>= @ @= ^ ^= abs accumulate all and any ap-compose ap-dotimes ap-each ap-each-while ap-filter ap-first ap-if ap-last ap-map ap-map-when ap-pipe ap-reduce ap-reject apply as-> ascii assert assoc bin break butlast callable calling-module-name car case cdr chain chr coll? combinations compile compress cond cons cons? continue count curry cut cycle dec def default-method defclass defmacro defmacro-alias defmacro/g! defmain defmethod defmulti defn defn-alias defnc defnr defreader defseq del delattr delete-route dict-comp dir disassemble dispatch-reader-macro distinct divmod do doto drop drop-last drop-while empty? end-sequence eval eval-and-compile eval-when-compile even? every? except exec filter first flatten float? fn fnc fnr for for* format fraction genexpr gensym get getattr global globals group-by hasattr hash hex id identity if if* if-not if-python2 import in inc input instance? integer integer-char? integer? interleave interpose is is-coll is-cons is-empty is-even is-every is-float is-instance is-integer is-integer-char is-iterable is-iterator is-keyword is-neg is-none is-not is-numeric is-odd is-pos is-string is-symbol is-zero isinstance islice issubclass iter iterable? iterate iterator? keyword keyword? lambda last len let lif lif-not list* list-comp locals loop macro-error macroexpand macroexpand-1 macroexpand-all map max merge-with method-decorator min multi-decorator multicombinations name neg? next none? nonlocal not not-in not? nth numeric? oct odd? open or ord partition permutations pos? post-route postwalk pow prewalk print product profile/calls profile/cpu put-route quasiquote quote raise range read read-str recursive-replace reduce remove repeat repeatedly repr require rest round route route-with-methods rwm second seq set-comp setattr setv some sorted string string? sum switch symbol? take take-nth take-while tee try unless unquote unquote-splicing vars walk when while with with* with-decorator with-gensyms xi xor yield yield-from zero? zip zip-longest | |= ~"
-		}, r = {
-			begin: t,
-			relevance: 0
 		}, i = {
+			begin: n,
+			relevance: 0
+		}, a = {
 			className: "number",
 			begin: "[-+]?\\d+(\\.\\d+)?",
 			relevance: 0
-		}, a = e.inherit(e.QUOTE_STRING_MODE, { illegal: null }), o = e.COMMENT(";", "$", { relevance: 0 }), s = {
+		}, o = e.inherit(e.QUOTE_STRING_MODE, { illegal: null }), s = e.COMMENT(";", "$", { relevance: 0 }), c = {
 			className: "literal",
 			begin: /\b([Tt]rue|[Ff]alse|nil|None)\b/
-		}, c = {
+		}, l = {
 			begin: "[\\[\\{]",
 			end: "[\\]\\}]",
 			relevance: 0
-		}, l = {
+		}, u = {
 			className: "comment",
-			begin: "\\^" + t
-		}, u = e.COMMENT("\\^\\{", "\\}"), d = {
+			begin: "\\^" + n
+		}, d = e.COMMENT("\\^\\{", "\\}"), f = {
 			className: "symbol",
-			begin: "[:]{1,2}" + t
-		}, f = {
+			begin: "[:]{1,2}" + n
+		}, p = {
 			begin: "\\(",
 			end: "\\)"
-		}, p = {
+		}, m = {
 			endsWithParent: !0,
 			relevance: 0
-		}, m = {
+		}, h = {
 			className: "name",
 			relevance: 0,
-			keywords: n,
-			begin: t,
-			starts: p
-		}, h = [
-			f,
-			a,
-			l,
-			u,
+			keywords: r,
+			begin: n,
+			starts: m
+		}, g = [
+			p,
 			o,
+			u,
 			d,
-			c,
-			i,
 			s,
-			r
+			f,
+			l,
+			a,
+			c,
+			i
 		];
-		return f.contains = [
+		return p.contains = [
 			e.COMMENT("comment", ""),
-			m,
-			p
-		], p.contains = h, c.contains = h, {
+			h,
+			m
+		], m.contains = g, l.contains = g, {
 			name: "Hy",
 			aliases: ["hylang"],
 			illegal: /\S/,
 			contains: [
 				e.SHEBANG(),
-				f,
-				a,
-				l,
-				u,
+				p,
 				o,
+				u,
 				d,
-				c,
-				i,
-				s
+				s,
+				f,
+				l,
+				a,
+				c
 			]
 		};
 	}
 	t.exports = n;
-})), Be = /* @__PURE__ */ o(((e, t) => {
+})), Ve = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "Inform 7",
@@ -8663,7 +8820,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Ve = /* @__PURE__ */ o(((e, t) => {
+})), He = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = e.regex, n = {
 			className: "number",
@@ -8750,7 +8907,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), He = /* @__PURE__ */ o(((e, t) => {
+})), Ue = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = e.regex, n = {
 			className: "params",
@@ -8796,7 +8953,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Ue = /* @__PURE__ */ o(((e, t) => {
+})), We = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = "[A-Za-zА-Яа-яёЁ_!][A-Za-zА-Яа-яёЁ_0-9]*", n = {
 			className: "number",
@@ -8891,7 +9048,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), We = /* @__PURE__ */ o(((e, t) => {
+})), Ge = /* @__PURE__ */ o(((e, t) => {
 	var n = "[0-9](_*[0-9])*", r = `\\.(${n})`, i = "[0-9a-fA-F](_*[0-9a-fA-F])*", a = {
 		className: "number",
 		variants: [
@@ -8911,7 +9068,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		return n === -1 ? "" : e.replace(t, (r) => o(e, t, n - 1));
 	}
 	function s(e) {
-		let t = e.regex, n = "[À-ʸa-zA-Z_$][À-ʸa-zA-Z_$0-9]*", r = n + o("(?:<" + n + "~~~(?:\\s*,\\s*[À-ʸa-zA-Z_$][À-ʸa-zA-Z_$0-9]*~~~)*>)?", /~~~/g, 2), i = {
+		let t = e.regex, n = "[À-ʸa-zA-Z_$][À-ʸa-zA-Z_$0-9]*", r = "(?:(?:\\s*\\[\\s*])+)?", i = "(?:\\?(?:\\s+(?:extends|super)\\s+[À-ʸa-zA-Z_$][À-ʸa-zA-Z_$0-9]*<@@@>(?:(?:\\s*\\[\\s*])+)?)?|[À-ʸa-zA-Z_$][À-ʸa-zA-Z_$0-9]*<@@@>(?:(?:\\s*\\[\\s*])+)?)", s = o("(?:\\s*<\\s*" + i + "(?:\\s*,\\s*" + i + ")*\\s*>)?", /<@@@>/g, 2), c = {
 			keyword: /* @__PURE__ */ "synchronized.abstract.private.var.static.if.const .for.while.strictfp.finally.protected.import.native.final.void.enum.else.break.transient.catch.instanceof.volatile.case.assert.package.default.public.try.switch.continue.throws.protected.public.private.module.requires.exports.do.sealed.yield.permits.goto.when".split("."),
 			literal: [
 				"false",
@@ -8929,7 +9086,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				"double"
 			],
 			built_in: ["super", "this"]
-		}, s = {
+		}, l = {
 			className: "meta",
 			begin: "@" + n,
 			contains: [{
@@ -8937,11 +9094,11 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				end: /\)/,
 				contains: ["self"]
 			}]
-		}, c = {
+		}, u = {
 			className: "params",
 			begin: /\(/,
 			end: /\)/,
-			keywords: i,
+			keywords: c,
 			relevance: 0,
 			contains: [e.C_BLOCK_COMMENT_MODE],
 			endsParent: !0
@@ -8949,7 +9106,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		return {
 			name: "Java",
 			aliases: ["jsp"],
-			keywords: i,
+			keywords: c,
 			illegal: /<\/|#/,
 			contains: [
 				e.COMMENT("/\\*\\*", "\\*/", {
@@ -8993,17 +9150,22 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					scope: "keyword"
 				},
 				{
+					beginKeywords: "new throw return else yield assert",
+					relevance: 0
+				},
+				{
 					begin: [
-						t.concat(/(?!else)/, n),
-						/\s+/,
 						n,
-						/\s+/,
+						t.concat(s, r, /\s+/),
+						n,
+						r,
+						/\s*/,
 						/=(?!=)/
 					],
 					className: {
 						1: "type",
 						3: "variable",
-						5: "operator"
+						6: "operator"
 					}
 				},
 				{
@@ -9017,32 +9179,32 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 						3: "title.class"
 					},
 					contains: [
-						c,
+						u,
 						e.C_LINE_COMMENT_MODE,
 						e.C_BLOCK_COMMENT_MODE
 					]
 				},
 				{
-					beginKeywords: "new throw return else",
-					relevance: 0
-				},
-				{
 					begin: [
-						"(?:" + r + "\\s+)",
-						e.UNDERSCORE_IDENT_RE,
+						n,
+						t.concat(s, r, /\s+/),
+						n,
 						/\s*(?=\()/
 					],
-					className: { 2: "title.function" },
-					keywords: i,
+					className: {
+						1: "type",
+						3: "title.function"
+					},
+					keywords: c,
 					contains: [
 						{
 							className: "params",
 							begin: /\(/,
 							end: /\)/,
-							keywords: i,
+							keywords: c,
 							relevance: 0,
 							contains: [
-								s,
+								l,
 								e.APOS_STRING_MODE,
 								e.QUOTE_STRING_MODE,
 								a,
@@ -9054,12 +9216,12 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					]
 				},
 				a,
-				s
+				l
 			]
 		};
 	}
 	t.exports = s;
-})), Ge = /* @__PURE__ */ o(((e, t) => {
+})), Ke = /* @__PURE__ */ o(((e, t) => {
 	var n = "[A-Za-z$_][0-9A-Za-z$_]*", r = /* @__PURE__ */ "as.in.of.if.for.while.finally.var.new.function.do.return.void.else.break.catch.instanceof.with.throw.case.default.try.switch.continue.typeof.delete.let.yield.const.class.debugger.async.await.static.import.from.export.extends.using".split("."), i = [
 		"true",
 		"false",
@@ -9104,6 +9266,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		"localStorage",
 		"sessionStorage",
 		"module",
+		"self",
 		"global"
 	], l = [].concat(s, a, o);
 	function u(e) {
@@ -9317,7 +9480,8 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			match: t.concat(/\b/, F([
 				...s,
 				"super",
-				"import"
+				"import",
+				"await"
 			].map((e) => `${e}\\s*\\(`)), d, t.lookahead(/\s*\(/)),
 			className: "title.function",
 			relevance: 0
@@ -9370,7 +9534,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				PARAMS_CONTAINS: O,
 				CLASS_REFERENCE: j
 			},
-			illegal: /#(?![$_A-z])/,
+			illegal: /#(?![$_A-Za-z])/,
 			contains: [
 				e.SHEBANG({
 					label: "shebang",
@@ -9494,7 +9658,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = u;
-})), Ke = /* @__PURE__ */ o(((e, t) => {
+})), qe = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "JBoss CLI",
@@ -9539,42 +9703,48 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), qe = /* @__PURE__ */ o(((e, t) => {
-	function n(e) {
+})), Je = /* @__PURE__ */ o(((e, t) => {
+	var n = {
+		scope: "number",
+		match: "([-+]?)(\\b0[xX][a-fA-F0-9]+|(\\b\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)|NaN|[-+]?Infinity",
+		relevance: 0
+	};
+	function r(e) {
 		let t = {
 			className: "attr",
-			begin: /"(\\.|[^\\"\r\n])*"(?=\s*:)/,
+			begin: /(("(\\.|[^\\"\r\n])*")|('(\\.|[^\\'\r\n])*'))(?=\s*:)/,
 			relevance: 1.01
-		}, n = {
+		}, r = {
 			match: /[{}[\],:]/,
 			className: "punctuation",
 			relevance: 0
-		}, r = [
+		}, i = [
 			"true",
 			"false",
 			"null"
-		], i = {
+		], a = {
 			scope: "literal",
-			beginKeywords: r.join(" ")
+			beginKeywords: i.join(" ")
 		};
 		return {
 			name: "JSON",
-			aliases: ["jsonc"],
-			keywords: { literal: r },
+			aliases: ["jsonc", "json5"],
+			keywords: { literal: i },
 			contains: [
 				t,
-				n,
+				r,
+				e.APOS_STRING_MODE,
 				e.QUOTE_STRING_MODE,
-				i,
-				e.C_NUMBER_MODE,
+				a,
+				n,
 				e.C_LINE_COMMENT_MODE,
 				e.C_BLOCK_COMMENT_MODE
 			],
 			illegal: "\\S"
 		};
 	}
-	t.exports = n;
-})), Je = /* @__PURE__ */ o(((e, t) => {
+	t.exports = r;
+})), Ye = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = "[A-Za-z_\\u00A1-\\uFFFF][A-Za-z_0-9\\u00A1-\\uFFFF]*", n = {
 			$pattern: t,
@@ -9653,7 +9823,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		], o.contains = r.contains, r;
 	}
 	t.exports = n;
-})), Ye = /* @__PURE__ */ o(((e, t) => {
+})), Xe = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "Julia REPL",
@@ -9670,7 +9840,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Xe = /* @__PURE__ */ o(((e, t) => {
+})), Ze = /* @__PURE__ */ o(((e, t) => {
 	var n = "[0-9](_*[0-9])*", r = `\\.(${n})`, i = "[0-9a-fA-F](_*[0-9a-fA-F])*", a = {
 		className: "number",
 		variants: [
@@ -9757,7 +9927,12 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		}] }, p = f;
 		return p.variants[1].contains = [f], f.variants[1].contains = [p], {
 			name: "Kotlin",
-			aliases: ["kt", "kts"],
+			aliases: [
+				"kt",
+				"kts",
+				"ktm",
+				"ktx"
+			],
 			keywords: t,
 			contains: [
 				e.COMMENT("/\\*\\*", "\\*/", {
@@ -9870,28 +10045,25 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = o;
-})), Ze = /* @__PURE__ */ o(((e, t) => {
+})), Qe = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
-		let t = "[a-zA-Z_][\\w.]*", n = "<\\?(lasso(script)?|=)", r = "\\]|\\?>", i = {
-			$pattern: t + "|&[lg]t;",
+		let t = "<\\?(lasso(script)?|=)", n = "\\]|\\?>", r = {
+			$pattern: "[a-zA-Z_][\\w.]*|&[lg]t;",
 			literal: "true false none minimal full all void and or not bw nbw ew new cn ncn lt lte gt gte eq neq rx nrx ft",
 			built_in: "array date decimal duration integer map pair string tag xml null boolean bytes keyword list locale queue set stack staticarray local var variable global data self inherited currentcapture givenblock",
 			keyword: "cache database_names database_schemanames database_tablenames define_tag define_type email_batch encode_set html_comment handle handle_error header if inline iterate ljax_target link link_currentaction link_currentgroup link_currentrecord link_detail link_firstgroup link_firstrecord link_lastgroup link_lastrecord link_nextgroup link_nextrecord link_prevgroup link_prevrecord log loop namespace_using output_none portal private protect records referer referrer repeating resultset rows search_args search_arguments select sort_args sort_arguments thread_atomic value_list while abort case else fail_if fail_ifnot fail if_empty if_false if_null if_true loop_abort loop_continue loop_count params params_up return return_value run_children soap_definetag soap_lastrequest soap_lastresponse tag_name ascending average by define descending do equals frozen group handle_failure import in into join let match max min on order parent protected provide public require returnhome skip split_thread sum take thread to trait type where with yield yieldhome"
-		}, a = e.COMMENT("<!--", "-->", { relevance: 0 }), o = {
+		}, i = e.COMMENT("<!--", "-->", { relevance: 0 }), a = {
 			className: "meta",
 			begin: "\\[noprocess\\]",
 			starts: {
 				end: "\\[/noprocess\\]",
 				returnEnd: !0,
-				contains: [a]
+				contains: [i]
 			}
-		}, s = {
+		}, o = {
 			className: "meta",
-			begin: "\\[/noprocess|" + n
-		}, c = {
-			className: "symbol",
-			begin: "'" + t + "'"
-		}, l = [
+			begin: "\\[/noprocess|" + t
+		}, s = [
 			e.C_LINE_COMMENT_MODE,
 			e.C_BLOCK_COMMENT_MODE,
 			e.inherit(e.C_NUMBER_MODE, { begin: e.C_NUMBER_RE + "|(-?infinity|NaN)\\b" }),
@@ -9902,7 +10074,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				begin: "`",
 				end: "`"
 			},
-			{ variants: [{ begin: "[#$]" + t }, {
+			{ variants: [{ begin: "[#$][a-zA-Z_][\\w.]*" }, {
 				begin: "#",
 				end: "\\d+",
 				illegal: "\\W"
@@ -9910,68 +10082,71 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			{
 				className: "type",
 				begin: "::\\s*",
-				end: t,
+				end: "[a-zA-Z_][\\w.]*",
 				illegal: "\\W"
 			},
 			{
 				className: "params",
 				variants: [{
-					begin: "-(?!infinity)" + t,
+					begin: "-(?!infinity)[a-zA-Z_][\\w.]*",
 					relevance: 0
 				}, { begin: "(\\.\\.\\.)" }]
 			},
 			{
 				begin: /(->|\.)\s*/,
 				relevance: 0,
-				contains: [c]
+				contains: [{
+					className: "symbol",
+					begin: "'[a-zA-Z_][\\w.]*'"
+				}]
 			},
 			{
 				className: "class",
 				beginKeywords: "define",
 				returnEnd: !0,
 				end: "\\(|=>",
-				contains: [e.inherit(e.TITLE_MODE, { begin: t + "(=(?!>))?|[-+*/%](?!>)" })]
+				contains: [e.inherit(e.TITLE_MODE, { begin: "[a-zA-Z_][\\w.]*(=(?!>))?|[-+*/%](?!>)" })]
 			}
 		];
 		return {
 			name: "Lasso",
 			aliases: ["ls", "lassoscript"],
 			case_insensitive: !0,
-			keywords: i,
+			keywords: r,
 			contains: [
 				{
 					className: "meta",
-					begin: r,
+					begin: n,
 					relevance: 0,
 					starts: {
-						end: "\\[|" + n,
+						end: "\\[|" + t,
 						returnEnd: !0,
 						relevance: 0,
-						contains: [a]
+						contains: [i]
 					}
 				},
+				a,
 				o,
-				s,
 				{
 					className: "meta",
 					begin: "\\[no_square_brackets",
 					starts: {
 						end: "\\[/no_square_brackets\\]",
-						keywords: i,
+						keywords: r,
 						contains: [
 							{
 								className: "meta",
-								begin: r,
+								begin: n,
 								relevance: 0,
 								starts: {
-									end: "\\[noprocess\\]|" + n,
+									end: "\\[noprocess\\]|" + t,
 									returnEnd: !0,
-									contains: [a]
+									contains: [i]
 								}
 							},
-							o,
-							s
-						].concat(l)
+							a,
+							o
+						].concat(s)
 					}
 				},
 				{
@@ -9985,11 +10160,11 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					end: "lasso9$",
 					relevance: 10
 				}
-			].concat(l)
+			].concat(s)
 		};
 	}
 	t.exports = n;
-})), Qe = /* @__PURE__ */ o(((e, t) => {
+})), $e = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = e.regex.either(...[
 			"(?:NeedsTeXFormat|RequirePackage|GetIdInfo)",
@@ -10152,7 +10327,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		return {
 			name: "LaTeX",
 			aliases: ["tex"],
-			contains: [...[
+			contains: [
 				...["verb", "lstinline"].map((e) => p(e, { contains: [h()] })),
 				p("mint", f(u, { contains: [h()] })),
 				p("mintinline", f(u, { contains: [_(), h()] })),
@@ -10168,12 +10343,13 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 						"L"
 					].map((t) => m(t + "Verbatim" + e, f(d, g(t + "Verbatim" + e))))
 				])),
-				m("minted", f(d, f(u, g("minted"))))
-			], ...a]
+				m("minted", f(d, f(u, g("minted")))),
+				...a
+			]
 		};
 	}
 	t.exports = n;
-})), $e = /* @__PURE__ */ o(((e, t) => {
+})), et = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "LDIF",
@@ -10196,9 +10372,9 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), et = /* @__PURE__ */ o(((e, t) => {
+})), tt = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
-		let t = /([A-Za-z_][A-Za-z_0-9]*)?/, n = {
+		let t = e.regex, n = /([A-Za-z_][A-Za-z_0-9]*)?/, r = {
 			scope: "params",
 			begin: /\(/,
 			end: /\)(?=\:?)/,
@@ -10212,11 +10388,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				},
 				{
 					scope: "keyword",
-					match: [
-						"true",
-						"false",
-						"in"
-					].join("|")
+					match: `\\b${t.either("true", "false", "in")}\\b`
 				},
 				{
 					scope: "variable",
@@ -10227,17 +10399,17 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					match: /\+|\-|\*|\/|\%|\=\=|\=|\!|\>|\<|\&\&|\|\|/
 				}
 			]
-		}, r = {
-			match: [t, /(?=\()/],
+		}, i = {
+			match: [n, /(?=\()/],
 			scope: { 1: "keyword" },
-			contains: [n]
+			contains: [r]
 		};
-		return n.contains.unshift(r), {
+		return r.contains.unshift(i), {
 			name: "Leaf",
 			contains: [{
 				match: [
 					/#+/,
-					t,
+					n,
 					/(?=\()/
 				],
 				scope: {
@@ -10248,11 +10420,11 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					match: /\:/,
 					scope: "punctuation"
 				}] },
-				contains: [n]
+				contains: [r]
 			}, {
 				match: [
 					/#+/,
-					t,
+					n,
 					/:?/
 				],
 				scope: {
@@ -10264,7 +10436,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), tt = /* @__PURE__ */ o(((e, t) => {
+})), nt = /* @__PURE__ */ o(((e, t) => {
 	var n = (e) => ({
 		IMPORTANT: {
 			scope: "meta",
@@ -10274,6 +10446,10 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		HEXCOLOR: {
 			scope: "number",
 			begin: /#(([0-9a-fA-F]{3,4})|(([0-9a-fA-F]{2}){3,4}))\b/
+		},
+		UNICODE_RANGE: {
+			scope: "number",
+			begin: /\b[Uu]\+[0-9A-Fa-f][0-9A-Fa-f?]{0,5}(-[0-9A-Fa-f][0-9A-Fa-f]{0,5})?/
 		},
 		FUNCTION_DISPATCH: {
 			className: "built_in",
@@ -10310,54 +10486,54 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		"selection",
 		"slotted",
 		"spelling-error"
-	].sort().reverse(), l = (/* @__PURE__ */ "accent-color.align-content.align-items.align-self.alignment-baseline.all.anchor-name.animation.animation-composition.animation-delay.animation-direction.animation-duration.animation-fill-mode.animation-iteration-count.animation-name.animation-play-state.animation-range.animation-range-end.animation-range-start.animation-timeline.animation-timing-function.appearance.aspect-ratio.backdrop-filter.backface-visibility.background.background-attachment.background-blend-mode.background-clip.background-color.background-image.background-origin.background-position.background-position-x.background-position-y.background-repeat.background-size.baseline-shift.block-size.border.border-block.border-block-color.border-block-end.border-block-end-color.border-block-end-style.border-block-end-width.border-block-start.border-block-start-color.border-block-start-style.border-block-start-width.border-block-style.border-block-width.border-bottom.border-bottom-color.border-bottom-left-radius.border-bottom-right-radius.border-bottom-style.border-bottom-width.border-collapse.border-color.border-end-end-radius.border-end-start-radius.border-image.border-image-outset.border-image-repeat.border-image-slice.border-image-source.border-image-width.border-inline.border-inline-color.border-inline-end.border-inline-end-color.border-inline-end-style.border-inline-end-width.border-inline-start.border-inline-start-color.border-inline-start-style.border-inline-start-width.border-inline-style.border-inline-width.border-left.border-left-color.border-left-style.border-left-width.border-radius.border-right.border-right-color.border-right-style.border-right-width.border-spacing.border-start-end-radius.border-start-start-radius.border-style.border-top.border-top-color.border-top-left-radius.border-top-right-radius.border-top-style.border-top-width.border-width.bottom.box-align.box-decoration-break.box-direction.box-flex.box-flex-group.box-lines.box-ordinal-group.box-orient.box-pack.box-shadow.box-sizing.break-after.break-before.break-inside.caption-side.caret-color.clear.clip.clip-path.clip-rule.color.color-interpolation.color-interpolation-filters.color-profile.color-rendering.color-scheme.column-count.column-fill.column-gap.column-rule.column-rule-color.column-rule-style.column-rule-width.column-span.column-width.columns.contain.contain-intrinsic-block-size.contain-intrinsic-height.contain-intrinsic-inline-size.contain-intrinsic-size.contain-intrinsic-width.container.container-name.container-type.content.content-visibility.counter-increment.counter-reset.counter-set.cue.cue-after.cue-before.cursor.cx.cy.direction.display.dominant-baseline.empty-cells.enable-background.field-sizing.fill.fill-opacity.fill-rule.filter.flex.flex-basis.flex-direction.flex-flow.flex-grow.flex-shrink.flex-wrap.float.flood-color.flood-opacity.flow.font.font-display.font-family.font-feature-settings.font-kerning.font-language-override.font-optical-sizing.font-palette.font-size.font-size-adjust.font-smooth.font-smoothing.font-stretch.font-style.font-synthesis.font-synthesis-position.font-synthesis-small-caps.font-synthesis-style.font-synthesis-weight.font-variant.font-variant-alternates.font-variant-caps.font-variant-east-asian.font-variant-emoji.font-variant-ligatures.font-variant-numeric.font-variant-position.font-variation-settings.font-weight.forced-color-adjust.gap.glyph-orientation-horizontal.glyph-orientation-vertical.grid.grid-area.grid-auto-columns.grid-auto-flow.grid-auto-rows.grid-column.grid-column-end.grid-column-start.grid-gap.grid-row.grid-row-end.grid-row-start.grid-template.grid-template-areas.grid-template-columns.grid-template-rows.hanging-punctuation.height.hyphenate-character.hyphenate-limit-chars.hyphens.icon.image-orientation.image-rendering.image-resolution.ime-mode.initial-letter.initial-letter-align.inline-size.inset.inset-area.inset-block.inset-block-end.inset-block-start.inset-inline.inset-inline-end.inset-inline-start.isolation.justify-content.justify-items.justify-self.kerning.left.letter-spacing.lighting-color.line-break.line-height.line-height-step.list-style.list-style-image.list-style-position.list-style-type.margin.margin-block.margin-block-end.margin-block-start.margin-bottom.margin-inline.margin-inline-end.margin-inline-start.margin-left.margin-right.margin-top.margin-trim.marker.marker-end.marker-mid.marker-start.marks.mask.mask-border.mask-border-mode.mask-border-outset.mask-border-repeat.mask-border-slice.mask-border-source.mask-border-width.mask-clip.mask-composite.mask-image.mask-mode.mask-origin.mask-position.mask-repeat.mask-size.mask-type.masonry-auto-flow.math-depth.math-shift.math-style.max-block-size.max-height.max-inline-size.max-width.min-block-size.min-height.min-inline-size.min-width.mix-blend-mode.nav-down.nav-index.nav-left.nav-right.nav-up.none.normal.object-fit.object-position.offset.offset-anchor.offset-distance.offset-path.offset-position.offset-rotate.opacity.order.orphans.outline.outline-color.outline-offset.outline-style.outline-width.overflow.overflow-anchor.overflow-block.overflow-clip-margin.overflow-inline.overflow-wrap.overflow-x.overflow-y.overlay.overscroll-behavior.overscroll-behavior-block.overscroll-behavior-inline.overscroll-behavior-x.overscroll-behavior-y.padding.padding-block.padding-block-end.padding-block-start.padding-bottom.padding-inline.padding-inline-end.padding-inline-start.padding-left.padding-right.padding-top.page.page-break-after.page-break-before.page-break-inside.paint-order.pause.pause-after.pause-before.perspective.perspective-origin.place-content.place-items.place-self.pointer-events.position.position-anchor.position-visibility.print-color-adjust.quotes.r.resize.rest.rest-after.rest-before.right.rotate.row-gap.ruby-align.ruby-position.scale.scroll-behavior.scroll-margin.scroll-margin-block.scroll-margin-block-end.scroll-margin-block-start.scroll-margin-bottom.scroll-margin-inline.scroll-margin-inline-end.scroll-margin-inline-start.scroll-margin-left.scroll-margin-right.scroll-margin-top.scroll-padding.scroll-padding-block.scroll-padding-block-end.scroll-padding-block-start.scroll-padding-bottom.scroll-padding-inline.scroll-padding-inline-end.scroll-padding-inline-start.scroll-padding-left.scroll-padding-right.scroll-padding-top.scroll-snap-align.scroll-snap-stop.scroll-snap-type.scroll-timeline.scroll-timeline-axis.scroll-timeline-name.scrollbar-color.scrollbar-gutter.scrollbar-width.shape-image-threshold.shape-margin.shape-outside.shape-rendering.speak.speak-as.src.stop-color.stop-opacity.stroke.stroke-dasharray.stroke-dashoffset.stroke-linecap.stroke-linejoin.stroke-miterlimit.stroke-opacity.stroke-width.tab-size.table-layout.text-align.text-align-all.text-align-last.text-anchor.text-combine-upright.text-decoration.text-decoration-color.text-decoration-line.text-decoration-skip.text-decoration-skip-ink.text-decoration-style.text-decoration-thickness.text-emphasis.text-emphasis-color.text-emphasis-position.text-emphasis-style.text-indent.text-justify.text-orientation.text-overflow.text-rendering.text-shadow.text-size-adjust.text-transform.text-underline-offset.text-underline-position.text-wrap.text-wrap-mode.text-wrap-style.timeline-scope.top.touch-action.transform.transform-box.transform-origin.transform-style.transition.transition-behavior.transition-delay.transition-duration.transition-property.transition-timing-function.translate.unicode-bidi.user-modify.user-select.vector-effect.vertical-align.view-timeline.view-timeline-axis.view-timeline-inset.view-timeline-name.view-transition-name.visibility.voice-balance.voice-duration.voice-family.voice-pitch.voice-range.voice-rate.voice-stress.voice-volume.white-space.white-space-collapse.widows.width.will-change.word-break.word-spacing.word-wrap.writing-mode.x.y.z-index.zoom".split(".")).sort().reverse(), u = s.concat(c).sort().reverse();
+	].sort().reverse(), l = (/* @__PURE__ */ "accent-color.align-content.align-items.align-self.alignment-baseline.all.anchor-name.animation.animation-composition.animation-delay.animation-direction.animation-duration.animation-fill-mode.animation-iteration-count.animation-name.animation-play-state.animation-range.animation-range-end.animation-range-start.animation-timeline.animation-timing-function.appearance.aspect-ratio.backdrop-filter.backface-visibility.background.background-attachment.background-blend-mode.background-clip.background-color.background-image.background-origin.background-position.background-position-x.background-position-y.background-repeat.background-size.baseline-shift.block-size.border.border-block.border-block-color.border-block-end.border-block-end-color.border-block-end-style.border-block-end-width.border-block-start.border-block-start-color.border-block-start-style.border-block-start-width.border-block-style.border-block-width.border-bottom.border-bottom-color.border-bottom-left-radius.border-bottom-right-radius.border-bottom-style.border-bottom-width.border-collapse.border-color.border-end-end-radius.border-end-start-radius.border-image.border-image-outset.border-image-repeat.border-image-slice.border-image-source.border-image-width.border-inline.border-inline-color.border-inline-end.border-inline-end-color.border-inline-end-style.border-inline-end-width.border-inline-start.border-inline-start-color.border-inline-start-style.border-inline-start-width.border-inline-style.border-inline-width.border-left.border-left-color.border-left-style.border-left-width.border-radius.border-right.border-right-color.border-right-style.border-right-width.border-spacing.border-start-end-radius.border-start-start-radius.border-style.border-top.border-top-color.border-top-left-radius.border-top-right-radius.border-top-style.border-top-width.border-width.bottom.box-align.box-decoration-break.box-direction.box-flex.box-flex-group.box-lines.box-ordinal-group.box-orient.box-pack.box-shadow.box-sizing.break-after.break-before.break-inside.caption-side.caret-color.clear.clip.clip-path.clip-rule.color.color-interpolation.color-interpolation-filters.color-profile.color-rendering.color-scheme.column-count.column-fill.column-gap.column-rule.column-rule-color.column-rule-style.column-rule-width.column-span.column-width.columns.contain.contain-intrinsic-block-size.contain-intrinsic-height.contain-intrinsic-inline-size.contain-intrinsic-size.contain-intrinsic-width.container.container-name.container-type.content.content-visibility.corner-bottom-left-shape.corner-bottom-right-shape.corner-shape.corner-top-left-shape.corner-top-right-shape.counter-increment.counter-reset.counter-set.cue.cue-after.cue-before.cursor.cx.cy.direction.display.dominant-baseline.empty-cells.enable-background.field-sizing.fill.fill-opacity.fill-rule.filter.flex.flex-basis.flex-direction.flex-flow.flex-grow.flex-shrink.flex-wrap.float.flood-color.flood-opacity.flow.font.font-display.font-family.font-feature-settings.font-kerning.font-language-override.font-optical-sizing.font-palette.font-size.font-size-adjust.font-smooth.font-smoothing.font-stretch.font-style.font-synthesis.font-synthesis-position.font-synthesis-small-caps.font-synthesis-style.font-synthesis-weight.font-variant.font-variant-alternates.font-variant-caps.font-variant-east-asian.font-variant-emoji.font-variant-ligatures.font-variant-numeric.font-variant-position.font-variation-settings.font-weight.forced-color-adjust.gap.glyph-orientation-horizontal.glyph-orientation-vertical.grid.grid-area.grid-auto-columns.grid-auto-flow.grid-auto-rows.grid-column.grid-column-end.grid-column-start.grid-gap.grid-row.grid-row-end.grid-row-start.grid-template.grid-template-areas.grid-template-columns.grid-template-rows.hanging-punctuation.height.hyphenate-character.hyphenate-limit-chars.hyphens.icon.image-orientation.image-rendering.image-resolution.ime-mode.initial-letter.initial-letter-align.inline-size.inset.inset-area.inset-block.inset-block-end.inset-block-start.inset-inline.inset-inline-end.inset-inline-start.isolation.justify-content.justify-items.justify-self.kerning.left.letter-spacing.lighting-color.line-break.line-height.line-height-step.list-style.list-style-image.list-style-position.list-style-type.margin.margin-block.margin-block-end.margin-block-start.margin-bottom.margin-inline.margin-inline-end.margin-inline-start.margin-left.margin-right.margin-top.margin-trim.marker.marker-end.marker-mid.marker-start.marks.mask.mask-border.mask-border-mode.mask-border-outset.mask-border-repeat.mask-border-slice.mask-border-source.mask-border-width.mask-clip.mask-composite.mask-image.mask-mode.mask-origin.mask-position.mask-repeat.mask-size.mask-type.masonry-auto-flow.math-depth.math-shift.math-style.max-block-size.max-height.max-inline-size.max-width.min-block-size.min-height.min-inline-size.min-width.mix-blend-mode.nav-down.nav-index.nav-left.nav-right.nav-up.none.normal.object-fit.object-position.offset.offset-anchor.offset-distance.offset-path.offset-position.offset-rotate.opacity.order.orphans.outline.outline-color.outline-offset.outline-style.outline-width.overflow.overflow-anchor.overflow-block.overflow-clip-margin.overflow-inline.overflow-wrap.overflow-x.overflow-y.overlay.overscroll-behavior.overscroll-behavior-block.overscroll-behavior-inline.overscroll-behavior-x.overscroll-behavior-y.padding.padding-block.padding-block-end.padding-block-start.padding-bottom.padding-inline.padding-inline-end.padding-inline-start.padding-left.padding-right.padding-top.page.page-break-after.page-break-before.page-break-inside.paint-order.pause.pause-after.pause-before.perspective.perspective-origin.place-content.place-items.place-self.pointer-events.position.position-anchor.position-visibility.print-color-adjust.quotes.r.resize.rest.rest-after.rest-before.right.rotate.row-gap.ruby-align.ruby-position.scale.scroll-behavior.scroll-margin.scroll-margin-block.scroll-margin-block-end.scroll-margin-block-start.scroll-margin-bottom.scroll-margin-inline.scroll-margin-inline-end.scroll-margin-inline-start.scroll-margin-left.scroll-margin-right.scroll-margin-top.scroll-padding.scroll-padding-block.scroll-padding-block-end.scroll-padding-block-start.scroll-padding-bottom.scroll-padding-inline.scroll-padding-inline-end.scroll-padding-inline-start.scroll-padding-left.scroll-padding-right.scroll-padding-top.scroll-snap-align.scroll-snap-stop.scroll-snap-type.scroll-timeline.scroll-timeline-axis.scroll-timeline-name.scrollbar-color.scrollbar-gutter.scrollbar-width.shape-image-threshold.shape-margin.shape-outside.shape-rendering.speak.speak-as.src.stop-color.stop-opacity.stroke.stroke-dasharray.stroke-dashoffset.stroke-linecap.stroke-linejoin.stroke-miterlimit.stroke-opacity.stroke-width.tab-size.table-layout.text-align.text-align-all.text-align-last.text-anchor.text-combine-upright.text-decoration.text-decoration-color.text-decoration-line.text-decoration-skip.text-decoration-skip-ink.text-decoration-style.text-decoration-thickness.text-emphasis.text-emphasis-color.text-emphasis-position.text-emphasis-style.text-indent.text-justify.text-orientation.text-overflow.text-rendering.text-shadow.text-size-adjust.text-transform.text-underline-offset.text-underline-position.text-wrap.text-wrap-mode.text-wrap-style.timeline-scope.top.touch-action.transform.transform-box.transform-origin.transform-style.transition.transition-behavior.transition-delay.transition-duration.transition-property.transition-timing-function.translate.unicode-bidi.unicode-range.user-modify.user-select.vector-effect.vertical-align.view-timeline.view-timeline-axis.view-timeline-inset.view-timeline-name.view-transition-name.visibility.voice-balance.voice-duration.voice-family.voice-pitch.voice-range.voice-rate.voice-stress.voice-volume.white-space.white-space-collapse.widows.width.will-change.word-break.word-spacing.word-wrap.writing-mode.x.y.z-index.zoom".split(".")).sort().reverse(), u = s.concat(c).sort().reverse();
 	function d(e) {
-		let t = n(e), r = u, i = "[\\w-]+", d = "(" + i + "|@\\{[\\w-]+\\})", f = [], p = [], m = function(e) {
+		let t = n(e), r = u, i = "([\\w-]+|@\\{[\\w-]+\\})", d = [], f = [], p = function(e) {
 			return {
 				className: "string",
 				begin: "~?" + e + ".*?" + e
 			};
-		}, h = function(e, t, n) {
+		}, m = function(e, t, n) {
 			return {
 				className: e,
 				begin: t,
 				relevance: n
 			};
-		}, g = {
+		}, h = {
 			$pattern: /[a-z-]+/,
 			keyword: "and or not only",
 			attribute: o.join(" ")
-		}, _ = {
+		}, g = {
 			begin: "\\(",
 			end: "\\)",
-			contains: p,
-			keywords: g,
+			contains: f,
+			keywords: h,
 			relevance: 0
 		};
-		p.push(e.C_LINE_COMMENT_MODE, e.C_BLOCK_COMMENT_MODE, m("'"), m("\""), t.CSS_NUMBER_MODE, {
+		f.push(e.C_LINE_COMMENT_MODE, e.C_BLOCK_COMMENT_MODE, p("'"), p("\""), t.CSS_NUMBER_MODE, {
 			begin: "(url|data-uri)\\(",
 			starts: {
 				className: "string",
 				end: "[\\)\\n]",
 				excludeEnd: !0
 			}
-		}, t.HEXCOLOR, _, h("variable", "@@?" + i, 10), h("variable", "@\\{" + i + "\\}"), h("built_in", "~?`[^`]*?`"), {
+		}, t.UNICODE_RANGE, t.HEXCOLOR, g, m("variable", "@@?[\\w-]+", 10), m("variable", "@\\{[\\w-]+\\}"), m("built_in", "~?`[^`]*?`"), {
 			className: "attribute",
-			begin: i + "\\s*:",
+			begin: "[\\w-]+\\s*:",
 			end: ":",
 			returnBegin: !0,
 			excludeEnd: !0
 		}, t.IMPORTANT, { beginKeywords: "and not" }, t.FUNCTION_DISPATCH);
-		let v = p.concat({
+		let _ = f.concat({
 			begin: /\{/,
 			end: /\}/,
-			contains: f
-		}), y = {
+			contains: d
+		}), v = {
 			beginKeywords: "when",
 			endsWithParent: !0,
-			contains: [{ beginKeywords: "and not" }].concat(p)
-		}, b = {
-			begin: d + "\\s*:",
+			contains: [{ beginKeywords: "and not" }].concat(f)
+		}, y = {
+			begin: i + "\\s*:",
 			returnBegin: !0,
 			end: /[;}]/,
 			relevance: 0,
@@ -10372,37 +10548,37 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 						endsWithParent: !0,
 						illegal: "[<=$]",
 						relevance: 0,
-						contains: p
+						contains: f
 					}
 				}
 			]
-		}, x = {
+		}, b = {
 			className: "keyword",
 			begin: "@(import|media|charset|font-face|(-[a-z]+-)?keyframes|supports|document|namespace|page|viewport|host)\\b",
 			starts: {
 				end: "[;{}]",
-				keywords: g,
+				keywords: h,
 				returnEnd: !0,
-				contains: p,
+				contains: f,
 				relevance: 0
 			}
-		}, S = {
+		}, x = {
 			className: "variable",
 			variants: [{
-				begin: "@" + i + "\\s*:",
+				begin: "@[\\w-]+\\s*:",
 				relevance: 15
-			}, { begin: "@" + i }],
+			}, { begin: "@[\\w-]+" }],
 			starts: {
 				end: "[;}]",
 				returnEnd: !0,
-				contains: v
+				contains: _
 			}
-		}, C = {
+		}, S = {
 			variants: [{
 				begin: "[\\.#:&\\[>]",
 				end: "[;{}]"
 			}, {
-				begin: d,
+				begin: i,
 				end: /\{/
 			}],
 			returnBegin: !0,
@@ -10412,18 +10588,18 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			contains: [
 				e.C_LINE_COMMENT_MODE,
 				e.C_BLOCK_COMMENT_MODE,
-				y,
-				h("keyword", "all\\b"),
-				h("variable", "@\\{" + i + "\\}"),
+				v,
+				m("keyword", "all\\b"),
+				m("variable", "@\\{[\\w-]+\\}"),
 				{
 					begin: "\\b(" + a.join("|") + ")\\b",
 					className: "selector-tag"
 				},
 				t.CSS_NUMBER_MODE,
-				h("selector-tag", d, 0),
-				h("selector-id", "#" + d),
-				h("selector-class", "\\." + d, 0),
-				h("selector-tag", "&", 0),
+				m("selector-tag", i, 0),
+				m("selector-id", "#" + i),
+				m("selector-class", "\\." + i, 0),
+				m("selector-tag", "&", 0),
 				t.ATTRIBUTE_SELECTOR_MODE,
 				{
 					className: "selector-pseudo",
@@ -10437,25 +10613,25 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					begin: /\(/,
 					end: /\)/,
 					relevance: 0,
-					contains: v
+					contains: _
 				},
 				{ begin: "!important" },
 				t.FUNCTION_DISPATCH
 			]
-		}, w = {
+		}, C = {
 			begin: `[\\w-]+:(:)?(${r.join("|")})`,
 			returnBegin: !0,
-			contains: [C]
+			contains: [S]
 		};
-		return f.push(e.C_LINE_COMMENT_MODE, e.C_BLOCK_COMMENT_MODE, x, S, w, b, C, y, t.FUNCTION_DISPATCH), {
+		return d.push(e.C_LINE_COMMENT_MODE, e.C_BLOCK_COMMENT_MODE, b, x, C, y, S, v, t.FUNCTION_DISPATCH), {
 			name: "Less",
 			case_insensitive: !0,
 			illegal: "[=>'/<($\"]",
-			contains: f
+			contains: d
 		};
 	}
 	t.exports = d;
-})), nt = /* @__PURE__ */ o(((e, t) => {
+})), rt = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = "[a-zA-Z_\\-+\\*\\/<=>&#][a-zA-Z0-9_\\-+*\\/<=>&#!]*", n = "\\|[^]*?\\|", r = "(-|\\+)?\\d+(\\.\\d+|\\/\\d+)?((d|e|f|l|s|D|E|F|L|S)(\\+|-)?\\d+)?", i = {
 			className: "literal",
@@ -10471,13 +10647,13 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				{ begin: "#(o|O)[0-7]+(/[0-7]+)?" },
 				{ begin: "#(x|X)[0-9a-fA-F]+(/[0-9a-fA-F]+)?" },
 				{
-					begin: "#(c|C)\\(" + r + " +(-|\\+)?\\d+(\\.\\d+|\\/\\d+)?((d|e|f|l|s|D|E|F|L|S)(\\+|-)?\\d+)?",
+					begin: "#(c|C)\\(" + r + " +" + r,
 					end: "\\)"
 				}
 			]
 		}, o = e.inherit(e.QUOTE_STRING_MODE, { illegal: null }), s = e.COMMENT(";", "$", { relevance: 0 }), c = {
-			begin: "\\*",
-			end: "\\*"
+			scope: "variable",
+			match: /\*[^\s()*]+\*/
 		}, l = {
 			className: "symbol",
 			begin: "[:&]" + t
@@ -10515,7 +10691,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				},
 				{ begin: "'" + n }
 			]
-		}, p = { variants: [{ begin: "'" + t }, { begin: "#'" + t + "(::[a-zA-Z_\\-+\\*\\/<=>&#][a-zA-Z0-9_\\-+*\\/<=>&#!]*)*" }] }, m = {
+		}, p = { variants: [{ begin: "'" + t }, { begin: "#'" + t + "(::" + t + ")*" }] }, m = {
 			begin: "\\(\\s*",
 			end: "\\)"
 		}, h = {
@@ -10557,7 +10733,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), rt = /* @__PURE__ */ o(((e, t) => {
+})), it = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = {
 			className: "variable",
@@ -10639,7 +10815,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), it = /* @__PURE__ */ o(((e, t) => {
+})), at = /* @__PURE__ */ o(((e, t) => {
 	var n = /* @__PURE__ */ "as.in.of.if.for.while.finally.var.new.function.do.return.void.else.break.catch.instanceof.with.throw.case.default.try.switch.continue.typeof.delete.let.yield.const.class.debugger.async.await.static.import.from.export.extends.using".split("."), r = [
 		"true",
 		"false",
@@ -10828,7 +11004,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = a;
-})), at = /* @__PURE__ */ o(((e, t) => {
+})), ot = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = e.regex, n = /([-a-zA-Z$._][\w$.-]*)/, r = {
 			className: "type",
@@ -10876,6 +11052,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				r,
 				e.COMMENT(/;\s*$/, null, { relevance: 0 }),
 				e.COMMENT(/;/, /$/),
+				e.C_BLOCK_COMMENT_MODE,
 				{
 					className: "string",
 					begin: /"/,
@@ -10895,7 +11072,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), ot = /* @__PURE__ */ o(((e, t) => {
+})), st = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = {
 			className: "string",
@@ -10948,13 +11125,13 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), st = /* @__PURE__ */ o(((e, t) => {
+})), ct = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = "\\[=*\\[", n = "\\]=*\\]", r = {
 			begin: t,
 			end: n,
 			contains: ["self"]
-		}, i = [e.COMMENT("--(?!" + t + ")", "$"), e.COMMENT("--" + t, n, {
+		}, i = [e.COMMENT("--(?!\\[=*\\[)", "$"), e.COMMENT("--\\[=*\\[", n, {
 			contains: [r],
 			relevance: 10
 		})];
@@ -10964,7 +11141,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			keywords: {
 				$pattern: e.UNDERSCORE_IDENT_RE,
 				literal: "true false nil",
-				keyword: "and break do else elseif end for goto if in local not or repeat return then until while",
+				keyword: "and break do else elseif end for goto if in local global not or repeat return then until while",
 				built_in: "_G _ENV _VERSION __index __newindex __mode __call __metatable __tostring __len __gc __add __sub __mul __div __mod __pow __concat __unm __eq __lt __le assert collectgarbage dofile error getfenv getmetatable ipairs load loadfile loadstring module next pairs pcall print rawequal rawget rawset require select setfenv setmetatable tonumber tostring type unpack xpcall arg self coroutine resume yield status wrap create running debug getupvalue debug sethook getmetatable gethook setmetatable setlocal traceback setfenv getinfo setupvalue getlocal getregistry getfenv io lines write close flush open output type read stderr stdin input stdout popen tmpfile math log max acos huge ldexp pi cos tanh pow deg tan cosh sinh random randomseed frexp ceil floor rad abs sqrt modf asin min mod fmod log10 atan2 exp sin atan os exit setlocale date getenv difftime remove time clock tmpname rename execute package preload loadlib loaded loaders cpath config path seeall string sub upper len gfind rep find match char dump gmatch reverse byte format gsub lower table setn insert getn foreachi maxn foreach concat sort remove"
 			},
 			contains: i.concat([
@@ -10993,7 +11170,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), ct = /* @__PURE__ */ o(((e, t) => {
+})), lt = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = {
 			className: "variable",
@@ -11049,7 +11226,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), lt = /* @__PURE__ */ o(((e, t) => {
+})), ut = /* @__PURE__ */ o(((e, t) => {
 	var n = /* @__PURE__ */ "AASTriangle.AbelianGroup.Abort.AbortKernels.AbortProtect.AbortScheduledTask.Above.Abs.AbsArg.AbsArgPlot.Absolute.AbsoluteCorrelation.AbsoluteCorrelationFunction.AbsoluteCurrentValue.AbsoluteDashing.AbsoluteFileName.AbsoluteOptions.AbsolutePointSize.AbsoluteThickness.AbsoluteTime.AbsoluteTiming.AcceptanceThreshold.AccountingForm.Accumulate.Accuracy.AccuracyGoal.AcousticAbsorbingValue.AcousticImpedanceValue.AcousticNormalVelocityValue.AcousticPDEComponent.AcousticPressureCondition.AcousticRadiationValue.AcousticSoundHardValue.AcousticSoundSoftCondition.ActionDelay.ActionMenu.ActionMenuBox.ActionMenuBoxOptions.Activate.Active.ActiveClassification.ActiveClassificationObject.ActiveItem.ActivePrediction.ActivePredictionObject.ActiveStyle.AcyclicGraphQ.AddOnHelpPath.AddSides.AddTo.AddToSearchIndex.AddUsers.AdjacencyGraph.AdjacencyList.AdjacencyMatrix.AdjacentMeshCells.Adjugate.AdjustmentBox.AdjustmentBoxOptions.AdjustTimeSeriesForecast.AdministrativeDivisionData.AffineHalfSpace.AffineSpace.AffineStateSpaceModel.AffineTransform.After.AggregatedEntityClass.AggregationLayer.AircraftData.AirportData.AirPressureData.AirSoundAttenuation.AirTemperatureData.AiryAi.AiryAiPrime.AiryAiZero.AiryBi.AiryBiPrime.AiryBiZero.AlgebraicIntegerQ.AlgebraicNumber.AlgebraicNumberDenominator.AlgebraicNumberNorm.AlgebraicNumberPolynomial.AlgebraicNumberTrace.AlgebraicRules.AlgebraicRulesData.Algebraics.AlgebraicUnitQ.Alignment.AlignmentMarker.AlignmentPoint.All.AllowAdultContent.AllowChatServices.AllowedCloudExtraParameters.AllowedCloudParameterExtensions.AllowedDimensions.AllowedFrequencyRange.AllowedHeads.AllowGroupClose.AllowIncomplete.AllowInlineCells.AllowKernelInitialization.AllowLooseGrammar.AllowReverseGroupClose.AllowScriptLevelChange.AllowVersionUpdate.AllTrue.Alphabet.AlphabeticOrder.AlphabeticSort.AlphaChannel.AlternateImage.AlternatingFactorial.AlternatingGroup.AlternativeHypothesis.Alternatives.AltitudeMethod.AmbientLight.AmbiguityFunction.AmbiguityList.Analytic.AnatomyData.AnatomyForm.AnatomyPlot3D.AnatomySkinStyle.AnatomyStyling.AnchoredSearch.And.AndersonDarlingTest.AngerJ.AngleBisector.AngleBracket.AnglePath.AnglePath3D.AngleVector.AngularGauge.Animate.AnimatedImage.AnimationCycleOffset.AnimationCycleRepetitions.AnimationDirection.AnimationDisplayTime.AnimationRate.AnimationRepetitions.AnimationRunning.AnimationRunTime.AnimationTimeIndex.AnimationVideo.Animator.AnimatorBox.AnimatorBoxOptions.AnimatorElements.Annotate.Annotation.AnnotationDelete.AnnotationKeys.AnnotationRules.AnnotationValue.Annuity.AnnuityDue.Annulus.AnomalyDetection.AnomalyDetector.AnomalyDetectorFunction.Anonymous.Antialiasing.Antihermitian.AntihermitianMatrixQ.Antisymmetric.AntisymmetricMatrixQ.Antonyms.AnyOrder.AnySubset.AnyTrue.Apart.ApartSquareFree.APIFunction.Appearance.AppearanceElements.AppearanceRules.AppellF1.Append.AppendCheck.AppendLayer.AppendTo.Application.Apply.ApplyReaction.ApplySides.ApplyTo.ArcCos.ArcCosh.ArcCot.ArcCoth.ArcCsc.ArcCsch.ArcCurvature.ARCHProcess.ArcLength.ArcSec.ArcSech.ArcSin.ArcSinDistribution.ArcSinh.ArcTan.ArcTanh.Area.Arg.ArgMax.ArgMin.ArgumentCountQ.ArgumentsOptions.ARIMAProcess.ArithmeticGeometricMean.ARMAProcess.Around.AroundReplace.ARProcess.Array.ArrayComponents.ArrayDepth.ArrayFilter.ArrayFlatten.ArrayMesh.ArrayPad.ArrayPlot.ArrayPlot3D.ArrayQ.ArrayReduce.ArrayResample.ArrayReshape.ArrayRules.Arrays.Arrow.Arrow3DBox.ArrowBox.Arrowheads.ASATriangle.Ask.AskAppend.AskConfirm.AskDisplay.AskedQ.AskedValue.AskFunction.AskState.AskTemplateDisplay.AspectRatio.AspectRatioFixed.Assert.AssessmentFunction.AssessmentResultObject.AssociateTo.Association.AssociationFormat.AssociationMap.AssociationQ.AssociationThread.AssumeDeterministic.Assuming.Assumptions.AstroAngularSeparation.AstroBackground.AstroCenter.AstroDistance.AstroGraphics.AstroGridLines.AstroGridLinesStyle.AstronomicalData.AstroPosition.AstroProjection.AstroRange.AstroRangePadding.AstroReferenceFrame.AstroStyling.AstroZoomLevel.Asymptotic.AsymptoticDSolveValue.AsymptoticEqual.AsymptoticEquivalent.AsymptoticExpectation.AsymptoticGreater.AsymptoticGreaterEqual.AsymptoticIntegrate.AsymptoticLess.AsymptoticLessEqual.AsymptoticOutputTracker.AsymptoticProbability.AsymptoticProduct.AsymptoticRSolveValue.AsymptoticSolve.AsymptoticSum.Asynchronous.AsynchronousTaskObject.AsynchronousTasks.Atom.AtomCoordinates.AtomCount.AtomDiagramCoordinates.AtomLabels.AtomLabelStyle.AtomList.AtomQ.AttachCell.AttachedCell.AttentionLayer.Attributes.Audio.AudioAmplify.AudioAnnotate.AudioAnnotationLookup.AudioBlockMap.AudioCapture.AudioChannelAssignment.AudioChannelCombine.AudioChannelMix.AudioChannels.AudioChannelSeparate.AudioData.AudioDelay.AudioDelete.AudioDevice.AudioDistance.AudioEncoding.AudioFade.AudioFrequencyShift.AudioGenerator.AudioIdentify.AudioInputDevice.AudioInsert.AudioInstanceQ.AudioIntervals.AudioJoin.AudioLabel.AudioLength.AudioLocalMeasurements.AudioLooping.AudioLoudness.AudioMeasurements.AudioNormalize.AudioOutputDevice.AudioOverlay.AudioPad.AudioPan.AudioPartition.AudioPause.AudioPitchShift.AudioPlay.AudioPlot.AudioQ.AudioRecord.AudioReplace.AudioResample.AudioReverb.AudioReverse.AudioSampleRate.AudioSpectralMap.AudioSpectralTransformation.AudioSplit.AudioStop.AudioStream.AudioStreams.AudioTimeStretch.AudioTrackApply.AudioTrackSelection.AudioTrim.AudioType.AugmentedPolyhedron.AugmentedSymmetricPolynomial.Authenticate.Authentication.AuthenticationDialog.AutoAction.Autocomplete.AutocompletionFunction.AutoCopy.AutocorrelationTest.AutoDelete.AutoEvaluateEvents.AutoGeneratedPackage.AutoIndent.AutoIndentSpacings.AutoItalicWords.AutoloadPath.AutoMatch.Automatic.AutomaticImageSize.AutoMultiplicationSymbol.AutoNumberFormatting.AutoOpenNotebooks.AutoOpenPalettes.AutoOperatorRenderings.AutoQuoteCharacters.AutoRefreshed.AutoRemove.AutorunSequencing.AutoScaling.AutoScroll.AutoSpacing.AutoStyleOptions.AutoStyleWords.AutoSubmitting.Axes.AxesEdge.AxesLabel.AxesOrigin.AxesStyle.AxiomaticTheory.Axis.Axis3DBox.Axis3DBoxOptions.AxisBox.AxisBoxOptions.AxisLabel.AxisObject.AxisStyle.BabyMonsterGroupB.Back.BackFaceColor.BackFaceGlowColor.BackFaceOpacity.BackFaceSpecularColor.BackFaceSpecularExponent.BackFaceSurfaceAppearance.BackFaceTexture.Background.BackgroundAppearance.BackgroundTasksSettings.Backslash.Backsubstitution.Backward.Ball.Band.BandpassFilter.BandstopFilter.BarabasiAlbertGraphDistribution.BarChart.BarChart3D.BarcodeImage.BarcodeRecognize.BaringhausHenzeTest.BarLegend.BarlowProschanImportance.BarnesG.BarOrigin.BarSpacing.BartlettHannWindow.BartlettWindow.BaseDecode.BaseEncode.BaseForm.Baseline.BaselinePosition.BaseStyle.BasicRecurrentLayer.BatchNormalizationLayer.BatchSize.BatesDistribution.BattleLemarieWavelet.BayesianMaximization.BayesianMaximizationObject.BayesianMinimization.BayesianMinimizationObject.Because.BeckmannDistribution.Beep.Before.Begin.BeginDialogPacket.BeginPackage.BellB.BellY.Below.BenfordDistribution.BeniniDistribution.BenktanderGibratDistribution.BenktanderWeibullDistribution.BernoulliB.BernoulliDistribution.BernoulliGraphDistribution.BernoulliProcess.BernsteinBasis.BesagL.BesselFilterModel.BesselI.BesselJ.BesselJZero.BesselK.BesselY.BesselYZero.Beta.BetaBinomialDistribution.BetaDistribution.BetaNegativeBinomialDistribution.BetaPrimeDistribution.BetaRegularized.Between.BetweennessCentrality.Beveled.BeveledPolyhedron.BezierCurve.BezierCurve3DBox.BezierCurve3DBoxOptions.BezierCurveBox.BezierCurveBoxOptions.BezierFunction.BilateralFilter.BilateralLaplaceTransform.BilateralZTransform.Binarize.BinaryDeserialize.BinaryDistance.BinaryFormat.BinaryImageQ.BinaryRead.BinaryReadList.BinarySerialize.BinaryWrite.BinCounts.BinLists.BinnedVariogramList.Binomial.BinomialDistribution.BinomialPointProcess.BinomialProcess.BinormalDistribution.BiorthogonalSplineWavelet.BioSequence.BioSequenceBackTranslateList.BioSequenceComplement.BioSequenceInstances.BioSequenceModify.BioSequencePlot.BioSequenceQ.BioSequenceReverseComplement.BioSequenceTranscribe.BioSequenceTranslate.BipartiteGraphQ.BiquadraticFilterModel.BirnbaumImportance.BirnbaumSaundersDistribution.BitAnd.BitClear.BitGet.BitLength.BitNot.BitOr.BitRate.BitSet.BitShiftLeft.BitShiftRight.BitXor.BiweightLocation.BiweightMidvariance.Black.BlackmanHarrisWindow.BlackmanNuttallWindow.BlackmanWindow.Blank.BlankForm.BlankNullSequence.BlankSequence.Blend.Block.BlockchainAddressData.BlockchainBase.BlockchainBlockData.BlockchainContractValue.BlockchainData.BlockchainGet.BlockchainKeyEncode.BlockchainPut.BlockchainTokenData.BlockchainTransaction.BlockchainTransactionData.BlockchainTransactionSign.BlockchainTransactionSubmit.BlockDiagonalMatrix.BlockLowerTriangularMatrix.BlockMap.BlockRandom.BlockUpperTriangularMatrix.BlomqvistBeta.BlomqvistBetaTest.Blue.Blur.Blurring.BodePlot.BohmanWindow.Bold.Bond.BondCount.BondLabels.BondLabelStyle.BondList.BondQ.Bookmarks.Boole.BooleanConsecutiveFunction.BooleanConvert.BooleanCountingFunction.BooleanFunction.BooleanGraph.BooleanMaxterms.BooleanMinimize.BooleanMinterms.BooleanQ.BooleanRegion.Booleans.BooleanStrings.BooleanTable.BooleanVariables.BorderDimensions.BorelTannerDistribution.Bottom.BottomHatTransform.BoundaryDiscretizeGraphics.BoundaryDiscretizeRegion.BoundaryMesh.BoundaryMeshRegion.BoundaryMeshRegionQ.BoundaryStyle.BoundedRegionQ.BoundingRegion.Bounds.Box.BoxBaselineShift.BoxData.BoxDimensions.Boxed.Boxes.BoxForm.BoxFormFormatTypes.BoxFrame.BoxID.BoxMargins.BoxMatrix.BoxObject.BoxRatios.BoxRotation.BoxRotationPoint.BoxStyle.BoxWhiskerChart.Bra.BracketingBar.BraKet.BrayCurtisDistance.BreadthFirstScan.Break.BridgeData.BrightnessEqualize.BroadcastStationData.Brown.BrownForsytheTest.BrownianBridgeProcess.BrowserCategory.BSplineBasis.BSplineCurve.BSplineCurve3DBox.BSplineCurve3DBoxOptions.BSplineCurveBox.BSplineCurveBoxOptions.BSplineFunction.BSplineSurface.BSplineSurface3DBox.BSplineSurface3DBoxOptions.BubbleChart.BubbleChart3D.BubbleScale.BubbleSizes.BuckyballGraph.BuildCompiledComponent.BuildingData.BulletGauge.BusinessDayQ.ButterflyGraph.ButterworthFilterModel.Button.ButtonBar.ButtonBox.ButtonBoxOptions.ButtonCell.ButtonContents.ButtonData.ButtonEvaluator.ButtonExpandable.ButtonFrame.ButtonFunction.ButtonMargins.ButtonMinHeight.ButtonNote.ButtonNotebook.ButtonSource.ButtonStyle.ButtonStyleMenuListing.Byte.ByteArray.ByteArrayFormat.ByteArrayFormatQ.ByteArrayQ.ByteArrayToString.ByteCount.ByteOrdering.C.CachedValue.CacheGraphics.CachePersistence.CalendarConvert.CalendarData.CalendarType.Callout.CalloutMarker.CalloutStyle.CallPacket.CanberraDistance.Cancel.CancelButton.CandlestickChart.CanonicalGraph.CanonicalizePolygon.CanonicalizePolyhedron.CanonicalizeRegion.CanonicalName.CanonicalWarpingCorrespondence.CanonicalWarpingDistance.CantorMesh.CantorStaircase.Canvas.Cap.CapForm.CapitalDifferentialD.Capitalize.CapsuleShape.CaptureRunning.CaputoD.CardinalBSplineBasis.CarlemanLinearize.CarlsonRC.CarlsonRD.CarlsonRE.CarlsonRF.CarlsonRG.CarlsonRJ.CarlsonRK.CarlsonRM.CarmichaelLambda.CaseOrdering.Cases.CaseSensitive.Cashflow.Casoratian.Cast.Catalan.CatalanNumber.Catch.CategoricalDistribution.Catenate.CatenateLayer.CauchyDistribution.CauchyMatrix.CauchyPointProcess.CauchyWindow.CayleyGraph.CDF.CDFDeploy.CDFInformation.CDFWavelet.Ceiling.CelestialSystem.Cell.CellAutoOverwrite.CellBaseline.CellBoundingBox.CellBracketOptions.CellChangeTimes.CellContents.CellContext.CellDingbat.CellDingbatMargin.CellDynamicExpression.CellEditDuplicate.CellElementsBoundingBox.CellElementSpacings.CellEpilog.CellEvaluationDuplicate.CellEvaluationFunction.CellEvaluationLanguage.CellEventActions.CellFrame.CellFrameColor.CellFrameLabelMargins.CellFrameLabels.CellFrameMargins.CellFrameStyle.CellGroup.CellGroupData.CellGrouping.CellGroupingRules.CellHorizontalScrolling.CellID.CellInsertionPointCell.CellLabel.CellLabelAutoDelete.CellLabelMargins.CellLabelPositioning.CellLabelStyle.CellLabelTemplate.CellMargins.CellObject.CellOpen.CellPrint.CellProlog.Cells.CellSize.CellStyle.CellTags.CellTrayPosition.CellTrayWidgets.CellularAutomaton.CensoredDistribution.Censoring.Center.CenterArray.CenterDot.CenteredInterval.CentralFeature.CentralMoment.CentralMomentGeneratingFunction.Cepstrogram.CepstrogramArray.CepstrumArray.CForm.ChampernowneNumber.ChangeOptions.ChannelBase.ChannelBrokerAction.ChannelDatabin.ChannelHistoryLength.ChannelListen.ChannelListener.ChannelListeners.ChannelListenerWait.ChannelObject.ChannelPreSendFunction.ChannelReceiverFunction.ChannelSend.ChannelSubscribers.ChanVeseBinarize.Character.CharacterCounts.CharacterEncoding.CharacterEncodingsPath.CharacteristicFunction.CharacteristicPolynomial.CharacterName.CharacterNormalize.CharacterRange.Characters.ChartBaseStyle.ChartElementData.ChartElementDataFunction.ChartElementFunction.ChartElements.ChartLabels.ChartLayout.ChartLegends.ChartStyle.Chebyshev1FilterModel.Chebyshev2FilterModel.ChebyshevDistance.ChebyshevT.ChebyshevU.Check.CheckAbort.CheckAll.CheckArguments.Checkbox.CheckboxBar.CheckboxBox.CheckboxBoxOptions.ChemicalConvert.ChemicalData.ChemicalFormula.ChemicalInstance.ChemicalReaction.ChessboardDistance.ChiDistribution.ChineseRemainder.ChiSquareDistribution.ChoiceButtons.ChoiceDialog.CholeskyDecomposition.Chop.ChromaticityPlot.ChromaticityPlot3D.ChromaticPolynomial.Circle.CircleBox.CircleDot.CircleMinus.CirclePlus.CirclePoints.CircleThrough.CircleTimes.CirculantGraph.CircularArcThrough.CircularOrthogonalMatrixDistribution.CircularQuaternionMatrixDistribution.CircularRealMatrixDistribution.CircularSymplecticMatrixDistribution.CircularUnitaryMatrixDistribution.Circumsphere.CityData.ClassifierFunction.ClassifierInformation.ClassifierMeasurements.ClassifierMeasurementsObject.Classify.ClassPriors.Clear.ClearAll.ClearAttributes.ClearCookies.ClearPermissions.ClearSystemCache.ClebschGordan.ClickPane.ClickToCopy.ClickToCopyEnabled.Clip.ClipboardNotebook.ClipFill.ClippingStyle.ClipPlanes.ClipPlanesStyle.ClipRange.Clock.ClockGauge.ClockwiseContourIntegral.Close.Closed.CloseKernels.ClosenessCentrality.Closing.ClosingAutoSave.ClosingEvent.CloudAccountData.CloudBase.CloudConnect.CloudConnections.CloudDeploy.CloudDirectory.CloudDisconnect.CloudEvaluate.CloudExport.CloudExpression.CloudExpressions.CloudFunction.CloudGet.CloudImport.CloudLoggingData.CloudObject.CloudObjectInformation.CloudObjectInformationData.CloudObjectNameFormat.CloudObjects.CloudObjectURLType.CloudPublish.CloudPut.CloudRenderingMethod.CloudSave.CloudShare.CloudSubmit.CloudSymbol.CloudUnshare.CloudUserID.ClusterClassify.ClusterDissimilarityFunction.ClusteringComponents.ClusteringMeasurements.ClusteringTree.CMYKColor.Coarse.CodeAssistOptions.Coefficient.CoefficientArrays.CoefficientDomain.CoefficientList.CoefficientRules.CoifletWavelet.Collect.CollinearPoints.Colon.ColonForm.ColorBalance.ColorCombine.ColorConvert.ColorCoverage.ColorData.ColorDataFunction.ColorDetect.ColorDistance.ColorFunction.ColorFunctionBinning.ColorFunctionScaling.Colorize.ColorNegate.ColorOutput.ColorProfileData.ColorQ.ColorQuantize.ColorReplace.ColorRules.ColorSelectorSettings.ColorSeparate.ColorSetter.ColorSetterBox.ColorSetterBoxOptions.ColorSlider.ColorsNear.ColorSpace.ColorToneMapping.Column.ColumnAlignments.ColumnBackgrounds.ColumnForm.ColumnLines.ColumnsEqual.ColumnSpacings.ColumnWidths.CombinatorB.CombinatorC.CombinatorI.CombinatorK.CombinatorS.CombinatorW.CombinatorY.CombinedEntityClass.CombinerFunction.CometData.CommonDefaultFormatTypes.Commonest.CommonestFilter.CommonName.CommonUnits.CommunityBoundaryStyle.CommunityGraphPlot.CommunityLabels.CommunityRegionStyle.CompanyData.CompatibleUnitQ.CompilationOptions.CompilationTarget.Compile.Compiled.CompiledCodeFunction.CompiledComponent.CompiledExpressionDeclaration.CompiledFunction.CompiledLayer.CompilerCallback.CompilerEnvironment.CompilerEnvironmentAppend.CompilerEnvironmentAppendTo.CompilerEnvironmentObject.CompilerOptions.Complement.ComplementedEntityClass.CompleteGraph.CompleteGraphQ.CompleteIntegral.CompleteKaryTree.CompletionsListPacket.Complex.ComplexArrayPlot.ComplexContourPlot.Complexes.ComplexExpand.ComplexInfinity.ComplexityFunction.ComplexListPlot.ComplexPlot.ComplexPlot3D.ComplexRegionPlot.ComplexStreamPlot.ComplexVectorPlot.ComponentMeasurements.ComponentwiseContextMenu.Compose.ComposeList.ComposeSeries.CompositeQ.Composition.CompoundElement.CompoundExpression.CompoundPoissonDistribution.CompoundPoissonProcess.CompoundRenewalProcess.Compress.CompressedData.CompressionLevel.ComputeUncertainty.ConcaveHullMesh.Condition.ConditionalExpression.Conditioned.Cone.ConeBox.ConfidenceLevel.ConfidenceRange.ConfidenceTransform.ConfigurationPath.Confirm.ConfirmAssert.ConfirmBy.ConfirmMatch.ConfirmQuiet.ConformationMethod.ConformAudio.ConformImages.Congruent.ConicGradientFilling.ConicHullRegion.ConicHullRegion3DBox.ConicHullRegion3DBoxOptions.ConicHullRegionBox.ConicHullRegionBoxOptions.ConicOptimization.Conjugate.ConjugateTranspose.Conjunction.Connect.ConnectedComponents.ConnectedGraphComponents.ConnectedGraphQ.ConnectedMeshComponents.ConnectedMoleculeComponents.ConnectedMoleculeQ.ConnectionSettings.ConnectLibraryCallbackFunction.ConnectSystemModelComponents.ConnectSystemModelController.ConnesWindow.ConoverTest.ConservativeConvectionPDETerm.ConsoleMessage.Constant.ConstantArray.ConstantArrayLayer.ConstantImage.ConstantPlusLayer.ConstantRegionQ.Constants.ConstantTimesLayer.ConstellationData.ConstrainedMax.ConstrainedMin.Construct.Containing.ContainsAll.ContainsAny.ContainsExactly.ContainsNone.ContainsOnly.ContentDetectorFunction.ContentFieldOptions.ContentLocationFunction.ContentObject.ContentPadding.ContentsBoundingBox.ContentSelectable.ContentSize.Context.ContextMenu.Contexts.ContextToFileName.Continuation.Continue.ContinuedFraction.ContinuedFractionK.ContinuousAction.ContinuousMarkovProcess.ContinuousTask.ContinuousTimeModelQ.ContinuousWaveletData.ContinuousWaveletTransform.ContourDetect.ContourGraphics.ContourIntegral.ContourLabels.ContourLines.ContourPlot.ContourPlot3D.Contours.ContourShading.ContourSmoothing.ContourStyle.ContraharmonicMean.ContrastiveLossLayer.Control.ControlActive.ControlAlignment.ControlGroupContentsBox.ControllabilityGramian.ControllabilityMatrix.ControllableDecomposition.ControllableModelQ.ControllerDuration.ControllerInformation.ControllerInformationData.ControllerLinking.ControllerManipulate.ControllerMethod.ControllerPath.ControllerState.ControlPlacement.ControlsRendering.ControlType.ConvectionPDETerm.Convergents.ConversionOptions.ConversionRules.ConvertToPostScript.ConvertToPostScriptPacket.ConvexHullMesh.ConvexHullRegion.ConvexOptimization.ConvexPolygonQ.ConvexPolyhedronQ.ConvexRegionQ.ConvolutionLayer.Convolve.ConwayGroupCo1.ConwayGroupCo2.ConwayGroupCo3.CookieFunction.Cookies.CoordinateBoundingBox.CoordinateBoundingBoxArray.CoordinateBounds.CoordinateBoundsArray.CoordinateChartData.CoordinatesToolOptions.CoordinateTransform.CoordinateTransformData.CoplanarPoints.CoprimeQ.Coproduct.CopulaDistribution.Copyable.CopyDatabin.CopyDirectory.CopyFile.CopyFunction.CopyTag.CopyToClipboard.CoreNilpotentDecomposition.CornerFilter.CornerNeighbors.Correlation.CorrelationDistance.CorrelationFunction.CorrelationTest.Cos.Cosh.CoshIntegral.CosineDistance.CosineWindow.CosIntegral.Cot.Coth.CoulombF.CoulombG.CoulombH1.CoulombH2.Count.CountDistinct.CountDistinctBy.CounterAssignments.CounterBox.CounterBoxOptions.CounterClockwiseContourIntegral.CounterEvaluator.CounterFunction.CounterIncrements.CounterStyle.CounterStyleMenuListing.CountRoots.CountryData.Counts.CountsBy.Covariance.CovarianceEstimatorFunction.CovarianceFunction.CoxianDistribution.CoxIngersollRossProcess.CoxModel.CoxModelFit.CramerVonMisesTest.CreateArchive.CreateCellID.CreateChannel.CreateCloudExpression.CreateCompilerEnvironment.CreateDatabin.CreateDataStructure.CreateDataSystemModel.CreateDialog.CreateDirectory.CreateDocument.CreateFile.CreateIntermediateDirectories.CreateLicenseEntitlement.CreateManagedLibraryExpression.CreateNotebook.CreatePacletArchive.CreatePalette.CreatePermissionsGroup.CreateScheduledTask.CreateSearchIndex.CreateSystemModel.CreateTemporary.CreateTypeInstance.CreateUUID.CreateWindow.CriterionFunction.CriticalityFailureImportance.CriticalitySuccessImportance.CriticalSection.Cross.CrossEntropyLossLayer.CrossingCount.CrossingDetect.CrossingPolygon.CrossMatrix.Csc.Csch.CSGRegion.CSGRegionQ.CSGRegionTree.CTCLossLayer.Cube.CubeRoot.Cubics.Cuboid.CuboidBox.CuboidBoxOptions.Cumulant.CumulantGeneratingFunction.CumulativeFeatureImpactPlot.Cup.CupCap.Curl.CurlyDoubleQuote.CurlyQuote.CurrencyConvert.CurrentDate.CurrentImage.CurrentNotebookImage.CurrentScreenImage.CurrentValue.Curry.CurryApplied.CurvatureFlowFilter.CurveClosed.Cyan.CycleGraph.CycleIndexPolynomial.Cycles.CyclicGroup.Cyclotomic.Cylinder.CylinderBox.CylinderBoxOptions.CylindricalDecomposition.CylindricalDecompositionFunction.D.DagumDistribution.DamData.DamerauLevenshteinDistance.DampingFactor.Darker.Dashed.Dashing.DatabaseConnect.DatabaseDisconnect.DatabaseReference.Databin.DatabinAdd.DatabinRemove.Databins.DatabinSubmit.DatabinUpload.DataCompression.DataDistribution.DataRange.DataReversed.Dataset.DatasetDisplayPanel.DatasetTheme.DataStructure.DataStructureQ.Date.DateBounds.Dated.DateDelimiters.DateDifference.DatedUnit.DateFormat.DateFunction.DateGranularity.DateHistogram.DateInterval.DateList.DateListLogPlot.DateListPlot.DateListStepPlot.DateObject.DateObjectQ.DateOverlapsQ.DatePattern.DatePlus.DateRange.DateReduction.DateScale.DateSelect.DateString.DateTicksFormat.DateValue.DateWithinQ.DaubechiesWavelet.DavisDistribution.DawsonF.DayCount.DayCountConvention.DayHemisphere.DaylightQ.DayMatchQ.DayName.DayNightTerminator.DayPlus.DayRange.DayRound.DeBruijnGraph.DeBruijnSequence.Debug.DebugTag.Decapitalize.Decimal.DecimalForm.DeclareCompiledComponent.DeclareKnownSymbols.DeclarePackage.Decompose.DeconvolutionLayer.Decrement.Decrypt.DecryptFile.DedekindEta.DeepSpaceProbeData.Default.Default2DTool.Default3DTool.DefaultAttachedCellStyle.DefaultAxesStyle.DefaultBaseStyle.DefaultBoxStyle.DefaultButton.DefaultColor.DefaultControlPlacement.DefaultDockedCellStyle.DefaultDuplicateCellStyle.DefaultDuration.DefaultElement.DefaultFaceGridsStyle.DefaultFieldHintStyle.DefaultFont.DefaultFontProperties.DefaultFormatType.DefaultFrameStyle.DefaultFrameTicksStyle.DefaultGridLinesStyle.DefaultInlineFormatType.DefaultInputFormatType.DefaultLabelStyle.DefaultMenuStyle.DefaultNaturalLanguage.DefaultNewCellStyle.DefaultNewInlineCellStyle.DefaultNotebook.DefaultOptions.DefaultOutputFormatType.DefaultPrintPrecision.DefaultStyle.DefaultStyleDefinitions.DefaultTextFormatType.DefaultTextInlineFormatType.DefaultTicksStyle.DefaultTooltipStyle.DefaultValue.DefaultValues.Defer.DefineExternal.DefineInputStreamMethod.DefineOutputStreamMethod.DefineResourceFunction.Definition.Degree.DegreeCentrality.DegreeGraphDistribution.DegreeLexicographic.DegreeReverseLexicographic.DEigensystem.DEigenvalues.Deinitialization.Del.DelaunayMesh.Delayed.Deletable.Delete.DeleteAdjacentDuplicates.DeleteAnomalies.DeleteBorderComponents.DeleteCases.DeleteChannel.DeleteCloudExpression.DeleteContents.DeleteDirectory.DeleteDuplicates.DeleteDuplicatesBy.DeleteElements.DeleteFile.DeleteMissing.DeleteObject.DeletePermissionsKey.DeleteSearchIndex.DeleteSmallComponents.DeleteStopwords.DeleteWithContents.DeletionWarning.DelimitedArray.DelimitedSequence.Delimiter.DelimiterAutoMatching.DelimiterFlashTime.DelimiterMatching.Delimiters.DeliveryFunction.Dendrogram.Denominator.DensityGraphics.DensityHistogram.DensityPlot.DensityPlot3D.DependentVariables.Deploy.Deployed.Depth.DepthFirstScan.Derivative.DerivativeFilter.DerivativePDETerm.DerivedKey.DescriptorStateSpace.DesignMatrix.DestroyAfterEvaluation.Det.DeviceClose.DeviceConfigure.DeviceExecute.DeviceExecuteAsynchronous.DeviceObject.DeviceOpen.DeviceOpenQ.DeviceRead.DeviceReadBuffer.DeviceReadLatest.DeviceReadList.DeviceReadTimeSeries.Devices.DeviceStreams.DeviceWrite.DeviceWriteBuffer.DGaussianWavelet.DiacriticalPositioning.Diagonal.DiagonalizableMatrixQ.DiagonalMatrix.DiagonalMatrixQ.Dialog.DialogIndent.DialogInput.DialogLevel.DialogNotebook.DialogProlog.DialogReturn.DialogSymbols.Diamond.DiamondMatrix.DiceDissimilarity.DictionaryLookup.DictionaryWordQ.DifferenceDelta.DifferenceOrder.DifferenceQuotient.DifferenceRoot.DifferenceRootReduce.Differences.DifferentialD.DifferentialRoot.DifferentialRootReduce.DifferentiatorFilter.DiffusionPDETerm.DiggleGatesPointProcess.DiggleGrattonPointProcess.DigitalSignature.DigitBlock.DigitBlockMinimum.DigitCharacter.DigitCount.DigitQ.DihedralAngle.DihedralGroup.Dilation.DimensionalCombinations.DimensionalMeshComponents.DimensionReduce.DimensionReducerFunction.DimensionReduction.Dimensions.DiracComb.DiracDelta.DirectedEdge.DirectedEdges.DirectedGraph.DirectedGraphQ.DirectedInfinity.Direction.DirectionalLight.Directive.Directory.DirectoryName.DirectoryQ.DirectoryStack.DirichletBeta.DirichletCharacter.DirichletCondition.DirichletConvolve.DirichletDistribution.DirichletEta.DirichletL.DirichletLambda.DirichletTransform.DirichletWindow.DisableConsolePrintPacket.DisableFormatting.DiscreteAsymptotic.DiscreteChirpZTransform.DiscreteConvolve.DiscreteDelta.DiscreteHadamardTransform.DiscreteIndicator.DiscreteInputOutputModel.DiscreteLimit.DiscreteLQEstimatorGains.DiscreteLQRegulatorGains.DiscreteLyapunovSolve.DiscreteMarkovProcess.DiscreteMaxLimit.DiscreteMinLimit.DiscretePlot.DiscretePlot3D.DiscreteRatio.DiscreteRiccatiSolve.DiscreteShift.DiscreteTimeModelQ.DiscreteUniformDistribution.DiscreteVariables.DiscreteWaveletData.DiscreteWaveletPacketTransform.DiscreteWaveletTransform.DiscretizeGraphics.DiscretizeRegion.Discriminant.DisjointQ.Disjunction.Disk.DiskBox.DiskBoxOptions.DiskMatrix.DiskSegment.Dispatch.DispatchQ.DispersionEstimatorFunction.Display.DisplayAllSteps.DisplayEndPacket.DisplayForm.DisplayFunction.DisplayPacket.DisplayRules.DisplayString.DisplayTemporary.DisplayWith.DisplayWithRef.DisplayWithVariable.DistanceFunction.DistanceMatrix.DistanceTransform.Distribute.Distributed.DistributedContexts.DistributeDefinitions.DistributionChart.DistributionDomain.DistributionFitTest.DistributionParameterAssumptions.DistributionParameterQ.Dithering.Div.Divergence.Divide.DivideBy.Dividers.DivideSides.Divisible.Divisors.DivisorSigma.DivisorSum.DMSList.DMSString.Do.DockedCell.DockedCells.DocumentGenerator.DocumentGeneratorInformation.DocumentGeneratorInformationData.DocumentGenerators.DocumentNotebook.DocumentWeightingRules.Dodecahedron.DomainRegistrationInformation.DominantColors.DominatorTreeGraph.DominatorVertexList.DOSTextFormat.Dot.DotDashed.DotEqual.DotLayer.DotPlusLayer.Dotted.DoubleBracketingBar.DoubleContourIntegral.DoubleDownArrow.DoubleLeftArrow.DoubleLeftRightArrow.DoubleLeftTee.DoubleLongLeftArrow.DoubleLongLeftRightArrow.DoubleLongRightArrow.DoubleRightArrow.DoubleRightTee.DoubleUpArrow.DoubleUpDownArrow.DoubleVerticalBar.DoublyInfinite.Down.DownArrow.DownArrowBar.DownArrowUpArrow.DownLeftRightVector.DownLeftTeeVector.DownLeftVector.DownLeftVectorBar.DownRightTeeVector.DownRightVector.DownRightVectorBar.Downsample.DownTee.DownTeeArrow.DownValues.DownValuesFunction.DragAndDrop.DrawBackFaces.DrawEdges.DrawFrontFaces.DrawHighlighted.DrazinInverse.Drop.DropoutLayer.DropShadowing.DSolve.DSolveChangeVariables.DSolveValue.Dt.DualLinearProgramming.DualPlanarGraph.DualPolyhedron.DualSystemsModel.DumpGet.DumpSave.DuplicateFreeQ.Duration.Dynamic.DynamicBox.DynamicBoxOptions.DynamicEvaluationTimeout.DynamicGeoGraphics.DynamicImage.DynamicLocation.DynamicModule.DynamicModuleBox.DynamicModuleBoxOptions.DynamicModuleParent.DynamicModuleValues.DynamicName.DynamicNamespace.DynamicReference.DynamicSetting.DynamicUpdating.DynamicWrapper.DynamicWrapperBox.DynamicWrapperBoxOptions.E.EarthImpactData.EarthquakeData.EccentricityCentrality.Echo.EchoEvaluation.EchoFunction.EchoLabel.EchoTiming.EclipseType.EdgeAdd.EdgeBetweennessCentrality.EdgeCapacity.EdgeCapForm.EdgeChromaticNumber.EdgeColor.EdgeConnectivity.EdgeContract.EdgeCost.EdgeCount.EdgeCoverQ.EdgeCycleMatrix.EdgeDashing.EdgeDelete.EdgeDetect.EdgeForm.EdgeIndex.EdgeJoinForm.EdgeLabeling.EdgeLabels.EdgeLabelStyle.EdgeList.EdgeOpacity.EdgeQ.EdgeRenderingFunction.EdgeRules.EdgeShapeFunction.EdgeStyle.EdgeTaggedGraph.EdgeTaggedGraphQ.EdgeTags.EdgeThickness.EdgeTransitiveGraphQ.EdgeValueRange.EdgeValueSizes.EdgeWeight.EdgeWeightedGraphQ.Editable.EditButtonSettings.EditCellTagsSettings.EditDistance.EffectiveInterest.Eigensystem.Eigenvalues.EigenvectorCentrality.Eigenvectors.Element.ElementData.ElementwiseLayer.ElidedForms.Eliminate.EliminationOrder.Ellipsoid.EllipticE.EllipticExp.EllipticExpPrime.EllipticF.EllipticFilterModel.EllipticK.EllipticLog.EllipticNomeQ.EllipticPi.EllipticReducedHalfPeriods.EllipticTheta.EllipticThetaPrime.EmbedCode.EmbeddedHTML.EmbeddedService.EmbeddedSQLEntityClass.EmbeddedSQLExpression.EmbeddingLayer.EmbeddingObject.EmitSound.EmphasizeSyntaxErrors.EmpiricalDistribution.Empty.EmptyGraphQ.EmptyRegion.EmptySpaceF.EnableConsolePrintPacket.Enabled.Enclose.Encode.Encrypt.EncryptedObject.EncryptFile.End.EndAdd.EndDialogPacket.EndOfBuffer.EndOfFile.EndOfLine.EndOfString.EndPackage.EngineEnvironment.EngineeringForm.Enter.EnterExpressionPacket.EnterTextPacket.Entity.EntityClass.EntityClassList.EntityCopies.EntityFunction.EntityGroup.EntityInstance.EntityList.EntityPrefetch.EntityProperties.EntityProperty.EntityPropertyClass.EntityRegister.EntityStore.EntityStores.EntityTypeName.EntityUnregister.EntityValue.Entropy.EntropyFilter.Environment.Epilog.EpilogFunction.Equal.EqualColumns.EqualRows.EqualTilde.EqualTo.EquatedTo.Equilibrium.EquirippleFilterKernel.Equivalent.Erf.Erfc.Erfi.ErlangB.ErlangC.ErlangDistribution.Erosion.ErrorBox.ErrorBoxOptions.ErrorNorm.ErrorPacket.ErrorsDialogSettings.EscapeRadius.EstimatedBackground.EstimatedDistribution.EstimatedPointNormals.EstimatedPointProcess.EstimatedProcess.EstimatedVariogramModel.EstimatorGains.EstimatorRegulator.EuclideanDistance.EulerAngles.EulerCharacteristic.EulerE.EulerGamma.EulerianGraphQ.EulerMatrix.EulerPhi.Evaluatable.Evaluate.Evaluated.EvaluatePacket.EvaluateScheduledTask.EvaluationBox.EvaluationCell.EvaluationCompletionAction.EvaluationData.EvaluationElements.EvaluationEnvironment.EvaluationMode.EvaluationMonitor.EvaluationNotebook.EvaluationObject.EvaluationOrder.EvaluationPrivileges.EvaluationRateLimit.Evaluator.EvaluatorNames.EvenQ.EventData.EventEvaluator.EventHandler.EventHandlerTag.EventLabels.EventSeries.ExactBlackmanWindow.ExactNumberQ.ExactRootIsolation.ExampleData.Except.ExcludedContexts.ExcludedForms.ExcludedLines.ExcludedPhysicalQuantities.ExcludePods.Exclusions.ExclusionsStyle.Exists.Exit.ExitDialog.ExoplanetData.Exp.Expand.ExpandAll.ExpandDenominator.ExpandFileName.ExpandNumerator.Expectation.ExpectationE.ExpectedValue.ExpGammaDistribution.ExpIntegralE.ExpIntegralEi.ExpirationDate.Exponent.ExponentFunction.ExponentialDistribution.ExponentialFamily.ExponentialGeneratingFunction.ExponentialMovingAverage.ExponentialPowerDistribution.ExponentPosition.ExponentStep.Export.ExportAutoReplacements.ExportByteArray.ExportForm.ExportPacket.ExportString.Expression.ExpressionCell.ExpressionGraph.ExpressionPacket.ExpressionTree.ExpressionUUID.ExpToTrig.ExtendedEntityClass.ExtendedGCD.Extension.ExtentElementFunction.ExtentMarkers.ExtentSize.ExternalBundle.ExternalCall.ExternalDataCharacterEncoding.ExternalEvaluate.ExternalFunction.ExternalFunctionName.ExternalIdentifier.ExternalObject.ExternalOptions.ExternalSessionObject.ExternalSessions.ExternalStorageBase.ExternalStorageDownload.ExternalStorageGet.ExternalStorageObject.ExternalStoragePut.ExternalStorageUpload.ExternalTypeSignature.ExternalValue.Extract.ExtractArchive.ExtractLayer.ExtractPacletArchive.ExtremeValueDistribution.FaceAlign.FaceForm.FaceGrids.FaceGridsStyle.FaceRecognize.FacialFeatures.Factor.FactorComplete.Factorial.Factorial2.FactorialMoment.FactorialMomentGeneratingFunction.FactorialPower.FactorInteger.FactorList.FactorSquareFree.FactorSquareFreeList.FactorTerms.FactorTermsList.Fail.Failure.FailureAction.FailureDistribution.FailureQ.False.FareySequence.FARIMAProcess.FeatureDistance.FeatureExtract.FeatureExtraction.FeatureExtractor.FeatureExtractorFunction.FeatureImpactPlot.FeatureNames.FeatureNearest.FeatureSpacePlot.FeatureSpacePlot3D.FeatureTypes.FeatureValueDependencyPlot.FeatureValueImpactPlot.FEDisableConsolePrintPacket.FeedbackLinearize.FeedbackSector.FeedbackSectorStyle.FeedbackType.FEEnableConsolePrintPacket.FetalGrowthData.Fibonacci.Fibonorial.FieldCompletionFunction.FieldHint.FieldHintStyle.FieldMasked.FieldSize.File.FileBaseName.FileByteCount.FileConvert.FileDate.FileExistsQ.FileExtension.FileFormat.FileFormatProperties.FileFormatQ.FileHandler.FileHash.FileInformation.FileName.FileNameDepth.FileNameDialogSettings.FileNameDrop.FileNameForms.FileNameJoin.FileNames.FileNameSetter.FileNameSplit.FileNameTake.FileNameToFormatList.FilePrint.FileSize.FileSystemMap.FileSystemScan.FileSystemTree.FileTemplate.FileTemplateApply.FileType.FilledCurve.FilledCurveBox.FilledCurveBoxOptions.FilledTorus.FillForm.Filling.FillingStyle.FillingTransform.FilteredEntityClass.FilterRules.FinancialBond.FinancialData.FinancialDerivative.FinancialIndicator.Find.FindAnomalies.FindArgMax.FindArgMin.FindChannels.FindClique.FindClusters.FindCookies.FindCurvePath.FindCycle.FindDevices.FindDistribution.FindDistributionParameters.FindDivisions.FindEdgeColoring.FindEdgeCover.FindEdgeCut.FindEdgeIndependentPaths.FindEquationalProof.FindEulerianCycle.FindExternalEvaluators.FindFaces.FindFile.FindFit.FindFormula.FindFundamentalCycles.FindGeneratingFunction.FindGeoLocation.FindGeometricConjectures.FindGeometricTransform.FindGraphCommunities.FindGraphIsomorphism.FindGraphPartition.FindHamiltonianCycle.FindHamiltonianPath.FindHiddenMarkovStates.FindImageText.FindIndependentEdgeSet.FindIndependentVertexSet.FindInstance.FindIntegerNullVector.FindIsomers.FindIsomorphicSubgraph.FindKClan.FindKClique.FindKClub.FindKPlex.FindLibrary.FindLinearRecurrence.FindList.FindMatchingColor.FindMaximum.FindMaximumCut.FindMaximumFlow.FindMaxValue.FindMeshDefects.FindMinimum.FindMinimumCostFlow.FindMinimumCut.FindMinValue.FindMoleculeSubstructure.FindPath.FindPeaks.FindPermutation.FindPlanarColoring.FindPointProcessParameters.FindPostmanTour.FindProcessParameters.FindRegionTransform.FindRepeat.FindRoot.FindSequenceFunction.FindSettings.FindShortestPath.FindShortestTour.FindSpanningTree.FindSubgraphIsomorphism.FindSystemModelEquilibrium.FindTextualAnswer.FindThreshold.FindTransientRepeat.FindVertexColoring.FindVertexCover.FindVertexCut.FindVertexIndependentPaths.Fine.FinishDynamic.FiniteAbelianGroupCount.FiniteGroupCount.FiniteGroupData.First.FirstCase.FirstPassageTimeDistribution.FirstPosition.FischerGroupFi22.FischerGroupFi23.FischerGroupFi24Prime.FisherHypergeometricDistribution.FisherRatioTest.FisherZDistribution.Fit.FitAll.FitRegularization.FittedModel.FixedOrder.FixedPoint.FixedPointList.FlashSelection.Flat.FlatShading.Flatten.FlattenAt.FlattenLayer.FlatTopWindow.FlightData.FlipView.Floor.FlowPolynomial.Fold.FoldList.FoldPair.FoldPairList.FoldWhile.FoldWhileList.FollowRedirects.Font.FontColor.FontFamily.FontForm.FontName.FontOpacity.FontPostScriptName.FontProperties.FontReencoding.FontSize.FontSlant.FontSubstitutions.FontTracking.FontVariations.FontWeight.For.ForAll.ForAllType.ForceVersionInstall.Format.FormatRules.FormatType.FormatTypeAutoConvert.FormatValues.FormBox.FormBoxOptions.FormControl.FormFunction.FormLayoutFunction.FormObject.FormPage.FormProtectionMethod.FormTheme.FormulaData.FormulaLookup.FortranForm.Forward.ForwardBackward.ForwardCloudCredentials.Fourier.FourierCoefficient.FourierCosCoefficient.FourierCosSeries.FourierCosTransform.FourierDCT.FourierDCTFilter.FourierDCTMatrix.FourierDST.FourierDSTMatrix.FourierMatrix.FourierParameters.FourierSequenceTransform.FourierSeries.FourierSinCoefficient.FourierSinSeries.FourierSinTransform.FourierTransform.FourierTrigSeries.FoxH.FoxHReduce.FractionalBrownianMotionProcess.FractionalD.FractionalGaussianNoiseProcess.FractionalPart.FractionBox.FractionBoxOptions.FractionLine.Frame.FrameBox.FrameBoxOptions.Framed.FrameInset.FrameLabel.Frameless.FrameListVideo.FrameMargins.FrameRate.FrameStyle.FrameTicks.FrameTicksStyle.FRatioDistribution.FrechetDistribution.FreeQ.FrenetSerretSystem.FrequencySamplingFilterKernel.FresnelC.FresnelF.FresnelG.FresnelS.Friday.FrobeniusNumber.FrobeniusSolve.FromAbsoluteTime.FromCharacterCode.FromCoefficientRules.FromContinuedFraction.FromDate.FromDateString.FromDigits.FromDMS.FromEntity.FromJulianDate.FromLetterNumber.FromPolarCoordinates.FromRawPointer.FromRomanNumeral.FromSphericalCoordinates.FromUnixTime.Front.FrontEndDynamicExpression.FrontEndEventActions.FrontEndExecute.FrontEndObject.FrontEndResource.FrontEndResourceString.FrontEndStackSize.FrontEndToken.FrontEndTokenExecute.FrontEndValueCache.FrontEndVersion.FrontFaceColor.FrontFaceGlowColor.FrontFaceOpacity.FrontFaceSpecularColor.FrontFaceSpecularExponent.FrontFaceSurfaceAppearance.FrontFaceTexture.Full.FullAxes.FullDefinition.FullForm.FullGraphics.FullInformationOutputRegulator.FullOptions.FullRegion.FullSimplify.Function.FunctionAnalytic.FunctionBijective.FunctionCompile.FunctionCompileExport.FunctionCompileExportByteArray.FunctionCompileExportLibrary.FunctionCompileExportString.FunctionContinuous.FunctionConvexity.FunctionDeclaration.FunctionDiscontinuities.FunctionDomain.FunctionExpand.FunctionInjective.FunctionInterpolation.FunctionLayer.FunctionMeromorphic.FunctionMonotonicity.FunctionPeriod.FunctionPoles.FunctionRange.FunctionSign.FunctionSingularities.FunctionSpace.FunctionSurjective.FussellVeselyImportance.GaborFilter.GaborMatrix.GaborWavelet.GainMargins.GainPhaseMargins.GalaxyData.GalleryView.Gamma.GammaDistribution.GammaRegularized.GapPenalty.GARCHProcess.GatedRecurrentLayer.Gather.GatherBy.GaugeFaceElementFunction.GaugeFaceStyle.GaugeFrameElementFunction.GaugeFrameSize.GaugeFrameStyle.GaugeLabels.GaugeMarkers.GaugeStyle.GaussianFilter.GaussianIntegers.GaussianMatrix.GaussianOrthogonalMatrixDistribution.GaussianSymplecticMatrixDistribution.GaussianUnitaryMatrixDistribution.GaussianWindow.GCD.GegenbauerC.General.GeneralizedLinearModelFit.GenerateAsymmetricKeyPair.GenerateConditions.GeneratedAssetFormat.GeneratedAssetLocation.GeneratedCell.GeneratedCellStyles.GeneratedDocumentBinding.GenerateDerivedKey.GenerateDigitalSignature.GenerateDocument.GeneratedParameters.GeneratedQuantityMagnitudes.GenerateFileSignature.GenerateHTTPResponse.GenerateSecuredAuthenticationKey.GenerateSymmetricKey.GeneratingFunction.GeneratorDescription.GeneratorHistoryLength.GeneratorOutputType.Generic.GenericCylindricalDecomposition.GenomeData.GenomeLookup.GeoAntipode.GeoArea.GeoArraySize.GeoBackground.GeoBoundary.GeoBoundingBox.GeoBounds.GeoBoundsRegion.GeoBoundsRegionBoundary.GeoBubbleChart.GeoCenter.GeoCircle.GeoContourPlot.GeoDensityPlot.GeodesicClosing.GeodesicDilation.GeodesicErosion.GeodesicOpening.GeodesicPolyhedron.GeoDestination.GeodesyData.GeoDirection.GeoDisk.GeoDisplacement.GeoDistance.GeoDistanceList.GeoElevationData.GeoEntities.GeoGraphics.GeoGraphPlot.GeoGraphValuePlot.GeogravityModelData.GeoGridDirectionDifference.GeoGridLines.GeoGridLinesStyle.GeoGridPosition.GeoGridRange.GeoGridRangePadding.GeoGridUnitArea.GeoGridUnitDistance.GeoGridVector.GeoGroup.GeoHemisphere.GeoHemisphereBoundary.GeoHistogram.GeoIdentify.GeoImage.GeoLabels.GeoLength.GeoListPlot.GeoLocation.GeologicalPeriodData.GeomagneticModelData.GeoMarker.GeometricAssertion.GeometricBrownianMotionProcess.GeometricDistribution.GeometricMean.GeometricMeanFilter.GeometricOptimization.GeometricScene.GeometricStep.GeometricStylingRules.GeometricTest.GeometricTransformation.GeometricTransformation3DBox.GeometricTransformation3DBoxOptions.GeometricTransformationBox.GeometricTransformationBoxOptions.GeoModel.GeoNearest.GeoOrientationData.GeoPath.GeoPolygon.GeoPosition.GeoPositionENU.GeoPositionXYZ.GeoProjection.GeoProjectionData.GeoRange.GeoRangePadding.GeoRegionValuePlot.GeoResolution.GeoScaleBar.GeoServer.GeoSmoothHistogram.GeoStreamPlot.GeoStyling.GeoStylingImageFunction.GeoVariant.GeoVector.GeoVectorENU.GeoVectorPlot.GeoVectorXYZ.GeoVisibleRegion.GeoVisibleRegionBoundary.GeoWithinQ.GeoZoomLevel.GestureHandler.GestureHandlerTag.Get.GetContext.GetEnvironment.GetFileName.GetLinebreakInformationPacket.GibbsPointProcess.Glaisher.GlobalClusteringCoefficient.GlobalPreferences.GlobalSession.Glow.GoldenAngle.GoldenRatio.GompertzMakehamDistribution.GoochShading.GoodmanKruskalGamma.GoodmanKruskalGammaTest.Goto.GouraudShading.Grad.Gradient.GradientFilter.GradientFittedMesh.GradientOrientationFilter.GrammarApply.GrammarRules.GrammarToken.Graph.Graph3D.GraphAssortativity.GraphAutomorphismGroup.GraphCenter.GraphComplement.GraphData.GraphDensity.GraphDiameter.GraphDifference.GraphDisjointUnion.GraphDistance.GraphDistanceMatrix.GraphEmbedding.GraphHighlight.GraphHighlightStyle.GraphHub.Graphics.Graphics3D.Graphics3DBox.Graphics3DBoxOptions.GraphicsArray.GraphicsBaseline.GraphicsBox.GraphicsBoxOptions.GraphicsColor.GraphicsColumn.GraphicsComplex.GraphicsComplex3DBox.GraphicsComplex3DBoxOptions.GraphicsComplexBox.GraphicsComplexBoxOptions.GraphicsContents.GraphicsData.GraphicsGrid.GraphicsGridBox.GraphicsGroup.GraphicsGroup3DBox.GraphicsGroup3DBoxOptions.GraphicsGroupBox.GraphicsGroupBoxOptions.GraphicsGrouping.GraphicsHighlightColor.GraphicsRow.GraphicsSpacing.GraphicsStyle.GraphIntersection.GraphJoin.GraphLayerLabels.GraphLayers.GraphLayerStyle.GraphLayout.GraphLinkEfficiency.GraphPeriphery.GraphPlot.GraphPlot3D.GraphPower.GraphProduct.GraphPropertyDistribution.GraphQ.GraphRadius.GraphReciprocity.GraphRoot.GraphStyle.GraphSum.GraphTree.GraphUnion.Gray.GrayLevel.Greater.GreaterEqual.GreaterEqualLess.GreaterEqualThan.GreaterFullEqual.GreaterGreater.GreaterLess.GreaterSlantEqual.GreaterThan.GreaterTilde.GreekStyle.Green.GreenFunction.Grid.GridBaseline.GridBox.GridBoxAlignment.GridBoxBackground.GridBoxDividers.GridBoxFrame.GridBoxItemSize.GridBoxItemStyle.GridBoxOptions.GridBoxSpacings.GridCreationSettings.GridDefaultElement.GridElementStyleOptions.GridFrame.GridFrameMargins.GridGraph.GridLines.GridLinesStyle.GridVideo.GroebnerBasis.GroupActionBase.GroupBy.GroupCentralizer.GroupElementFromWord.GroupElementPosition.GroupElementQ.GroupElements.GroupElementToWord.GroupGenerators.Groupings.GroupMultiplicationTable.GroupOpenerColor.GroupOpenerInsideFrame.GroupOrbits.GroupOrder.GroupPageBreakWithin.GroupSetwiseStabilizer.GroupStabilizer.GroupStabilizerChain.GroupTogetherGrouping.GroupTogetherNestedGrouping.GrowCutComponents.Gudermannian.GuidedFilter.GumbelDistribution.HaarWavelet.HadamardMatrix.HalfLine.HalfNormalDistribution.HalfPlane.HalfSpace.HalftoneShading.HamiltonianGraphQ.HammingDistance.HammingWindow.HandlerFunctions.HandlerFunctionsKeys.HankelH1.HankelH2.HankelMatrix.HankelTransform.HannPoissonWindow.HannWindow.HaradaNortonGroupHN.HararyGraph.HardcorePointProcess.HarmonicMean.HarmonicMeanFilter.HarmonicNumber.Hash.HatchFilling.HatchShading.Haversine.HazardFunction.Head.HeadCompose.HeaderAlignment.HeaderBackground.HeaderDisplayFunction.HeaderLines.Headers.HeaderSize.HeaderStyle.Heads.HeatFluxValue.HeatInsulationValue.HeatOutflowValue.HeatRadiationValue.HeatSymmetryValue.HeatTemperatureCondition.HeatTransferPDEComponent.HeatTransferValue.HeavisideLambda.HeavisidePi.HeavisideTheta.HeldGroupHe.HeldPart.HelmholtzPDEComponent.HelpBrowserLookup.HelpBrowserNotebook.HelpBrowserSettings.HelpViewerSettings.Here.HermiteDecomposition.HermiteH.Hermitian.HermitianMatrixQ.HessenbergDecomposition.Hessian.HeunB.HeunBPrime.HeunC.HeunCPrime.HeunD.HeunDPrime.HeunG.HeunGPrime.HeunT.HeunTPrime.HexadecimalCharacter.Hexahedron.HexahedronBox.HexahedronBoxOptions.HiddenItems.HiddenMarkovProcess.HiddenSurface.Highlighted.HighlightGraph.HighlightImage.HighlightMesh.HighlightString.HighpassFilter.HigmanSimsGroupHS.HilbertCurve.HilbertFilter.HilbertMatrix.Histogram.Histogram3D.HistogramDistribution.HistogramList.HistogramPointDensity.HistogramTransform.HistogramTransformInterpolation.HistoricalPeriodData.HitMissTransform.HITSCentrality.HjorthDistribution.HodgeDual.HoeffdingD.HoeffdingDTest.Hold.HoldAll.HoldAllComplete.HoldComplete.HoldFirst.HoldForm.HoldPattern.HoldRest.HolidayCalendar.HomeDirectory.HomePage.Horizontal.HorizontalForm.HorizontalGauge.HorizontalScrollPosition.HornerForm.HostLookup.HotellingTSquareDistribution.HoytDistribution.HTMLSave.HTTPErrorResponse.HTTPRedirect.HTTPRequest.HTTPRequestData.HTTPResponse.Hue.HumanGrowthData.HumpDownHump.HumpEqual.HurwitzLerchPhi.HurwitzZeta.HyperbolicDistribution.HypercubeGraph.HyperexponentialDistribution.Hyperfactorial.Hypergeometric0F1.Hypergeometric0F1Regularized.Hypergeometric1F1.Hypergeometric1F1Regularized.Hypergeometric2F1.Hypergeometric2F1Regularized.HypergeometricDistribution.HypergeometricPFQ.HypergeometricPFQRegularized.HypergeometricU.Hyperlink.HyperlinkAction.HyperlinkCreationSettings.Hyperplane.Hyphenation.HyphenationOptions.HypoexponentialDistribution.HypothesisTestData.I.IconData.Iconize.IconizedObject.IconRules.Icosahedron.Identity.IdentityMatrix.If.IfCompiled.IgnoreCase.IgnoreDiacritics.IgnoreIsotopes.IgnorePunctuation.IgnoreSpellCheck.IgnoreStereochemistry.IgnoringInactive.Im.Image.Image3D.Image3DProjection.Image3DSlices.ImageAccumulate.ImageAdd.ImageAdjust.ImageAlign.ImageApply.ImageApplyIndexed.ImageAspectRatio.ImageAssemble.ImageAugmentationLayer.ImageBoundingBoxes.ImageCache.ImageCacheValid.ImageCapture.ImageCaptureFunction.ImageCases.ImageChannels.ImageClip.ImageCollage.ImageColorSpace.ImageCompose.ImageContainsQ.ImageContents.ImageConvolve.ImageCooccurrence.ImageCorners.ImageCorrelate.ImageCorrespondingPoints.ImageCrop.ImageData.ImageDeconvolve.ImageDemosaic.ImageDifference.ImageDimensions.ImageDisplacements.ImageDistance.ImageEditMode.ImageEffect.ImageExposureCombine.ImageFeatureTrack.ImageFileApply.ImageFileFilter.ImageFileScan.ImageFilter.ImageFocusCombine.ImageForestingComponents.ImageFormattingWidth.ImageForwardTransformation.ImageGraphics.ImageHistogram.ImageIdentify.ImageInstanceQ.ImageKeypoints.ImageLabels.ImageLegends.ImageLevels.ImageLines.ImageMargins.ImageMarker.ImageMarkers.ImageMeasurements.ImageMesh.ImageMultiply.ImageOffset.ImagePad.ImagePadding.ImagePartition.ImagePeriodogram.ImagePerspectiveTransformation.ImagePosition.ImagePreviewFunction.ImagePyramid.ImagePyramidApply.ImageQ.ImageRangeCache.ImageRecolor.ImageReflect.ImageRegion.ImageResize.ImageResolution.ImageRestyle.ImageRotate.ImageRotated.ImageSaliencyFilter.ImageScaled.ImageScan.ImageSize.ImageSizeAction.ImageSizeCache.ImageSizeMultipliers.ImageSizeRaw.ImageStitch.ImageSubtract.ImageTake.ImageTransformation.ImageTrim.ImageType.ImageValue.ImageValuePositions.ImageVectorscopePlot.ImageWaveformPlot.ImagingDevice.ImplicitD.ImplicitRegion.Implies.Import.ImportAutoReplacements.ImportByteArray.ImportedObject.ImportOptions.ImportString.ImprovementImportance.In.Inactivate.Inactive.InactiveStyle.IncidenceGraph.IncidenceList.IncidenceMatrix.IncludeAromaticBonds.IncludeConstantBasis.IncludedContexts.IncludeDefinitions.IncludeDirectories.IncludeFileExtension.IncludeGeneratorTasks.IncludeHydrogens.IncludeInflections.IncludeMetaInformation.IncludePods.IncludeQuantities.IncludeRelatedTables.IncludeSingularSolutions.IncludeSingularTerm.IncludeWindowTimes.Increment.IndefiniteMatrixQ.Indent.IndentingNewlineSpacings.IndentMaxFraction.IndependenceTest.IndependentEdgeSetQ.IndependentPhysicalQuantity.IndependentUnit.IndependentUnitDimension.IndependentVertexSetQ.Indeterminate.IndeterminateThreshold.IndexCreationOptions.Indexed.IndexEdgeTaggedGraph.IndexGraph.IndexTag.Inequality.InertEvaluate.InertExpression.InexactNumberQ.InexactNumbers.InfiniteFuture.InfiniteLine.InfiniteLineThrough.InfinitePast.InfinitePlane.Infinity.Infix.InflationAdjust.InflationMethod.Information.InformationData.InformationDataGrid.Inherited.InheritScope.InhomogeneousPoissonPointProcess.InhomogeneousPoissonProcess.InitialEvaluationHistory.Initialization.InitializationCell.InitializationCellEvaluation.InitializationCellWarning.InitializationObject.InitializationObjects.InitializationValue.Initialize.InitialSeeding.InlineCounterAssignments.InlineCounterIncrements.InlineRules.Inner.InnerPolygon.InnerPolyhedron.Inpaint.Input.InputAliases.InputAssumptions.InputAutoReplacements.InputField.InputFieldBox.InputFieldBoxOptions.InputForm.InputGrouping.InputNamePacket.InputNotebook.InputPacket.InputPorts.InputSettings.InputStream.InputString.InputStringPacket.InputToBoxFormPacket.Insert.InsertionFunction.InsertionPointObject.InsertLinebreaks.InsertResults.Inset.Inset3DBox.Inset3DBoxOptions.InsetBox.InsetBoxOptions.Insphere.Install.InstallService.InstanceNormalizationLayer.InString.Integer.IntegerDigits.IntegerExponent.IntegerLength.IntegerName.IntegerPart.IntegerPartitions.IntegerQ.IntegerReverse.Integers.IntegerString.Integral.Integrate.IntegrateChangeVariables.Interactive.InteractiveTradingChart.InterfaceSwitched.Interlaced.Interleaving.InternallyBalancedDecomposition.InterpolatingFunction.InterpolatingPolynomial.Interpolation.InterpolationOrder.InterpolationPoints.InterpolationPrecision.Interpretation.InterpretationBox.InterpretationBoxOptions.InterpretationFunction.Interpreter.InterpretTemplate.InterquartileRange.Interrupt.InterruptSettings.IntersectedEntityClass.IntersectingQ.Intersection.Interval.IntervalIntersection.IntervalMarkers.IntervalMarkersStyle.IntervalMemberQ.IntervalSlider.IntervalUnion.Into.Inverse.InverseBetaRegularized.InverseBilateralLaplaceTransform.InverseBilateralZTransform.InverseCDF.InverseChiSquareDistribution.InverseContinuousWaveletTransform.InverseDistanceTransform.InverseEllipticNomeQ.InverseErf.InverseErfc.InverseFourier.InverseFourierCosTransform.InverseFourierSequenceTransform.InverseFourierSinTransform.InverseFourierTransform.InverseFunction.InverseFunctions.InverseGammaDistribution.InverseGammaRegularized.InverseGaussianDistribution.InverseGudermannian.InverseHankelTransform.InverseHaversine.InverseImagePyramid.InverseJacobiCD.InverseJacobiCN.InverseJacobiCS.InverseJacobiDC.InverseJacobiDN.InverseJacobiDS.InverseJacobiNC.InverseJacobiND.InverseJacobiNS.InverseJacobiSC.InverseJacobiSD.InverseJacobiSN.InverseLaplaceTransform.InverseMellinTransform.InversePermutation.InverseRadon.InverseRadonTransform.InverseSeries.InverseShortTimeFourier.InverseSpectrogram.InverseSurvivalFunction.InverseTransformedRegion.InverseWaveletTransform.InverseWeierstrassP.InverseWishartMatrixDistribution.InverseZTransform.Invisible.InvisibleApplication.InvisibleTimes.IPAddress.IrreduciblePolynomialQ.IslandData.IsolatingInterval.IsomorphicGraphQ.IsomorphicSubgraphQ.IsotopeData.Italic.Item.ItemAspectRatio.ItemBox.ItemBoxOptions.ItemDisplayFunction.ItemSize.ItemStyle.ItoProcess.JaccardDissimilarity.JacobiAmplitude.Jacobian.JacobiCD.JacobiCN.JacobiCS.JacobiDC.JacobiDN.JacobiDS.JacobiEpsilon.JacobiNC.JacobiND.JacobiNS.JacobiP.JacobiSC.JacobiSD.JacobiSN.JacobiSymbol.JacobiZeta.JacobiZN.JankoGroupJ1.JankoGroupJ2.JankoGroupJ3.JankoGroupJ4.JarqueBeraALMTest.JohnsonDistribution.Join.JoinAcross.Joined.JoinedCurve.JoinedCurveBox.JoinedCurveBoxOptions.JoinForm.JordanDecomposition.JordanModelDecomposition.JulianDate.JuliaSetBoettcher.JuliaSetIterationCount.JuliaSetPlot.JuliaSetPoints.K.KagiChart.KaiserBesselWindow.KaiserWindow.KalmanEstimator.KalmanFilter.KarhunenLoeveDecomposition.KaryTree.KatzCentrality.KCoreComponents.KDistribution.KEdgeConnectedComponents.KEdgeConnectedGraphQ.KeepExistingVersion.KelvinBei.KelvinBer.KelvinKei.KelvinKer.KendallTau.KendallTauTest.KernelConfiguration.KernelExecute.KernelFunction.KernelMixtureDistribution.KernelObject.Kernels.Ket.Key.KeyCollisionFunction.KeyComplement.KeyDrop.KeyDropFrom.KeyExistsQ.KeyFreeQ.KeyIntersection.KeyMap.KeyMemberQ.KeypointStrength.Keys.KeySelect.KeySort.KeySortBy.KeyTake.KeyUnion.KeyValueMap.KeyValuePattern.Khinchin.KillProcess.KirchhoffGraph.KirchhoffMatrix.KleinInvariantJ.KnapsackSolve.KnightTourGraph.KnotData.KnownUnitQ.KochCurve.KolmogorovSmirnovTest.KroneckerDelta.KroneckerModelDecomposition.KroneckerProduct.KroneckerSymbol.KuiperTest.KumaraswamyDistribution.Kurtosis.KuwaharaFilter.KVertexConnectedComponents.KVertexConnectedGraphQ.LABColor.Label.Labeled.LabeledSlider.LabelingFunction.LabelingSize.LabelStyle.LabelVisibility.LaguerreL.LakeData.LambdaComponents.LambertW.LameC.LameCPrime.LameEigenvalueA.LameEigenvalueB.LameS.LameSPrime.LaminaData.LanczosWindow.LandauDistribution.Language.LanguageCategory.LanguageData.LanguageIdentify.LanguageOptions.LaplaceDistribution.LaplaceTransform.Laplacian.LaplacianFilter.LaplacianGaussianFilter.LaplacianPDETerm.Large.Larger.Last.Latitude.LatitudeLongitude.LatticeData.LatticeReduce.Launch.LaunchKernels.LayeredGraphPlot.LayeredGraphPlot3D.LayerSizeFunction.LayoutInformation.LCHColor.LCM.LeaderSize.LeafCount.LeapVariant.LeapYearQ.LearnDistribution.LearnedDistribution.LearningRate.LearningRateMultipliers.LeastSquares.LeastSquaresFilterKernel.Left.LeftArrow.LeftArrowBar.LeftArrowRightArrow.LeftDownTeeVector.LeftDownVector.LeftDownVectorBar.LeftRightArrow.LeftRightVector.LeftTee.LeftTeeArrow.LeftTeeVector.LeftTriangle.LeftTriangleBar.LeftTriangleEqual.LeftUpDownVector.LeftUpTeeVector.LeftUpVector.LeftUpVectorBar.LeftVector.LeftVectorBar.LegendAppearance.Legended.LegendFunction.LegendLabel.LegendLayout.LegendMargins.LegendMarkers.LegendMarkerSize.LegendreP.LegendreQ.LegendreType.Length.LengthWhile.LerchPhi.Less.LessEqual.LessEqualGreater.LessEqualThan.LessFullEqual.LessGreater.LessLess.LessSlantEqual.LessThan.LessTilde.LetterCharacter.LetterCounts.LetterNumber.LetterQ.Level.LeveneTest.LeviCivitaTensor.LevyDistribution.Lexicographic.LexicographicOrder.LexicographicSort.LibraryDataType.LibraryFunction.LibraryFunctionDeclaration.LibraryFunctionError.LibraryFunctionInformation.LibraryFunctionLoad.LibraryFunctionUnload.LibraryLoad.LibraryUnload.LicenseEntitlementObject.LicenseEntitlements.LicenseID.LicensingSettings.LiftingFilterData.LiftingWaveletTransform.LightBlue.LightBrown.LightCyan.Lighter.LightGray.LightGreen.Lighting.LightingAngle.LightMagenta.LightOrange.LightPink.LightPurple.LightRed.LightSources.LightYellow.Likelihood.Limit.LimitsPositioning.LimitsPositioningTokens.LindleyDistribution.Line.Line3DBox.Line3DBoxOptions.LinearFilter.LinearFractionalOptimization.LinearFractionalTransform.LinearGradientFilling.LinearGradientImage.LinearizingTransformationData.LinearLayer.LinearModelFit.LinearOffsetFunction.LinearOptimization.LinearProgramming.LinearRecurrence.LinearSolve.LinearSolveFunction.LineBox.LineBoxOptions.LineBreak.LinebreakAdjustments.LineBreakChart.LinebreakSemicolonWeighting.LineBreakWithin.LineColor.LineGraph.LineIndent.LineIndentMaxFraction.LineIntegralConvolutionPlot.LineIntegralConvolutionScale.LineLegend.LineOpacity.LineSpacing.LineWrapParts.LinkActivate.LinkClose.LinkConnect.LinkConnectedQ.LinkCreate.LinkError.LinkFlush.LinkFunction.LinkHost.LinkInterrupt.LinkLaunch.LinkMode.LinkObject.LinkOpen.LinkOptions.LinkPatterns.LinkProtocol.LinkRankCentrality.LinkRead.LinkReadHeld.LinkReadyQ.Links.LinkService.LinkWrite.LinkWriteHeld.LiouvilleLambda.List.Listable.ListAnimate.ListContourPlot.ListContourPlot3D.ListConvolve.ListCorrelate.ListCurvePathPlot.ListDeconvolve.ListDensityPlot.ListDensityPlot3D.Listen.ListFormat.ListFourierSequenceTransform.ListInterpolation.ListLineIntegralConvolutionPlot.ListLinePlot.ListLinePlot3D.ListLogLinearPlot.ListLogLogPlot.ListLogPlot.ListPicker.ListPickerBox.ListPickerBoxBackground.ListPickerBoxOptions.ListPlay.ListPlot.ListPlot3D.ListPointPlot3D.ListPolarPlot.ListQ.ListSliceContourPlot3D.ListSliceDensityPlot3D.ListSliceVectorPlot3D.ListStepPlot.ListStreamDensityPlot.ListStreamPlot.ListStreamPlot3D.ListSurfacePlot3D.ListVectorDensityPlot.ListVectorDisplacementPlot.ListVectorDisplacementPlot3D.ListVectorPlot.ListVectorPlot3D.ListZTransform.Literal.LiteralSearch.LiteralType.LoadCompiledComponent.LocalAdaptiveBinarize.LocalCache.LocalClusteringCoefficient.LocalEvaluate.LocalizeDefinitions.LocalizeVariables.LocalObject.LocalObjects.LocalResponseNormalizationLayer.LocalSubmit.LocalSymbol.LocalTime.LocalTimeZone.LocationEquivalenceTest.LocationTest.Locator.LocatorAutoCreate.LocatorBox.LocatorBoxOptions.LocatorCentering.LocatorPane.LocatorPaneBox.LocatorPaneBoxOptions.LocatorRegion.Locked.Log.Log10.Log2.LogBarnesG.LogGamma.LogGammaDistribution.LogicalExpand.LogIntegral.LogisticDistribution.LogisticSigmoid.LogitModelFit.LogLikelihood.LogLinearPlot.LogLogisticDistribution.LogLogPlot.LogMultinormalDistribution.LogNormalDistribution.LogPlot.LogRankTest.LogSeriesDistribution.LongEqual.Longest.LongestCommonSequence.LongestCommonSequencePositions.LongestCommonSubsequence.LongestCommonSubsequencePositions.LongestMatch.LongestOrderedSequence.LongForm.Longitude.LongLeftArrow.LongLeftRightArrow.LongRightArrow.LongShortTermMemoryLayer.Lookup.Loopback.LoopFreeGraphQ.Looping.LossFunction.LowerCaseQ.LowerLeftArrow.LowerRightArrow.LowerTriangularize.LowerTriangularMatrix.LowerTriangularMatrixQ.LowpassFilter.LQEstimatorGains.LQGRegulator.LQOutputRegulatorGains.LQRegulatorGains.LUBackSubstitution.LucasL.LuccioSamiComponents.LUDecomposition.LunarEclipse.LUVColor.LyapunovSolve.LyonsGroupLy.MachineID.MachineName.MachineNumberQ.MachinePrecision.MacintoshSystemPageSetup.Magenta.Magnification.Magnify.MailAddressValidation.MailExecute.MailFolder.MailItem.MailReceiverFunction.MailResponseFunction.MailSearch.MailServerConnect.MailServerConnection.MailSettings.MainSolve.MaintainDynamicCaches.Majority.MakeBoxes.MakeExpression.MakeRules.ManagedLibraryExpressionID.ManagedLibraryExpressionQ.MandelbrotSetBoettcher.MandelbrotSetDistance.MandelbrotSetIterationCount.MandelbrotSetMemberQ.MandelbrotSetPlot.MangoldtLambda.ManhattanDistance.Manipulate.Manipulator.MannedSpaceMissionData.MannWhitneyTest.MantissaExponent.Manual.Map.MapAll.MapApply.MapAt.MapIndexed.MAProcess.MapThread.MarchenkoPasturDistribution.MarcumQ.MardiaCombinedTest.MardiaKurtosisTest.MardiaSkewnessTest.MarginalDistribution.MarkovProcessProperties.Masking.MassConcentrationCondition.MassFluxValue.MassImpermeableBoundaryValue.MassOutflowValue.MassSymmetryValue.MassTransferValue.MassTransportPDEComponent.MatchingDissimilarity.MatchLocalNameQ.MatchLocalNames.MatchQ.Material.MaterialShading.MaternPointProcess.MathematicalFunctionData.MathematicaNotation.MathieuC.MathieuCharacteristicA.MathieuCharacteristicB.MathieuCharacteristicExponent.MathieuCPrime.MathieuGroupM11.MathieuGroupM12.MathieuGroupM22.MathieuGroupM23.MathieuGroupM24.MathieuS.MathieuSPrime.MathMLForm.MathMLText.Matrices.MatrixExp.MatrixForm.MatrixFunction.MatrixLog.MatrixNormalDistribution.MatrixPlot.MatrixPower.MatrixPropertyDistribution.MatrixQ.MatrixRank.MatrixTDistribution.Max.MaxBend.MaxCellMeasure.MaxColorDistance.MaxDate.MaxDetect.MaxDisplayedChildren.MaxDuration.MaxExtraBandwidths.MaxExtraConditions.MaxFeatureDisplacement.MaxFeatures.MaxFilter.MaximalBy.Maximize.MaxItems.MaxIterations.MaxLimit.MaxMemoryUsed.MaxMixtureKernels.MaxOverlapFraction.MaxPlotPoints.MaxPoints.MaxRecursion.MaxStableDistribution.MaxStepFraction.MaxSteps.MaxStepSize.MaxTrainingRounds.MaxValue.MaxwellDistribution.MaxWordGap.McLaughlinGroupMcL.Mean.MeanAbsoluteLossLayer.MeanAround.MeanClusteringCoefficient.MeanDegreeConnectivity.MeanDeviation.MeanFilter.MeanGraphDistance.MeanNeighborDegree.MeanPointDensity.MeanShift.MeanShiftFilter.MeanSquaredLossLayer.Median.MedianDeviation.MedianFilter.MedicalTestData.Medium.MeijerG.MeijerGReduce.MeixnerDistribution.MellinConvolve.MellinTransform.MemberQ.MemoryAvailable.MemoryConstrained.MemoryConstraint.MemoryInUse.MengerMesh.Menu.MenuAppearance.MenuCommandKey.MenuEvaluator.MenuItem.MenuList.MenuPacket.MenuSortingValue.MenuStyle.MenuView.Merge.MergeDifferences.MergingFunction.MersennePrimeExponent.MersennePrimeExponentQ.Mesh.MeshCellCentroid.MeshCellCount.MeshCellHighlight.MeshCellIndex.MeshCellLabel.MeshCellMarker.MeshCellMeasure.MeshCellQuality.MeshCells.MeshCellShapeFunction.MeshCellStyle.MeshConnectivityGraph.MeshCoordinates.MeshFunctions.MeshPrimitives.MeshQualityGoal.MeshRange.MeshRefinementFunction.MeshRegion.MeshRegionQ.MeshShading.MeshStyle.Message.MessageDialog.MessageList.MessageName.MessageObject.MessageOptions.MessagePacket.Messages.MessagesNotebook.MetaCharacters.MetaInformation.MeteorShowerData.Method.MethodOptions.MexicanHatWavelet.MeyerWavelet.Midpoint.MIMETypeToFormatList.Min.MinColorDistance.MinDate.MinDetect.MineralData.MinFilter.MinimalBy.MinimalPolynomial.MinimalStateSpaceModel.Minimize.MinimumTimeIncrement.MinIntervalSize.MinkowskiQuestionMark.MinLimit.MinMax.MinorPlanetData.Minors.MinPointSeparation.MinRecursion.MinSize.MinStableDistribution.Minus.MinusPlus.MinValue.Missing.MissingBehavior.MissingDataMethod.MissingDataRules.MissingQ.MissingString.MissingStyle.MissingValuePattern.MissingValueSynthesis.MittagLefflerE.MixedFractionParts.MixedGraphQ.MixedMagnitude.MixedRadix.MixedRadixQuantity.MixedUnit.MixtureDistribution.Mod.Modal.Mode.ModelPredictiveController.Modular.ModularInverse.ModularLambda.Module.Modulus.MoebiusMu.Molecule.MoleculeAlign.MoleculeContainsQ.MoleculeDraw.MoleculeEquivalentQ.MoleculeFreeQ.MoleculeGraph.MoleculeMatchQ.MoleculeMaximumCommonSubstructure.MoleculeModify.MoleculeName.MoleculePattern.MoleculePlot.MoleculePlot3D.MoleculeProperty.MoleculeQ.MoleculeRecognize.MoleculeSubstructureCount.MoleculeValue.Moment.MomentConvert.MomentEvaluate.MomentGeneratingFunction.MomentOfInertia.Monday.Monitor.MonomialList.MonomialOrder.MonsterGroupM.MoonPhase.MoonPosition.MorletWavelet.MorphologicalBinarize.MorphologicalBranchPoints.MorphologicalComponents.MorphologicalEulerNumber.MorphologicalGraph.MorphologicalPerimeter.MorphologicalTransform.MortalityData.Most.MountainData.MouseAnnotation.MouseAppearance.MouseAppearanceTag.MouseButtons.Mouseover.MousePointerNote.MousePosition.MovieData.MovingAverage.MovingMap.MovingMedian.MoyalDistribution.MultiaxisArrangement.Multicolumn.MultiedgeStyle.MultigraphQ.MultilaunchWarning.MultiLetterItalics.MultiLetterStyle.MultilineFunction.Multinomial.MultinomialDistribution.MultinormalDistribution.MultiplicativeOrder.Multiplicity.MultiplySides.MultiscriptBoxOptions.Multiselection.MultivariateHypergeometricDistribution.MultivariatePoissonDistribution.MultivariateTDistribution.N.NakagamiDistribution.NameQ.Names.NamespaceBox.NamespaceBoxOptions.Nand.NArgMax.NArgMin.NBernoulliB.NBodySimulation.NBodySimulationData.NCache.NCaputoD.NDEigensystem.NDEigenvalues.NDSolve.NDSolveValue.Nearest.NearestFunction.NearestMeshCells.NearestNeighborG.NearestNeighborGraph.NearestTo.NebulaData.NeedlemanWunschSimilarity.Needs.Negative.NegativeBinomialDistribution.NegativeDefiniteMatrixQ.NegativeIntegers.NegativelyOrientedPoints.NegativeMultinomialDistribution.NegativeRationals.NegativeReals.NegativeSemidefiniteMatrixQ.NeighborhoodData.NeighborhoodGraph.Nest.NestedGreaterGreater.NestedLessLess.NestedScriptRules.NestGraph.NestList.NestTree.NestWhile.NestWhileList.NetAppend.NetArray.NetArrayLayer.NetBidirectionalOperator.NetChain.NetDecoder.NetDelete.NetDrop.NetEncoder.NetEvaluationMode.NetExternalObject.NetExtract.NetFlatten.NetFoldOperator.NetGANOperator.NetGraph.NetInformation.NetInitialize.NetInsert.NetInsertSharedArrays.NetJoin.NetMapOperator.NetMapThreadOperator.NetMeasurements.NetModel.NetNestOperator.NetPairEmbeddingOperator.NetPort.NetPortGradient.NetPrepend.NetRename.NetReplace.NetReplacePart.NetSharedArray.NetStateObject.NetTake.NetTrain.NetTrainResultsObject.NetUnfold.NetworkPacketCapture.NetworkPacketRecording.NetworkPacketRecordingDuring.NetworkPacketTrace.NeumannValue.NevilleThetaC.NevilleThetaD.NevilleThetaN.NevilleThetaS.NewPrimitiveStyle.NExpectation.Next.NextCell.NextDate.NextPrime.NextScheduledTaskTime.NeymanScottPointProcess.NFractionalD.NHoldAll.NHoldFirst.NHoldRest.NicholsGridLines.NicholsPlot.NightHemisphere.NIntegrate.NMaximize.NMaxValue.NMinimize.NMinValue.NominalScale.NominalVariables.NonAssociative.NoncentralBetaDistribution.NoncentralChiSquareDistribution.NoncentralFRatioDistribution.NoncentralStudentTDistribution.NonCommutativeMultiply.NonConstants.NondimensionalizationTransform.None.NoneTrue.NonlinearModelFit.NonlinearStateSpaceModel.NonlocalMeansFilter.NonNegative.NonNegativeIntegers.NonNegativeRationals.NonNegativeReals.NonPositive.NonPositiveIntegers.NonPositiveRationals.NonPositiveReals.Nor.NorlundB.Norm.Normal.NormalDistribution.NormalGrouping.NormalizationLayer.Normalize.Normalized.NormalizedSquaredEuclideanDistance.NormalMatrixQ.NormalsFunction.NormFunction.Not.NotCongruent.NotCupCap.NotDoubleVerticalBar.Notebook.NotebookApply.NotebookAutoSave.NotebookBrowseDirectory.NotebookClose.NotebookConvertSettings.NotebookCreate.NotebookDefault.NotebookDelete.NotebookDirectory.NotebookDynamicExpression.NotebookEvaluate.NotebookEventActions.NotebookFileName.NotebookFind.NotebookGet.NotebookImport.NotebookInformation.NotebookInterfaceObject.NotebookLocate.NotebookObject.NotebookOpen.NotebookPath.NotebookPrint.NotebookPut.NotebookRead.Notebooks.NotebookSave.NotebookSelection.NotebooksMenu.NotebookTemplate.NotebookWrite.NotElement.NotEqualTilde.NotExists.NotGreater.NotGreaterEqual.NotGreaterFullEqual.NotGreaterGreater.NotGreaterLess.NotGreaterSlantEqual.NotGreaterTilde.Nothing.NotHumpDownHump.NotHumpEqual.NotificationFunction.NotLeftTriangle.NotLeftTriangleBar.NotLeftTriangleEqual.NotLess.NotLessEqual.NotLessFullEqual.NotLessGreater.NotLessLess.NotLessSlantEqual.NotLessTilde.NotNestedGreaterGreater.NotNestedLessLess.NotPrecedes.NotPrecedesEqual.NotPrecedesSlantEqual.NotPrecedesTilde.NotReverseElement.NotRightTriangle.NotRightTriangleBar.NotRightTriangleEqual.NotSquareSubset.NotSquareSubsetEqual.NotSquareSuperset.NotSquareSupersetEqual.NotSubset.NotSubsetEqual.NotSucceeds.NotSucceedsEqual.NotSucceedsSlantEqual.NotSucceedsTilde.NotSuperset.NotSupersetEqual.NotTilde.NotTildeEqual.NotTildeFullEqual.NotTildeTilde.NotVerticalBar.Now.NoWhitespace.NProbability.NProduct.NProductFactors.NRoots.NSolve.NSolveValues.NSum.NSumTerms.NuclearExplosionData.NuclearReactorData.Null.NullRecords.NullSpace.NullWords.Number.NumberCompose.NumberDecompose.NumberDigit.NumberExpand.NumberFieldClassNumber.NumberFieldDiscriminant.NumberFieldFundamentalUnits.NumberFieldIntegralBasis.NumberFieldNormRepresentatives.NumberFieldRegulator.NumberFieldRootsOfUnity.NumberFieldSignature.NumberForm.NumberFormat.NumberLinePlot.NumberMarks.NumberMultiplier.NumberPadding.NumberPoint.NumberQ.NumberSeparator.NumberSigns.NumberString.Numerator.NumeratorDenominator.NumericalOrder.NumericalSort.NumericArray.NumericArrayQ.NumericArrayType.NumericFunction.NumericQ.NuttallWindow.NValues.NyquistGridLines.NyquistPlot.O.ObjectExistsQ.ObservabilityGramian.ObservabilityMatrix.ObservableDecomposition.ObservableModelQ.OceanData.Octahedron.OddQ.Off.Offset.OLEData.On.ONanGroupON.Once.OneIdentity.Opacity.OpacityFunction.OpacityFunctionScaling.Open.OpenAppend.Opener.OpenerBox.OpenerBoxOptions.OpenerView.OpenFunctionInspectorPacket.Opening.OpenRead.OpenSpecialOptions.OpenTemporary.OpenWrite.Operate.OperatingSystem.OperatorApplied.OptimumFlowData.Optional.OptionalElement.OptionInspectorSettings.OptionQ.Options.OptionsPacket.OptionsPattern.OptionValue.OptionValueBox.OptionValueBoxOptions.Or.Orange.Order.OrderDistribution.OrderedQ.Ordering.OrderingBy.OrderingLayer.Orderless.OrderlessPatternSequence.OrdinalScale.OrnsteinUhlenbeckProcess.Orthogonalize.OrthogonalMatrixQ.Out.Outer.OuterPolygon.OuterPolyhedron.OutputAutoOverwrite.OutputControllabilityMatrix.OutputControllableModelQ.OutputForm.OutputFormData.OutputGrouping.OutputMathEditExpression.OutputNamePacket.OutputPorts.OutputResponse.OutputSizeLimit.OutputStream.Over.OverBar.OverDot.Overflow.OverHat.Overlaps.Overlay.OverlayBox.OverlayBoxOptions.OverlayVideo.Overscript.OverscriptBox.OverscriptBoxOptions.OverTilde.OverVector.OverwriteTarget.OwenT.OwnValues.Package.PackingMethod.PackPaclet.PacletDataRebuild.PacletDirectoryAdd.PacletDirectoryLoad.PacletDirectoryRemove.PacletDirectoryUnload.PacletDisable.PacletEnable.PacletFind.PacletFindRemote.PacletInformation.PacletInstall.PacletInstallSubmit.PacletNewerQ.PacletObject.PacletObjectQ.PacletSite.PacletSiteObject.PacletSiteRegister.PacletSites.PacletSiteUnregister.PacletSiteUpdate.PacletSymbol.PacletUninstall.PacletUpdate.PaddedForm.Padding.PaddingLayer.PaddingSize.PadeApproximant.PadLeft.PadRight.PageBreakAbove.PageBreakBelow.PageBreakWithin.PageFooterLines.PageFooters.PageHeaderLines.PageHeaders.PageHeight.PageRankCentrality.PageTheme.PageWidth.Pagination.PairCorrelationG.PairedBarChart.PairedHistogram.PairedSmoothHistogram.PairedTTest.PairedZTest.PaletteNotebook.PalettePath.PalettesMenuSettings.PalindromeQ.Pane.PaneBox.PaneBoxOptions.Panel.PanelBox.PanelBoxOptions.Paneled.PaneSelector.PaneSelectorBox.PaneSelectorBoxOptions.PaperWidth.ParabolicCylinderD.ParagraphIndent.ParagraphSpacing.ParallelArray.ParallelAxisPlot.ParallelCombine.ParallelDo.Parallelepiped.ParallelEvaluate.Parallelization.Parallelize.ParallelKernels.ParallelMap.ParallelNeeds.Parallelogram.ParallelProduct.ParallelSubmit.ParallelSum.ParallelTable.ParallelTry.Parameter.ParameterEstimator.ParameterMixtureDistribution.ParameterVariables.ParametricConvexOptimization.ParametricFunction.ParametricNDSolve.ParametricNDSolveValue.ParametricPlot.ParametricPlot3D.ParametricRampLayer.ParametricRegion.ParentBox.ParentCell.ParentConnect.ParentDirectory.ParentEdgeLabel.ParentEdgeLabelFunction.ParentEdgeLabelStyle.ParentEdgeShapeFunction.ParentEdgeStyle.ParentEdgeStyleFunction.ParentForm.Parenthesize.ParentList.ParentNotebook.ParetoDistribution.ParetoPickandsDistribution.ParkData.Part.PartBehavior.PartialCorrelationFunction.PartialD.ParticleAcceleratorData.ParticleData.Partition.PartitionGranularity.PartitionsP.PartitionsQ.PartLayer.PartOfSpeech.PartProtection.ParzenWindow.PascalDistribution.PassEventsDown.PassEventsUp.Paste.PasteAutoQuoteCharacters.PasteBoxFormInlineCells.PasteButton.Path.PathGraph.PathGraphQ.Pattern.PatternFilling.PatternReaction.PatternSequence.PatternTest.PauliMatrix.PaulWavelet.Pause.PausedTime.PDF.PeakDetect.PeanoCurve.PearsonChiSquareTest.PearsonCorrelationTest.PearsonDistribution.PenttinenPointProcess.PercentForm.PerfectNumber.PerfectNumberQ.PerformanceGoal.Perimeter.PeriodicBoundaryCondition.PeriodicInterpolation.Periodogram.PeriodogramArray.Permanent.Permissions.PermissionsGroup.PermissionsGroupMemberQ.PermissionsGroups.PermissionsKey.PermissionsKeys.PermutationCycles.PermutationCyclesQ.PermutationGroup.PermutationLength.PermutationList.PermutationListQ.PermutationMatrix.PermutationMax.PermutationMin.PermutationOrder.PermutationPower.PermutationProduct.PermutationReplace.Permutations.PermutationSupport.Permute.PeronaMalikFilter.Perpendicular.PerpendicularBisector.PersistenceLocation.PersistenceTime.PersistentObject.PersistentObjects.PersistentSymbol.PersistentValue.PersonData.PERTDistribution.PetersenGraph.PhaseMargins.PhaseRange.PhongShading.PhysicalSystemData.Pi.Pick.PickedElements.PickMode.PIDData.PIDDerivativeFilter.PIDFeedforward.PIDTune.Piecewise.PiecewiseExpand.PieChart.PieChart3D.PillaiTrace.PillaiTraceTest.PingTime.Pink.PitchRecognize.Pivoting.PixelConstrained.PixelValue.PixelValuePositions.Placed.Placeholder.PlaceholderLayer.PlaceholderReplace.Plain.PlanarAngle.PlanarFaceList.PlanarGraph.PlanarGraphQ.PlanckRadiationLaw.PlaneCurveData.PlanetaryMoonData.PlanetData.PlantData.Play.PlaybackSettings.PlayRange.Plot.Plot3D.Plot3Matrix.PlotDivision.PlotJoined.PlotLabel.PlotLabels.PlotLayout.PlotLegends.PlotMarkers.PlotPoints.PlotRange.PlotRangeClipping.PlotRangeClipPlanesStyle.PlotRangePadding.PlotRegion.PlotStyle.PlotTheme.Pluralize.Plus.PlusMinus.Pochhammer.PodStates.PodWidth.Point.Point3DBox.Point3DBoxOptions.PointBox.PointBoxOptions.PointCountDistribution.PointDensity.PointDensityFunction.PointFigureChart.PointLegend.PointLight.PointProcessEstimator.PointProcessFitTest.PointProcessParameterAssumptions.PointProcessParameterQ.PointSize.PointStatisticFunction.PointValuePlot.PoissonConsulDistribution.PoissonDistribution.PoissonPDEComponent.PoissonPointProcess.PoissonProcess.PoissonWindow.PolarAxes.PolarAxesOrigin.PolarGridLines.PolarPlot.PolarTicks.PoleZeroMarkers.PolyaAeppliDistribution.PolyGamma.Polygon.Polygon3DBox.Polygon3DBoxOptions.PolygonalNumber.PolygonAngle.PolygonBox.PolygonBoxOptions.PolygonCoordinates.PolygonDecomposition.PolygonHoleScale.PolygonIntersections.PolygonScale.Polyhedron.PolyhedronAngle.PolyhedronBox.PolyhedronBoxOptions.PolyhedronCoordinates.PolyhedronData.PolyhedronDecomposition.PolyhedronGenus.PolyLog.PolynomialExpressionQ.PolynomialExtendedGCD.PolynomialForm.PolynomialGCD.PolynomialLCM.PolynomialMod.PolynomialQ.PolynomialQuotient.PolynomialQuotientRemainder.PolynomialReduce.PolynomialRemainder.Polynomials.PolynomialSumOfSquaresList.PoolingLayer.PopupMenu.PopupMenuBox.PopupMenuBoxOptions.PopupView.PopupWindow.Position.PositionIndex.PositionLargest.PositionSmallest.Positive.PositiveDefiniteMatrixQ.PositiveIntegers.PositivelyOrientedPoints.PositiveRationals.PositiveReals.PositiveSemidefiniteMatrixQ.PossibleZeroQ.Postfix.PostScript.Power.PowerDistribution.PowerExpand.PowerMod.PowerModList.PowerRange.PowerSpectralDensity.PowersRepresentations.PowerSymmetricPolynomial.Precedence.PrecedenceForm.Precedes.PrecedesEqual.PrecedesSlantEqual.PrecedesTilde.Precision.PrecisionGoal.PreDecrement.Predict.PredictionRoot.PredictorFunction.PredictorInformation.PredictorMeasurements.PredictorMeasurementsObject.PreemptProtect.PreferencesPath.PreferencesSettings.Prefix.PreIncrement.Prepend.PrependLayer.PrependTo.PreprocessingRules.PreserveColor.PreserveImageOptions.Previous.PreviousCell.PreviousDate.PriceGraphDistribution.PrimaryPlaceholder.Prime.PrimeNu.PrimeOmega.PrimePi.PrimePowerQ.PrimeQ.Primes.PrimeZetaP.PrimitivePolynomialQ.PrimitiveRoot.PrimitiveRootList.PrincipalComponents.PrincipalValue.Print.PrintableASCIIQ.PrintAction.PrintForm.PrintingCopies.PrintingOptions.PrintingPageRange.PrintingStartingPageNumber.PrintingStyleEnvironment.Printout3D.Printout3DPreviewer.PrintPrecision.PrintTemporary.Prism.PrismBox.PrismBoxOptions.PrivateCellOptions.PrivateEvaluationOptions.PrivateFontOptions.PrivateFrontEndOptions.PrivateKey.PrivateNotebookOptions.PrivatePaths.Probability.ProbabilityDistribution.ProbabilityPlot.ProbabilityPr.ProbabilityScalePlot.ProbitModelFit.ProcessConnection.ProcessDirectory.ProcessEnvironment.Processes.ProcessEstimator.ProcessInformation.ProcessObject.ProcessParameterAssumptions.ProcessParameterQ.ProcessStateDomain.ProcessStatus.ProcessTimeDomain.Product.ProductDistribution.ProductLog.ProgressIndicator.ProgressIndicatorBox.ProgressIndicatorBoxOptions.ProgressReporting.Projection.Prolog.PromptForm.ProofObject.PropagateAborts.Properties.Property.PropertyList.PropertyValue.Proportion.Proportional.Protect.Protected.ProteinData.Pruning.PseudoInverse.PsychrometricPropertyData.PublicKey.PublisherID.PulsarData.PunctuationCharacter.Purple.Put.PutAppend.Pyramid.PyramidBox.PyramidBoxOptions.QBinomial.QFactorial.QGamma.QHypergeometricPFQ.QnDispersion.QPochhammer.QPolyGamma.QRDecomposition.QuadraticIrrationalQ.QuadraticOptimization.Quantile.QuantilePlot.Quantity.QuantityArray.QuantityDistribution.QuantityForm.QuantityMagnitude.QuantityQ.QuantityUnit.QuantityVariable.QuantityVariableCanonicalUnit.QuantityVariableDimensions.QuantityVariableIdentifier.QuantityVariablePhysicalQuantity.Quartics.QuartileDeviation.Quartiles.QuartileSkewness.Query.QuestionGenerator.QuestionInterface.QuestionObject.QuestionSelector.QueueingNetworkProcess.QueueingProcess.QueueProperties.Quiet.QuietEcho.Quit.Quotient.QuotientRemainder.RadialAxisPlot.RadialGradientFilling.RadialGradientImage.RadialityCentrality.RadicalBox.RadicalBoxOptions.RadioButton.RadioButtonBar.RadioButtonBox.RadioButtonBoxOptions.Radon.RadonTransform.RamanujanTau.RamanujanTauL.RamanujanTauTheta.RamanujanTauZ.Ramp.Random.RandomArrayLayer.RandomChoice.RandomColor.RandomComplex.RandomDate.RandomEntity.RandomFunction.RandomGeneratorState.RandomGeoPosition.RandomGraph.RandomImage.RandomInstance.RandomInteger.RandomPermutation.RandomPoint.RandomPointConfiguration.RandomPolygon.RandomPolyhedron.RandomPrime.RandomReal.RandomSample.RandomSeed.RandomSeeding.RandomTime.RandomTree.RandomVariate.RandomWalkProcess.RandomWord.Range.RangeFilter.RangeSpecification.RankedMax.RankedMin.RarerProbability.Raster.Raster3D.Raster3DBox.Raster3DBoxOptions.RasterArray.RasterBox.RasterBoxOptions.Rasterize.RasterSize.Rational.RationalExpressionQ.RationalFunctions.Rationalize.Rationals.Ratios.RawArray.RawBoxes.RawData.RawMedium.RayleighDistribution.Re.ReactionBalance.ReactionBalancedQ.ReactionPDETerm.Read.ReadByteArray.ReadLine.ReadList.ReadProtected.ReadString.Real.RealAbs.RealBlockDiagonalForm.RealDigits.RealExponent.Reals.RealSign.Reap.RebuildPacletData.RecalibrationFunction.RecognitionPrior.RecognitionThreshold.ReconstructionMesh.Record.RecordLists.RecordSeparators.Rectangle.RectangleBox.RectangleBoxOptions.RectangleChart.RectangleChart3D.RectangularRepeatingElement.RecurrenceFilter.RecurrenceTable.RecurringDigitsForm.Red.Reduce.RefBox.ReferenceLineStyle.ReferenceMarkers.ReferenceMarkerStyle.Refine.ReflectionMatrix.ReflectionTransform.Refresh.RefreshRate.Region.RegionBinarize.RegionBoundary.RegionBoundaryStyle.RegionBounds.RegionCentroid.RegionCongruent.RegionConvert.RegionDifference.RegionDilation.RegionDimension.RegionDisjoint.RegionDistance.RegionDistanceFunction.RegionEmbeddingDimension.RegionEqual.RegionErosion.RegionFillingStyle.RegionFit.RegionFunction.RegionImage.RegionIntersection.RegionMeasure.RegionMember.RegionMemberFunction.RegionMoment.RegionNearest.RegionNearestFunction.RegionPlot.RegionPlot3D.RegionProduct.RegionQ.RegionResize.RegionSimilar.RegionSize.RegionSymmetricDifference.RegionUnion.RegionWithin.RegisterExternalEvaluator.RegularExpression.Regularization.RegularlySampledQ.RegularPolygon.ReIm.ReImLabels.ReImPlot.ReImStyle.Reinstall.RelationalDatabase.RelationGraph.Release.ReleaseHold.ReliabilityDistribution.ReliefImage.ReliefPlot.RemoteAuthorizationCaching.RemoteBatchJobAbort.RemoteBatchJobObject.RemoteBatchJobs.RemoteBatchMapSubmit.RemoteBatchSubmissionEnvironment.RemoteBatchSubmit.RemoteConnect.RemoteConnectionObject.RemoteEvaluate.RemoteFile.RemoteInputFiles.RemoteKernelObject.RemoteProviderSettings.RemoteRun.RemoteRunProcess.RemovalConditions.Remove.RemoveAlphaChannel.RemoveAsynchronousTask.RemoveAudioStream.RemoveBackground.RemoveChannelListener.RemoveChannelSubscribers.Removed.RemoveDiacritics.RemoveInputStreamMethod.RemoveOutputStreamMethod.RemoveProperty.RemoveScheduledTask.RemoveUsers.RemoveVideoStream.RenameDirectory.RenameFile.RenderAll.RenderingOptions.RenewalProcess.RenkoChart.RepairMesh.Repeated.RepeatedNull.RepeatedString.RepeatedTiming.RepeatingElement.Replace.ReplaceAll.ReplaceAt.ReplaceHeldPart.ReplaceImageValue.ReplaceList.ReplacePart.ReplacePixelValue.ReplaceRepeated.ReplicateLayer.RequiredPhysicalQuantities.Resampling.ResamplingAlgorithmData.ResamplingMethod.Rescale.RescalingTransform.ResetDirectory.ResetScheduledTask.ReshapeLayer.Residue.ResidueSum.ResizeLayer.Resolve.ResolveContextAliases.ResourceAcquire.ResourceData.ResourceFunction.ResourceObject.ResourceRegister.ResourceRemove.ResourceSearch.ResourceSubmissionObject.ResourceSubmit.ResourceSystemBase.ResourceSystemPath.ResourceUpdate.ResourceVersion.ResponseForm.Rest.RestartInterval.Restricted.Resultant.ResumePacket.Return.ReturnCreatesNewCell.ReturnEntersInput.ReturnExpressionPacket.ReturnInputFormPacket.ReturnPacket.ReturnReceiptFunction.ReturnTextPacket.Reverse.ReverseApplied.ReverseBiorthogonalSplineWavelet.ReverseElement.ReverseEquilibrium.ReverseGraph.ReverseSort.ReverseSortBy.ReverseUpEquilibrium.RevolutionAxis.RevolutionPlot3D.RGBColor.RiccatiSolve.RiceDistribution.RidgeFilter.RiemannR.RiemannSiegelTheta.RiemannSiegelZ.RiemannXi.Riffle.Right.RightArrow.RightArrowBar.RightArrowLeftArrow.RightComposition.RightCosetRepresentative.RightDownTeeVector.RightDownVector.RightDownVectorBar.RightTee.RightTeeArrow.RightTeeVector.RightTriangle.RightTriangleBar.RightTriangleEqual.RightUpDownVector.RightUpTeeVector.RightUpVector.RightUpVectorBar.RightVector.RightVectorBar.RipleyK.RipleyRassonRegion.RiskAchievementImportance.RiskReductionImportance.RobustConvexOptimization.RogersTanimotoDissimilarity.RollPitchYawAngles.RollPitchYawMatrix.RomanNumeral.Root.RootApproximant.RootIntervals.RootLocusPlot.RootMeanSquare.RootOfUnityQ.RootReduce.Roots.RootSum.RootTree.Rotate.RotateLabel.RotateLeft.RotateRight.RotationAction.RotationBox.RotationBoxOptions.RotationMatrix.RotationTransform.Round.RoundImplies.RoundingRadius.Row.RowAlignments.RowBackgrounds.RowBox.RowHeights.RowLines.RowMinHeight.RowReduce.RowsEqual.RowSpacings.RSolve.RSolveValue.RudinShapiro.RudvalisGroupRu.Rule.RuleCondition.RuleDelayed.RuleForm.RulePlot.RulerUnits.RulesTree.Run.RunProcess.RunScheduledTask.RunThrough.RuntimeAttributes.RuntimeOptions.RussellRaoDissimilarity.SameAs.SameQ.SameTest.SameTestProperties.SampledEntityClass.SampleDepth.SampledSoundFunction.SampledSoundList.SampleRate.SamplingPeriod.SARIMAProcess.SARMAProcess.SASTriangle.SatelliteData.SatisfiabilityCount.SatisfiabilityInstances.SatisfiableQ.Saturday.Save.Saveable.SaveAutoDelete.SaveConnection.SaveDefinitions.SavitzkyGolayMatrix.SawtoothWave.Scale.Scaled.ScaleDivisions.ScaledMousePosition.ScaleOrigin.ScalePadding.ScaleRanges.ScaleRangeStyle.ScalingFunctions.ScalingMatrix.ScalingTransform.Scan.ScheduledTask.ScheduledTaskActiveQ.ScheduledTaskInformation.ScheduledTaskInformationData.ScheduledTaskObject.ScheduledTasks.SchurDecomposition.ScientificForm.ScientificNotationThreshold.ScorerGi.ScorerGiPrime.ScorerHi.ScorerHiPrime.ScreenRectangle.ScreenStyleEnvironment.ScriptBaselineShifts.ScriptForm.ScriptLevel.ScriptMinSize.ScriptRules.ScriptSizeMultipliers.Scrollbars.ScrollingOptions.ScrollPosition.SearchAdjustment.SearchIndexObject.SearchIndices.SearchQueryString.SearchResultObject.Sec.Sech.SechDistribution.SecondOrderConeOptimization.SectionGrouping.SectorChart.SectorChart3D.SectorOrigin.SectorSpacing.SecuredAuthenticationKey.SecuredAuthenticationKeys.SecurityCertificate.SeedRandom.Select.Selectable.SelectComponents.SelectedCells.SelectedNotebook.SelectFirst.Selection.SelectionAnimate.SelectionCell.SelectionCellCreateCell.SelectionCellDefaultStyle.SelectionCellParentStyle.SelectionCreateCell.SelectionDebuggerTag.SelectionEvaluate.SelectionEvaluateCreateCell.SelectionMove.SelectionPlaceholder.SelectWithContents.SelfLoops.SelfLoopStyle.SemanticImport.SemanticImportString.SemanticInterpretation.SemialgebraicComponentInstances.SemidefiniteOptimization.SendMail.SendMessage.Sequence.SequenceAlignment.SequenceAttentionLayer.SequenceCases.SequenceCount.SequenceFold.SequenceFoldList.SequenceForm.SequenceHold.SequenceIndicesLayer.SequenceLastLayer.SequenceMostLayer.SequencePosition.SequencePredict.SequencePredictorFunction.SequenceReplace.SequenceRestLayer.SequenceReverseLayer.SequenceSplit.Series.SeriesCoefficient.SeriesData.SeriesTermGoal.ServiceConnect.ServiceDisconnect.ServiceExecute.ServiceObject.ServiceRequest.ServiceResponse.ServiceSubmit.SessionSubmit.SessionTime.Set.SetAccuracy.SetAlphaChannel.SetAttributes.Setbacks.SetCloudDirectory.SetCookies.SetDelayed.SetDirectory.SetEnvironment.SetFileDate.SetFileFormatProperties.SetOptions.SetOptionsPacket.SetPermissions.SetPrecision.SetProperty.SetSecuredAuthenticationKey.SetSelectedNotebook.SetSharedFunction.SetSharedVariable.SetStreamPosition.SetSystemModel.SetSystemOptions.Setter.SetterBar.SetterBox.SetterBoxOptions.Setting.SetUsers.Shading.Shallow.ShannonWavelet.ShapiroWilkTest.Share.SharingList.Sharpen.ShearingMatrix.ShearingTransform.ShellRegion.ShenCastanMatrix.ShiftedGompertzDistribution.ShiftRegisterSequence.Short.ShortDownArrow.Shortest.ShortestMatch.ShortestPathFunction.ShortLeftArrow.ShortRightArrow.ShortTimeFourier.ShortTimeFourierData.ShortUpArrow.Show.ShowAutoConvert.ShowAutoSpellCheck.ShowAutoStyles.ShowCellBracket.ShowCellLabel.ShowCellTags.ShowClosedCellArea.ShowCodeAssist.ShowContents.ShowControls.ShowCursorTracker.ShowGroupOpenCloseIcon.ShowGroupOpener.ShowInvisibleCharacters.ShowPageBreaks.ShowPredictiveInterface.ShowSelection.ShowShortBoxForm.ShowSpecialCharacters.ShowStringCharacters.ShowSyntaxStyles.ShrinkingDelay.ShrinkWrapBoundingBox.SiderealTime.SiegelTheta.SiegelTukeyTest.SierpinskiCurve.SierpinskiMesh.Sign.Signature.SignedRankTest.SignedRegionDistance.SignificanceLevel.SignPadding.SignTest.SimilarityRules.SimpleGraph.SimpleGraphQ.SimplePolygonQ.SimplePolyhedronQ.Simplex.Simplify.Sin.Sinc.SinghMaddalaDistribution.SingleEvaluation.SingleLetterItalics.SingleLetterStyle.SingularValueDecomposition.SingularValueList.SingularValuePlot.SingularValues.Sinh.SinhIntegral.SinIntegral.SixJSymbol.Skeleton.SkeletonTransform.SkellamDistribution.Skewness.SkewNormalDistribution.SkinStyle.Skip.SliceContourPlot3D.SliceDensityPlot3D.SliceDistribution.SliceVectorPlot3D.Slider.Slider2D.Slider2DBox.Slider2DBoxOptions.SliderBox.SliderBoxOptions.SlideShowVideo.SlideView.Slot.SlotSequence.Small.SmallCircle.Smaller.SmithDecomposition.SmithDelayCompensator.SmithWatermanSimilarity.SmoothDensityHistogram.SmoothHistogram.SmoothHistogram3D.SmoothKernelDistribution.SmoothPointDensity.SnDispersion.Snippet.SnippetsVideo.SnubPolyhedron.SocialMediaData.Socket.SocketConnect.SocketListen.SocketListener.SocketObject.SocketOpen.SocketReadMessage.SocketReadyQ.Sockets.SocketWaitAll.SocketWaitNext.SoftmaxLayer.SokalSneathDissimilarity.SolarEclipse.SolarSystemFeatureData.SolarTime.SolidAngle.SolidBoundaryLoadValue.SolidData.SolidDisplacementCondition.SolidFixedCondition.SolidMechanicsPDEComponent.SolidMechanicsStrain.SolidMechanicsStress.SolidRegionQ.Solve.SolveAlways.SolveDelayed.SolveValues.Sort.SortBy.SortedBy.SortedEntityClass.Sound.SoundAndGraphics.SoundNote.SoundVolume.SourceLink.SourcePDETerm.Sow.Space.SpaceCurveData.SpaceForm.Spacer.Spacings.Span.SpanAdjustments.SpanCharacterRounding.SpanFromAbove.SpanFromBoth.SpanFromLeft.SpanLineThickness.SpanMaxSize.SpanMinSize.SpanningCharacters.SpanSymmetric.SparseArray.SparseArrayQ.SpatialBinnedPointData.SpatialBoundaryCorrection.SpatialEstimate.SpatialEstimatorFunction.SpatialGraphDistribution.SpatialJ.SpatialMedian.SpatialNoiseLevel.SpatialObservationRegionQ.SpatialPointData.SpatialPointSelect.SpatialRandomnessTest.SpatialTransformationLayer.SpatialTrendFunction.Speak.SpeakerMatchQ.SpearmanRankTest.SpearmanRho.SpeciesData.SpecificityGoal.SpectralLineData.Spectrogram.SpectrogramArray.Specularity.SpeechCases.SpeechInterpreter.SpeechRecognize.SpeechSynthesize.SpellingCorrection.SpellingCorrectionList.SpellingDictionaries.SpellingDictionariesPath.SpellingOptions.Sphere.SphereBox.SphereBoxOptions.SpherePoints.SphericalBesselJ.SphericalBesselY.SphericalHankelH1.SphericalHankelH2.SphericalHarmonicY.SphericalPlot3D.SphericalRegion.SphericalShell.SpheroidalEigenvalue.SpheroidalJoiningFactor.SpheroidalPS.SpheroidalPSPrime.SpheroidalQS.SpheroidalQSPrime.SpheroidalRadialFactor.SpheroidalS1.SpheroidalS1Prime.SpheroidalS2.SpheroidalS2Prime.Splice.SplicedDistribution.SplineClosed.SplineDegree.SplineKnots.SplineWeights.Split.SplitBy.SpokenString.SpotLight.Sqrt.SqrtBox.SqrtBoxOptions.Square.SquaredEuclideanDistance.SquareFreeQ.SquareIntersection.SquareMatrixQ.SquareRepeatingElement.SquaresR.SquareSubset.SquareSubsetEqual.SquareSuperset.SquareSupersetEqual.SquareUnion.SquareWave.SSSTriangle.StabilityMargins.StabilityMarginsStyle.StableDistribution.Stack.StackBegin.StackComplete.StackedDateListPlot.StackedListPlot.StackInhibit.StadiumShape.StandardAtmosphereData.StandardDeviation.StandardDeviationFilter.StandardForm.Standardize.Standardized.StandardOceanData.StandbyDistribution.Star.StarClusterData.StarData.StarGraph.StartAsynchronousTask.StartExternalSession.StartingStepSize.StartOfLine.StartOfString.StartProcess.StartScheduledTask.StartupSound.StartWebSession.StateDimensions.StateFeedbackGains.StateOutputEstimator.StateResponse.StateSpaceModel.StateSpaceRealization.StateSpaceTransform.StateTransformationLinearize.StationaryDistribution.StationaryWaveletPacketTransform.StationaryWaveletTransform.StatusArea.StatusCentrality.StepMonitor.StereochemistryElements.StieltjesGamma.StippleShading.StirlingS1.StirlingS2.StopAsynchronousTask.StoppingPowerData.StopScheduledTask.StrataVariables.StratonovichProcess.StraussHardcorePointProcess.StraussPointProcess.StreamColorFunction.StreamColorFunctionScaling.StreamDensityPlot.StreamMarkers.StreamPlot.StreamPlot3D.StreamPoints.StreamPosition.Streams.StreamScale.StreamStyle.StrictInequalities.String.StringBreak.StringByteCount.StringCases.StringContainsQ.StringCount.StringDelete.StringDrop.StringEndsQ.StringExpression.StringExtract.StringForm.StringFormat.StringFormatQ.StringFreeQ.StringInsert.StringJoin.StringLength.StringMatchQ.StringPadLeft.StringPadRight.StringPart.StringPartition.StringPosition.StringQ.StringRepeat.StringReplace.StringReplaceList.StringReplacePart.StringReverse.StringRiffle.StringRotateLeft.StringRotateRight.StringSkeleton.StringSplit.StringStartsQ.StringTake.StringTakeDrop.StringTemplate.StringToByteArray.StringToStream.StringTrim.StripBoxes.StripOnInput.StripStyleOnPaste.StripWrapperBoxes.StrokeForm.Struckthrough.StructuralImportance.StructuredArray.StructuredArrayHeadQ.StructuredSelection.StruveH.StruveL.Stub.StudentTDistribution.Style.StyleBox.StyleBoxAutoDelete.StyleData.StyleDefinitions.StyleForm.StyleHints.StyleKeyMapping.StyleMenuListing.StyleNameDialogSettings.StyleNames.StylePrint.StyleSheetPath.Subdivide.Subfactorial.Subgraph.SubMinus.SubPlus.SubresultantPolynomialRemainders.SubresultantPolynomials.Subresultants.Subscript.SubscriptBox.SubscriptBoxOptions.Subscripted.Subsequences.Subset.SubsetCases.SubsetCount.SubsetEqual.SubsetMap.SubsetPosition.SubsetQ.SubsetReplace.Subsets.SubStar.SubstitutionSystem.Subsuperscript.SubsuperscriptBox.SubsuperscriptBoxOptions.SubtitleEncoding.SubtitleTrackSelection.Subtract.SubtractFrom.SubtractSides.SubValues.Succeeds.SucceedsEqual.SucceedsSlantEqual.SucceedsTilde.Success.SuchThat.Sum.SumConvergence.SummationLayer.Sunday.SunPosition.Sunrise.Sunset.SuperDagger.SuperMinus.SupernovaData.SuperPlus.Superscript.SuperscriptBox.SuperscriptBoxOptions.Superset.SupersetEqual.SuperStar.Surd.SurdForm.SurfaceAppearance.SurfaceArea.SurfaceColor.SurfaceData.SurfaceGraphics.SurvivalDistribution.SurvivalFunction.SurvivalModel.SurvivalModelFit.SuspendPacket.SuzukiDistribution.SuzukiGroupSuz.SwatchLegend.Switch.Symbol.SymbolName.SymletWavelet.Symmetric.SymmetricDifference.SymmetricGroup.SymmetricKey.SymmetricMatrixQ.SymmetricPolynomial.SymmetricReduction.Symmetrize.SymmetrizedArray.SymmetrizedArrayRules.SymmetrizedDependentComponents.SymmetrizedIndependentComponents.SymmetrizedReplacePart.SynchronousInitialization.SynchronousUpdating.Synonyms.Syntax.SyntaxForm.SyntaxInformation.SyntaxLength.SyntaxPacket.SyntaxQ.SynthesizeMissingValues.SystemCredential.SystemCredentialData.SystemCredentialKey.SystemCredentialKeys.SystemCredentialStoreObject.SystemDialogInput.SystemException.SystemGet.SystemHelpPath.SystemInformation.SystemInformationData.SystemInstall.SystemModel.SystemModeler.SystemModelExamples.SystemModelLinearize.SystemModelMeasurements.SystemModelParametricSimulate.SystemModelPlot.SystemModelProgressReporting.SystemModelReliability.SystemModels.SystemModelSimulate.SystemModelSimulateSensitivity.SystemModelSimulationData.SystemOpen.SystemOptions.SystemProcessData.SystemProcesses.SystemsConnectionsModel.SystemsModelControllerData.SystemsModelDelay.SystemsModelDelayApproximate.SystemsModelDelete.SystemsModelDimensions.SystemsModelExtract.SystemsModelFeedbackConnect.SystemsModelLabels.SystemsModelLinearity.SystemsModelMerge.SystemsModelOrder.SystemsModelParallelConnect.SystemsModelSeriesConnect.SystemsModelStateFeedbackConnect.SystemsModelVectorRelativeOrders.SystemStub.SystemTest.Tab.TabFilling.Table.TableAlignments.TableDepth.TableDirections.TableForm.TableHeadings.TableSpacing.TableView.TableViewBox.TableViewBoxAlignment.TableViewBoxBackground.TableViewBoxHeaders.TableViewBoxItemSize.TableViewBoxItemStyle.TableViewBoxOptions.TabSpacings.TabView.TabViewBox.TabViewBoxOptions.TagBox.TagBoxNote.TagBoxOptions.TaggingRules.TagSet.TagSetDelayed.TagStyle.TagUnset.Take.TakeDrop.TakeLargest.TakeLargestBy.TakeList.TakeSmallest.TakeSmallestBy.TakeWhile.Tally.Tan.Tanh.TargetDevice.TargetFunctions.TargetSystem.TargetUnits.TaskAbort.TaskExecute.TaskObject.TaskRemove.TaskResume.Tasks.TaskSuspend.TaskWait.TautologyQ.TelegraphProcess.TemplateApply.TemplateArgBox.TemplateBox.TemplateBoxOptions.TemplateEvaluate.TemplateExpression.TemplateIf.TemplateObject.TemplateSequence.TemplateSlot.TemplateSlotSequence.TemplateUnevaluated.TemplateVerbatim.TemplateWith.TemporalData.TemporalRegularity.Temporary.TemporaryVariable.TensorContract.TensorDimensions.TensorExpand.TensorProduct.TensorQ.TensorRank.TensorReduce.TensorSymmetry.TensorTranspose.TensorWedge.TerminatedEvaluation.TernaryListPlot.TernaryPlotCorners.TestID.TestReport.TestReportObject.TestResultObject.Tetrahedron.TetrahedronBox.TetrahedronBoxOptions.TeXForm.TeXSave.Text.Text3DBox.Text3DBoxOptions.TextAlignment.TextBand.TextBoundingBox.TextBox.TextCases.TextCell.TextClipboardType.TextContents.TextData.TextElement.TextForm.TextGrid.TextJustification.TextLine.TextPacket.TextParagraph.TextPosition.TextRecognize.TextSearch.TextSearchReport.TextSentences.TextString.TextStructure.TextStyle.TextTranslation.Texture.TextureCoordinateFunction.TextureCoordinateScaling.TextWords.Therefore.ThermodynamicData.ThermometerGauge.Thick.Thickness.Thin.Thinning.ThisLink.ThomasPointProcess.ThompsonGroupTh.Thread.Threaded.ThreadingLayer.ThreeJSymbol.Threshold.Through.Throw.ThueMorse.Thumbnail.Thursday.TickDirection.TickLabelOrientation.TickLabelPositioning.TickLabels.TickLengths.TickPositions.Ticks.TicksStyle.TideData.Tilde.TildeEqual.TildeFullEqual.TildeTilde.TimeConstrained.TimeConstraint.TimeDirection.TimeFormat.TimeGoal.TimelinePlot.TimeObject.TimeObjectQ.TimeRemaining.Times.TimesBy.TimeSeries.TimeSeriesAggregate.TimeSeriesForecast.TimeSeriesInsert.TimeSeriesInvertibility.TimeSeriesMap.TimeSeriesMapThread.TimeSeriesModel.TimeSeriesModelFit.TimeSeriesResample.TimeSeriesRescale.TimeSeriesShift.TimeSeriesThread.TimeSeriesWindow.TimeSystem.TimeSystemConvert.TimeUsed.TimeValue.TimeWarpingCorrespondence.TimeWarpingDistance.TimeZone.TimeZoneConvert.TimeZoneOffset.Timing.Tiny.TitleGrouping.TitsGroupT.ToBoxes.ToCharacterCode.ToColor.ToContinuousTimeModel.ToDate.Today.ToDiscreteTimeModel.ToEntity.ToeplitzMatrix.ToExpression.ToFileName.Together.Toggle.ToggleFalse.Toggler.TogglerBar.TogglerBox.TogglerBoxOptions.ToHeldExpression.ToInvertibleTimeSeries.TokenWords.Tolerance.ToLowerCase.Tomorrow.ToNumberField.TooBig.Tooltip.TooltipBox.TooltipBoxOptions.TooltipDelay.TooltipStyle.ToonShading.Top.TopHatTransform.ToPolarCoordinates.TopologicalSort.ToRadicals.ToRawPointer.ToRules.Torus.TorusGraph.ToSphericalCoordinates.ToString.Total.TotalHeight.TotalLayer.TotalVariationFilter.TotalWidth.TouchPosition.TouchscreenAutoZoom.TouchscreenControlPlacement.ToUpperCase.TourVideo.Tr.Trace.TraceAbove.TraceAction.TraceBackward.TraceDepth.TraceDialog.TraceForward.TraceInternal.TraceLevel.TraceOff.TraceOn.TraceOriginal.TracePrint.TraceScan.TrackCellChangeTimes.TrackedSymbols.TrackingFunction.TracyWidomDistribution.TradingChart.TraditionalForm.TraditionalFunctionNotation.TraditionalNotation.TraditionalOrder.TrainImageContentDetector.TrainingProgressCheckpointing.TrainingProgressFunction.TrainingProgressMeasurements.TrainingProgressReporting.TrainingStoppingCriterion.TrainingUpdateSchedule.TrainTextContentDetector.TransferFunctionCancel.TransferFunctionExpand.TransferFunctionFactor.TransferFunctionModel.TransferFunctionPoles.TransferFunctionTransform.TransferFunctionZeros.TransformationClass.TransformationFunction.TransformationFunctions.TransformationMatrix.TransformedDistribution.TransformedField.TransformedProcess.TransformedRegion.TransitionDirection.TransitionDuration.TransitionEffect.TransitiveClosureGraph.TransitiveReductionGraph.Translate.TranslationOptions.TranslationTransform.Transliterate.Transparent.TransparentColor.Transpose.TransposeLayer.TrapEnterKey.TrapSelection.TravelDirections.TravelDirectionsData.TravelDistance.TravelDistanceList.TravelMethod.TravelTime.Tree.TreeCases.TreeChildren.TreeCount.TreeData.TreeDelete.TreeDepth.TreeElementCoordinates.TreeElementLabel.TreeElementLabelFunction.TreeElementLabelStyle.TreeElementShape.TreeElementShapeFunction.TreeElementSize.TreeElementSizeFunction.TreeElementStyle.TreeElementStyleFunction.TreeExpression.TreeExtract.TreeFold.TreeForm.TreeGraph.TreeGraphQ.TreeInsert.TreeLayout.TreeLeafCount.TreeLeafQ.TreeLeaves.TreeLevel.TreeMap.TreeMapAt.TreeOutline.TreePlot.TreePosition.TreeQ.TreeReplacePart.TreeRules.TreeScan.TreeSelect.TreeSize.TreeTraversalOrder.TrendStyle.Triangle.TriangleCenter.TriangleConstruct.TriangleMeasurement.TriangleWave.TriangularDistribution.TriangulateMesh.Trig.TrigExpand.TrigFactor.TrigFactorList.Trigger.TrigReduce.TrigToExp.TrimmedMean.TrimmedVariance.TropicalStormData.True.TrueQ.TruncatedDistribution.TruncatedPolyhedron.TsallisQExponentialDistribution.TsallisQGaussianDistribution.TTest.Tube.TubeBezierCurveBox.TubeBezierCurveBoxOptions.TubeBox.TubeBoxOptions.TubeBSplineCurveBox.TubeBSplineCurveBoxOptions.Tuesday.TukeyLambdaDistribution.TukeyWindow.TunnelData.Tuples.TuranGraph.TuringMachine.TuttePolynomial.TwoWayRule.Typed.TypeDeclaration.TypeEvaluate.TypeHint.TypeOf.TypeSpecifier.UnateQ.Uncompress.UnconstrainedParameters.Undefined.UnderBar.Underflow.Underlined.Underoverscript.UnderoverscriptBox.UnderoverscriptBoxOptions.Underscript.UnderscriptBox.UnderscriptBoxOptions.UnderseaFeatureData.UndirectedEdge.UndirectedGraph.UndirectedGraphQ.UndoOptions.UndoTrackedVariables.Unequal.UnequalTo.Unevaluated.UniformDistribution.UniformGraphDistribution.UniformPolyhedron.UniformSumDistribution.Uninstall.Union.UnionedEntityClass.UnionPlus.Unique.UniqueElements.UnitaryMatrixQ.UnitBox.UnitConvert.UnitDimensions.Unitize.UnitRootTest.UnitSimplify.UnitStep.UnitSystem.UnitTriangle.UnitVector.UnitVectorLayer.UnityDimensions.UniverseModelData.UniversityData.UnixTime.UnlabeledTree.UnmanageObject.Unprotect.UnregisterExternalEvaluator.UnsameQ.UnsavedVariables.Unset.UnsetShared.Until.UntrackedVariables.Up.UpArrow.UpArrowBar.UpArrowDownArrow.Update.UpdateDynamicObjects.UpdateDynamicObjectsSynchronous.UpdateInterval.UpdatePacletSites.UpdateSearchIndex.UpDownArrow.UpEquilibrium.UpperCaseQ.UpperLeftArrow.UpperRightArrow.UpperTriangularize.UpperTriangularMatrix.UpperTriangularMatrixQ.Upsample.UpSet.UpSetDelayed.UpTee.UpTeeArrow.UpTo.UpValues.URL.URLBuild.URLDecode.URLDispatcher.URLDownload.URLDownloadSubmit.URLEncode.URLExecute.URLExpand.URLFetch.URLFetchAsynchronous.URLParse.URLQueryDecode.URLQueryEncode.URLRead.URLResponseTime.URLSave.URLSaveAsynchronous.URLShorten.URLSubmit.UseEmbeddedLibrary.UseGraphicsRange.UserDefinedWavelet.Using.UsingFrontEnd.UtilityFunction.V2Get.ValenceErrorHandling.ValenceFilling.ValidationLength.ValidationSet.ValueBox.ValueBoxOptions.ValueDimensions.ValueForm.ValuePreprocessingFunction.ValueQ.Values.ValuesData.VandermondeMatrix.Variables.Variance.VarianceEquivalenceTest.VarianceEstimatorFunction.VarianceGammaDistribution.VarianceGammaPointProcess.VarianceTest.VariogramFunction.VariogramModel.VectorAngle.VectorAround.VectorAspectRatio.VectorColorFunction.VectorColorFunctionScaling.VectorDensityPlot.VectorDisplacementPlot.VectorDisplacementPlot3D.VectorGlyphData.VectorGreater.VectorGreaterEqual.VectorLess.VectorLessEqual.VectorMarkers.VectorPlot.VectorPlot3D.VectorPoints.VectorQ.VectorRange.Vectors.VectorScale.VectorScaling.VectorSizes.VectorStyle.Vee.Verbatim.Verbose.VerificationTest.VerifyConvergence.VerifyDerivedKey.VerifyDigitalSignature.VerifyFileSignature.VerifyInterpretation.VerifySecurityCertificates.VerifySolutions.VerifyTestAssumptions.VersionedPreferences.VertexAdd.VertexCapacity.VertexChromaticNumber.VertexColors.VertexComponent.VertexConnectivity.VertexContract.VertexCoordinateRules.VertexCoordinates.VertexCorrelationSimilarity.VertexCosineSimilarity.VertexCount.VertexCoverQ.VertexDataCoordinates.VertexDegree.VertexDelete.VertexDiceSimilarity.VertexEccentricity.VertexInComponent.VertexInComponentGraph.VertexInDegree.VertexIndex.VertexJaccardSimilarity.VertexLabeling.VertexLabels.VertexLabelStyle.VertexList.VertexNormals.VertexOutComponent.VertexOutComponentGraph.VertexOutDegree.VertexQ.VertexRenderingFunction.VertexReplace.VertexShape.VertexShapeFunction.VertexSize.VertexStyle.VertexTextureCoordinates.VertexTransitiveGraphQ.VertexWeight.VertexWeightedGraphQ.Vertical.VerticalBar.VerticalForm.VerticalGauge.VerticalSeparator.VerticalSlider.VerticalTilde.Video.VideoCapture.VideoCombine.VideoDelete.VideoEncoding.VideoExtractFrames.VideoFrameList.VideoFrameMap.VideoGenerator.VideoInsert.VideoIntervals.VideoJoin.VideoMap.VideoMapList.VideoMapTimeSeries.VideoPadding.VideoPause.VideoPlay.VideoQ.VideoRecord.VideoReplace.VideoScreenCapture.VideoSplit.VideoStop.VideoStream.VideoStreams.VideoTimeStretch.VideoTrackSelection.VideoTranscode.VideoTransparency.VideoTrim.ViewAngle.ViewCenter.ViewMatrix.ViewPoint.ViewPointSelectorSettings.ViewPort.ViewProjection.ViewRange.ViewVector.ViewVertical.VirtualGroupData.Visible.VisibleCell.VoiceStyleData.VoigtDistribution.VolcanoData.Volume.VonMisesDistribution.VoronoiMesh.WaitAll.WaitAsynchronousTask.WaitNext.WaitUntil.WakebyDistribution.WalleniusHypergeometricDistribution.WaringYuleDistribution.WarpingCorrespondence.WarpingDistance.WatershedComponents.WatsonUSquareTest.WattsStrogatzGraphDistribution.WaveletBestBasis.WaveletFilterCoefficients.WaveletImagePlot.WaveletListPlot.WaveletMapIndexed.WaveletMatrixPlot.WaveletPhi.WaveletPsi.WaveletScale.WaveletScalogram.WaveletThreshold.WavePDEComponent.WeaklyConnectedComponents.WeaklyConnectedGraphComponents.WeaklyConnectedGraphQ.WeakStationarity.WeatherData.WeatherForecastData.WebAudioSearch.WebColumn.WebElementObject.WeberE.WebExecute.WebImage.WebImageSearch.WebItem.WebPageMetaInformation.WebRow.WebSearch.WebSessionObject.WebSessions.WebWindowObject.Wedge.Wednesday.WeibullDistribution.WeierstrassE1.WeierstrassE2.WeierstrassE3.WeierstrassEta1.WeierstrassEta2.WeierstrassEta3.WeierstrassHalfPeriods.WeierstrassHalfPeriodW1.WeierstrassHalfPeriodW2.WeierstrassHalfPeriodW3.WeierstrassInvariantG2.WeierstrassInvariantG3.WeierstrassInvariants.WeierstrassP.WeierstrassPPrime.WeierstrassSigma.WeierstrassZeta.WeightedAdjacencyGraph.WeightedAdjacencyMatrix.WeightedData.WeightedGraphQ.Weights.WelchWindow.WheelGraph.WhenEvent.Which.While.White.WhiteNoiseProcess.WhitePoint.Whitespace.WhitespaceCharacter.WhittakerM.WhittakerW.WholeCellGroupOpener.WienerFilter.WienerProcess.WignerD.WignerSemicircleDistribution.WikidataData.WikidataSearch.WikipediaData.WikipediaSearch.WilksW.WilksWTest.WindDirectionData.WindingCount.WindingPolygon.WindowClickSelect.WindowElements.WindowFloating.WindowFrame.WindowFrameElements.WindowMargins.WindowMovable.WindowOpacity.WindowPersistentStyles.WindowSelected.WindowSize.WindowStatusArea.WindowTitle.WindowToolbars.WindowWidth.WindSpeedData.WindVectorData.WinsorizedMean.WinsorizedVariance.WishartMatrixDistribution.With.WithCleanup.WithLock.WolframAlpha.WolframAlphaDate.WolframAlphaQuantity.WolframAlphaResult.WolframCloudSettings.WolframLanguageData.Word.WordBoundary.WordCharacter.WordCloud.WordCount.WordCounts.WordData.WordDefinition.WordFrequency.WordFrequencyData.WordList.WordOrientation.WordSearch.WordSelectionFunction.WordSeparators.WordSpacings.WordStem.WordTranslation.WorkingPrecision.WrapAround.Write.WriteLine.WriteString.Wronskian.XMLElement.XMLObject.XMLTemplate.Xnor.Xor.XYZColor.Yellow.Yesterday.YuleDissimilarity.ZernikeR.ZeroSymmetric.ZeroTest.ZeroWidthTimes.Zeta.ZetaZero.ZIPCodeData.ZipfDistribution.ZoomCenter.ZoomFactor.ZTest.ZTransform.$Aborted.$ActivationGroupID.$ActivationKey.$ActivationUserRegistered.$AddOnsDirectory.$AllowDataUpdates.$AllowExternalChannelFunctions.$AllowInternet.$AssertFunction.$Assumptions.$AsynchronousTask.$AudioDecoders.$AudioEncoders.$AudioInputDevices.$AudioOutputDevices.$BaseDirectory.$BasePacletsDirectory.$BatchInput.$BatchOutput.$BlockchainBase.$BoxForms.$ByteOrdering.$CacheBaseDirectory.$Canceled.$ChannelBase.$CharacterEncoding.$CharacterEncodings.$CloudAccountName.$CloudBase.$CloudConnected.$CloudConnection.$CloudCreditsAvailable.$CloudEvaluation.$CloudExpressionBase.$CloudObjectNameFormat.$CloudObjectURLType.$CloudRootDirectory.$CloudSymbolBase.$CloudUserID.$CloudUserUUID.$CloudVersion.$CloudVersionNumber.$CloudWolframEngineVersionNumber.$CommandLine.$CompilationTarget.$CompilerEnvironment.$ConditionHold.$ConfiguredKernels.$Context.$ContextAliases.$ContextPath.$ControlActiveSetting.$Cookies.$CookieStore.$CreationDate.$CryptographicEllipticCurveNames.$CurrentLink.$CurrentTask.$CurrentWebSession.$DataStructures.$DateStringFormat.$DefaultAudioInputDevice.$DefaultAudioOutputDevice.$DefaultFont.$DefaultFrontEnd.$DefaultImagingDevice.$DefaultKernels.$DefaultLocalBase.$DefaultLocalKernel.$DefaultMailbox.$DefaultNetworkInterface.$DefaultPath.$DefaultProxyRules.$DefaultRemoteBatchSubmissionEnvironment.$DefaultRemoteKernel.$DefaultSystemCredentialStore.$Display.$DisplayFunction.$DistributedContexts.$DynamicEvaluation.$Echo.$EmbedCodeEnvironments.$EmbeddableServices.$EntityStores.$Epilog.$EvaluationCloudBase.$EvaluationCloudObject.$EvaluationEnvironment.$ExportFormats.$ExternalIdentifierTypes.$ExternalStorageBase.$Failed.$FinancialDataSource.$FontFamilies.$FormatType.$FrontEnd.$FrontEndSession.$GeneratedAssetLocation.$GeoEntityTypes.$GeoLocation.$GeoLocationCity.$GeoLocationCountry.$GeoLocationPrecision.$GeoLocationSource.$HistoryLength.$HomeDirectory.$HTMLExportRules.$HTTPCookies.$HTTPRequest.$IgnoreEOF.$ImageFormattingWidth.$ImageResolution.$ImagingDevice.$ImagingDevices.$ImportFormats.$IncomingMailSettings.$InitialDirectory.$Initialization.$InitializationContexts.$Input.$InputFileName.$InputStreamMethods.$Inspector.$InstallationDate.$InstallationDirectory.$InterfaceEnvironment.$InterpreterTypes.$IterationLimit.$KernelCount.$KernelID.$Language.$LaunchDirectory.$LibraryPath.$LicenseExpirationDate.$LicenseID.$LicenseProcesses.$LicenseServer.$LicenseSubprocesses.$LicenseType.$Line.$Linked.$LinkSupported.$LoadedFiles.$LocalBase.$LocalSymbolBase.$MachineAddresses.$MachineDomain.$MachineDomains.$MachineEpsilon.$MachineID.$MachineName.$MachinePrecision.$MachineType.$MaxDisplayedChildren.$MaxExtraPrecision.$MaxLicenseProcesses.$MaxLicenseSubprocesses.$MaxMachineNumber.$MaxNumber.$MaxPiecewiseCases.$MaxPrecision.$MaxRootDegree.$MessageGroups.$MessageList.$MessagePrePrint.$Messages.$MinMachineNumber.$MinNumber.$MinorReleaseNumber.$MinPrecision.$MobilePhone.$ModuleNumber.$NetworkConnected.$NetworkInterfaces.$NetworkLicense.$NewMessage.$NewSymbol.$NotebookInlineStorageLimit.$Notebooks.$NoValue.$NumberMarks.$Off.$OperatingSystem.$Output.$OutputForms.$OutputSizeLimit.$OutputStreamMethods.$Packages.$ParentLink.$ParentProcessID.$PasswordFile.$PatchLevelID.$Path.$PathnameSeparator.$PerformanceGoal.$Permissions.$PermissionsGroupBase.$PersistenceBase.$PersistencePath.$PipeSupported.$PlotTheme.$Post.$Pre.$PreferencesDirectory.$PreInitialization.$PrePrint.$PreRead.$PrintForms.$PrintLiteral.$Printout3DPreviewer.$ProcessID.$ProcessorCount.$ProcessorType.$ProductInformation.$ProgramName.$ProgressReporting.$PublisherID.$RandomGeneratorState.$RandomState.$RecursionLimit.$RegisteredDeviceClasses.$RegisteredUserName.$ReleaseNumber.$RequesterAddress.$RequesterCloudUserID.$RequesterCloudUserUUID.$RequesterWolframID.$RequesterWolframUUID.$ResourceSystemBase.$ResourceSystemPath.$RootDirectory.$ScheduledTask.$ScriptCommandLine.$ScriptInputString.$SecuredAuthenticationKeyTokens.$ServiceCreditsAvailable.$Services.$SessionID.$SetParentLink.$SharedFunctions.$SharedVariables.$SoundDisplay.$SoundDisplayFunction.$SourceLink.$SSHAuthentication.$SubtitleDecoders.$SubtitleEncoders.$SummaryBoxDataSizeLimit.$SuppressInputFormHeads.$SynchronousEvaluation.$SyntaxHandler.$System.$SystemCharacterEncoding.$SystemCredentialStore.$SystemID.$SystemMemory.$SystemShell.$SystemTimeZone.$SystemWordLength.$TargetSystems.$TemplatePath.$TemporaryDirectory.$TemporaryPrefix.$TestFileName.$TextStyle.$TimedOut.$TimeUnit.$TimeZone.$TimeZoneEntity.$TopDirectory.$TraceOff.$TraceOn.$TracePattern.$TracePostAction.$TracePreAction.$UnitSystem.$Urgent.$UserAddOnsDirectory.$UserAgentLanguages.$UserAgentMachine.$UserAgentName.$UserAgentOperatingSystem.$UserAgentString.$UserAgentVersion.$UserBaseDirectory.$UserBasePacletsDirectory.$UserDocumentsDirectory.$Username.$UserName.$UserURLBase.$Version.$VersionNumber.$VideoDecoders.$VideoEncoders.$VoiceStyles.$WolframDocumentsDirectory.$WolframID.$WolframUUID".split(".");
 	function r(e) {
 		let t = e.regex, r = t.either(t.concat(/([2-9]|[1-2]\d|[3][0-5])\^\^/, /(\w*\.\w+|\w+\.\w*|\w+)/), /(\d*\.\d+|\d+\.\d*|\d+)/), i = t.either(/``[+-]?(\d*\.\d+|\d+\.\d*|\d+)/, /`([+-]?(\d*\.\d+|\d+\.\d*|\d+))?/), a = {
@@ -11117,11 +11294,11 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = r;
-})), ut = /* @__PURE__ */ o(((e, t) => {
+})), dt = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
-		let t = "('|\\.')+", n = {
+		let t = {
 			relevance: 0,
-			contains: [{ begin: t }]
+			contains: [{ begin: "('|\\.')+" }]
 		};
 		return {
 			name: "Matlab",
@@ -11150,17 +11327,17 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					className: "built_in",
 					begin: /true|false/,
 					relevance: 0,
-					starts: n
+					starts: t
 				},
 				{
-					begin: "[a-zA-Z][a-zA-Z_0-9]*" + t,
+					begin: "[a-zA-Z][a-zA-Z_0-9]*('|\\.')+",
 					relevance: 0
 				},
 				{
 					className: "number",
 					begin: e.C_NUMBER_RE,
 					relevance: 0,
-					starts: n
+					starts: t
 				},
 				{
 					className: "string",
@@ -11171,14 +11348,14 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				{
 					begin: /\]|\}|\)/,
 					relevance: 0,
-					starts: n
+					starts: t
 				},
 				{
 					className: "string",
 					begin: "\"",
 					end: "\"",
 					contains: [{ begin: "\"\"" }],
-					starts: n
+					starts: t
 				},
 				e.COMMENT("^\\s*%\\{\\s*$", "^\\s*%\\}\\s*$"),
 				e.COMMENT("%", "$")
@@ -11186,7 +11363,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), dt = /* @__PURE__ */ o(((e, t) => {
+})), ft = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "Maxima",
@@ -11223,7 +11400,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), ft = /* @__PURE__ */ o(((e, t) => {
+})), pt = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "MEL",
@@ -11246,7 +11423,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), pt = /* @__PURE__ */ o(((e, t) => {
+})), mt = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = {
 			keyword: "module use_module import_module include_module end_module initialise mutable initialize finalize finalise interface implementation pred mode func type inst solver any_pred any_func is semidet det nondet multi erroneous failure cc_nondet cc_multi typeclass instance where pragma promise external trace atomic or_else require_complete_switch require_det require_semidet require_multi require_nondet require_cc_multi require_cc_nondet require_erroneous require_failure",
@@ -11300,7 +11477,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), mt = /* @__PURE__ */ o(((e, t) => {
+})), ht = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "MIPS Assembly",
@@ -11352,7 +11529,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), ht = /* @__PURE__ */ o(((e, t) => {
+})), gt = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "Mizar",
@@ -11361,7 +11538,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), gt = /* @__PURE__ */ o(((e, t) => {
+})), _t = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = e.regex, n = /* @__PURE__ */ "abs.accept.alarm.and.atan2.bind.binmode.bless.break.caller.chdir.chmod.chomp.chop.chown.chr.chroot.class.close.closedir.connect.continue.cos.crypt.dbmclose.dbmopen.defined.delete.die.do.dump.each.else.elsif.endgrent.endhostent.endnetent.endprotoent.endpwent.endservent.eof.eval.exec.exists.exit.exp.fcntl.field.fileno.flock.for.foreach.fork.format.formline.getc.getgrent.getgrgid.getgrnam.gethostbyaddr.gethostbyname.gethostent.getlogin.getnetbyaddr.getnetbyname.getnetent.getpeername.getpgrp.getpriority.getprotobyname.getprotobynumber.getprotoent.getpwent.getpwnam.getpwuid.getservbyname.getservbyport.getservent.getsockname.getsockopt.given.glob.gmtime.goto.grep.gt.hex.if.index.int.ioctl.join.keys.kill.last.lc.lcfirst.length.link.listen.local.localtime.log.lstat.lt.ma.map.method.mkdir.msgctl.msgget.msgrcv.msgsnd.my.ne.next.no.not.oct.open.opendir.or.ord.our.pack.package.pipe.pop.pos.print.printf.prototype.push.q|0.qq.quotemeta.qw.qx.rand.read.readdir.readline.readlink.readpipe.recv.redo.ref.rename.require.reset.return.reverse.rewinddir.rindex.rmdir.say.scalar.seek.seekdir.select.semctl.semget.semop.send.setgrent.sethostent.setnetent.setpgrp.setpriority.setprotoent.setpwent.setservent.setsockopt.shift.shmctl.shmget.shmread.shmwrite.shutdown.sin.sleep.socket.socketpair.sort.splice.split.sprintf.sqrt.srand.stat.state.study.sub.substr.symlink.syscall.sysopen.sysread.sysseek.system.syswrite.tell.telldir.tie.tied.time.times.tr.truncate.uc.ucfirst.umask.undef.unless.unlink.unpack.unshift.untie.until.use.utime.values.vec.wait.waitpid.wantarray.warn.when.while.write.x|0.xor.y|0".split("."), r = /[dualxmsipngr]{0,12}/, i = {
 			$pattern: /[\w.]+/,
@@ -11552,7 +11729,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), _t = /* @__PURE__ */ o(((e, t) => {
+})), vt = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "Mojolicious",
@@ -11578,7 +11755,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), vt = /* @__PURE__ */ o(((e, t) => {
+})), yt = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = {
 			className: "number",
@@ -11648,7 +11825,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), yt = /* @__PURE__ */ o(((e, t) => {
+})), bt = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = {
 			keyword: "if then not for in while do return else elseif break continue switch and or unless when class extends super local import export from using",
@@ -11684,7 +11861,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			{ begin: e.IDENT_RE + "\\\\" + e.IDENT_RE }
 		];
 		r.contains = i;
-		let a = e.inherit(e.TITLE_MODE, { begin: n }), o = {
+		let a = e.inherit(e.TITLE_MODE, { begin: n }), o = "(\\(.*\\)\\s*)?\\B[-=]>", s = {
 			className: "params",
 			begin: "\\([^\\(]",
 			returnBegin: !0,
@@ -11704,20 +11881,20 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				e.COMMENT("--", "$"),
 				{
 					className: "function",
-					begin: "^\\s*" + n + "\\s*=\\s*(\\(.*\\)\\s*)?\\B[-=]>",
+					begin: "^\\s*" + n + "\\s*=\\s*" + o,
 					end: "[-=]>",
 					returnBegin: !0,
-					contains: [a, o]
+					contains: [a, s]
 				},
 				{
 					begin: /[\(,:=]\s*/,
 					relevance: 0,
 					contains: [{
 						className: "function",
-						begin: "(\\(.*\\)\\s*)?\\B[-=]>",
+						begin: o,
 						end: "[-=]>",
 						returnBegin: !0,
-						contains: [o]
+						contains: [s]
 					}]
 				},
 				{
@@ -11744,7 +11921,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), bt = /* @__PURE__ */ o(((e, t) => {
+})), xt = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "N1QL",
@@ -11788,7 +11965,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), xt = /* @__PURE__ */ o(((e, t) => {
+})), St = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "Nested Text",
@@ -11852,7 +12029,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), St = /* @__PURE__ */ o(((e, t) => {
+})), Ct = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = e.regex, n = {
 			className: "variable",
@@ -11975,7 +12152,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Ct = /* @__PURE__ */ o(((e, t) => {
+})), wt = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "Nim",
@@ -12029,7 +12206,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), wt = /* @__PURE__ */ o(((e, t) => {
+})), Tt = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = e.regex, n = {
 			keyword: [
@@ -12202,7 +12379,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Tt = /* @__PURE__ */ o(((e, t) => {
+})), Et = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "Node REPL",
@@ -12220,9 +12397,9 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Et = /* @__PURE__ */ o(((e, t) => {
+})), Dt = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
-		let t = e.regex, n = /* @__PURE__ */ "ADMINTOOLS.APPDATA.CDBURN_AREA.CMDLINE.COMMONFILES32.COMMONFILES64.COMMONFILES.COOKIES.DESKTOP.DOCUMENTS.EXEDIR.EXEFILE.EXEPATH.FAVORITES.FONTS.HISTORY.HWNDPARENT.INSTDIR.INTERNET_CACHE.LANGUAGE.LOCALAPPDATA.MUSIC.NETHOOD.OUTDIR.PICTURES.PLUGINSDIR.PRINTHOOD.PROFILE.PROGRAMFILES32.PROGRAMFILES64.PROGRAMFILES.QUICKLAUNCH.RECENT.RESOURCES_LOCALIZED.RESOURCES.SENDTO.SMPROGRAMS.SMSTARTUP.STARTMENU.SYSDIR.TEMP.TEMPLATES.VIDEOS.WINDIR".split("."), r = /* @__PURE__ */ "ARCHIVE.FILE_ATTRIBUTE_ARCHIVE.FILE_ATTRIBUTE_NORMAL.FILE_ATTRIBUTE_OFFLINE.FILE_ATTRIBUTE_READONLY.FILE_ATTRIBUTE_SYSTEM.FILE_ATTRIBUTE_TEMPORARY.HKCR.HKCU.HKDD.HKEY_CLASSES_ROOT.HKEY_CURRENT_CONFIG.HKEY_CURRENT_USER.HKEY_DYN_DATA.HKEY_LOCAL_MACHINE.HKEY_PERFORMANCE_DATA.HKEY_USERS.HKLM.HKPD.HKU.IDABORT.IDCANCEL.IDIGNORE.IDNO.IDOK.IDRETRY.IDYES.MB_ABORTRETRYIGNORE.MB_DEFBUTTON1.MB_DEFBUTTON2.MB_DEFBUTTON3.MB_DEFBUTTON4.MB_ICONEXCLAMATION.MB_ICONINFORMATION.MB_ICONQUESTION.MB_ICONSTOP.MB_OK.MB_OKCANCEL.MB_RETRYCANCEL.MB_RIGHT.MB_RTLREADING.MB_SETFOREGROUND.MB_TOPMOST.MB_USERICON.MB_YESNO.NORMAL.OFFLINE.READONLY.SHCTX.SHELL_CONTEXT.SYSTEM|TEMPORARY".split("."), i = /* @__PURE__ */ "addincludedir.addplugindir.appendfile.assert.cd.define.delfile.echo.else.endif.error.execute.finalize.getdllversion.gettlbversion.if.ifdef.ifmacrodef.ifmacrondef.ifndef.include.insertmacro.macro.macroend.makensis.packhdr.searchparse.searchreplace.system.tempfile.undef.uninstfinalize.verbose.warning".split("."), a = {
+		let t = e.regex, n = /* @__PURE__ */ "ADMINTOOLS.APPDATA.CDBURN_AREA.CMDLINE.COMMONFILES32.COMMONFILES64.COMMONFILES.COOKIES.DESKTOP.DOCUMENTS.EXEDIR.EXEFILE.EXEPATH.FAVORITES.FONTS.HISTORY.HWNDPARENT.INSTDIR.INTERNET_CACHE.LANGUAGE.LOCALAPPDATA.MUSIC.NETHOOD.OUTDIR.PICTURES.PLUGINSDIR.PRINTHOOD.PROFILE.PROGRAMFILES32.PROGRAMFILES64.PROGRAMFILES.QUICKLAUNCH.RECENT.RESOURCES_LOCALIZED.RESOURCES.SENDTO.SMPROGRAMS.SMSTARTUP.STARTMENU.SYSDIR.TEMP.TEMPLATES.VIDEOS.WINDIR".split("."), r = /* @__PURE__ */ "ARCHIVE.FILE_ATTRIBUTE_ARCHIVE.FILE_ATTRIBUTE_NORMAL.FILE_ATTRIBUTE_OFFLINE.FILE_ATTRIBUTE_READONLY.FILE_ATTRIBUTE_SYSTEM.FILE_ATTRIBUTE_TEMPORARY.HKCC.HKCR.HKCR32.HKCR64.HKCU.HKCU32.HKCU64.HKDD.HKEY_CLASSES_ROOT.HKEY_CURRENT_CONFIG.HKEY_CURRENT_USER.HKEY_DYN_DATA.HKEY_LOCAL_MACHINE.HKEY_PERFORMANCE_DATA.HKEY_USERS.HKLM.HKLM32.HKLM64.HKPD.HKU.IDABORT.IDCANCEL.IDIGNORE.IDNO.IDOK.IDRETRY.IDYES.MB_ABORTRETRYIGNORE.MB_DEFBUTTON1.MB_DEFBUTTON2.MB_DEFBUTTON3.MB_DEFBUTTON4.MB_ICONEXCLAMATION.MB_ICONINFORMATION.MB_ICONQUESTION.MB_ICONSTOP.MB_OK.MB_OKCANCEL.MB_RETRYCANCEL.MB_RIGHT.MB_RTLREADING.MB_SETFOREGROUND.MB_TOPMOST.MB_USERICON.MB_YESNO.MB_YESNOCANCEL.OFFLINE.READONLY.SHCTX.SHELL_CONTEXT.SW_HIDE.SW_SHOW.SW_SHOWMAXIMIZED.SW_SHOWMINIMIZED.SW_SHOWNORMAL".split("."), i = /* @__PURE__ */ "addincludedir.addplugindir.appendfile.appendmemfile.assert.cd.define.delfile.echo.else.elseif.elseifdef.elseifmacrodef.elseifmacrondef.elseifndef.endif.error.execute.finalize.getdllversion.gettlbversion.if.ifdef.ifmacrodef.ifmacrondef.ifndef.include.insertmacro.macro.macroend.macroundef.makensis.packhdr.pragma.searchparse.searchreplace.system.tempfile.undef.uninstfinalize.verbose.warning".split("."), a = {
 			className: "variable.constant",
 			begin: t.concat(/\$/, t.either(...n))
 		}, o = {
@@ -12237,10 +12414,10 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			begin: /\$+\([\w^.:!-]+\)/
 		}, l = {
 			className: "params",
-			begin: t.either(...r)
+			begin: t.concat(t.either(...r), /\b/)
 		}, u = {
 			className: "keyword",
-			begin: t.concat(/!/, t.either(...i))
+			begin: t.concat(/!/, t.either(...i), /\b/)
 		}, d = {
 			className: "char.escape",
 			begin: /\$(\\[nrt]|\$)/
@@ -12271,7 +12448,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				s,
 				c
 			]
-		}, m = /* @__PURE__ */ "Abort.AddBrandingImage.AddSize.AllowRootDirInstall.AllowSkipFiles.AutoCloseWindow.BGFont.BGGradient.BrandingText.BringToFront.Call.CallInstDLL.Caption.ChangeUI.CheckBitmap.ClearErrors.CompletedText.ComponentText.CopyFiles.CRCCheck.CreateDirectory.CreateFont.CreateShortCut.Delete.DeleteINISec.DeleteINIStr.DeleteRegKey.DeleteRegValue.DetailPrint.DetailsButtonText.DirText.DirVar.DirVerify.EnableWindow.EnumRegKey.EnumRegValue.Exch.Exec.ExecShell.ExecShellWait.ExecWait.ExpandEnvStrings.File.FileBufSize.FileClose.FileErrorText.FileOpen.FileRead.FileReadByte.FileReadUTF16LE.FileReadWord.FileWriteUTF16LE.FileSeek.FileWrite.FileWriteByte.FileWriteWord.FindClose.FindFirst.FindNext.FindWindow.FlushINI.GetCurInstType.GetCurrentAddress.GetDlgItem.GetDLLVersion.GetDLLVersionLocal.GetErrorLevel.GetFileTime.GetFileTimeLocal.GetFullPathName.GetFunctionAddress.GetInstDirError.GetKnownFolderPath.GetLabelAddress.GetTempFileName.GetWinVer.Goto.HideWindow.Icon.IfAbort.IfErrors.IfFileExists.IfRebootFlag.IfRtlLanguage.IfShellVarContextAll.IfSilent.InitPluginsDir.InstallButtonText.InstallColors.InstallDir.InstallDirRegKey.InstProgressFlags.InstType.InstTypeGetText.InstTypeSetText.Int64Cmp.Int64CmpU.Int64Fmt.IntCmp.IntCmpU.IntFmt.IntOp.IntPtrCmp.IntPtrCmpU.IntPtrOp.IsWindow.LangString.LicenseBkColor.LicenseData.LicenseForceSelection.LicenseLangString.LicenseText.LoadAndSetImage.LoadLanguageFile.LockWindow.LogSet.LogText.ManifestDPIAware.ManifestLongPathAware.ManifestMaxVersionTested.ManifestSupportedOS.MessageBox.MiscButtonText.Name|0.Nop.OutFile.Page.PageCallbacks.PEAddResource.PEDllCharacteristics.PERemoveResource.PESubsysVer.Pop.Push.Quit.ReadEnvStr.ReadINIStr.ReadRegDWORD.ReadRegStr.Reboot.RegDLL.Rename.RequestExecutionLevel.ReserveFile.Return.RMDir.SearchPath.SectionGetFlags.SectionGetInstTypes.SectionGetSize.SectionGetText.SectionIn.SectionSetFlags.SectionSetInstTypes.SectionSetSize.SectionSetText.SendMessage.SetAutoClose.SetBrandingImage.SetCompress.SetCompressor.SetCompressorDictSize.SetCtlColors.SetCurInstType.SetDatablockOptimize.SetDateSave.SetDetailsPrint.SetDetailsView.SetErrorLevel.SetErrors.SetFileAttributes.SetFont.SetOutPath.SetOverwrite.SetRebootFlag.SetRegView.SetShellVarContext.SetSilent.ShowInstDetails.ShowUninstDetails.ShowWindow.SilentInstall.SilentUnInstall.Sleep.SpaceTexts.StrCmp.StrCmpS.StrCpy.StrLen.SubCaption.Unicode.UninstallButtonText.UninstallCaption.UninstallIcon.UninstallSubCaption.UninstallText.UninstPage.UnRegDLL.Var.VIAddVersionKey.VIFileVersion.VIProductVersion.WindowIcon.WriteINIStr.WriteRegBin.WriteRegDWORD.WriteRegExpandStr.WriteRegMultiStr.WriteRegNone.WriteRegStr.WriteUninstaller.XPStyle".split("."), h = /* @__PURE__ */ "admin,all,auto,both,bottom,bzip2,colored,components,current,custom,directory,false,force,hide,highest,ifdiff,ifnewer,instfiles,lastused,leave,left,license,listonly,lzma,nevershow,none,normal,notset,off,on,open,print,right,show,silent,silentlog,smooth,textonly,top,true,try,un.components,un.custom,un.directory,un.instfiles,un.license,uninstConfirm,user,Win10,Win7,Win8,WinVista,zlib".split(","), g = {
+		}, m = /* @__PURE__ */ "Abort.AddBrandingImage.AddSize.AllowRootDirInstall.AllowSkipFiles.AutoCloseWindow.BGFont.BGGradient.BrandingText.BringToFront.Call.CallInstDLL.Caption.ChangeUI.CheckBitmap.ClearErrors.CompletedText.ComponentText.CopyFiles.CPU.CRCCheck.CreateDirectory.CreateFont.CreateShortCut.Delete.DeleteINISec.DeleteINIStr.DeleteRegKey.DeleteRegValue.DetailPrint.DetailsButtonText.DirText.DirVar.DirVerify.EnableWindow.EnumRegKey.EnumRegValue.Exch.Exec.ExecShell.ExecShellWait.ExecWait.ExpandEnvStrings.File.FileBufSize.FileClose.FileErrorText.FileOpen.FileRead.FileReadByte.FileReadUTF16LE.FileReadWord.FileWriteUTF16LE.FileSeek.FileWrite.FileWriteByte.FileWriteWord.FindClose.FindFirst.FindNext.FindWindow.FlushINI.GetCurInstType.GetCurrentAddress.GetDlgItem.GetDLLVersion.GetDLLVersionLocal.GetErrorLevel.GetFileTime.GetFileTimeLocal.GetFullPathName.GetFunctionAddress.GetInstDirError.GetKnownFolderPath.GetLabelAddress.GetRegView.GetShellVarContext.GetTempFileName.GetWinVer.Goto.HideWindow.Icon.IfAbort.IfAltRegView.IfErrors.IfFileExists.IfRebootFlag.IfRtlLanguage.IfShellVarContextAll.IfSilent.InitPluginsDir.InstallButtonText.InstallColors.InstallDir.InstallDirRegKey.InstProgressFlags.InstType.InstTypeGetText.InstTypeSetText.Int64Cmp.Int64CmpU.Int64Fmt.IntCmp.IntCmpU.IntFmt.IntOp.IntPtrCmp.IntPtrCmpU.IntPtrOp.IsWindow.LangString.LicenseBkColor.LicenseData.LicenseForceSelection.LicenseLangString.LicenseText.LoadAndSetImage.LoadLanguageFile.LockWindow.LogSet.LogText.ManifestAppendCustomString.ManifestDisableWindowFiltering.ManifestDPIAware.ManifestDPIAwareness.ManifestGdiScaling.ManifestLongPathAware.ManifestMaxVersionTested.ManifestSupportedOS.MessageBox.MiscButtonText.Name|0.Nop.OutFile.Page.PageCallbacks.PEAddResource.PEDllCharacteristics.PERemoveResource.PESubsysVer.Pop.Push.Quit.ReadEnvStr.ReadINIStr.ReadMemory.ReadRegDWORD.ReadRegStr.Reboot.RegDLL.Rename.RequestExecutionLevel.ReserveFile.Return.RMDir.SearchPath.SectionGetFlags.SectionGetInstTypes.SectionGetSize.SectionGetText.SectionIn.SectionSetFlags.SectionSetInstTypes.SectionSetSize.SectionSetText.SendMessage.SetAutoClose.SetBrandingImage.SetCompress.SetCompressor.SetCompressorDictSize.SetCompressionLevel.SetCtlColors.SetCurInstType.SetDatablockOptimize.SetDateSave.SetDetailsPrint.SetDetailsView.SetErrorLevel.SetErrors.SetFileAttributes.SetFont.SetOutPath.SetOverwrite.SetRebootFlag.SetRegView.SetShellVarContext.SetSilent.ShowInstDetails.ShowUninstDetails.ShowWindow.SilentInstall.SilentUnInstall.Sleep.SpaceTexts.StrCmp.StrCmpS.StrCpy.StrLen.SubCaption.Target.Unicode.UnsafeStrCpy.UninstallButtonText.UninstallCaption.UninstallIcon.UninstallSubCaption.UninstallText.UninstPage.UnRegDLL.Var.VIAddVersionKey.VIFileVersion.VIProductVersion.WindowIcon.WriteINIStr.WriteRegBin.WriteRegDWORD.WriteRegExpandStr.WriteRegMultiStr.WriteRegNone.WriteRegStr.WriteUninstaller.XPStyle".split("."), h = /* @__PURE__ */ "admin,all,auto,both,bottom,bzip2,colored,components,current,custom,directory,false,force,hide,highest,ifdiff,ifnewer,instfiles,lastused,leave,left,license,listonly,lzma,nevershow,none,normal,notset,off,on,open,print,right,show,silent,silentlog,smooth,textonly,top,true,try,un.components,un.custom,un.directory,un.instfiles,un.license,uninstConfirm,user,Win10,Win7,Win8,WinVista,zlib".split(","), g = {
 			match: [
 				/Function/,
 				/\s+/,
@@ -12307,7 +12484,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					}
 				},
 				g,
-				{ beginKeywords: "Function PageEx Section SectionGroup FunctionEnd SectionEnd" },
+				{ beginKeywords: "Function PageEx Section SectionGroup FunctionEnd PageExEnd SectionEnd SectionGroupEnd" },
 				p,
 				u,
 				o,
@@ -12315,12 +12492,12 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				c,
 				l,
 				f,
-				e.NUMBER_MODE
+				e.C_NUMBER_MODE
 			]
 		};
 	}
 	t.exports = n;
-})), Dt = /* @__PURE__ */ o(((e, t) => {
+})), Ot = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = {
 			className: "built_in",
@@ -12436,7 +12613,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Ot = /* @__PURE__ */ o(((e, t) => {
+})), kt = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "OCaml",
@@ -12487,7 +12664,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), kt = /* @__PURE__ */ o(((e, t) => {
+})), At = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = {
 			className: "keyword",
@@ -12545,7 +12722,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), At = /* @__PURE__ */ o(((e, t) => {
+})), jt = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = {
 			$pattern: /\.?\w+/,
@@ -12597,7 +12774,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), jt = /* @__PURE__ */ o(((e, t) => {
+})), Mt = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = e.COMMENT(/\{/, /\}/, { contains: ["self"] });
 		return {
@@ -12636,7 +12813,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Mt = /* @__PURE__ */ o(((e, t) => {
+})), Nt = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "Packet Filter config",
@@ -12665,7 +12842,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Nt = /* @__PURE__ */ o(((e, t) => {
+})), Pt = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = e.COMMENT("--", "$"), n = "\\$([a-zA-Z_]?|[a-zA-Z_][a-zA-Z_0-9]*)\\$", r = "BIGINT INT8 BIGSERIAL SERIAL8 BIT VARYING VARBIT BOOLEAN BOOL BOX BYTEA CHARACTER CHAR VARCHAR CIDR CIRCLE DATE DOUBLE PRECISION FLOAT8 FLOAT INET INTEGER INT INT4 INTERVAL JSON JSONB LINE LSEG|10 MACADDR MACADDR8 MONEY NUMERIC DEC DECIMAL PATH POINT POLYGON REAL FLOAT4 SMALLINT INT2 SMALLSERIAL|10 SERIAL2|10 SERIAL|10 SERIAL4|10 TEXT TIME ZONE TIMETZ|10 TIMESTAMP TIMESTAMPTZ|10 TSQUERY|10 TSVECTOR|10 TXID_SNAPSHOT|10 UUID XML NATIONAL NCHAR INT4RANGE|10 INT8RANGE|10 NUMRANGE|10 TSRANGE|10 TSTZRANGE|10 DATERANGE|10 ANYELEMENT ANYARRAY ANYNONARRAY ANYENUM ANYRANGE CSTRING INTERNAL RECORD PG_DDL_COMMAND VOID UNKNOWN OPAQUE REFCURSOR NAME OID REGPROC|10 REGPROCEDURE|10 REGOPER|10 REGOPERATOR|10 REGCLASS|10 REGTYPE|10 REGROLE|10 REGNAMESPACE|10 REGCONFIG|10 REGDICTIONARY|10".split(" ").map(function(e) {
 			return e.split("|")[0];
@@ -12855,7 +13032,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Pt = /* @__PURE__ */ o(((e, t) => {
+})), Ft = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = e.regex, n = /(?![A-Za-z0-9])(?![$])/, r = t.concat(/[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*/, n), i = t.concat(/(\\?[A-Z][a-z0-9_\x7f-\xff]+|\\?[A-Z]+(?=[A-Z][a-z0-9_\x7f-\xff])){1,}/, n), a = t.concat(/[A-Z]+/, n), o = {
 			scope: "variable",
@@ -12985,6 +13162,8 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				o,
 				C,
 				e.C_BLOCK_COMMENT_MODE,
+				e.C_LINE_COMMENT_MODE,
+				e.HASH_COMMENT_MODE,
 				m,
 				h,
 				x
@@ -13006,6 +13185,8 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			w,
 			C,
 			e.C_BLOCK_COMMENT_MODE,
+			e.C_LINE_COMMENT_MODE,
+			e.HASH_COMMENT_MODE,
 			m,
 			h,
 			x
@@ -13106,6 +13287,8 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 								o,
 								C,
 								e.C_BLOCK_COMMENT_MODE,
+								e.C_LINE_COMMENT_MODE,
+								e.HASH_COMMENT_MODE,
 								m,
 								h
 							]
@@ -13148,7 +13331,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Ft = /* @__PURE__ */ o(((e, t) => {
+})), It = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "PHP template",
@@ -13190,7 +13373,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), It = /* @__PURE__ */ o(((e, t) => {
+})), Lt = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "Plain text",
@@ -13199,7 +13382,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Lt = /* @__PURE__ */ o(((e, t) => {
+})), Rt = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "Pony",
@@ -13248,7 +13431,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Rt = /* @__PURE__ */ o(((e, t) => {
+})), zt = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = [
 			"string",
@@ -13435,7 +13618,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), zt = /* @__PURE__ */ o(((e, t) => {
+})), Bt = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = e.regex, n = /* @__PURE__ */ "displayHeight.displayWidth.mouseY.mouseX.mousePressed.pmouseX.pmouseY.key.keyCode.pixels.focused.frameCount.frameRate.height.width.size.createGraphics.beginDraw.createShape.loadShape.PShape.arc.ellipse.line.point.quad.rect.triangle.bezier.bezierDetail.bezierPoint.bezierTangent.curve.curveDetail.curvePoint.curveTangent.curveTightness.shape.shapeMode.beginContour.beginShape.bezierVertex.curveVertex.endContour.endShape.quadraticVertex.vertex.ellipseMode.noSmooth.rectMode.smooth.strokeCap.strokeJoin.strokeWeight.mouseClicked.mouseDragged.mouseMoved.mousePressed.mouseReleased.mouseWheel.keyPressed.keyPressedkeyReleased.keyTyped.print.println.save.saveFrame.day.hour.millis.minute.month.second.year.background.clear.colorMode.fill.noFill.noStroke.stroke.alpha.blue.brightness.color.green.hue.lerpColor.red.saturation.modelX.modelY.modelZ.screenX.screenY.screenZ.ambient.emissive.shininess.specular.add.createImage.beginCamera.camera.endCamera.frustum.ortho.perspective.printCamera.printProjection.cursor.frameRate.noCursor.exit.loop.noLoop.popStyle.pushStyle.redraw.binary.boolean.byte.char.float.hex.int.str.unbinary.unhex.join.match.matchAll.nf.nfc.nfp.nfs.split.splitTokens.trim.append.arrayCopy.concat.expand.reverse.shorten.sort.splice.subset.box.sphere.sphereDetail.createInput.createReader.loadBytes.loadJSONArray.loadJSONObject.loadStrings.loadTable.loadXML.open.parseXML.saveTable.selectFolder.selectInput.beginRaw.beginRecord.createOutput.createWriter.endRaw.endRecord.PrintWritersaveBytes.saveJSONArray.saveJSONObject.saveStream.saveStrings.saveXML.selectOutput.popMatrix.printMatrix.pushMatrix.resetMatrix.rotate.rotateX.rotateY.rotateZ.scale.shearX.shearY.translate.ambientLight.directionalLight.lightFalloff.lights.lightSpecular.noLights.normal.pointLight.spotLight.image.imageMode.loadImage.noTint.requestImage.tint.texture.textureMode.textureWrap.blend.copy.filter.get.loadPixels.set.updatePixels.blendMode.loadShader.PShaderresetShader.shader.createFont.loadFont.text.textFont.textAlign.textLeading.textMode.textSize.textWidth.textAscent.textDescent.abs.ceil.constrain.dist.exp.floor.lerp.log.mag.map.max.min.norm.pow.round.sq.sqrt.acos.asin.atan.atan2.cos.degrees.radians.sin.tan.noise.noiseDetail.noiseSeed.random.randomGaussian.randomSeed".split("."), r = e.IDENT_RE, i = { variants: [{
 			match: t.concat(t.either(...n), t.lookahead(/\s*\(/)),
@@ -13532,7 +13715,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Bt = /* @__PURE__ */ o(((e, t) => {
+})), Vt = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "Python profiler",
@@ -13569,7 +13752,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Vt = /* @__PURE__ */ o(((e, t) => {
+})), Ht = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = {
 			begin: /[a-z][A-Za-z0-9_]*/,
@@ -13622,11 +13805,9 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Ht = /* @__PURE__ */ o(((e, t) => {
+})), Ut = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
-		let t = "[ \\t\\f]*", n = t + "[:=][ \\t\\f]*";
-		"" + n;
-		let r = "([^\\\\:= \\t\\f\\n]|\\\\.)+";
+		let t = "([^\\\\:= \\t\\f\\n]|\\\\.)+";
 		return {
 			name: ".properties",
 			disableAutodetect: !0,
@@ -13636,10 +13817,10 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				e.COMMENT("^\\s*[!#]", "$"),
 				{
 					returnBegin: !0,
-					variants: [{ begin: r + n }, { begin: r + "[ \\t\\f]+" }],
+					variants: [{ begin: t + "[ \\t\\f]*[:=][ \\t\\f]*" }, { begin: t + "[ \\t\\f]+" }],
 					contains: [{
 						className: "attr",
-						begin: r,
+						begin: t,
 						endsParent: !0
 					}],
 					starts: {
@@ -13655,13 +13836,13 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				},
 				{
 					className: "attr",
-					begin: r + t + "$"
+					begin: t + "[ \\t\\f]*" + "$"
 				}
 			]
 		};
 	}
 	t.exports = n;
-})), Ut = /* @__PURE__ */ o(((e, t) => {
+})), Wt = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = [
 			"package",
@@ -13721,7 +13902,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Wt = /* @__PURE__ */ o(((e, t) => {
+})), Gt = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = {
 			keyword: "and case default else elsif false if in import enherits node or true undef unless main settings $string ",
@@ -13802,7 +13983,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Gt = /* @__PURE__ */ o(((e, t) => {
+})), Kt = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "PureBASIC",
@@ -13843,12 +14024,12 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Kt = /* @__PURE__ */ o(((e, t) => {
+})), qt = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
-		let t = e.regex, n = /[\p{XID_Start}_]\p{XID_Continue}*/u, r = /* @__PURE__ */ "and.as.assert.async.await.break.case.class.continue.def.del.elif.else.except.finally.for.from.global.if.import.in.is.lambda.match.nonlocal|10.not.or.pass.raise.return.try.while.with.yield".split("."), i = {
+		let t = e.regex, n = /[\p{XID_Start}_]\p{XID_Continue}*/u, r = /* @__PURE__ */ "and.as.assert.async.await.break.case.class.continue.def.del.elif.else.except.finally.for.from.global.if.import.in.is.lambda.lazy.match.nonlocal|10.not.or.pass.raise.return.try.while.with.yield".split("."), i = {
 			$pattern: /[A-Za-z]\w+|__\w+__/,
 			keyword: r,
-			built_in: /* @__PURE__ */ "__import__.abs.all.any.ascii.bin.bool.breakpoint.bytearray.bytes.callable.chr.classmethod.compile.complex.delattr.dict.dir.divmod.enumerate.eval.exec.filter.float.format.frozenset.getattr.globals.hasattr.hash.help.hex.id.input.int.isinstance.issubclass.iter.len.list.locals.map.max.memoryview.min.next.object.oct.open.ord.pow.print.property.range.repr.reversed.round.set.setattr.slice.sorted.staticmethod.str.sum.super.tuple.type.vars.zip".split("."),
+			built_in: /* @__PURE__ */ "__import__.abs.aiter.all.anext.any.ascii.bin.bool.breakpoint.bytearray.bytes.callable.chr.classmethod.compile.complex.delattr.dict.dir.divmod.enumerate.eval.exec.filter.float.format.frozendict.frozenset.getattr.globals.hasattr.hash.help.hex.id.input.int.isinstance.issubclass.iter.len.list.locals.map.max.memoryview.min.next.object.oct.open.ord.pow.print.property.range.repr.reversed.round.sentinel.set.setattr.slice.sorted.staticmethod.str.sum.super.tuple.type.vars.zip".split("."),
 			literal: [
 				"__debug__",
 				"Ellipsis",
@@ -13901,7 +14082,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					relevance: 10
 				},
 				{
-					begin: /([fF][rR]|[rR][fF]|[fF])'''/,
+					begin: /([fFtT][rR]|[rR][fFtT]|[fFtT])'''/,
 					end: /'''/,
 					contains: [
 						e.BACKSLASH_ESCAPE,
@@ -13911,7 +14092,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					]
 				},
 				{
-					begin: /([fF][rR]|[rR][fF]|[fF])"""/,
+					begin: /([fFtT][rR]|[rR][fFtT]|[fFtT])"""/,
 					end: /"""/,
 					contains: [
 						e.BACKSLASH_ESCAPE,
@@ -13939,7 +14120,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					end: /"/
 				},
 				{
-					begin: /([fF][rR]|[rR][fF]|[fF])'/,
+					begin: /([fFtT][rR]|[rR][fFtT]|[fFtT])'/,
 					end: /'/,
 					contains: [
 						e.BACKSLASH_ESCAPE,
@@ -13948,7 +14129,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					]
 				},
 				{
-					begin: /([fF][rR]|[rR][fF]|[fF])"/,
+					begin: /([fFtT][rR]|[rR][fFtT]|[fFtT])"/,
 					end: /"/,
 					contains: [
 						e.BACKSLASH_ESCAPE,
@@ -14080,7 +14261,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), qt = /* @__PURE__ */ o(((e, t) => {
+})), Jt = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			aliases: ["pycon"],
@@ -14098,7 +14279,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Jt = /* @__PURE__ */ o(((e, t) => {
+})), Yt = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "Q",
@@ -14118,7 +14299,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Yt = /* @__PURE__ */ o(((e, t) => {
+})), Xt = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = e.regex, n = {
 			keyword: "in of on if for while finally var new function do return void else break catch instanceof with throw case default try this switch continue typeof delete let yield const export super debugger as async await import",
@@ -14244,7 +14425,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Xt = /* @__PURE__ */ o(((e, t) => {
+})), Zt = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = e.regex, n = /(?:(?:[a-zA-Z]|\.[._a-zA-Z])[._a-zA-Z0-9]*)|\.(?!\d)/, r = t.either(/0[xX][0-9a-fA-F]+\.[0-9a-fA-F]*[pP][+-]?\d+i?/, /0[xX][0-9a-fA-F]+(?:[pP][+-]?\d+)?[Li]?/, /(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?[Li]?/), i = /[=!<>:]=|\|\||&&|:::?|<-|<<-|->>|->|\|>|[-+*\/?!$&|:<=>@^~]|\*\*/, a = t.either(/[()]/, /[{}]/, /\[\[/, /[[\]]/, /\\/, /,/);
 		return {
@@ -14383,7 +14564,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Zt = /* @__PURE__ */ o(((e, t) => {
+})), Qt = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "ReasonML",
@@ -14460,7 +14641,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Qt = /* @__PURE__ */ o(((e, t) => {
+})), $t = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "RenderMan RIB",
@@ -14475,7 +14656,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), $t = /* @__PURE__ */ o(((e, t) => {
+})), en = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = "[a-zA-Z-_][^\\n{]+\\{", n = {
 			className: "attribute",
@@ -14527,7 +14708,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), en = /* @__PURE__ */ o(((e, t) => {
+})), tn = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = "foreach do while for if from to step else on-error and or not in", n = "true false yes no nothing nil null", r = {
 			className: "variable",
@@ -14628,7 +14809,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), tn = /* @__PURE__ */ o(((e, t) => {
+})), nn = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = /* @__PURE__ */ "abs.acos.ambient.area.asin.atan.atmosphere.attribute.calculatenormal.ceil.cellnoise.clamp.comp.concat.cos.degrees.depth.Deriv.diffuse.distance.Du.Dv.environment.exp.faceforward.filterstep.floor.format.fresnel.incident.length.lightsource.log.match.max.min.mod.noise.normalize.ntransform.opposite.option.phong.pnoise.pow.printf.ptlined.radians.random.reflect.refract.renderinfo.round.setcomp.setxcomp.setycomp.setzcomp.shadow.sign.sin.smoothstep.specular.specularbrdf.spline.sqrt.step.tan.texture.textureinfo.trace.transform.vtransform.xcomp.ycomp.zcomp".split("."), n = [
 			"matrix",
@@ -14686,7 +14867,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), nn = /* @__PURE__ */ o(((e, t) => {
+})), rn = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "Oracle Rules Language",
@@ -14711,13 +14892,13 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), rn = /* @__PURE__ */ o(((e, t) => {
+})), an = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = e.regex, n = /(r#)?/, r = t.concat(n, e.UNDERSCORE_IDENT_RE), i = t.concat(n, e.IDENT_RE), a = {
-			className: "title.function.invoke",
+			scope: "title.function.invoke",
 			relevance: 0,
-			begin: t.concat(/\b/, /(?!let|for|while|if|else|match\b)/, i, t.lookahead(/\s*\(/))
-		}, o = "([ui](8|16|32|64|128|size)|f(32|64))?", s = /* @__PURE__ */ "abstract.as.async.await.become.box.break.const.continue.crate.do.dyn.else.enum.extern.false.final.fn.for.if.impl.in.let.loop.macro.match.mod.move.mut.override.priv.pub.ref.return.self.Self.static.struct.super.trait.true.try.type.typeof.union.unsafe.unsized.use.virtual.where.while.yield".split("."), c = [
+			begin: t.concat(/\b/, /(?!(?:let|for|while|if|else|match)\b)/, i, t.lookahead(/\s*\(/))
+		}, o = "([ui](8|16|32|64|128|size)|f(16|32|64|128))?", s = /* @__PURE__ */ "abstract.as.async.await.become.box.break.const.continue.crate.do.dyn.else.enum.extern.false.final.fn.for.if.impl.in.let.loop.macro.match.mod.move.mut.override.priv.pub.raw.ref.return.self.Self.static.struct.super.trait.true.try.type.typeof.union.unsafe.unsized.use.virtual.where.while.yield".split("."), c = [
 			"true",
 			"false",
 			"Some",
@@ -14737,8 +14918,10 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			"u64",
 			"u128",
 			"usize",
+			"f16",
 			"f32",
 			"f64",
+			"f128",
 			"str",
 			"char",
 			"bool",
@@ -14767,7 +14950,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					illegal: null
 				}),
 				{
-					className: "symbol",
+					scope: "symbol",
 					begin: /'[a-zA-Z_][a-zA-Z0-9_]*(?!')/
 				},
 				{
@@ -14777,12 +14960,12 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 						end: /'/,
 						contains: [{
 							scope: "char.escape",
-							match: /\\('|\w|x\w{2}|u\w{4}|U\w{8})/
+							match: /\\('|"|\\|\w|x\w{2}|u\w{4}|U\w{8})/
 						}]
 					}]
 				},
 				{
-					className: "number",
+					scope: "number",
 					variants: [
 						{ begin: "\\b0b([01_]+)" + o },
 						{ begin: "\\b0o([0-7_]+)" + o },
@@ -14793,21 +14976,32 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				},
 				{
 					begin: [
+						/\bsafe/,
+						/\s+/,
+						/extern/
+					],
+					scope: {
+						1: "keyword",
+						3: "keyword"
+					}
+				},
+				{
+					begin: [
 						/fn/,
 						/\s+/,
 						r
 					],
-					className: {
+					scope: {
 						1: "keyword",
 						3: "title.function"
 					}
 				},
 				{
-					className: "meta",
+					scope: "meta",
 					begin: "#!?\\[",
 					end: "\\]",
 					contains: [{
-						className: "string",
+						scope: "string",
 						begin: /"/,
 						end: /"/,
 						contains: [e.BACKSLASH_ESCAPE]
@@ -14820,7 +15014,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 						/(?:mut\s+)?/,
 						r
 					],
-					className: {
+					scope: {
 						1: "keyword",
 						3: "keyword",
 						4: "variable"
@@ -14834,7 +15028,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 						/\s+/,
 						/in/
 					],
-					className: {
+					scope: {
 						1: "keyword",
 						3: "variable",
 						5: "keyword"
@@ -14846,7 +15040,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 						/\s+/,
 						r
 					],
-					className: {
+					scope: {
 						1: "keyword",
 						3: "title.class"
 					}
@@ -14857,7 +15051,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 						/\s+/,
 						r
 					],
-					className: {
+					scope: {
 						1: "keyword",
 						3: "title.class"
 					}
@@ -14871,7 +15065,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					}
 				},
 				{
-					className: "punctuation",
+					scope: "punctuation",
 					begin: "->"
 				},
 				a
@@ -14879,7 +15073,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), an = /* @__PURE__ */ o(((e, t) => {
+})), on = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = e.regex, n = /* @__PURE__ */ "do.if.then.else.end.until.while.abort.array.attrib.by.call.cards.cards4.catname.continue.datalines.datalines4.delete.delim.delimiter.display.dm.drop.endsas.error.file.filename.footnote.format.goto.in.infile.informat.input.keep.label.leave.length.libname.link.list.lostcard.merge.missing.modify.options.output.out.page.put.redirect.remove.rename.replace.retain.return.select.set.skip.startsas.stop.title.update.waitsas.where.window.x|0.systask.add.and.alter.as.cascade.check.create.delete.describe.distinct.drop.foreign.from.group.having.index.insert.into.in.key.like.message.modify.msgtype.not.null.on.or.order.primary.references.reset.restrict.select.set.table.unique.update.validate.view.where".split("."), r = /* @__PURE__ */ "abs.addr.airy.arcos.arsin.atan.attrc.attrn.band.betainv.blshift.bnot.bor.brshift.bxor.byte.cdf.ceil.cexist.cinv.close.cnonct.collate.compbl.compound.compress.cos.cosh.css.curobs.cv.daccdb.daccdbsl.daccsl.daccsyd.dacctab.dairy.date.datejul.datepart.datetime.day.dclose.depdb.depdbsl.depdbsl.depsl.depsl.depsyd.depsyd.deptab.deptab.dequote.dhms.dif.digamma.dim.dinfo.dnum.dopen.doptname.doptnum.dread.dropnote.dsname.erf.erfc.exist.exp.fappend.fclose.fcol.fdelete.fetch.fetchobs.fexist.fget.fileexist.filename.fileref.finfo.finv.fipname.fipnamel.fipstate.floor.fnonct.fnote.fopen.foptname.foptnum.fpoint.fpos.fput.fread.frewind.frlen.fsep.fuzz.fwrite.gaminv.gamma.getoption.getvarc.getvarn.hbound.hms.hosthelp.hour.ibessel.index.indexc.indexw.input.inputc.inputn.int.intck.intnx.intrr.irr.jbessel.juldate.kurtosis.lag.lbound.left.length.lgamma.libname.libref.log.log10.log2.logpdf.logpmf.logsdf.lowcase.max.mdy.mean.min.minute.mod.month.mopen.mort.n.netpv.nmiss.normal.note.npv.open.ordinal.pathname.pdf.peek.peekc.pmf.point.poisson.poke.probbeta.probbnml.probchi.probf.probgam.probhypr.probit.probnegb.probnorm.probt.put.putc.putn.qtr.quote.ranbin.rancau.ranexp.rangam.range.rank.rannor.ranpoi.rantbl.rantri.ranuni.repeat.resolve.reverse.rewind.right.round.saving.scan.sdf.second.sign.sin.sinh.skewness.soundex.spedis.sqrt.std.stderr.stfips.stname.stnamel.substr.sum.symget.sysget.sysmsg.sysprod.sysrc.system.tan.tanh.time.timepart.tinv.tnonct.today.translate.tranwrd.trigamma.trim.trimn.trunc.uniform.upcase.uss.var.varfmt.varinfmt.varlabel.varlen.varname.varnum.varray.varrayx.vartype.verify.vformat.vformatd.vformatdx.vformatn.vformatnx.vformatw.vformatwx.vformatx.vinarray.vinarrayx.vinformat.vinformatd.vinformatdx.vinformatn.vinformatnx.vinformatw.vinformatwx.vinformatx.vlabel.vlabelx.vlength.vlengthx.vname.vnamex.vtype.vtypex.weekday.year.yyq.zipfips.zipname.zipnamel.zipstate".split(".");
 		return {
@@ -14956,7 +15150,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), on = /* @__PURE__ */ o(((e, t) => {
+})), sn = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = e.regex, n = {
 			className: "meta",
@@ -15117,21 +15311,19 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), sn = /* @__PURE__ */ o(((e, t) => {
+})), cn = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
-		let t = "[^\\(\\)\\[\\]\\{\\}\",'`;#|\\\\\\s]+", n = "(-|\\+)?\\d+([./]\\d+)?";
-		n + "";
-		let r = {
+		let t = "[^\\(\\)\\[\\]\\{\\}\",'`;#|\\\\\\s]+", n = {
 			$pattern: t,
 			built_in: "case-lambda call/cc class define-class exit-handler field import inherit init-field interface let*-values let-values let/ec mixin opt-lambda override protect provide public rename require require-for-syntax syntax syntax-case syntax-error unit/sig unless when with-syntax and begin call-with-current-continuation call-with-input-file call-with-output-file case cond define define-syntax delay do dynamic-wind else for-each if lambda let let* let-syntax letrec letrec-syntax map or syntax-rules ' * + , ,@ - ... / ; < <= = => > >= ` abs acos angle append apply asin assoc assq assv atan boolean? caar cadr call-with-input-file call-with-output-file call-with-values car cdddar cddddr cdr ceiling char->integer char-alphabetic? char-ci<=? char-ci<? char-ci=? char-ci>=? char-ci>? char-downcase char-lower-case? char-numeric? char-ready? char-upcase char-upper-case? char-whitespace? char<=? char<? char=? char>=? char>? char? close-input-port close-output-port complex? cons cos current-input-port current-output-port denominator display eof-object? eq? equal? eqv? eval even? exact->inexact exact? exp expt floor force gcd imag-part inexact->exact inexact? input-port? integer->char integer? interaction-environment lcm length list list->string list->vector list-ref list-tail list? load log magnitude make-polar make-rectangular make-string make-vector max member memq memv min modulo negative? newline not null-environment null? number->string number? numerator odd? open-input-file open-output-file output-port? pair? peek-char port? positive? procedure? quasiquote quote quotient rational? rationalize read read-char real-part real? remainder reverse round scheme-report-environment set! set-car! set-cdr! sin sqrt string string->list string->number string->symbol string-append string-ci<=? string-ci<? string-ci=? string-ci>=? string-ci>? string-copy string-fill! string-length string-ref string-set! string<=? string<? string=? string>=? string>? string? substring symbol->string symbol? tan transcript-off transcript-on truncate values vector vector->list vector-fill! vector-length vector-ref vector-set! with-input-from-file with-output-to-file write write-char zero?"
-		}, i = {
+		}, r = {
 			className: "literal",
 			begin: "(#t|#f|#\\\\" + t + "|#\\\\.)"
-		}, a = {
+		}, i = {
 			className: "number",
 			variants: [
 				{
-					begin: n,
+					begin: "(-|\\+)?\\d+([./]\\d+)?",
 					relevance: 0
 				},
 				{
@@ -15142,35 +15334,35 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				{ begin: "#o[0-7]+(/[0-7]+)?" },
 				{ begin: "#x[0-9a-f]+(/[0-9a-f]+)?" }
 			]
-		}, o = e.QUOTE_STRING_MODE, s = [e.COMMENT(";", "$", { relevance: 0 }), e.COMMENT("#\\|", "\\|#")], c = {
+		}, a = e.QUOTE_STRING_MODE, o = [e.COMMENT(";", "$", { relevance: 0 }), e.COMMENT("#\\|", "\\|#")], s = {
 			begin: t,
 			relevance: 0
-		}, l = {
+		}, c = {
 			className: "symbol",
 			begin: "'" + t
-		}, u = {
+		}, l = {
 			endsWithParent: !0,
 			relevance: 0
-		}, d = {
+		}, u = {
 			variants: [{ begin: /'/ }, { begin: "`" }],
 			contains: [{
 				begin: "\\(",
 				end: "\\)",
 				contains: [
 					"self",
-					i,
-					o,
+					r,
 					a,
-					c,
-					l
+					i,
+					s,
+					c
 				]
 			}]
-		}, f = {
+		}, d = {
 			className: "name",
 			relevance: 0,
 			begin: t,
-			keywords: r
-		}, p = {
+			keywords: n
+		}, f = {
 			variants: [{
 				begin: "\\(",
 				end: "\\)"
@@ -15183,7 +15375,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					begin: /lambda/,
 					endsWithParent: !0,
 					returnBegin: !0,
-					contains: [f, {
+					contains: [d, {
 						endsParent: !0,
 						variants: [{
 							begin: /\(/,
@@ -15192,37 +15384,37 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 							begin: /\[/,
 							end: /\]/
 						}],
-						contains: [c]
+						contains: [s]
 					}]
 				},
-				f,
-				u
+				d,
+				l
 			]
 		};
-		return u.contains = [
+		return l.contains = [
+			r,
 			i,
 			a,
-			o,
+			s,
 			c,
-			l,
-			d,
-			p
-		].concat(s), {
+			u,
+			f
+		].concat(o), {
 			name: "Scheme",
 			aliases: ["scm"],
 			illegal: /\S/,
 			contains: [
 				e.SHEBANG(),
+				i,
 				a,
-				o,
-				l,
-				d,
-				p
-			].concat(s)
+				c,
+				u,
+				f
+			].concat(o)
 		};
 	}
 	t.exports = n;
-})), cn = /* @__PURE__ */ o(((e, t) => {
+})), ln = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = [e.C_NUMBER_MODE, {
 			className: "string",
@@ -15266,7 +15458,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), ln = /* @__PURE__ */ o(((e, t) => {
+})), un = /* @__PURE__ */ o(((e, t) => {
 	var n = (e) => ({
 		IMPORTANT: {
 			scope: "meta",
@@ -15276,6 +15468,10 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		HEXCOLOR: {
 			scope: "number",
 			begin: /#(([0-9a-fA-F]{3,4})|(([0-9a-fA-F]{2}){3,4}))\b/
+		},
+		UNICODE_RANGE: {
+			scope: "number",
+			begin: /\b[Uu]\+[0-9A-Fa-f][0-9A-Fa-f?]{0,5}(-[0-9A-Fa-f][0-9A-Fa-f]{0,5})?/
 		},
 		FUNCTION_DISPATCH: {
 			className: "built_in",
@@ -15312,7 +15508,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		"selection",
 		"slotted",
 		"spelling-error"
-	].sort().reverse(), l = (/* @__PURE__ */ "accent-color.align-content.align-items.align-self.alignment-baseline.all.anchor-name.animation.animation-composition.animation-delay.animation-direction.animation-duration.animation-fill-mode.animation-iteration-count.animation-name.animation-play-state.animation-range.animation-range-end.animation-range-start.animation-timeline.animation-timing-function.appearance.aspect-ratio.backdrop-filter.backface-visibility.background.background-attachment.background-blend-mode.background-clip.background-color.background-image.background-origin.background-position.background-position-x.background-position-y.background-repeat.background-size.baseline-shift.block-size.border.border-block.border-block-color.border-block-end.border-block-end-color.border-block-end-style.border-block-end-width.border-block-start.border-block-start-color.border-block-start-style.border-block-start-width.border-block-style.border-block-width.border-bottom.border-bottom-color.border-bottom-left-radius.border-bottom-right-radius.border-bottom-style.border-bottom-width.border-collapse.border-color.border-end-end-radius.border-end-start-radius.border-image.border-image-outset.border-image-repeat.border-image-slice.border-image-source.border-image-width.border-inline.border-inline-color.border-inline-end.border-inline-end-color.border-inline-end-style.border-inline-end-width.border-inline-start.border-inline-start-color.border-inline-start-style.border-inline-start-width.border-inline-style.border-inline-width.border-left.border-left-color.border-left-style.border-left-width.border-radius.border-right.border-right-color.border-right-style.border-right-width.border-spacing.border-start-end-radius.border-start-start-radius.border-style.border-top.border-top-color.border-top-left-radius.border-top-right-radius.border-top-style.border-top-width.border-width.bottom.box-align.box-decoration-break.box-direction.box-flex.box-flex-group.box-lines.box-ordinal-group.box-orient.box-pack.box-shadow.box-sizing.break-after.break-before.break-inside.caption-side.caret-color.clear.clip.clip-path.clip-rule.color.color-interpolation.color-interpolation-filters.color-profile.color-rendering.color-scheme.column-count.column-fill.column-gap.column-rule.column-rule-color.column-rule-style.column-rule-width.column-span.column-width.columns.contain.contain-intrinsic-block-size.contain-intrinsic-height.contain-intrinsic-inline-size.contain-intrinsic-size.contain-intrinsic-width.container.container-name.container-type.content.content-visibility.counter-increment.counter-reset.counter-set.cue.cue-after.cue-before.cursor.cx.cy.direction.display.dominant-baseline.empty-cells.enable-background.field-sizing.fill.fill-opacity.fill-rule.filter.flex.flex-basis.flex-direction.flex-flow.flex-grow.flex-shrink.flex-wrap.float.flood-color.flood-opacity.flow.font.font-display.font-family.font-feature-settings.font-kerning.font-language-override.font-optical-sizing.font-palette.font-size.font-size-adjust.font-smooth.font-smoothing.font-stretch.font-style.font-synthesis.font-synthesis-position.font-synthesis-small-caps.font-synthesis-style.font-synthesis-weight.font-variant.font-variant-alternates.font-variant-caps.font-variant-east-asian.font-variant-emoji.font-variant-ligatures.font-variant-numeric.font-variant-position.font-variation-settings.font-weight.forced-color-adjust.gap.glyph-orientation-horizontal.glyph-orientation-vertical.grid.grid-area.grid-auto-columns.grid-auto-flow.grid-auto-rows.grid-column.grid-column-end.grid-column-start.grid-gap.grid-row.grid-row-end.grid-row-start.grid-template.grid-template-areas.grid-template-columns.grid-template-rows.hanging-punctuation.height.hyphenate-character.hyphenate-limit-chars.hyphens.icon.image-orientation.image-rendering.image-resolution.ime-mode.initial-letter.initial-letter-align.inline-size.inset.inset-area.inset-block.inset-block-end.inset-block-start.inset-inline.inset-inline-end.inset-inline-start.isolation.justify-content.justify-items.justify-self.kerning.left.letter-spacing.lighting-color.line-break.line-height.line-height-step.list-style.list-style-image.list-style-position.list-style-type.margin.margin-block.margin-block-end.margin-block-start.margin-bottom.margin-inline.margin-inline-end.margin-inline-start.margin-left.margin-right.margin-top.margin-trim.marker.marker-end.marker-mid.marker-start.marks.mask.mask-border.mask-border-mode.mask-border-outset.mask-border-repeat.mask-border-slice.mask-border-source.mask-border-width.mask-clip.mask-composite.mask-image.mask-mode.mask-origin.mask-position.mask-repeat.mask-size.mask-type.masonry-auto-flow.math-depth.math-shift.math-style.max-block-size.max-height.max-inline-size.max-width.min-block-size.min-height.min-inline-size.min-width.mix-blend-mode.nav-down.nav-index.nav-left.nav-right.nav-up.none.normal.object-fit.object-position.offset.offset-anchor.offset-distance.offset-path.offset-position.offset-rotate.opacity.order.orphans.outline.outline-color.outline-offset.outline-style.outline-width.overflow.overflow-anchor.overflow-block.overflow-clip-margin.overflow-inline.overflow-wrap.overflow-x.overflow-y.overlay.overscroll-behavior.overscroll-behavior-block.overscroll-behavior-inline.overscroll-behavior-x.overscroll-behavior-y.padding.padding-block.padding-block-end.padding-block-start.padding-bottom.padding-inline.padding-inline-end.padding-inline-start.padding-left.padding-right.padding-top.page.page-break-after.page-break-before.page-break-inside.paint-order.pause.pause-after.pause-before.perspective.perspective-origin.place-content.place-items.place-self.pointer-events.position.position-anchor.position-visibility.print-color-adjust.quotes.r.resize.rest.rest-after.rest-before.right.rotate.row-gap.ruby-align.ruby-position.scale.scroll-behavior.scroll-margin.scroll-margin-block.scroll-margin-block-end.scroll-margin-block-start.scroll-margin-bottom.scroll-margin-inline.scroll-margin-inline-end.scroll-margin-inline-start.scroll-margin-left.scroll-margin-right.scroll-margin-top.scroll-padding.scroll-padding-block.scroll-padding-block-end.scroll-padding-block-start.scroll-padding-bottom.scroll-padding-inline.scroll-padding-inline-end.scroll-padding-inline-start.scroll-padding-left.scroll-padding-right.scroll-padding-top.scroll-snap-align.scroll-snap-stop.scroll-snap-type.scroll-timeline.scroll-timeline-axis.scroll-timeline-name.scrollbar-color.scrollbar-gutter.scrollbar-width.shape-image-threshold.shape-margin.shape-outside.shape-rendering.speak.speak-as.src.stop-color.stop-opacity.stroke.stroke-dasharray.stroke-dashoffset.stroke-linecap.stroke-linejoin.stroke-miterlimit.stroke-opacity.stroke-width.tab-size.table-layout.text-align.text-align-all.text-align-last.text-anchor.text-combine-upright.text-decoration.text-decoration-color.text-decoration-line.text-decoration-skip.text-decoration-skip-ink.text-decoration-style.text-decoration-thickness.text-emphasis.text-emphasis-color.text-emphasis-position.text-emphasis-style.text-indent.text-justify.text-orientation.text-overflow.text-rendering.text-shadow.text-size-adjust.text-transform.text-underline-offset.text-underline-position.text-wrap.text-wrap-mode.text-wrap-style.timeline-scope.top.touch-action.transform.transform-box.transform-origin.transform-style.transition.transition-behavior.transition-delay.transition-duration.transition-property.transition-timing-function.translate.unicode-bidi.user-modify.user-select.vector-effect.vertical-align.view-timeline.view-timeline-axis.view-timeline-inset.view-timeline-name.view-transition-name.visibility.voice-balance.voice-duration.voice-family.voice-pitch.voice-range.voice-rate.voice-stress.voice-volume.white-space.white-space-collapse.widows.width.will-change.word-break.word-spacing.word-wrap.writing-mode.x.y.z-index.zoom".split(".")).sort().reverse();
+	].sort().reverse(), l = (/* @__PURE__ */ "accent-color.align-content.align-items.align-self.alignment-baseline.all.anchor-name.animation.animation-composition.animation-delay.animation-direction.animation-duration.animation-fill-mode.animation-iteration-count.animation-name.animation-play-state.animation-range.animation-range-end.animation-range-start.animation-timeline.animation-timing-function.appearance.aspect-ratio.backdrop-filter.backface-visibility.background.background-attachment.background-blend-mode.background-clip.background-color.background-image.background-origin.background-position.background-position-x.background-position-y.background-repeat.background-size.baseline-shift.block-size.border.border-block.border-block-color.border-block-end.border-block-end-color.border-block-end-style.border-block-end-width.border-block-start.border-block-start-color.border-block-start-style.border-block-start-width.border-block-style.border-block-width.border-bottom.border-bottom-color.border-bottom-left-radius.border-bottom-right-radius.border-bottom-style.border-bottom-width.border-collapse.border-color.border-end-end-radius.border-end-start-radius.border-image.border-image-outset.border-image-repeat.border-image-slice.border-image-source.border-image-width.border-inline.border-inline-color.border-inline-end.border-inline-end-color.border-inline-end-style.border-inline-end-width.border-inline-start.border-inline-start-color.border-inline-start-style.border-inline-start-width.border-inline-style.border-inline-width.border-left.border-left-color.border-left-style.border-left-width.border-radius.border-right.border-right-color.border-right-style.border-right-width.border-spacing.border-start-end-radius.border-start-start-radius.border-style.border-top.border-top-color.border-top-left-radius.border-top-right-radius.border-top-style.border-top-width.border-width.bottom.box-align.box-decoration-break.box-direction.box-flex.box-flex-group.box-lines.box-ordinal-group.box-orient.box-pack.box-shadow.box-sizing.break-after.break-before.break-inside.caption-side.caret-color.clear.clip.clip-path.clip-rule.color.color-interpolation.color-interpolation-filters.color-profile.color-rendering.color-scheme.column-count.column-fill.column-gap.column-rule.column-rule-color.column-rule-style.column-rule-width.column-span.column-width.columns.contain.contain-intrinsic-block-size.contain-intrinsic-height.contain-intrinsic-inline-size.contain-intrinsic-size.contain-intrinsic-width.container.container-name.container-type.content.content-visibility.corner-bottom-left-shape.corner-bottom-right-shape.corner-shape.corner-top-left-shape.corner-top-right-shape.counter-increment.counter-reset.counter-set.cue.cue-after.cue-before.cursor.cx.cy.direction.display.dominant-baseline.empty-cells.enable-background.field-sizing.fill.fill-opacity.fill-rule.filter.flex.flex-basis.flex-direction.flex-flow.flex-grow.flex-shrink.flex-wrap.float.flood-color.flood-opacity.flow.font.font-display.font-family.font-feature-settings.font-kerning.font-language-override.font-optical-sizing.font-palette.font-size.font-size-adjust.font-smooth.font-smoothing.font-stretch.font-style.font-synthesis.font-synthesis-position.font-synthesis-small-caps.font-synthesis-style.font-synthesis-weight.font-variant.font-variant-alternates.font-variant-caps.font-variant-east-asian.font-variant-emoji.font-variant-ligatures.font-variant-numeric.font-variant-position.font-variation-settings.font-weight.forced-color-adjust.gap.glyph-orientation-horizontal.glyph-orientation-vertical.grid.grid-area.grid-auto-columns.grid-auto-flow.grid-auto-rows.grid-column.grid-column-end.grid-column-start.grid-gap.grid-row.grid-row-end.grid-row-start.grid-template.grid-template-areas.grid-template-columns.grid-template-rows.hanging-punctuation.height.hyphenate-character.hyphenate-limit-chars.hyphens.icon.image-orientation.image-rendering.image-resolution.ime-mode.initial-letter.initial-letter-align.inline-size.inset.inset-area.inset-block.inset-block-end.inset-block-start.inset-inline.inset-inline-end.inset-inline-start.isolation.justify-content.justify-items.justify-self.kerning.left.letter-spacing.lighting-color.line-break.line-height.line-height-step.list-style.list-style-image.list-style-position.list-style-type.margin.margin-block.margin-block-end.margin-block-start.margin-bottom.margin-inline.margin-inline-end.margin-inline-start.margin-left.margin-right.margin-top.margin-trim.marker.marker-end.marker-mid.marker-start.marks.mask.mask-border.mask-border-mode.mask-border-outset.mask-border-repeat.mask-border-slice.mask-border-source.mask-border-width.mask-clip.mask-composite.mask-image.mask-mode.mask-origin.mask-position.mask-repeat.mask-size.mask-type.masonry-auto-flow.math-depth.math-shift.math-style.max-block-size.max-height.max-inline-size.max-width.min-block-size.min-height.min-inline-size.min-width.mix-blend-mode.nav-down.nav-index.nav-left.nav-right.nav-up.none.normal.object-fit.object-position.offset.offset-anchor.offset-distance.offset-path.offset-position.offset-rotate.opacity.order.orphans.outline.outline-color.outline-offset.outline-style.outline-width.overflow.overflow-anchor.overflow-block.overflow-clip-margin.overflow-inline.overflow-wrap.overflow-x.overflow-y.overlay.overscroll-behavior.overscroll-behavior-block.overscroll-behavior-inline.overscroll-behavior-x.overscroll-behavior-y.padding.padding-block.padding-block-end.padding-block-start.padding-bottom.padding-inline.padding-inline-end.padding-inline-start.padding-left.padding-right.padding-top.page.page-break-after.page-break-before.page-break-inside.paint-order.pause.pause-after.pause-before.perspective.perspective-origin.place-content.place-items.place-self.pointer-events.position.position-anchor.position-visibility.print-color-adjust.quotes.r.resize.rest.rest-after.rest-before.right.rotate.row-gap.ruby-align.ruby-position.scale.scroll-behavior.scroll-margin.scroll-margin-block.scroll-margin-block-end.scroll-margin-block-start.scroll-margin-bottom.scroll-margin-inline.scroll-margin-inline-end.scroll-margin-inline-start.scroll-margin-left.scroll-margin-right.scroll-margin-top.scroll-padding.scroll-padding-block.scroll-padding-block-end.scroll-padding-block-start.scroll-padding-bottom.scroll-padding-inline.scroll-padding-inline-end.scroll-padding-inline-start.scroll-padding-left.scroll-padding-right.scroll-padding-top.scroll-snap-align.scroll-snap-stop.scroll-snap-type.scroll-timeline.scroll-timeline-axis.scroll-timeline-name.scrollbar-color.scrollbar-gutter.scrollbar-width.shape-image-threshold.shape-margin.shape-outside.shape-rendering.speak.speak-as.src.stop-color.stop-opacity.stroke.stroke-dasharray.stroke-dashoffset.stroke-linecap.stroke-linejoin.stroke-miterlimit.stroke-opacity.stroke-width.tab-size.table-layout.text-align.text-align-all.text-align-last.text-anchor.text-combine-upright.text-decoration.text-decoration-color.text-decoration-line.text-decoration-skip.text-decoration-skip-ink.text-decoration-style.text-decoration-thickness.text-emphasis.text-emphasis-color.text-emphasis-position.text-emphasis-style.text-indent.text-justify.text-orientation.text-overflow.text-rendering.text-shadow.text-size-adjust.text-transform.text-underline-offset.text-underline-position.text-wrap.text-wrap-mode.text-wrap-style.timeline-scope.top.touch-action.transform.transform-box.transform-origin.transform-style.transition.transition-behavior.transition-delay.transition-duration.transition-property.transition-timing-function.translate.unicode-bidi.unicode-range.user-modify.user-select.vector-effect.vertical-align.view-timeline.view-timeline-axis.view-timeline-inset.view-timeline-name.view-transition-name.visibility.voice-balance.voice-duration.voice-family.voice-pitch.voice-range.voice-rate.voice-stress.voice-volume.white-space.white-space-collapse.widows.width.will-change.word-break.word-spacing.word-wrap.writing-mode.x.y.z-index.zoom".split(".")).sort().reverse();
 	function u(e) {
 		let t = n(e), r = c, i = s, u = "@[a-z-]+", d = {
 			className: "variable",
@@ -15372,6 +15568,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 						d,
 						t.HEXCOLOR,
 						t.CSS_NUMBER_MODE,
+						t.UNICODE_RANGE,
 						e.QUOTE_STRING_MODE,
 						e.APOS_STRING_MODE,
 						t.IMPORTANT,
@@ -15415,14 +15612,14 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = u;
-})), un = /* @__PURE__ */ o(((e, t) => {
+})), dn = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "Shell Session",
 			aliases: ["console", "shellsession"],
 			contains: [{
 				className: "meta.prompt",
-				begin: /^\s{0,3}[/~\w\d[\]()@-]*[>%$#][ ]?/,
+				begin: /^\s{0,3}[./~\w\d[\]()@-]*[>%$#][ ]?/,
 				starts: {
 					end: /[^\\](?=\s*$)/,
 					subLanguage: "bash"
@@ -15431,7 +15628,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), dn = /* @__PURE__ */ o(((e, t) => {
+})), fn = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = /* @__PURE__ */ "add.and.cmp.cmpg.cmpl.const.div.double.float.goto.if.int.long.move.mul.neg.new.nop.not.or.rem.return.shl.shr.sput.sub.throw.ushr.xor".split(".");
 		return {
@@ -15513,7 +15710,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), fn = /* @__PURE__ */ o(((e, t) => {
+})), pn = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = "[a-z][a-zA-Z0-9_]*", n = {
 			className: "string",
@@ -15549,7 +15746,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				r,
 				n,
 				{
-					begin: "\\|[ ]*" + t + "([ ]+[a-z][a-zA-Z0-9_]*)*[ ]*\\|",
+					begin: "\\|[ ]*" + t + "([ ]+" + t + ")*[ ]*\\|",
 					returnBegin: !0,
 					end: /\|/,
 					illegal: /\S/,
@@ -15569,7 +15766,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), pn = /* @__PURE__ */ o(((e, t) => {
+})), mn = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "SML (Standard ML)",
@@ -15617,7 +15814,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), mn = /* @__PURE__ */ o(((e, t) => {
+})), hn = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = {
 			className: "variable",
@@ -15642,7 +15839,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					relevance: 0
 				}]
 			}]
-		}, i = /* @__PURE__ */ "break.breakWith.breakOut.breakTo.case.catch.continue.continueWith.default.do.else.exit.exitWith.for.forEach.from.if.local.private.switch.step.then.throw.to.try.waitUntil.while.with".split("."), a = /* @__PURE__ */ "blufor.civilian.configNull.controlNull.displayNull.diaryRecordNull.east.endl.false.grpNull.independent.lineBreak.locationNull.nil.objNull.opfor.pi.resistance.scriptNull.sideAmbientLife.sideEmpty.sideEnemy.sideFriendly.sideLogic.sideUnknown.taskNull.teamMemberNull.true.west".split("."), o = /* @__PURE__ */ "abs.accTime.acos.action.actionIDs.actionKeys.actionKeysEx.actionKeysImages.actionKeysNames.actionKeysNamesArray.actionName.actionParams.activateAddons.activatedAddons.activateKey.activeTitleEffectParams.add3DENConnection.add3DENEventHandler.add3DENLayer.addAction.addBackpack.addBackpackCargo.addBackpackCargoGlobal.addBackpackGlobal.addBinocularItem.addCamShake.addCuratorAddons.addCuratorCameraArea.addCuratorEditableObjects.addCuratorEditingArea.addCuratorPoints.addEditorObject.addEventHandler.addForce.addForceGeneratorRTD.addGoggles.addGroupIcon.addHandgunItem.addHeadgear.addItem.addItemCargo.addItemCargoGlobal.addItemPool.addItemToBackpack.addItemToUniform.addItemToVest.addLiveStats.addMagazine.addMagazineAmmoCargo.addMagazineCargo.addMagazineCargoGlobal.addMagazineGlobal.addMagazinePool.addMagazines.addMagazineTurret.addMenu.addMenuItem.addMissionEventHandler.addMPEventHandler.addMusicEventHandler.addonFiles.addOwnedMine.addPlayerScores.addPrimaryWeaponItem.addPublicVariableEventHandler.addRating.addResources.addScore.addScoreSide.addSecondaryWeaponItem.addSwitchableUnit.addTeamMember.addToRemainsCollector.addTorque.addUniform.addUserActionEventHandler.addVehicle.addVest.addWaypoint.addWeapon.addWeaponCargo.addWeaponCargoGlobal.addWeaponGlobal.addWeaponItem.addWeaponPool.addWeaponTurret.addWeaponWithAttachmentsCargo.addWeaponWithAttachmentsCargoGlobal.admin.agent.agents.AGLToASL.aimedAtTarget.aimPos.airDensityCurveRTD.airDensityRTD.airplaneThrottle.airportSide.AISFinishHeal.alive.all3DENEntities.allActiveTitleEffects.allAddonsInfo.allAirports.allControls.allCurators.allCutLayers.allDead.allDeadMen.allDiaryRecords.allDiarySubjects.allDisplays.allEnv3DSoundSources.allGroups.allLODs.allMapMarkers.allMines.allMissionObjects.allObjects.allow3DMode.allowCrewInImmobile.allowCuratorLogicIgnoreAreas.allowDamage.allowDammage.allowedService.allowFileOperations.allowFleeing.allowGetIn.allowService.allowSprint.allPlayers.allSimpleObjects.allSites.allTurrets.allUnits.allUnitsUAV.allUsers.allVariables.ambientTemperature.ammo.ammoOnPylon.and.animate.animateBay.animateDoor.animatePylon.animateSource.animationNames.animationPhase.animationSourcePhase.animationState.apertureParams.append.apply.armoryPoints.arrayIntersect.asin.ASLToAGL.ASLToATL.assert.assignAsCargo.assignAsCargoIndex.assignAsCommander.assignAsDriver.assignAsGunner.assignAsTurret.assignCurator.assignedCargo.assignedCommander.assignedDriver.assignedGroup.assignedGunner.assignedItems.assignedTarget.assignedTeam.assignedVehicle.assignedVehicleRole.assignedVehicles.assignItem.assignTeam.assignToAirport.atan.atan2.atg.ATLToASL.attachedObject.attachedObjects.attachedTo.attachObject.attachTo.attackEnabled.awake.backpack.backpackCargo.backpackContainer.backpackItems.backpackMagazines.backpackSpaceFor.behaviour.benchmark.bezierInterpolation.binocular.binocularItems.binocularMagazine.boundingBox.boundingBoxReal.boundingCenter.brakesDisabled.briefingName.buildingExit.buildingPos.buldozer_EnableRoadDiag.buldozer_IsEnabledRoadDiag.buldozer_LoadNewRoads.buldozer_reloadOperMap.buttonAction.buttonSetAction.cadetMode.calculatePath.calculatePlayerVisibilityByFriendly.call.callExtension.camCommand.camCommit.camCommitPrepared.camCommitted.camConstuctionSetParams.camCreate.camDestroy.cameraEffect.cameraEffectEnableHUD.cameraInterest.cameraOn.cameraView.campaignConfigFile.camPreload.camPreloaded.camPrepareBank.camPrepareDir.camPrepareDive.camPrepareFocus.camPrepareFov.camPrepareFovRange.camPreparePos.camPrepareRelPos.camPrepareTarget.camSetBank.camSetDir.camSetDive.camSetFocus.camSetFov.camSetFovRange.camSetPos.camSetRelPos.camSetTarget.camTarget.camUseNVG.canAdd.canAddItemToBackpack.canAddItemToUniform.canAddItemToVest.cancelSimpleTaskDestination.canDeployWeapon.canFire.canMove.canSlingLoad.canStand.canSuspend.canTriggerDynamicSimulation.canUnloadInCombat.canVehicleCargo.captive.captiveNum.cbChecked.cbSetChecked.ceil.channelEnabled.cheatsEnabled.checkAIFeature.checkVisibility.className.clear3DENAttribute.clear3DENInventory.clearAllItemsFromBackpack.clearBackpackCargo.clearBackpackCargoGlobal.clearForcesRTD.clearGroupIcons.clearItemCargo.clearItemCargoGlobal.clearItemPool.clearMagazineCargo.clearMagazineCargoGlobal.clearMagazinePool.clearOverlay.clearRadio.clearWeaponCargo.clearWeaponCargoGlobal.clearWeaponPool.clientOwner.closeDialog.closeDisplay.closeOverlay.collapseObjectTree.collect3DENHistory.collectiveRTD.collisionDisabledWith.combatBehaviour.combatMode.commandArtilleryFire.commandChat.commander.commandFire.commandFollow.commandFSM.commandGetOut.commandingMenu.commandMove.commandRadio.commandStop.commandSuppressiveFire.commandTarget.commandWatch.comment.commitOverlay.compatibleItems.compatibleMagazines.compile.compileFinal.compileScript.completedFSM.composeText.configClasses.configFile.configHierarchy.configName.configOf.configProperties.configSourceAddonList.configSourceMod.configSourceModList.confirmSensorTarget.connectTerminalToUAV.connectToServer.controlsGroupCtrl.conversationDisabled.copyFromClipboard.copyToClipboard.copyWaypoints.cos.count.countEnemy.countFriendly.countSide.countType.countUnknown.create3DENComposition.create3DENEntity.createAgent.createCenter.createDialog.createDiaryLink.createDiaryRecord.createDiarySubject.createDisplay.createGearDialog.createGroup.createGuardedPoint.createHashMap.createHashMapFromArray.createLocation.createMarker.createMarkerLocal.createMenu.createMine.createMissionDisplay.createMPCampaignDisplay.createSimpleObject.createSimpleTask.createSite.createSoundSource.createTask.createTeam.createTrigger.createUnit.createVehicle.createVehicleCrew.createVehicleLocal.crew.ctAddHeader.ctAddRow.ctClear.ctCurSel.ctData.ctFindHeaderRows.ctFindRowHeader.ctHeaderControls.ctHeaderCount.ctRemoveHeaders.ctRemoveRows.ctrlActivate.ctrlAddEventHandler.ctrlAngle.ctrlAnimateModel.ctrlAnimationPhaseModel.ctrlAt.ctrlAutoScrollDelay.ctrlAutoScrollRewind.ctrlAutoScrollSpeed.ctrlBackgroundColor.ctrlChecked.ctrlClassName.ctrlCommit.ctrlCommitted.ctrlCreate.ctrlDelete.ctrlEnable.ctrlEnabled.ctrlFade.ctrlFontHeight.ctrlForegroundColor.ctrlHTMLLoaded.ctrlIDC.ctrlIDD.ctrlMapAnimAdd.ctrlMapAnimClear.ctrlMapAnimCommit.ctrlMapAnimDone.ctrlMapCursor.ctrlMapMouseOver.ctrlMapPosition.ctrlMapScale.ctrlMapScreenToWorld.ctrlMapSetPosition.ctrlMapWorldToScreen.ctrlModel.ctrlModelDirAndUp.ctrlModelScale.ctrlMousePosition.ctrlParent.ctrlParentControlsGroup.ctrlPosition.ctrlRemoveAllEventHandlers.ctrlRemoveEventHandler.ctrlScale.ctrlScrollValues.ctrlSetActiveColor.ctrlSetAngle.ctrlSetAutoScrollDelay.ctrlSetAutoScrollRewind.ctrlSetAutoScrollSpeed.ctrlSetBackgroundColor.ctrlSetChecked.ctrlSetDisabledColor.ctrlSetEventHandler.ctrlSetFade.ctrlSetFocus.ctrlSetFont.ctrlSetFontH1.ctrlSetFontH1B.ctrlSetFontH2.ctrlSetFontH2B.ctrlSetFontH3.ctrlSetFontH3B.ctrlSetFontH4.ctrlSetFontH4B.ctrlSetFontH5.ctrlSetFontH5B.ctrlSetFontH6.ctrlSetFontH6B.ctrlSetFontHeight.ctrlSetFontHeightH1.ctrlSetFontHeightH2.ctrlSetFontHeightH3.ctrlSetFontHeightH4.ctrlSetFontHeightH5.ctrlSetFontHeightH6.ctrlSetFontHeightSecondary.ctrlSetFontP.ctrlSetFontPB.ctrlSetFontSecondary.ctrlSetForegroundColor.ctrlSetModel.ctrlSetModelDirAndUp.ctrlSetModelScale.ctrlSetMousePosition.ctrlSetPixelPrecision.ctrlSetPosition.ctrlSetPositionH.ctrlSetPositionW.ctrlSetPositionX.ctrlSetPositionY.ctrlSetScale.ctrlSetScrollValues.ctrlSetShadow.ctrlSetStructuredText.ctrlSetText.ctrlSetTextColor.ctrlSetTextColorSecondary.ctrlSetTextSecondary.ctrlSetTextSelection.ctrlSetTooltip.ctrlSetTooltipColorBox.ctrlSetTooltipColorShade.ctrlSetTooltipColorText.ctrlSetTooltipMaxWidth.ctrlSetURL.ctrlSetURLOverlayMode.ctrlShadow.ctrlShow.ctrlShown.ctrlStyle.ctrlText.ctrlTextColor.ctrlTextHeight.ctrlTextSecondary.ctrlTextSelection.ctrlTextWidth.ctrlTooltip.ctrlType.ctrlURL.ctrlURLOverlayMode.ctrlVisible.ctRowControls.ctRowCount.ctSetCurSel.ctSetData.ctSetHeaderTemplate.ctSetRowTemplate.ctSetValue.ctValue.curatorAddons.curatorCamera.curatorCameraArea.curatorCameraAreaCeiling.curatorCoef.curatorEditableObjects.curatorEditingArea.curatorEditingAreaType.curatorMouseOver.curatorPoints.curatorRegisteredObjects.curatorSelected.curatorWaypointCost.current3DENOperation.currentChannel.currentCommand.currentMagazine.currentMagazineDetail.currentMagazineDetailTurret.currentMagazineTurret.currentMuzzle.currentNamespace.currentPilot.currentTask.currentTasks.currentThrowable.currentVisionMode.currentWaypoint.currentWeapon.currentWeaponMode.currentWeaponTurret.currentZeroing.cursorObject.cursorTarget.customChat.customRadio.customWaypointPosition.cutFadeOut.cutObj.cutRsc.cutText.damage.date.dateToNumber.dayTime.deActivateKey.debriefingText.debugFSM.debugLog.decayGraphValues.deg.delete3DENEntities.deleteAt.deleteCenter.deleteCollection.deleteEditorObject.deleteGroup.deleteGroupWhenEmpty.deleteIdentity.deleteLocation.deleteMarker.deleteMarkerLocal.deleteRange.deleteResources.deleteSite.deleteStatus.deleteTeam.deleteVehicle.deleteVehicleCrew.deleteWaypoint.detach.detectedMines.diag_activeMissionFSMs.diag_activeScripts.diag_activeSQFScripts.diag_activeSQSScripts.diag_allMissionEventHandlers.diag_captureFrame.diag_captureFrameToFile.diag_captureSlowFrame.diag_codePerformance.diag_deltaTime.diag_drawmode.diag_dumpCalltraceToLog.diag_dumpScriptAssembly.diag_dumpTerrainSynth.diag_dynamicSimulationEnd.diag_enable.diag_enabled.diag_exportConfig.diag_exportTerrainSVG.diag_fps.diag_fpsmin.diag_frameno.diag_getTerrainSegmentOffset.diag_lightNewLoad.diag_list.diag_localized.diag_log.diag_logSlowFrame.diag_mergeConfigFile.diag_recordTurretLimits.diag_resetFSM.diag_resetshapes.diag_scope.diag_setLightNew.diag_stacktrace.diag_tickTime.diag_toggle.dialog.diarySubjectExists.didJIP.didJIPOwner.difficulty.difficultyEnabled.difficultyEnabledRTD.difficultyOption.direction.directionStabilizationEnabled.directSay.disableAI.disableBrakes.disableCollisionWith.disableConversation.disableDebriefingStats.disableMapIndicators.disableNVGEquipment.disableRemoteSensors.disableSerialization.disableTIEquipment.disableUAVConnectability.disableUserInput.displayAddEventHandler.displayChild.displayCtrl.displayParent.displayRemoveAllEventHandlers.displayRemoveEventHandler.displaySetEventHandler.displayUniqueName.displayUpdate.dissolveTeam.distance.distance2D.distanceSqr.distributionRegion.do3DENAction.doArtilleryFire.doFire.doFollow.doFSM.doGetOut.doMove.doorPhase.doStop.doSuppressiveFire.doTarget.doWatch.drawArrow.drawEllipse.drawIcon.drawIcon3D.drawLaser.drawLine.drawLine3D.drawLink.drawLocation.drawPolygon.drawRectangle.drawTriangle.driver.drop.dynamicSimulationDistance.dynamicSimulationDistanceCoef.dynamicSimulationEnabled.dynamicSimulationSystemEnabled.echo.edit3DENMissionAttributes.editObject.editorSetEventHandler.effectiveCommander.elevatePeriscope.emptyPositions.enableAI.enableAIFeature.enableAimPrecision.enableAttack.enableAudioFeature.enableAutoStartUpRTD.enableAutoTrimRTD.enableCamShake.enableCaustics.enableChannel.enableCollisionWith.enableCopilot.enableDebriefingStats.enableDiagLegend.enableDirectionStabilization.enableDynamicSimulation.enableDynamicSimulationSystem.enableEndDialog.enableEngineArtillery.enableEnvironment.enableFatigue.enableGunLights.enableInfoPanelComponent.enableIRLasers.enableMimics.enablePersonTurret.enableRadio.enableReload.enableRopeAttach.enableSatNormalOnDetail.enableSaving.enableSentences.enableSimulation.enableSimulationGlobal.enableStamina.enableStressDamage.enableTeamSwitch.enableTraffic.enableUAVConnectability.enableUAVWaypoints.enableVehicleCargo.enableVehicleSensor.enableWeaponDisassembly.endLoadingScreen.endMission.engineOn.enginesIsOnRTD.enginesPowerRTD.enginesRpmRTD.enginesTorqueRTD.entities.environmentEnabled.environmentVolume.equipmentDisabled.estimatedEndServerTime.estimatedTimeLeft.evalObjectArgument.everyBackpack.everyContainer.exec.execEditorScript.execFSM.execVM.exp.expectedDestination.exportJIPMessages.eyeDirection.eyePos.face.faction.fadeEnvironment.fadeMusic.fadeRadio.fadeSound.fadeSpeech.failMission.fileExists.fillWeaponsFromPool.find.findAny.findCover.findDisplay.findEditorObject.findEmptyPosition.findEmptyPositionReady.findIf.findNearestEnemy.finishMissionInit.finite.fire.fireAtTarget.firstBackpack.flag.flagAnimationPhase.flagOwner.flagSide.flagTexture.flatten.fleeing.floor.flyInHeight.flyInHeightASL.focusedCtrl.fog.fogForecast.fogParams.forceAddUniform.forceAtPositionRTD.forceCadetDifficulty.forcedMap.forceEnd.forceFlagTexture.forceFollowRoad.forceGeneratorRTD.forceMap.forceRespawn.forceSpeed.forceUnicode.forceWalk.forceWeaponFire.forceWeatherChange.forEachMember.forEachMemberAgent.forEachMemberTeam.forgetTarget.format.formation.formationDirection.formationLeader.formationMembers.formationPosition.formationTask.formatText.formLeader.freeExtension.freeLook.fromEditor.fuel.fullCrew.gearIDCAmmoCount.gearSlotAmmoCount.gearSlotData.gestureState.get.get3DENActionState.get3DENAttribute.get3DENCamera.get3DENConnections.get3DENEntity.get3DENEntityID.get3DENGrid.get3DENIconsVisible.get3DENLayerEntities.get3DENLinesVisible.get3DENMissionAttribute.get3DENMouseOver.get3DENSelected.getAimingCoef.getAllEnv3DSoundControllers.getAllEnvSoundControllers.getAllHitPointsDamage.getAllOwnedMines.getAllPylonsInfo.getAllSoundControllers.getAllUnitTraits.getAmmoCargo.getAnimAimPrecision.getAnimSpeedCoef.getArray.getArtilleryAmmo.getArtilleryComputerSettings.getArtilleryETA.getAssetDLCInfo.getAssignedCuratorLogic.getAssignedCuratorUnit.getAttackTarget.getAudioOptionVolumes.getBackpackCargo.getBleedingRemaining.getBurningValue.getCalculatePlayerVisibilityByFriendly.getCameraViewDirection.getCargoIndex.getCenterOfMass.getClientState.getClientStateNumber.getCompatiblePylonMagazines.getConnectedUAV.getConnectedUAVUnit.getContainerMaxLoad.getCorpse.getCruiseControl.getCursorObjectParams.getCustomAimCoef.getCustomSoundController.getCustomSoundControllerCount.getDammage.getDebriefingText.getDescription.getDir.getDirVisual.getDiverState.getDLCAssetsUsage.getDLCAssetsUsageByName.getDLCs.getDLCUsageTime.getEditorCamera.getEditorMode.getEditorObjectScope.getElevationOffset.getEngineTargetRPMRTD.getEnv3DSoundController.getEnvSoundController.getEventHandlerInfo.getFatigue.getFieldManualStartPage.getForcedFlagTexture.getForcedSpeed.getFriend.getFSMVariable.getFuelCargo.getGraphValues.getGroupIcon.getGroupIconParams.getGroupIcons.getHideFrom.getHit.getHitIndex.getHitPointDamage.getItemCargo.getLighting.getLightingAt.getLoadedModsInfo.getMagazineCargo.getMarkerColor.getMarkerPos.getMarkerSize.getMarkerType.getMass.getMissionConfig.getMissionConfigValue.getMissionDLCs.getMissionLayerEntities.getMissionLayers.getMissionPath.getModelInfo.getMousePosition.getMusicPlayedTime.getNumber.getObjectArgument.getObjectChildren.getObjectDLC.getObjectFOV.getObjectID.getObjectMaterials.getObjectProxy.getObjectScale.getObjectTextures.getObjectType.getObjectViewDistance.getOpticsMode.getOrDefault.getOrDefaultCall.getOxygenRemaining.getPersonUsedDLCs.getPilotCameraDirection.getPilotCameraPosition.getPilotCameraRotation.getPilotCameraTarget.getPiPViewDistance.getPlateNumber.getPlayerChannel.getPlayerID.getPlayerScores.getPlayerUID.getPlayerVoNVolume.getPos.getPosASL.getPosASLVisual.getPosASLW.getPosATL.getPosATLVisual.getPosVisual.getPosWorld.getPosWorldVisual.getPylonMagazines.getRelDir.getRelPos.getRemoteSensorsDisabled.getRepairCargo.getResolution.getRoadInfo.getRotorBrakeRTD.getSensorTargets.getSensorThreats.getShadowDistance.getShotParents.getSlingLoad.getSoundController.getSoundControllerResult.getSpeed.getStamina.getStatValue.getSteamFriendsServers.getSubtitleOptions.getSuppression.getTerrainGrid.getTerrainHeight.getTerrainHeightASL.getTerrainInfo.getText.getTextRaw.getTextureInfo.getTextWidth.getTiParameters.getTotalDLCUsageTime.getTrimOffsetRTD.getTurretLimits.getTurretOpticsMode.getUnitFreefallInfo.getUnitLoadout.getUnitTrait.getUnloadInCombat.getUserInfo.getUserMFDText.getUserMFDValue.getVariable.getVehicleCargo.getVehicleTiPars.getWeaponCargo.getWeaponSway.getWingsOrientationRTD.getWingsPositionRTD.getWPPos.glanceAt.globalChat.globalRadio.goggles.goto.group.groupChat.groupFromNetId.groupIconSelectable.groupIconsVisible.groupID.groupOwner.groupRadio.groups.groupSelectedUnits.groupSelectUnit.gunner.gusts.halt.handgunItems.handgunMagazine.handgunWeapon.handsHit.hashValue.hasInterface.hasPilotCamera.hasWeapon.hcAllGroups.hcGroupParams.hcLeader.hcRemoveAllGroups.hcRemoveGroup.hcSelected.hcSelectGroup.hcSetGroup.hcShowBar.hcShownBar.headgear.hideBody.hideObject.hideObjectGlobal.hideSelection.hint.hintC.hintCadet.hintSilent.hmd.hostMission.htmlLoad.HUDMovementLevels.humidity.image.importAllGroups.importance.in.inArea.inAreaArray.incapacitatedState.inflame.inflamed.infoPanel.infoPanelComponentEnabled.infoPanelComponents.infoPanels.inGameUISetEventHandler.inheritsFrom.initAmbientLife.inPolygon.inputAction.inputController.inputMouse.inRangeOfArtillery.insert.insertEditorObject.intersect.is3DEN.is3DENMultiplayer.is3DENPreview.isAbleToBreathe.isActionMenuVisible.isAgent.isAimPrecisionEnabled.isAllowedCrewInImmobile.isArray.isAutoHoverOn.isAutonomous.isAutoStartUpEnabledRTD.isAutotest.isAutoTrimOnRTD.isAwake.isBleeding.isBurning.isClass.isCollisionLightOn.isCopilotEnabled.isDamageAllowed.isDedicated.isDLCAvailable.isEngineOn.isEqualRef.isEqualTo.isEqualType.isEqualTypeAll.isEqualTypeAny.isEqualTypeArray.isEqualTypeParams.isFilePatchingEnabled.isFinal.isFlashlightOn.isFlatEmpty.isForcedWalk.isFormationLeader.isGameFocused.isGamePaused.isGroupDeletedWhenEmpty.isHidden.isInRemainsCollector.isInstructorFigureEnabled.isIRLaserOn.isKeyActive.isKindOf.isLaserOn.isLightOn.isLocalized.isManualFire.isMarkedForCollection.isMissionProfileNamespaceLoaded.isMultiplayer.isMultiplayerSolo.isNil.isNotEqualRef.isNotEqualTo.isNull.isNumber.isObjectHidden.isObjectRTD.isOnRoad.isPiPEnabled.isPlayer.isRealTime.isRemoteExecuted.isRemoteExecutedJIP.isSaving.isSensorTargetConfirmed.isServer.isShowing3DIcons.isSimpleObject.isSprintAllowed.isStaminaEnabled.isSteamMission.isSteamOverlayEnabled.isStreamFriendlyUIEnabled.isStressDamageEnabled.isText.isTouchingGround.isTurnedOut.isTutHintsEnabled.isUAVConnectable.isUAVConnected.isUIContext.isUniformAllowed.isVehicleCargo.isVehicleRadarOn.isVehicleSensorEnabled.isWalking.isWeaponDeployed.isWeaponRested.itemCargo.items.itemsWithMagazines.join.joinAs.joinAsSilent.joinSilent.joinString.kbAddDatabase.kbAddDatabaseTargets.kbAddTopic.kbHasTopic.kbReact.kbRemoveTopic.kbTell.kbWasSaid.keyImage.keyName.keys.knowsAbout.land.landAt.landResult.language.laserTarget.lbAdd.lbClear.lbColor.lbColorRight.lbCurSel.lbData.lbDelete.lbIsSelected.lbPicture.lbPictureRight.lbSelection.lbSetColor.lbSetColorRight.lbSetCurSel.lbSetData.lbSetPicture.lbSetPictureColor.lbSetPictureColorDisabled.lbSetPictureColorSelected.lbSetPictureRight.lbSetPictureRightColor.lbSetPictureRightColorDisabled.lbSetPictureRightColorSelected.lbSetSelectColor.lbSetSelectColorRight.lbSetSelected.lbSetText.lbSetTextRight.lbSetTooltip.lbSetValue.lbSize.lbSort.lbSortBy.lbSortByValue.lbText.lbTextRight.lbTooltip.lbValue.leader.leaderboardDeInit.leaderboardGetRows.leaderboardInit.leaderboardRequestRowsFriends.leaderboardRequestRowsGlobal.leaderboardRequestRowsGlobalAroundUser.leaderboardsRequestUploadScore.leaderboardsRequestUploadScoreKeepBest.leaderboardState.leaveVehicle.libraryCredits.libraryDisclaimers.lifeState.lightAttachObject.lightDetachObject.lightIsOn.lightnings.limitSpeed.linearConversion.lineIntersects.lineIntersectsObjs.lineIntersectsSurfaces.lineIntersectsWith.linkItem.list.listObjects.listRemoteTargets.listVehicleSensors.ln.lnbAddArray.lnbAddColumn.lnbAddRow.lnbClear.lnbColor.lnbColorRight.lnbCurSelRow.lnbData.lnbDeleteColumn.lnbDeleteRow.lnbGetColumnsPosition.lnbPicture.lnbPictureRight.lnbSetColor.lnbSetColorRight.lnbSetColumnsPos.lnbSetCurSelRow.lnbSetData.lnbSetPicture.lnbSetPictureColor.lnbSetPictureColorRight.lnbSetPictureColorSelected.lnbSetPictureColorSelectedRight.lnbSetPictureRight.lnbSetText.lnbSetTextRight.lnbSetTooltip.lnbSetValue.lnbSize.lnbSort.lnbSortBy.lnbSortByValue.lnbText.lnbTextRight.lnbValue.load.loadAbs.loadBackpack.loadConfig.loadFile.loadGame.loadIdentity.loadMagazine.loadOverlay.loadStatus.loadUniform.loadVest.localize.localNamespace.locationPosition.lock.lockCameraTo.lockCargo.lockDriver.locked.lockedCameraTo.lockedCargo.lockedDriver.lockedInventory.lockedTurret.lockIdentity.lockInventory.lockTurret.lockWp.log.logEntities.logNetwork.logNetworkTerminate.lookAt.lookAtPos.magazineCargo.magazines.magazinesAllTurrets.magazinesAmmo.magazinesAmmoCargo.magazinesAmmoFull.magazinesDetail.magazinesDetailBackpack.magazinesDetailUniform.magazinesDetailVest.magazinesTurret.magazineTurretAmmo.mapAnimAdd.mapAnimClear.mapAnimCommit.mapAnimDone.mapCenterOnCamera.mapGridPosition.markAsFinishedOnSteam.markerAlpha.markerBrush.markerChannel.markerColor.markerDir.markerPolyline.markerPos.markerShadow.markerShape.markerSize.markerText.markerType.matrixMultiply.matrixTranspose.max.maxLoad.members.menuAction.menuAdd.menuChecked.menuClear.menuCollapse.menuData.menuDelete.menuEnable.menuEnabled.menuExpand.menuHover.menuPicture.menuSetAction.menuSetCheck.menuSetData.menuSetPicture.menuSetShortcut.menuSetText.menuSetURL.menuSetValue.menuShortcut.menuShortcutText.menuSize.menuSort.menuText.menuURL.menuValue.merge.min.mineActive.mineDetectedBy.missileTarget.missileTargetPos.missionConfigFile.missionDifficulty.missionEnd.missionName.missionNameSource.missionNamespace.missionProfileNamespace.missionStart.missionVersion.mod.modelToWorld.modelToWorldVisual.modelToWorldVisualWorld.modelToWorldWorld.modParams.moonIntensity.moonPhase.morale.move.move3DENCamera.moveInAny.moveInCargo.moveInCommander.moveInDriver.moveInGunner.moveInTurret.moveObjectToEnd.moveOut.moveTime.moveTo.moveToCompleted.moveToFailed.musicVolume.name.namedProperties.nameSound.nearEntities.nearestBuilding.nearestLocation.nearestLocations.nearestLocationWithDubbing.nearestMines.nearestObject.nearestObjects.nearestTerrainObjects.nearObjects.nearObjectsReady.nearRoads.nearSupplies.nearTargets.needReload.needService.netId.netObjNull.newOverlay.nextMenuItemIndex.nextWeatherChange.nMenuItems.not.numberOfEnginesRTD.numberToDate.objectCurators.objectFromNetId.objectParent.objStatus.onBriefingGroup.onBriefingNotes.onBriefingPlan.onBriefingTeamSwitch.onCommandModeChanged.onDoubleClick.onEachFrame.onGroupIconClick.onGroupIconOverEnter.onGroupIconOverLeave.onHCGroupSelectionChanged.onMapSingleClick.onPlayerConnected.onPlayerDisconnected.onPreloadFinished.onPreloadStarted.onShowNewObject.onTeamSwitch.openCuratorInterface.openDLCPage.openGPS.openMap.openSteamApp.openYoutubeVideo.or.orderGetIn.overcast.overcastForecast.owner.param.params.parseNumber.parseSimpleArray.parseText.parsingNamespace.particlesQuality.periscopeElevation.pickWeaponPool.pitch.pixelGrid.pixelGridBase.pixelGridNoUIScale.pixelH.pixelW.playableSlotsNumber.playableUnits.playAction.playActionNow.player.playerRespawnTime.playerSide.playersNumber.playGesture.playMission.playMove.playMoveNow.playMusic.playScriptedMission.playSound.playSound3D.playSoundUI.pose.position.positionCameraToWorld.posScreenToWorld.posWorldToScreen.ppEffectAdjust.ppEffectCommit.ppEffectCommitted.ppEffectCreate.ppEffectDestroy.ppEffectEnable.ppEffectEnabled.ppEffectForceInNVG.precision.preloadCamera.preloadObject.preloadSound.preloadTitleObj.preloadTitleRsc.preprocessFile.preprocessFileLineNumbers.primaryWeapon.primaryWeaponItems.primaryWeaponMagazine.priority.processDiaryLink.productVersion.profileName.profileNamespace.profileNameSteam.progressLoadingScreen.progressPosition.progressSetPosition.publicVariable.publicVariableClient.publicVariableServer.pushBack.pushBackUnique.putWeaponPool.queryItemsPool.queryMagazinePool.queryWeaponPool.rad.radioChannelAdd.radioChannelCreate.radioChannelInfo.radioChannelRemove.radioChannelSetCallSign.radioChannelSetLabel.radioEnabled.radioVolume.rain.rainbow.rainParams.random.rank.rankId.rating.rectangular.regexFind.regexMatch.regexReplace.registeredTasks.registerTask.reload.reloadEnabled.remoteControl.remoteExec.remoteExecCall.remoteExecutedOwner.remove3DENConnection.remove3DENEventHandler.remove3DENLayer.removeAction.removeAll3DENEventHandlers.removeAllActions.removeAllAssignedItems.removeAllBinocularItems.removeAllContainers.removeAllCuratorAddons.removeAllCuratorCameraAreas.removeAllCuratorEditingAreas.removeAllEventHandlers.removeAllHandgunItems.removeAllItems.removeAllItemsWithMagazines.removeAllMissionEventHandlers.removeAllMPEventHandlers.removeAllMusicEventHandlers.removeAllOwnedMines.removeAllPrimaryWeaponItems.removeAllSecondaryWeaponItems.removeAllUserActionEventHandlers.removeAllWeapons.removeBackpack.removeBackpackGlobal.removeBinocularItem.removeCuratorAddons.removeCuratorCameraArea.removeCuratorEditableObjects.removeCuratorEditingArea.removeDiaryRecord.removeDiarySubject.removeDrawIcon.removeDrawLinks.removeEventHandler.removeFromRemainsCollector.removeGoggles.removeGroupIcon.removeHandgunItem.removeHeadgear.removeItem.removeItemFromBackpack.removeItemFromUniform.removeItemFromVest.removeItems.removeMagazine.removeMagazineGlobal.removeMagazines.removeMagazinesTurret.removeMagazineTurret.removeMenuItem.removeMissionEventHandler.removeMPEventHandler.removeMusicEventHandler.removeOwnedMine.removePrimaryWeaponItem.removeSecondaryWeaponItem.removeSimpleTask.removeSwitchableUnit.removeTeamMember.removeUniform.removeUserActionEventHandler.removeVest.removeWeapon.removeWeaponAttachmentCargo.removeWeaponCargo.removeWeaponGlobal.removeWeaponTurret.reportRemoteTarget.requiredVersion.resetCamShake.resetSubgroupDirection.resize.resources.respawnVehicle.restartEditorCamera.reveal.revealMine.reverse.reversedMouseY.roadAt.roadsConnectedTo.roleDescription.ropeAttachedObjects.ropeAttachedTo.ropeAttachEnabled.ropeAttachTo.ropeCreate.ropeCut.ropeDestroy.ropeDetach.ropeEndPosition.ropeLength.ropes.ropesAttachedTo.ropeSegments.ropeUnwind.ropeUnwound.rotorsForcesRTD.rotorsRpmRTD.round.runInitScript.safeZoneH.safeZoneW.safeZoneWAbs.safeZoneX.safeZoneXAbs.safeZoneY.save3DENInventory.saveGame.saveIdentity.saveJoysticks.saveMissionProfileNamespace.saveOverlay.saveProfileNamespace.saveStatus.saveVar.savingEnabled.say.say2D.say3D.scopeName.score.scoreSide.screenshot.screenToWorld.scriptDone.scriptName.scudState.secondaryWeapon.secondaryWeaponItems.secondaryWeaponMagazine.select.selectBestPlaces.selectDiarySubject.selectedEditorObjects.selectEditorObject.selectionNames.selectionPosition.selectionVectorDirAndUp.selectLeader.selectMax.selectMin.selectNoPlayer.selectPlayer.selectRandom.selectRandomWeighted.selectWeapon.selectWeaponTurret.sendAUMessage.sendSimpleCommand.sendTask.sendTaskResult.sendUDPMessage.sentencesEnabled.serverCommand.serverCommandAvailable.serverCommandExecutable.serverName.serverNamespace.serverTime.set.set3DENAttribute.set3DENAttributes.set3DENGrid.set3DENIconsVisible.set3DENLayer.set3DENLinesVisible.set3DENLogicType.set3DENMissionAttribute.set3DENMissionAttributes.set3DENModelsVisible.set3DENObjectType.set3DENSelected.setAccTime.setActualCollectiveRTD.setAirplaneThrottle.setAirportSide.setAmmo.setAmmoCargo.setAmmoOnPylon.setAnimSpeedCoef.setAperture.setApertureNew.setArmoryPoints.setAttributes.setAutonomous.setBehaviour.setBehaviourStrong.setBleedingRemaining.setBrakesRTD.setCameraInterest.setCamShakeDefParams.setCamShakeParams.setCamUseTi.setCaptive.setCenterOfMass.setCollisionLight.setCombatBehaviour.setCombatMode.setCompassOscillation.setConvoySeparation.setCruiseControl.setCuratorCameraAreaCeiling.setCuratorCoef.setCuratorEditingAreaType.setCuratorWaypointCost.setCurrentChannel.setCurrentTask.setCurrentWaypoint.setCustomAimCoef.SetCustomMissionData.setCustomSoundController.setCustomWeightRTD.setDamage.setDammage.setDate.setDebriefingText.setDefaultCamera.setDestination.setDetailMapBlendPars.setDiaryRecordText.setDiarySubjectPicture.setDir.setDirection.setDrawIcon.setDriveOnPath.setDropInterval.setDynamicSimulationDistance.setDynamicSimulationDistanceCoef.setEditorMode.setEditorObjectScope.setEffectCondition.setEffectiveCommander.setEngineRpmRTD.setFace.setFaceanimation.setFatigue.setFeatureType.setFlagAnimationPhase.setFlagOwner.setFlagSide.setFlagTexture.setFog.setForceGeneratorRTD.setFormation.setFormationTask.setFormDir.setFriend.setFromEditor.setFSMVariable.setFuel.setFuelCargo.setGroupIcon.setGroupIconParams.setGroupIconsSelectable.setGroupIconsVisible.setGroupid.setGroupIdGlobal.setGroupOwner.setGusts.setHideBehind.setHit.setHitIndex.setHitPointDamage.setHorizonParallaxCoef.setHUDMovementLevels.setHumidity.setIdentity.setImportance.setInfoPanel.setLeader.setLightAmbient.setLightAttenuation.setLightBrightness.setLightColor.setLightConePars.setLightDayLight.setLightFlareMaxDistance.setLightFlareSize.setLightIntensity.setLightIR.setLightnings.setLightUseFlare.setLightVolumeShape.setLocalWindParams.setMagazineTurretAmmo.setMarkerAlpha.setMarkerAlphaLocal.setMarkerBrush.setMarkerBrushLocal.setMarkerColor.setMarkerColorLocal.setMarkerDir.setMarkerDirLocal.setMarkerPolyline.setMarkerPolylineLocal.setMarkerPos.setMarkerPosLocal.setMarkerShadow.setMarkerShadowLocal.setMarkerShape.setMarkerShapeLocal.setMarkerSize.setMarkerSizeLocal.setMarkerText.setMarkerTextLocal.setMarkerType.setMarkerTypeLocal.setMass.setMaxLoad.setMimic.setMissileTarget.setMissileTargetPos.setMousePosition.setMusicEffect.setMusicEventHandler.setName.setNameSound.setObjectArguments.setObjectMaterial.setObjectMaterialGlobal.setObjectProxy.setObjectScale.setObjectTexture.setObjectTextureGlobal.setObjectViewDistance.setOpticsMode.setOvercast.setOwner.setOxygenRemaining.setParticleCircle.setParticleClass.setParticleFire.setParticleParams.setParticleRandom.setPilotCameraDirection.setPilotCameraRotation.setPilotCameraTarget.setPilotLight.setPiPEffect.setPiPViewDistance.setPitch.setPlateNumber.setPlayable.setPlayerRespawnTime.setPlayerVoNVolume.setPos.setPosASL.setPosASL2.setPosASLW.setPosATL.setPosition.setPosWorld.setPylonLoadout.setPylonsPriority.setRadioMsg.setRain.setRainbow.setRandomLip.setRank.setRectangular.setRepairCargo.setRotorBrakeRTD.setShadowDistance.setShotParents.setSide.setSimpleTaskAlwaysVisible.setSimpleTaskCustomData.setSimpleTaskDescription.setSimpleTaskDestination.setSimpleTaskTarget.setSimpleTaskType.setSimulWeatherLayers.setSize.setSkill.setSlingLoad.setSoundEffect.setSpeaker.setSpeech.setSpeedMode.setStamina.setStaminaScheme.setStatValue.setSuppression.setSystemOfUnits.setTargetAge.setTaskMarkerOffset.setTaskResult.setTaskState.setTerrainGrid.setTerrainHeight.setText.setTimeMultiplier.setTiParameter.setTitleEffect.setTowParent.setTrafficDensity.setTrafficDistance.setTrafficGap.setTrafficSpeed.setTriggerActivation.setTriggerArea.setTriggerInterval.setTriggerStatements.setTriggerText.setTriggerTimeout.setTriggerType.setTurretLimits.setTurretOpticsMode.setType.setUnconscious.setUnitAbility.setUnitCombatMode.setUnitFreefallHeight.setUnitLoadout.setUnitPos.setUnitPosWeak.setUnitRank.setUnitRecoilCoefficient.setUnitTrait.setUnloadInCombat.setUserActionText.setUserMFDText.setUserMFDValue.setVariable.setVectorDir.setVectorDirAndUp.setVectorUp.setVehicleAmmo.setVehicleAmmoDef.setVehicleArmor.setVehicleCargo.setVehicleId.setVehicleLock.setVehiclePosition.setVehicleRadar.setVehicleReceiveRemoteTargets.setVehicleReportOwnPosition.setVehicleReportRemoteTargets.setVehicleTiPars.setVehicleVarName.setVelocity.setVelocityModelSpace.setVelocityTransformation.setViewDistance.setVisibleIfTreeCollapsed.setWantedRPMRTD.setWaves.setWaypointBehaviour.setWaypointCombatMode.setWaypointCompletionRadius.setWaypointDescription.setWaypointForceBehaviour.setWaypointFormation.setWaypointHousePosition.setWaypointLoiterAltitude.setWaypointLoiterRadius.setWaypointLoiterType.setWaypointName.setWaypointPosition.setWaypointScript.setWaypointSpeed.setWaypointStatements.setWaypointTimeout.setWaypointType.setWaypointVisible.setWeaponReloadingTime.setWeaponZeroing.setWind.setWindDir.setWindForce.setWindStr.setWingForceScaleRTD.setWPPos.show3DIcons.showChat.showCinemaBorder.showCommandingMenu.showCompass.showCuratorCompass.showGps.showHUD.showLegend.showMap.shownArtilleryComputer.shownChat.shownCompass.shownCuratorCompass.showNewEditorObject.shownGps.shownHUD.shownMap.shownPad.shownRadio.shownScoretable.shownSubtitles.shownUAVFeed.shownWarrant.shownWatch.showPad.showRadio.showScoretable.showSubtitles.showUAVFeed.showWarrant.showWatch.showWaypoint.showWaypoints.side.sideChat.sideRadio.simpleTasks.simulationEnabled.simulCloudDensity.simulCloudOcclusion.simulInClouds.simulWeatherSync.sin.size.sizeOf.skill.skillFinal.skipTime.sleep.sliderPosition.sliderRange.sliderSetPosition.sliderSetRange.sliderSetSpeed.sliderSpeed.slingLoadAssistantShown.soldierMagazines.someAmmo.sort.soundVolume.spawn.speaker.speechVolume.speed.speedMode.splitString.sqrt.squadParams.stance.startLoadingScreen.stop.stopEngineRTD.stopped.str.sunOrMoon.supportInfo.suppressFor.surfaceIsWater.surfaceNormal.surfaceTexture.surfaceType.swimInDepth.switchableUnits.switchAction.switchCamera.switchGesture.switchLight.switchMove.synchronizedObjects.synchronizedTriggers.synchronizedWaypoints.synchronizeObjectsAdd.synchronizeObjectsRemove.synchronizeTrigger.synchronizeWaypoint.systemChat.systemOfUnits.systemTime.systemTimeUTC.tan.targetKnowledge.targets.targetsAggregate.targetsQuery.taskAlwaysVisible.taskChildren.taskCompleted.taskCustomData.taskDescription.taskDestination.taskHint.taskMarkerOffset.taskName.taskParent.taskResult.taskState.taskType.teamMember.teamName.teams.teamSwitch.teamSwitchEnabled.teamType.terminate.terrainIntersect.terrainIntersectASL.terrainIntersectAtASL.text.textLog.textLogFormat.tg.time.timeMultiplier.titleCut.titleFadeOut.titleObj.titleRsc.titleText.toArray.toFixed.toLower.toLowerANSI.toString.toUpper.toUpperANSI.triggerActivated.triggerActivation.triggerAmmo.triggerArea.triggerAttachedVehicle.triggerAttachObject.triggerAttachVehicle.triggerDynamicSimulation.triggerInterval.triggerStatements.triggerText.triggerTimeout.triggerTimeoutCurrent.triggerType.trim.turretLocal.turretOwner.turretUnit.tvAdd.tvClear.tvCollapse.tvCollapseAll.tvCount.tvCurSel.tvData.tvDelete.tvExpand.tvExpandAll.tvIsSelected.tvPicture.tvPictureRight.tvSelection.tvSetColor.tvSetCurSel.tvSetData.tvSetPicture.tvSetPictureColor.tvSetPictureColorDisabled.tvSetPictureColorSelected.tvSetPictureRight.tvSetPictureRightColor.tvSetPictureRightColorDisabled.tvSetPictureRightColorSelected.tvSetSelectColor.tvSetSelected.tvSetText.tvSetTooltip.tvSetValue.tvSort.tvSortAll.tvSortByValue.tvSortByValueAll.tvText.tvTooltip.tvValue.type.typeName.typeOf.UAVControl.uiNamespace.uiSleep.unassignCurator.unassignItem.unassignTeam.unassignVehicle.underwater.uniform.uniformContainer.uniformItems.uniformMagazines.uniqueUnitItems.unitAddons.unitAimPosition.unitAimPositionVisual.unitBackpack.unitCombatMode.unitIsUAV.unitPos.unitReady.unitRecoilCoefficient.units.unitsBelowHeight.unitTurret.unlinkItem.unlockAchievement.unregisterTask.updateDrawIcon.updateMenuItem.updateObjectTree.useAIOperMapObstructionTest.useAISteeringComponent.useAudioTimeForMoves.userInputDisabled.values.vectorAdd.vectorCos.vectorCrossProduct.vectorDiff.vectorDir.vectorDirVisual.vectorDistance.vectorDistanceSqr.vectorDotProduct.vectorFromTo.vectorLinearConversion.vectorMagnitude.vectorMagnitudeSqr.vectorModelToWorld.vectorModelToWorldVisual.vectorMultiply.vectorNormalized.vectorUp.vectorUpVisual.vectorWorldToModel.vectorWorldToModelVisual.vehicle.vehicleCargoEnabled.vehicleChat.vehicleMoveInfo.vehicleRadio.vehicleReceiveRemoteTargets.vehicleReportOwnPosition.vehicleReportRemoteTargets.vehicles.vehicleVarName.velocity.velocityModelSpace.verifySignature.vest.vestContainer.vestItems.vestMagazines.viewDistance.visibleCompass.visibleGps.visibleMap.visiblePosition.visiblePositionASL.visibleScoretable.visibleWatch.waves.waypointAttachedObject.waypointAttachedVehicle.waypointAttachObject.waypointAttachVehicle.waypointBehaviour.waypointCombatMode.waypointCompletionRadius.waypointDescription.waypointForceBehaviour.waypointFormation.waypointHousePosition.waypointLoiterAltitude.waypointLoiterRadius.waypointLoiterType.waypointName.waypointPosition.waypoints.waypointScript.waypointsEnabledUAV.waypointShow.waypointSpeed.waypointStatements.waypointTimeout.waypointTimeoutCurrent.waypointType.waypointVisible.weaponAccessories.weaponAccessoriesCargo.weaponCargo.weaponDirection.weaponInertia.weaponLowered.weaponReloadingTime.weapons.weaponsInfo.weaponsItems.weaponsItemsCargo.weaponState.weaponsTurret.weightRTD.WFSideText.wind.windDir.windRTD.windStr.wingsForcesRTD.worldName.worldSize.worldToModel.worldToModelVisual.worldToScreen".split("."), s = {
+		}, i = /* @__PURE__ */ "break.breakOut.breakTo.breakWith.case.catch.continue.continueWith.default.do.else.exit.exitWith.for.forEach.forEachMember.forEachMemberAgent.forEachMemberTeam.forEachReversed.from.if.private.privateAll.step.switch.then.throw.to.try.waitUntil.while.with".split("."), a = /* @__PURE__ */ "blufor.civilian.configNull.controlNull.diaryRecordNull.displayNull.east.endl.false.grpNull.independent.lineBreak.locationNull.netObjNull.nil.objNull.opfor.pi.resistance.scriptNull.sideAmbientLife.sideEmpty.sideEnemy.sideFriendly.sideLogic.sideUnknown.taskNull.teamMemberNull.true.west".split("."), o = /* @__PURE__ */ "abs.accTime.acos.action.actionIDs.actionKeys.actionKeysEx.actionKeysImages.actionKeysNames.actionKeysNamesArray.actionName.actionNow.actionParams.activateAddons.activatedAddons.activateKey.activeTitleEffectParams.add3DENConnection.add3DENEventHandler.add3DENLayer.addAction.addBackpack.addBackpackCargo.addBackpackCargoGlobal.addBackpackGlobal.addBinocularItem.addCamShake.addCuratorAddons.addCuratorCameraArea.addCuratorEditableObjects.addCuratorEditingArea.addCuratorPoints.addCuratorSelected.addEditorObject.addEventHandler.addForce.addForceGeneratorRTD.addGoggles.addGroupIcon.addHandgunItem.addHeadgear.addItem.addItemCargo.addItemCargoGlobal.addItemPool.addItemToBackpack.addItemToUniform.addItemToVest.addLiveStats.addMagazine.addMagazineAmmoCargo.addMagazineCargo.addMagazineCargoGlobal.addMagazineGlobal.addMagazinePool.addMagazines.addMagazinesTurret.addMagazineTurret.addMenu.addMenuItem.addMissionEventHandler.addMPEventHandler.addMusicEventHandler.addonFiles.addOwnedMine.addPlayerScores.addPrimaryWeaponItem.addPublicVariableEventHandler.addRating.addResources.addScore.addScoreSide.addSecondaryWeaponItem.addSwitchableUnit.addTeamMember.addToRemainsCollector.addTorque.addUniform.addUserActionEventHandler.addVehicle.addVest.addWaypoint.addWeapon.addWeaponCargo.addWeaponCargoGlobal.addWeaponGlobal.addWeaponItem.addWeaponPool.addWeaponTurret.addWeaponWithAttachmentsCargo.addWeaponWithAttachmentsCargoGlobal.admin.agent.agents.AGLToASL.aimedAtTarget.aimPos.airDensityCurveRTD.airDensityRTD.airplaneThrottle.airportSide.AISFinishHeal.alive.all3DENEntities.allActiveTitleEffects.allAddonsInfo.allAirports.allCameras.allControls.allCurators.allCutLayers.allDead.allDeadMen.allDiaryRecords.allDiarySubjects.allDisplays.allEnv3DSoundSources.allExtensions.allGroups.allLODs.allMapMarkers.allMines.allMissionObjects.allObjects.allow3DMode.allowCrewInImmobile.allowCuratorLogicIgnoreAreas.allowDamage.allowDammage.allowedService.allowFileOperations.allowFleeing.allowGetIn.allowService.allowSprint.allPlayers.allSimpleObjects.allSites.allTurrets.allUnits.allUnitsUAV.allUsers.allVariables.ambientTemperature.ammo.ammoOnPylon.and.angularVelocity.angularVelocityModelSpace.animate.animateBay.animateDoor.animatePylon.animateSource.animationNames.animationPhase.animationSourcePhase.animationState.apertureParams.append.apply.armoryPoints.arrayIntersect.asin.ASLToAGL.ASLToATL.assert.assignAsCargo.assignAsCargoIndex.assignAsCommander.assignAsDriver.assignAsGunner.assignAsTurret.assignCurator.assignedCargo.assignedCommander.assignedDriver.assignedGroup.assignedGunner.assignedItems.assignedTarget.assignedTeam.assignedVehicle.assignedVehicleRole.assignedVehicles.assignItem.assignTeam.assignToAirport.atan.atan2.atg.ATLToASL.attachChild.attachedObject.attachedObjects.attachedTo.attachObject.attachTo.attackEnabled.awake.backpack.backpackCargo.backpackContainer.backpackItems.backpackMagazines.backpacks.backpackSpaceFor.batteryChargeRTD.behaviour.benchmark.bezierInterpolation.binocular.binocularItems.binocularMagazine.boundingBox.boundingBoxReal.boundingCenter.brakesDisabled.briefingName.buildingExit.buildingPos.buldozer_enableRoadDiag.buldozer_isEnabledRoadDiag.buldozer_loadNewRoads.buldozer_reloadOperMap.buttonAction.buttonSetAction.cadetMode.calculatePath.calculatePlayerVisibilityByFriendly.call.callExtension.camCommand.camCommit.camCommitPrepared.camCommitted.camConstuctionSetParams.camCreate.camDestroy.cameraEffect.cameraEffectEnableHUD.cameraInterest.cameraOn.cameraView.campaignConfigFile.camPreload.camPreloaded.camPrepareBank.camPrepareDir.camPrepareDive.camPrepareFocus.camPrepareFov.camPrepareFovRange.camPreparePos.camPrepareRelPos.camPrepareTarget.camSetBank.camSetDir.camSetDive.camSetFocus.camSetFov.camSetFovRange.camSetPos.camSetRelPos.camSetTarget.camTarget.camUseNVG.canAdd.canAddItemToBackpack.canAddItemToUniform.canAddItemToVest.cancelSimpleTaskDestination.canDeployWeapon.canFire.canMove.canSlingLoad.canStand.canSuspend.canTriggerDynamicSimulation.canUnloadInCombat.canVehicleCargo.captive.captiveNum.cbChecked.cbSetChecked.ceil.channelEnabled.cheatsEnabled.checkAIFeature.checkVisibility.childAttached.className.clear3DENAttribute.clear3DENInventory.clearAllItemsFromBackpack.clearBackpackCargo.clearBackpackCargoGlobal.clearForcesRTD.clearGroupIcons.clearItemCargo.clearItemCargoGlobal.clearItemPool.clearKillConfirmations.clearMagazineCargo.clearMagazineCargoGlobal.clearMagazinePool.clearOverlay.clearRadio.clearVehicleInit.clearWeaponCargo.clearWeaponCargoGlobal.clearWeaponPool.clientOwner.closeDialog.closeDisplay.closeOverlay.collapseObjectTree.collect3DENHistory.collectiveRTD.collisionDisabledWith.combatBehaviour.combatMode.combatPace.commandArtilleryFire.commandChat.commander.commandFire.commandFollow.commandFSM.commandGetOut.commandingMenu.commandMove.commandRadio.commandStop.commandSuppressiveFire.commandTarget.commandWatch.comment.commitOverlay.compatibleItems.compatibleMagazines.compatibleWeapons.compile.compileFinal.compileScript.completedFSM.composeText.config_greater_greater_name.configClasses.configFile.configHierarchy.configName.configOf.configProperties.configSourceAddonList.configSourceMod.configSourceModList.confirmSensorTarget.connectTerminalToUAV.connectToServer.controlsGroupCtrl.conversationDisabled.copyFromClipboard.copyToClipboard.copyWaypoints.cos.count.countEnemy.countFriendly.countSide.countType.countUnknown.create3DENComposition.create3DENEntity.createAgent.createCenter.createDialog.createDiaryLink.createDiaryRecord.createDiarySubject.createDisplay.createGearDialog.createGroup.createGuardedPoint.createHashMap.createHashMapFromArray.createHashMapObject.createLocation.createMarker.createMarkerLocal.createMenu.createMine.createMissionDisplay.createMPCampaignDisplay.createSimpleObject.createSimpleTask.createSite.createSoundSource.createSoundSourceLocal.createTarget.createTask.createTeam.createTrigger.createUnit.createVehicle.createVehicleCrew.createVehicleLocal.crew.ctAddHeader.ctAddRow.ctClear.ctCurSel.ctData.ctFindHeaderRows.ctFindRowHeader.ctHeaderControls.ctHeaderCount.ctRemoveHeaders.ctRemoveRows.ctrlActivate.ctrlAddEventHandler.ctrlAngle.ctrlAnimateModel.ctrlAnimationPhaseModel.ctrlAt.ctrlAutoScrollDelay.ctrlAutoScrollRewind.ctrlAutoScrollSpeed.ctrlBackgroundColor.ctrlChecked.ctrlClassName.ctrlCommit.ctrlCommitted.ctrlCreate.ctrlDelete.ctrlEnable.ctrlEnabled.ctrlFade.ctrlFontHeight.ctrlForegroundColor.ctrlHTMLLoaded.ctrlIDC.ctrlIDD.ctrlMapAnimAdd.ctrlMapAnimClear.ctrlMapAnimCommit.ctrlMapAnimDone.ctrlMapCursor.ctrlMapDir.ctrlMapMouseOver.ctrlMapPosition.ctrlMapScale.ctrlMapScreenToWorld.ctrlMapSetPosition.ctrlMapWorldToScreen.ctrlModel.ctrlModelDirAndUp.ctrlModelScale.ctrlModelVectorSide.ctrlMousePosition.ctrlParent.ctrlParentControlsGroup.ctrlPosition.ctrlRemoveAllEventHandlers.ctrlRemoveEventHandler.ctrlScale.ctrlScrollValues.ctrlSetActiveColor.ctrlSetAngle.ctrlSetAutoScrollDelay.ctrlSetAutoScrollRewind.ctrlSetAutoScrollSpeed.ctrlSetBackgroundColor.ctrlSetChecked.ctrlSetDisabledColor.ctrlSetEventHandler.ctrlSetFade.ctrlSetFocus.ctrlSetFont.ctrlSetFontH1.ctrlSetFontH1B.ctrlSetFontH2.ctrlSetFontH2B.ctrlSetFontH3.ctrlSetFontH3B.ctrlSetFontH4.ctrlSetFontH4B.ctrlSetFontH5.ctrlSetFontH5B.ctrlSetFontH6.ctrlSetFontH6B.ctrlSetFontHeight.ctrlSetFontHeightH1.ctrlSetFontHeightH2.ctrlSetFontHeightH3.ctrlSetFontHeightH4.ctrlSetFontHeightH5.ctrlSetFontHeightH6.ctrlSetFontHeightSecondary.ctrlSetFontP.ctrlSetFontPB.ctrlSetFontSecondary.ctrlSetForegroundColor.ctrlSetModel.ctrlSetModelDirAndUp.ctrlSetModelScale.ctrlSetMousePosition.ctrlSetPixelPrecision.ctrlSetPosition.ctrlSetPositionH.ctrlSetPositionW.ctrlSetPositionX.ctrlSetPositionY.ctrlSetScale.ctrlSetScrollValues.ctrlSetShadow.ctrlSetStructuredText.ctrlSetText.ctrlSetTextColor.ctrlSetTextColorSecondary.ctrlSetTextSecondary.ctrlSetTextSelection.ctrlSetTooltip.ctrlSetTooltipColorBox.ctrlSetTooltipColorShade.ctrlSetTooltipColorText.ctrlSetTooltipMaxWidth.ctrlSetURL.ctrlSetURLOverlayMode.ctrlShadow.ctrlShow.ctrlShown.ctrlStyle.ctrlText.ctrlTextColor.ctrlTextHeight.ctrlTextSecondary.ctrlTextSelection.ctrlTextWidth.ctrlTooltip.ctrlType.ctrlURL.ctrlURLOverlayMode.ctrlVisible.ctrlWebBrowserAction.ctRowControls.ctRowCount.ctSetCurSel.ctSetData.ctSetHeaderTemplate.ctSetRowTemplate.ctSetValue.ctValue.curatorAddons.curatorCamera.curatorCameraArea.curatorCameraAreaCeiling.curatorCoef.curatorEditableObjects.curatorEditingArea.curatorEditingAreaType.curatorMouseOver.curatorPoints.curatorRegisteredObjects.curatorSelected.curatorSelectionPreset.curatorWaypointCost.current3DENOperation.currentChannel.currentCommand.currentMagazine.currentMagazineDetail.currentMagazineDetailTurret.currentMagazineTurret.currentMuzzle.currentNamespace.currentPilot.currentTask.currentTasks.currentThrowable.currentVisionMode.currentWaypoint.currentWeapon.currentWeaponMode.currentWeaponTurret.currentZeroing.cursorObject.cursorTarget.customChat.customRadio.customWaypointPosition.cutFadeOut.cutObj.cutRsc.cutText.damage.date.dateToNumber.dayTime.deActivateKey.debriefingText.debugFSM.debugLog.decayGraphValues.deg.delete3DENEntities.deleteAt.deleteCenter.deleteCollection.deleteEditorObject.deleteGroup.deleteGroupWhenEmpty.deleteIdentity.deleteLocation.deleteMarker.deleteMarkerLocal.deleteRange.deleteResources.deleteSite.deleteStatus.deleteTarget.deleteTeam.deleteVehicle.deleteVehicleCrew.deleteWaypoint.detach.detachChild.detectedMines.diag_activeMissionFSMs.diag_activeScripts.diag_activeSQFScripts.diag_activeSQSScripts.diag_allMissionEventHandlers.diag_captureFrame.diag_captureFrameToFile.diag_captureSlowFrame.diag_codePerformance.diag_deltaTime.diag_drawMode.diag_dumpCalltraceToLog.diag_dumpScriptAssembly.diag_dumpTerrainSynth.diag_dynamicSimulationEnd.diag_dynamicSimulationStart.diag_enable.diag_enabled.diag_exportConfig.diag_exportTerrainSVG.diag_fps.diag_fpsMin.diag_frameNo.diag_getTerrainGrid.diag_getTerrainHeight.diag_getTerrainSegmentOffset.diag_lightNewLoad.diag_list.diag_localized.diag_log.diag_logSlowFrame.diag_mergeConfigFile.diag_recordTurretLimits.diag_remainsCollector.diag_resetAnims.diag_resetShapes.diag_scope.diag_setLightNew.diag_setTerrainHeight.diag_SQFCDebugDump.diag_stacktrace.diag_testScriptSimpleVM.diag_tickTime.diag_toggle.dialog.diarySubjectExists.didJIP.didJIPOwner.difficulty.difficultyEnabled.difficultyEnabledRTD.difficultyOption.direction.directionStabilizationEnabled.directSay.disableAI.disableBrakes.disableCollisionWith.disableConversation.disableDebriefingStats.disableMapIndicators.disableNVGEquipment.disableRemoteSensors.disableSerialization.disableTIEquipment.disableUAVConnectability.disableUserInput.displayAddEventHandler.displayChild.displayCtrl.displayParent.displayRemoveAllEventHandlers.displayRemoveEventHandler.displaySetEventHandler.displayUniqueName.displayUpdate.dissolveTeam.distance.distance2D.distanceSqr.distributionRegion.do3DENAction.doArtilleryFire.doFire.doFollow.doFSM.doGetOut.doMove.doorPhase.doStop.doSuppressiveFire.doTarget.doWatch.drawArrow.drawEllipse.drawIcon.drawIcon3D.drawLaser.drawLine.drawLine3D.drawLink.drawLocation.drawPolygon.drawRectangle.drawTriangle.drawXPolygon.driver.drop.dynamicSimulationDistance.dynamicSimulationDistanceCoef.dynamicSimulationEnabled.dynamicSimulationSystemEnabled.echo.edit3DENMissionAttributes.editObject.editorSetEventHandler.effectiveCommander.elevatePeriscope.emptyPositions.enableAI.enableAIFeature.enableAimPrecision.enableAttack.enableAudioFeature.enableAutoStartUpRTD.enableAutoTrimRTD.enableCamShake.enableCaustics.enableChannel.enableCollisionWith.enableCopilot.enableDebriefingStats.enableDiagLegend.enableDirectionStabilization.enableDynamicSimulation.enableDynamicSimulationSystem.enableEndDialog.enableEngineArtillery.enableEnvironment.enableFatigue.enableFreeLook.enableGunLights.enableGunStabilization.enableInfoPanelComponent.enableIRLasers.enableMimics.enablePersonTurret.enableRadio.enableReload.enableRopeAttach.enableSatNormalOnDetail.enableSaving.enableSentences.enableSimulation.enableSimulationGlobal.enableStamina.enableStressDamage.enableTeamSwitch.enableTraffic.enableUAVConnectability.enableUAVWaypoints.enableVehicleCargo.enableVehicleSensor.enableWeaponDisassembly.endLoadingScreen.endMission.enemy.engineOn.enginesIsOnRTD.enginesPowerRTD.enginesRpmRTD.enginesTorqueRTD.entities.environmentEnabled.environmentVolume.equipmentDisabled.estimatedEndServerTime.estimatedTimeLeft.evalObjectArgument.everyBackpack.everyContainer.exec.execEditorScript.execFSM.execVM.exp.expectedDestination.exportJIPMessages.exportLandscapeXYZ.eyeDirection.eyePos.face.faction.fadeEnvironment.fadeMusic.fadeRadio.fadeSound.fadeSpeech.failMission.fileExists.fillWeaponsFromPool.find.findAny.findCover.findDisplay.findEditorObject.findEmptyPosition.findEmptyPositionReady.findIf.findNearestEnemy.finishMissionInit.finite.fire.fireAtTarget.firstBackpack.flag.flagAnimationPhase.flagOwner.flagSide.flagTexture.flatten.fleeing.floor.flyInHeight.flyInHeightASL.focusedCtrl.focusOn.fog.fogForecast.fogParams.forceAddUniform.forceAtPositionRTD.forceCadetDifficulty.forcedMap.forceEnd.forceFlagTexture.forceFollowRoad.forceGeneratorRTD.forceHitPointsDamageSync.forceMap.forceRespawn.forceSpeed.forceUnicode.forceWalk.forceWeaponFire.forceWeatherChange.forgetTarget.format.formation.formationDirection.formationLeader.formationMembers.formationPosition.formationTask.formatText.formLeader.freeExtension.freeLook.friendly.fromEditor.fromJSON.fuel.fullCrew.gameValueToJson.gearIDCAmmoCount.gearSlotAmmoCount.gearSlotData.gestureState.get.get3DENActionState.get3DENAttribute.get3DENAttributes.get3DENCamera.get3DENConnections.get3DENEntity.get3DENEntityID.get3DENGrid.get3DENIconsVisible.get3DENLayer.get3DENLayerEntities.get3DENLinesVisible.get3DENMissionAttribute.get3DENMissionAttributes.get3DENMouseOver.get3DENParent.get3DENSelected.getAimDirectionAndUp.getAimingCoef.getAllEnv3DSoundControllers.getAllEnvSoundControllers.getAllHitPointsDamage.getAllOwnedMines.getAllPylonsInfo.getAllSoundControllers.getAllUnitTraits.getAmmoCargo.getAnimAimPrecision.getAnimationsQueue.getAnimSpeedCoef.getArray.getArtilleryAmmo.getArtilleryComputerSettings.getArtilleryETA.getAssetDLCInfo.getAssignedCuratorLogic.getAssignedCuratorUnit.getAttackTarget.getAudioOptionVolumes.getBackpackCargo.getBleedingRemaining.getBoneNames.getBurningValue.getCalculatePlayerVisibilityByFriendly.getCameraViewDirection.getCargoIndex.getCenterOfMass.getClientState.getClientStateNumber.getCompatiblePylonMagazines.getConnectedUAV.getConnectedUAVUnit.getContainerMaxLoad.getCorpse.getCorpseWeaponholders.getCruiseControl.getCurrentPlayerLevel.getCursorObjectParams.getCustomAimCoef.getCustomSoundController.getCustomSoundControllerCount.getDammage.getDebriefingText.getDescription.getDir.getDirVisual.getDiverState.getDLCAssetsUsage.getDLCAssetsUsageByName.getDLCs.getDLCUsageTime.getEditorCamera.getEditorMode.getEditorObjectScope.getElevationOffset.getEngineTargetRPMRTD.getEntityInfo.getEnv3DSoundController.getEnvSoundController.getEventHandlerInfo.getFatigue.getFieldManualStartPage.getForcedFlagTexture.getForcedSpeed.getFriend.getFSMVariable.getFuelCargo.getFuelConsumptionCoef.getGraphValues.getGroupIcon.getGroupIconParams.getGroupIcons.getHideFrom.getHit.getHitIndex.getHitPointDamage.getItemCargo.getLeaning.getLightInfo.getLighting.getLightingAt.getLoadedModsInfo.getLoginStatus.getMagazineCargo.getMarkerColor.getMarkerPos.getMarkerSize.getMarkerType.getMass.getMissionConfig.getMissionConfigValue.getMissionDLCs.getMissionLayerEntities.getMissionLayers.getMissionOptions.getMissionPath.getModelInfo.getMousePosition.getMusicPlayedTime.getNextId.getNumber.getObjectArgument.getObjectChildren.getObjectDLC.getObjectFOV.getObjectID.getObjectMaterials.getObjectProxy.getObjectScale.getObjectTextures.getObjectType.getObjectViewDistance.getOpticsMode.getOrDefault.getOrDefaultCall.getOxygenRemaining.getPersonUsedDLCs.getPhysicsCollisionFlag.getPilotCameraDirection.getPilotCameraOpticsMode.getPilotCameraPosition.getPilotCameraRotation.getPilotCameraTarget.getPiPViewDistance.getPlateNumber.getPlayerChannel.getPlayerCloudId.getPlayerID.getPlayerLevel.getPlayerScores.getPlayerUID.getPlayerUIDOld.getPlayerVoNVolume.getPos.getPosASL.getPosASLVisual.getPosASLW.getPosATL.getPosATLVisual.getPosVisual.getPosWorld.getPosWorldVisual.getPylonMagazines.getRelDir.getRelPos.getRemoteSensorsDisabled.getRepairCargo.getResolution.getRespawnVehicleInfo.getRoadInfo.getRotorBrakeRTD.getSelectionBones.getSensorTargets.getSensorThreats.getServerInfo.getShadowDistance.getShotInfo.getShotParents.getSlingLoad.getSlotItemName.getSoundController.getSoundControllerResult.getSpeed.getStamina.getStatValue.getSteamFriendsServers.getSubtitleOptions.getSuppression.getTerrainGrid.getTerrainHeight.getTerrainHeightASL.getTerrainInfo.getText.getTextRaw.getTextureInfo.getTextWidth.getTIParameters.getTotalDLCUsageTime.getTowParent.getTrimOffsetRTD.getTurretLimits.getTurretOpticsMode.getUnitFreefallInfo.getUnitLoadout.getUnitMovesInfo.getUnitState.getUnitTrait.getUnloadInCombat.getUserInfo.getUserMFDText.getUserMFDValue.getVariable.getVehicleCargo.getVehicleTIPars.getVideoOptions.getWaterFillPercentage.getWaterLeakiness.getWeaponCargo.getWeaponSway.getWingsOrientationRTD.getWingsPositionRTD.getWorld.getWPPos.glanceAt.globalChat.globalRadio.goggles.goto.group.groupChat.groupFromNetId.groupIconSelectable.groupIconsVisible.groupId.groupOwner.groupRadio.groups.groupSelectedUnits.groupSelectUnit.gunner.gusts.halt.handgunItems.handgunMagazine.handgunWeapon.handsHit.hasCustomFace.hashValue.hasInterface.hasPilotCamera.hasWeapon.hcAllGroups.hcGroupParams.hcLeader.hcRemoveAllGroups.hcRemoveGroup.hcSelected.hcSelectGroup.hcSetGroup.hcShowBar.hcShownBar.headgear.hiddenActions.hideActions.hideBehindScripted.hideBody.hideObject.hideObjectGlobal.hideSelection.hint.hintC.hintCadet.hintSilent.hmd.hostMission.htmlLoad.HUDMovementLevels.humidity.ignore3DENHistory.ignoreTarget.image.import.importAllGroups.importance.in.inArea.inAreaArray.inAreaArrayIndexes.incapacitatedState.inflame.inflamed.infoPanel.infoPanelComponentEnabled.infoPanelComponents.infoPanels.inGameUISetEventHandler.inheritsFrom.initAmbientLife.inPolygon.inputAction.inputController.inputMouse.inRangeOfArtillery.insert.insertEditorObject.insideBuilding.intersect.is3DEN.is3DENMultiplayer.is3DENPreview.isAbleToBreathe.isActionMenuVisible.isAgent.isAimPrecisionEnabled.isAISteeringComponentEnabled.isAllowedCrewInImmobile.isAppSubscribed.isArray.isAutoHoverOn.isAutonomous.isAutoStartUpEnabledRTD.isAutotest.isAutoTrimOnRTD.isAwake.isBleeding.isBurning.isClass.isCollisionLightOn.isCopilotEnabled.isDamageAllowed.isDedicated.isDLCAvailable.isEngineOn.isEqualRef.isEqualTo.isEqualType.isEqualTypeAll.isEqualTypeAny.isEqualTypeArray.isEqualTypeParams.isFilePatchingEnabled.isFinal.isFlashlightOn.isFlatEmpty.isForcedWalk.isFormationLeader.isGameFocused.isGamePaused.isGroupDeletedWhenEmpty.isHidden.isHideBehindScripted.isInRemainsCollector.isInstructorFigureEnabled.isIRLaserOn.isKeyActive.isKindOf.isLaserOn.isLightOn.isLocalized.isManualFire.isMarkedForCollection.isMissionProfileNamespaceLoaded.isMultiplayer.isMultiplayerSolo.isNil.isNotEqualRef.isNotEqualTo.isNull.isNumber.isObjectHidden.isObjectRTD.isOnRoad.isPiPEnabled.isPlayer.isPlayerSupporter.isRealTime.isRemoteControlling.isRemoteExecuted.isRemoteExecutedJIP.isSaving.isSensorTargetConfirmed.isServer.isShowing3DIcons.isSimpleObject.isSprintAllowed.isStaminaEnabled.isSteamMission.isSteamOverlayEnabled.isStreamFriendlyUIEnabled.isStressDamageEnabled.isSwitchingWeapon.isText.isThrowable.isTouchingGround.isTurnedOut.isTutHintsEnabled.isUAVConnectable.isUAVConnected.isUIContext.isUniformAllowed.isUsingAISteeringComponent.isVehicleCargo.isVehicleRadarOn.isVehicleSensorEnabled.isWalking.isWeaponDeployed.isWeaponRested.itemCargo.items.itemsWithMagazines.join.joinAs.joinAsSilent.joinSilent.joinString.jsonToGameValue.kbAddDatabase.kbAddDatabaseTargets.kbAddTopic.kbHasTopic.kbReact.kbRemoveTopic.kbTell.kbWasSaid.keyImage.keyName.keys.kickPlayer.knowsAbout.land.landAt.landResult.language.laserTarget.lbAdd.lbClear.lbColor.lbColorRight.lbCurSel.lbData.lbDelete.lbIsSelected.lbPicture.lbPictureRight.lbSelection.lbSetColor.lbSetColorRight.lbSetCurSel.lbSetData.lbSetPicture.lbSetPictureColor.lbSetPictureColorDisabled.lbSetPictureColorSelected.lbSetPictureRight.lbSetPictureRightColor.lbSetPictureRightColorDisabled.lbSetPictureRightColorSelected.lbSetSelectColor.lbSetSelectColorRight.lbSetSelected.lbSetText.lbSetTextRight.lbSetTooltip.lbSetValue.lbSize.lbSort.lbSortBy.lbSortByValue.lbText.lbTextRight.lbTooltip.lbValue.leader.leaderboardDeInit.leaderboardGetRows.leaderboardInit.leaderboardRequestRowsFriends.leaderboardRequestRowsGlobal.leaderboardRequestRowsGlobalAroundUser.leaderboardsRequestUploadScore.leaderboardsRequestUploadScoreKeepBest.leaderboardState.leaveVehicle.libraryCredits.libraryDisclaimers.lifeState.lightAttachObject.lightDetachObject.lightIsOn.lightnings.limitSpeed.linearConversion.lineIntersects.lineIntersectsObjs.lineIntersectsSurfaces.lineIntersectsWith.linkItem.list.listObjects.listRemoteTargets.listVehicleSensors.ln.lnbAddArray.lnbAddColumn.lnbAddRow.lnbClear.lnbColor.lnbColorRight.lnbCurSelRow.lnbData.lnbDeleteColumn.lnbDeleteRow.lnbGetColumnsPosition.lnbPicture.lnbPictureRight.lnbSetColor.lnbSetColorRight.lnbSetColumnsPos.lnbSetCurSelRow.lnbSetData.lnbSetPicture.lnbSetPictureColor.lnbSetPictureColorRight.lnbSetPictureColorSelected.lnbSetPictureColorSelectedRight.lnbSetPictureRight.lnbSetText.lnbSetTextRight.lnbSetTooltip.lnbSetValue.lnbSize.lnbSort.lnbSortBy.lnbSortByValue.lnbText.lnbTextRight.lnbValue.load.load3DENScenario.loadAbs.loadBackpack.loadConfig.loadCuratorSelectionPreset.loadFile.loadGame.loadIdentity.loadMagazine.loadOverlay.loadStatus.loadUniform.loadVest.local.localize.localNamespace.locationPosition.lock.lockCameraTo.lockCargo.lockDriver.locked.lockedCameraTo.lockedCargo.lockedDriver.lockedInventory.lockedTurret.lockIdentity.lockInventory.lockTurret.lockWP.log.logEntities.logNetwork.logNetworkTerminate.lookAt.lookAtPos.magazineCargo.magazines.magazinesAllTurrets.magazinesAmmo.magazinesAmmoCargo.magazinesAmmoFull.magazinesDetail.magazinesDetailBackpack.magazinesDetailUniform.magazinesDetailVest.magazinesTurret.magazineTurretAmmo.mapAnimAdd.mapAnimClear.mapAnimCommit.mapAnimDone.mapCenterOnCamera.mapGridPosition.markAsFinishedOnSteam.markerAlpha.markerBrush.markerChannel.markerColor.markerDir.markerDrawPriority.markerPolyline.markerPos.markerShadow.markerShape.markerSize.markerText.markerType.matrixMultiply.matrixTranspose.max.maxLoad.members.menuAction.menuAdd.menuChecked.menuClear.menuCollapse.menuData.menuDelete.menuEnable.menuEnabled.menuExpand.menuHover.menuPicture.menuSetAction.menuSetCheck.menuSetData.menuSetPicture.menuSetShortcut.menuSetText.menuSetURL.menuSetValue.menuShortcut.menuShortcutText.menuSize.menuSort.menuText.menuURL.menuValue.merge.min.mineActive.mineDetectedBy.missileState.missileTarget.missileTargetPos.missionConfigFile.missionDifficulty.missionEnd.missionName.missionNameSource.missionNamespace.missionProfileNamespace.missionStart.missionVersion.mod.modelToWorld.modelToWorldVisual.modelToWorldVisualWorld.modelToWorldWorld.modParams.moonIntensity.moonPhase.morale.move.move3DENCamera.moveInAny.moveInCargo.moveInCommander.moveInDriver.moveInGunner.moveInTurret.moveObjectToEnd.moveOut.moveTarget.moveTime.moveTo.moveToCompleted.moveToFailed.musicVolume.name.namedProperties.nameSound.nearEntities.nearestBuilding.nearestLocation.nearestLocations.nearestLocationWithDubbing.nearestMines.nearestObject.nearestObjects.nearestTerrainObjects.nearObjects.nearObjectsReady.nearRoads.nearSupplies.nearTargets.needReload.needService.netId.netObjNull.newOverlay.nextMenuItemIndex.nextWeatherChange.nMenuItems.not.numberOfEnginesRTD.numberToDate.object.objectCurators.objectFromNetId.objectParent.objStatus.onBriefingGear.onBriefingGroup.onBriefingNotes.onBriefingPlan.onBriefingTeamSwitch.onCommandModeChanged.onDoubleClick.onEachFrame.onGroupIconClick.onGroupIconOverEnter.onGroupIconOverLeave.onHCGroupSelectionChanged.onMapSingleClick.onOfficialServer.onPlayerConnected.onPlayerDisconnected.onPreloadFinished.onPreloadStarted.onShowNewObject.onTeamSwitch.openCuratorInterface.openDLCPage.openDSInterface.openGPS.openMap.openSteamApp.openYoutubeVideo.or.orderGetIn.overcast.overcastForecast.owner.param.params.parentAttached.parseNumber.parseSimpleArray.parseText.parsingNamespace.particlesQuality.periscopeElevation.pickWeaponPool.pitch.pixelGrid.pixelGridBase.pixelGridNoUIScale.pixelH.pixelW.playableSlotsNumber.playableUnits.playAction.playActionNow.player.playerRespawnTime.playerSide.playersNumber.playerTargetLock.playGesture.playMission.playMove.playMoveNow.playMusic.playScriptedMission.playSound.playSound3D.playSoundUI.pose.position.positionCameraToWorld.posScreenToWorld.posWorldToScreen.ppEffectAdjust.ppEffectCommit.ppEffectCommitted.ppEffectCreate.ppEffectDestroy.ppEffectEnable.ppEffectEnabled.ppEffectForceInNVG.precision.preloadCamera.preloadObject.preloadSound.preloadTitleObj.preloadTitleRsc.preprocessFile.preprocessFileLineNumbers.primaryWeapon.primaryWeaponItems.primaryWeaponMagazine.priority.processDiaryLink.processInitCommands.productVersion.profileName.profileNamespace.profileNameSteam.progressLoadingScreen.progressPosition.progressSetPosition.publicVariable.publicVariableClient.publicVariableServer.pushBack.pushBackUnique.putWeaponPool.pylonAction.queryItemsPool.queryMagazinePool.queryWeaponPool.rad.radioChannelAdd.radioChannelCreate.radioChannelInfo.radioChannelRemove.radioChannelSetCallSign.radioChannelSetLabel.radioEnabled.radioVolume.rain.rainbow.rainParams.random.rank.rankId.rating.rectangular.regexFind.regexMatch.regexReplace.registeredTasks.registerTask.reload.reloadEnabled.remoteControl.remoteControlled.remoteExec.remoteExecCall.remoteExecutedJIPID.remoteExecutedOwner.remove3DENConnection.remove3DENEventHandler.remove3DENLayer.removeAction.removeAll3DENEventHandlers.removeAllActions.removeAllAssignedItems.removeAllBinocularItems.removeAllContainers.removeAllCuratorAddons.removeAllCuratorCameraAreas.removeAllCuratorEditingAreas.removeAllEventHandlers.removeAllHandgunItems.removeAllItems.removeAllItemsWithMagazines.removeAllMagazines.removeAllMagazinesTurret.removeAllMissionEventHandlers.removeAllMPEventHandlers.removeAllMusicEventHandlers.removeAllOwnedMines.removeAllPrimaryWeaponItems.removeAllSecondaryWeaponItems.removeAllUserActionEventHandlers.removeAllWeapons.removeBackpack.removeBackpackGlobal.removeBinocularItem.removeClothing.removeCuratorAddons.removeCuratorCameraArea.removeCuratorEditableObjects.removeCuratorEditingArea.removeDiaryRecord.removeDiarySubject.removeDrawIcon.removeDrawLinks.removeEventHandler.removeFromRemainsCollector.removeGoggles.removeGroupIcon.removeHandgunItem.removeHeadgear.removeItem.removeItemFromBackpack.removeItemFromUniform.removeItemFromVest.removeItems.removeMagazine.removeMagazineGlobal.removeMagazines.removeMagazinesTurret.removeMagazineTurret.removeMenuItem.removeMissionEventHandler.removeMPEventHandler.removeMusicEventHandler.removeOwnedMine.removePrimaryWeaponItem.removeSecondaryWeaponItem.removeSimpleTask.removeSwitchableUnit.removeTeamMember.removeUniform.removeUserActionEventHandler.removeVest.removeWeapon.removeWeaponAttachmentCargo.removeWeaponCargo.removeWeaponGlobal.removeWeaponItem.removeWeaponTurret.reportRemoteTarget.requiredVersion.resetCamShake.resetSubgroupDirection.resize.resources.respawnVehicle.restartEditorCamera.reveal.revealMine.reverse.reversedMouseY.roadAt.roadsConnectedTo.roleDescription.ropeAttachedObjects.ropeAttachedTo.ropeAttachEnabled.ropeAttachTo.ropeCreate.ropeCut.ropeDestroy.ropeDetach.ropeEndPosition.ropeLength.ropes.ropesAttachedTo.ropeSegments.ropeSetCargoMass.ropeUnwind.ropeUnwound.rotorsForcesRTD.rotorsRpmRTD.round.runInitScript.safeZoneH.safeZoneW.safeZoneWAbs.safeZoneX.safeZoneXAbs.safeZoneY.save3DENInventory.save3DENPreferences.saveGame.saveIdentity.saveJoysticks.saveMissionProfileNamespace.saveOverlay.saveProfileNamespace.saveStatus.saveVar.savingEnabled.say.say2D.say3D.scopeName.score.scoreSide.screenshot.screenToWorld.screenToWorldDirection.scriptDone.scriptName.scudState.secondaryWeapon.secondaryWeaponItems.secondaryWeaponMagazine.select.selectBestPlaces.selectDiarySubject.selectedEditorObjects.selectEditorObject.selectionNames.selectionPosition.selectionVectorDirAndUp.selectLeader.selectMax.selectMin.selectNoPlayer.selectPlayer.selectRandom.selectRandomWeighted.selectThrowable.selectWeapon.selectWeaponTurret.sendAnalyticEvent.sendAUMessage.sendCloudRequest.sendCloudRequestClient.sendCloudRequestServer.sendSimpleCommand.sendTask.sendTaskResult.sendUDPMessage.sentencesEnabled.serverCommand.serverCommandAvailable.serverCommandExecutable.serverConfigTopLevelEntry.serverName.serverNamespace.serverStartMission.serverTime.set.set3DENAttachedCursorEntity.set3DENAttribute.set3DENAttributes.set3DENGrid.set3DENIconsVisible.set3DENLayer.set3DENLinesVisible.set3DENLogicType.set3DENMissionAttribute.set3DENMissionAttributes.set3DENModelsVisible.set3DENObjectType.set3DENSelected.setAccTime.setActualCollectiveRTD.setAirplaneThrottle.setAirportSide.setAmmo.setAmmoCargo.setAmmoOnPylon.setAngularVelocity.setAngularVelocityModelSpace.setAnimSpeedCoef.setAperture.setApertureNew.setAPURTD.setArmoryPoints.setAttributes.setAutonomous.setBatteryChargeRTD.setBatteryRTD.setBehaviour.setBehaviourStrong.setBleedingRemaining.setBrakesRTD.setCameraEffect.setCameraInterest.setCamShakeDefParams.setCamShakeParams.setCamUseTI.setCaptive.setCenterOfMass.setCollisionLight.setCombatBehaviour.setCombatMode.setCompassDeclination.setCompassOscillation.setConvoySeparation.setCruiseControl.setCuratorCameraAreaCeiling.setCuratorCoef.setCuratorEditingAreaType.setCuratorSelected.setCuratorSelectionPreset.setCuratorWaypointCost.setCurrentChannel.setCurrentTask.setCurrentWaypoint.setCustomAimCoef.setCustomMissionData.setCustomSoundController.setCustomWeightRTD.setDamage.setDammage.setDate.setDebriefingText.setDefaultCamera.setDestination.setDetailMapBlendPars.setDiaryRecordText.setDiarySubjectPicture.setDir.setDirection.setDrawIcon.setDriveOnPath.setDropInterval.setDynamicSimulationDistance.setDynamicSimulationDistanceCoef.setEditorMode.setEditorObjectScope.setEffectCondition.setEffectiveCommander.setEngineRpmRTD.setFace.setFaceAnimation.setFatigue.setFeatureType.setFlagAnimationPhase.setFlagOwner.setFlagSide.setFlagTexture.setFog.setForceGeneratorRTD.setFormation.setFormationTask.setFormDir.setFriend.setFromEditor.setFSMVariable.setFuel.setFuelCargo.setFuelConsumptionCoef.setGroupIcon.setGroupIconParams.setGroupIconsSelectable.setGroupIconsVisible.setGroupId.setGroupIdGlobal.setGroupOwner.setGusts.setHideBehind.setHit.setHitIndex.setHitPointDamage.setHorizonParallaxCoef.setHUDMovementLevels.setHumidity.setIdentity.setImportance.setInfoPanel.setJointDriveAngularVelocity.setJointDriveLinearVelocity.setJointDriveOrientation.setJointDrivePosition.setLeader.setLightAmbient.setLightAttenuation.setLightBrightness.setLightColor.setLightConePars.setLightDayLight.setLightFlareMaxDistance.setLightFlareSize.setLightIntensity.setLightIR.setLightnings.setLightUseFlare.setLightVolumeShape.setLocalWindParams.setMagazineTurretAmmo.setMarkerAlpha.setMarkerAlphaLocal.setMarkerBrush.setMarkerBrushLocal.setMarkerColor.setMarkerColorLocal.setMarkerDir.setMarkerDirLocal.setMarkerDrawPriority.setMarkerPolyline.setMarkerPolylineLocal.setMarkerPos.setMarkerPosLocal.setMarkerShadow.setMarkerShadowLocal.setMarkerShape.setMarkerShapeLocal.setMarkerSize.setMarkerSizeLocal.setMarkerText.setMarkerTextLocal.setMarkerType.setMarkerTypeLocal.setMass.setMaxLoad.setMimic.setMissileTarget.setMissileTargetPos.setMissionOptions.setMousePosition.setMusicEffect.setMusicEventHandler.setName.setNameSound.setObjectArguments.setObjectMaterial.setObjectMaterialGlobal.setObjectProxy.setObjectScale.setObjectTexture.setObjectTextureGlobal.setObjectViewDistance.setOpticsMode.setOvercast.setOwner.setOxygenRemaining.setParticleCircle.setParticleClass.setParticleFire.setParticleParams.setParticleRandom.setPhysicsCollisionFlag.setPilotCameraDirection.setPilotCameraOpticsMode.setPilotCameraRotation.setPilotCameraTarget.setPilotLight.setPiPEffect.setPiPViewDistance.setPitch.setPlateNumber.setPlayable.setPlayerRespawnTime.setPlayerVoNVolume.setPos.setPosASL.setPosASL2.setPosASLW.setPosATL.setPosition.setPosWorld.setPylonLoadout.setPylonsPriority.setRadioMsg.setRain.setRainbow.setRandomLip.setRank.setRectangular.setRepairCargo.setRotorBrakeRTD.setShadowDistance.setShotParents.setSide.setSimpleTaskAlwaysVisible.setSimpleTaskCustomData.setSimpleTaskDescription.setSimpleTaskDestination.setSimpleTaskTarget.setSimpleTaskType.setSimulWeatherLayers.setSize.setSkill.setSlingLoad.setSoundEffect.setSpeaker.setSpeech.setSpeedMode.setStamina.setStaminaScheme.setStarterRTD.setStatValue.setSuppression.setSystemOfUnits.setTargetAge.setTargetSize.setTaskMarkerOffset.setTaskResult.setTaskState.setTerrainGrid.setTerrainHeight.setText.setThrottleRTD.setTimeMultiplier.setTIParameter.setTitleEffect.setToneMapping.setToneMappingParams.setTowParent.setTrafficDensity.setTrafficDistance.setTrafficGap.setTrafficSpeed.setTriggerActivation.setTriggerArea.setTriggerInterval.setTriggerStatements.setTriggerText.setTriggerTimeout.setTriggerType.setTurretLimits.setTurretOpticsMode.setType.setUnconscious.setUnitAbility.setUnitCombatMode.setUnitFreefallHeight.setUnitLoadout.setUnitPos.setUnitPosWeak.setUnitRank.setUnitRecoilCoefficient.setUnitTrait.setUnloadInCombat.setUserActionText.setUserMFDText.setUserMFDValue.setVariable.setVectorDir.setVectorDirAndUp.setVectorUp.setVehicleAmmo.setVehicleAmmoDef.setVehicleArmor.setVehicleCargo.setVehicleId.setVehicleInit.setVehicleLock.setVehiclePosition.setVehicleRadar.setVehicleReceiveRemoteTargets.setVehicleReportOwnPosition.setVehicleReportRemoteTargets.setVehicleTIPars.setVehicleVarName.setVelocity.setVelocityModelSpace.setVelocityTransformation.setViewDistance.setVisibleIfTreeCollapsed.setWantedRPMRTD.setWaterFillPercentage.setWaterLeakiness.setWaves.setWaypointBehaviour.setWaypointCombatMode.setWaypointCompletionRadius.setWaypointDescription.setWaypointForceBehaviour.setWaypointFormation.setWaypointHousePosition.setWaypointLoiterAltitude.setWaypointLoiterRadius.setWaypointLoiterType.setWaypointName.setWaypointPosition.setWaypointScript.setWaypointSpeed.setWaypointStatements.setWaypointTimeout.setWaypointType.setWaypointVisible.setWeaponReloadingTime.setWeaponZeroing.setWind.setWindDir.setWindForce.setWindStr.setWingForceScaleRTD.setWPPos.show3DIcons.showChat.showCinemaBorder.showCommandingMenu.showCompass.showCuratorCompass.showGPS.showHUD.showLegend.showMap.shownAction.shownArtilleryComputer.shownChat.shownCompass.shownCuratorCompass.showNewEditorObject.shownGPS.shownHUD.shownMap.shownPad.shownRadio.shownScoretable.shownSubtitles.shownUAVFeed.shownWarrant.shownWatch.showPad.showRadio.showScoretable.showSubtitles.showUAVFeed.showWarrant.showWatch.showWaypoint.showWaypoints.side.sideChat.sideRadio.simpleTasks.simulationEnabled.simulCloudDensity.simulCloudOcclusion.simulInClouds.simulSetHumidity.simulWeatherSync.sin.size.sizeOf.skill.skillFinal.skipTime.sleep.sliderPosition.sliderRange.sliderSetPosition.sliderSetRange.sliderSetSpeed.sliderSpeed.slingLoadAssistantShown.soldierMagazines.someAmmo.sort.soundParams.soundVolume.spawn.speaker.speechVolume.speed.speedMode.splitString.sqrt.squadParams.stance.startLoadingScreen.steamGameRecordingEvent.stop.stopEngineRTD.stopped.stopSound.str.sunOrMoon.supportInfo.suppressFor.surfaceIsWater.surfaceNormal.surfaceTexture.surfaceType.swimInDepth.switchableUnits.switchAction.switchCamera.switchGesture.switchLight.switchMove.synchronizedObjects.synchronizedTriggers.synchronizedWaypoints.synchronizeObjectsAdd.synchronizeObjectsRemove.synchronizeTrigger.synchronizeWaypoint.systemChat.systemOfUnits.systemTime.systemTimeUTC.tan.targetKnowledge.targets.targetsAggregate.targetsQuery.taskAlwaysVisible.taskChildren.taskCompleted.taskCustomData.taskDescription.taskDestination.taskHint.taskMarkerOffset.taskName.taskParent.taskResult.taskState.taskType.teamMember.teamName.teams.teamSwitch.teamSwitchEnabled.teamType.terminate.terrainIntersect.terrainIntersectASL.terrainIntersectAtASL.text.textLog.textLogFormat.tg.throttleRTD.throwables.time.timeMultiplier.titleCut.titleFadeOut.titleObj.titleRsc.titleText.toArray.toFixed.toJSON.toLower.toLowerANSI.toString.toUpper.toUpperANSI.triggerActivated.triggerActivation.triggerAmmo.triggerArea.triggerAttachedVehicle.triggerAttachObject.triggerAttachVehicle.triggerDynamicSimulation.triggerInterval.triggerStatements.triggerText.triggerTimeout.triggerTimeoutCurrent.triggerType.trim.turretLocal.turretOwner.turretUnit.tvAdd.tvClear.tvCollapse.tvCollapseAll.tvCount.tvCurSel.tvData.tvDelete.tvExpand.tvExpandAll.tvIsSelected.tvPicture.tvPictureRight.tvSelection.tvSetColor.tvSetCurSel.tvSetData.tvSetPicture.tvSetPictureColor.tvSetPictureColorDisabled.tvSetPictureColorSelected.tvSetPictureRight.tvSetPictureRightColor.tvSetPictureRightColorDisabled.tvSetPictureRightColorSelected.tvSetSelectColor.tvSetSelected.tvSetText.tvSetTooltip.tvSetValue.tvSort.tvSortAll.tvSortByValue.tvSortByValueAll.tvText.tvTooltip.tvValue.type.typeName.typeOf.UAVControl.uiNamespace.uiSleep.uiTime.unassignCurator.unassignItem.unassignTeam.unassignVehicle.underwater.uniform.uniformContainer.uniformItems.uniformMagazines.uniqueUnitItems.unitAddons.unitAimPosition.unitAimPositionVisual.unitBackpack.unitCombatMode.unitIsUAV.unitPos.unitReady.unitRecoilCoefficient.units.unitsBelowHeight.unitTurret.unlinkItem.unlockAchievement.unregisterTask.updateDrawIcon.updateMenuItem.updateObjectTree.useAIOperMapObstructionTest.useAISteeringComponent.useAudioTimeForMoves.userInputDisabled.values.vectorAdd.vectorCos.vectorCrossProduct.vectorDiff.vectorDir.vectorDirVisual.vectorDistance.vectorDistanceSqr.vectorDotProduct.vectorFromTo.vectorLinearConversion.vectorMagnitude.vectorMagnitudeSqr.vectorModelToWorld.vectorModelToWorldVisual.vectorMultiply.vectorNormalized.vectorSide.vectorSideVisual.vectorUp.vectorUpVisual.vectorWorldToModel.vectorWorldToModelVisual.vehicle.vehicleCargoEnabled.vehicleChat.vehicleMoveInfo.vehicleRadio.vehicleReceiveRemoteTargets.vehicleReportOwnPosition.vehicleReportRemoteTargets.vehicles.vehicleVarName.velocity.velocityModelSpace.verifySignature.vest.vestContainer.vestItems.vestMagazines.viewDistance.visibleCompass.visibleGPS.visibleMap.visiblePosition.visiblePositionASL.visibleScoretable.visibleWatch.waterDamaged.waves.waypointAttachedObject.waypointAttachedVehicle.waypointAttachObject.waypointAttachVehicle.waypointBehaviour.waypointCombatMode.waypointCompletionRadius.waypointDescription.waypointForceBehaviour.waypointFormation.waypointHousePosition.waypointLoiterAltitude.waypointLoiterRadius.waypointLoiterType.waypointName.waypointPosition.waypoints.waypointScript.waypointsEnabledUAV.waypointShow.waypointSpeed.waypointStatements.waypointTimeout.waypointTimeoutCurrent.waypointType.waypointVisible.weaponAccessories.weaponAccessoriesCargo.weaponCargo.weaponDirection.weaponDisassemblyEnabled.weaponInertia.weaponLowered.weaponReloadingTime.weapons.weaponsInfo.weaponsItems.weaponsItemsCargo.weaponState.weaponsTurret.weightRTD.WFSideText.wind.windDir.windRTD.windStr.wingsForcesRTD.worldName.worldSize.worldToModel.worldToModelVisual.worldToScreen".split("."), s = {
 			className: "meta",
 			begin: /#\s*[a-z]+\b/,
 			end: /$/,
@@ -15692,7 +15889,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), hn = /* @__PURE__ */ o(((e, t) => {
+})), gn = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = e.regex, n = e.COMMENT("--", "$"), r = {
 			scope: "string",
@@ -15809,7 +16006,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), gn = /* @__PURE__ */ o(((e, t) => {
+})), _n = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = e.regex, n = [
 			"functions",
@@ -15948,7 +16145,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), _n = /* @__PURE__ */ o(((e, t) => {
+})), vn = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "Stata",
@@ -15980,7 +16177,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), vn = /* @__PURE__ */ o(((e, t) => {
+})), yn = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "STEP Part 21",
@@ -16032,7 +16229,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), yn = /* @__PURE__ */ o(((e, t) => {
+})), bn = /* @__PURE__ */ o(((e, t) => {
 	var n = (e) => ({
 		IMPORTANT: {
 			scope: "meta",
@@ -16042,6 +16239,10 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		HEXCOLOR: {
 			scope: "number",
 			begin: /#(([0-9a-fA-F]{3,4})|(([0-9a-fA-F]{2}){3,4}))\b/
+		},
+		UNICODE_RANGE: {
+			scope: "number",
+			begin: /\b[Uu]\+[0-9A-Fa-f][0-9A-Fa-f?]{0,5}(-[0-9A-Fa-f][0-9A-Fa-f]{0,5})?/
 		},
 		FUNCTION_DISPATCH: {
 			className: "built_in",
@@ -16078,27 +16279,12 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		"selection",
 		"slotted",
 		"spelling-error"
-	].sort().reverse(), l = (/* @__PURE__ */ "accent-color.align-content.align-items.align-self.alignment-baseline.all.anchor-name.animation.animation-composition.animation-delay.animation-direction.animation-duration.animation-fill-mode.animation-iteration-count.animation-name.animation-play-state.animation-range.animation-range-end.animation-range-start.animation-timeline.animation-timing-function.appearance.aspect-ratio.backdrop-filter.backface-visibility.background.background-attachment.background-blend-mode.background-clip.background-color.background-image.background-origin.background-position.background-position-x.background-position-y.background-repeat.background-size.baseline-shift.block-size.border.border-block.border-block-color.border-block-end.border-block-end-color.border-block-end-style.border-block-end-width.border-block-start.border-block-start-color.border-block-start-style.border-block-start-width.border-block-style.border-block-width.border-bottom.border-bottom-color.border-bottom-left-radius.border-bottom-right-radius.border-bottom-style.border-bottom-width.border-collapse.border-color.border-end-end-radius.border-end-start-radius.border-image.border-image-outset.border-image-repeat.border-image-slice.border-image-source.border-image-width.border-inline.border-inline-color.border-inline-end.border-inline-end-color.border-inline-end-style.border-inline-end-width.border-inline-start.border-inline-start-color.border-inline-start-style.border-inline-start-width.border-inline-style.border-inline-width.border-left.border-left-color.border-left-style.border-left-width.border-radius.border-right.border-right-color.border-right-style.border-right-width.border-spacing.border-start-end-radius.border-start-start-radius.border-style.border-top.border-top-color.border-top-left-radius.border-top-right-radius.border-top-style.border-top-width.border-width.bottom.box-align.box-decoration-break.box-direction.box-flex.box-flex-group.box-lines.box-ordinal-group.box-orient.box-pack.box-shadow.box-sizing.break-after.break-before.break-inside.caption-side.caret-color.clear.clip.clip-path.clip-rule.color.color-interpolation.color-interpolation-filters.color-profile.color-rendering.color-scheme.column-count.column-fill.column-gap.column-rule.column-rule-color.column-rule-style.column-rule-width.column-span.column-width.columns.contain.contain-intrinsic-block-size.contain-intrinsic-height.contain-intrinsic-inline-size.contain-intrinsic-size.contain-intrinsic-width.container.container-name.container-type.content.content-visibility.counter-increment.counter-reset.counter-set.cue.cue-after.cue-before.cursor.cx.cy.direction.display.dominant-baseline.empty-cells.enable-background.field-sizing.fill.fill-opacity.fill-rule.filter.flex.flex-basis.flex-direction.flex-flow.flex-grow.flex-shrink.flex-wrap.float.flood-color.flood-opacity.flow.font.font-display.font-family.font-feature-settings.font-kerning.font-language-override.font-optical-sizing.font-palette.font-size.font-size-adjust.font-smooth.font-smoothing.font-stretch.font-style.font-synthesis.font-synthesis-position.font-synthesis-small-caps.font-synthesis-style.font-synthesis-weight.font-variant.font-variant-alternates.font-variant-caps.font-variant-east-asian.font-variant-emoji.font-variant-ligatures.font-variant-numeric.font-variant-position.font-variation-settings.font-weight.forced-color-adjust.gap.glyph-orientation-horizontal.glyph-orientation-vertical.grid.grid-area.grid-auto-columns.grid-auto-flow.grid-auto-rows.grid-column.grid-column-end.grid-column-start.grid-gap.grid-row.grid-row-end.grid-row-start.grid-template.grid-template-areas.grid-template-columns.grid-template-rows.hanging-punctuation.height.hyphenate-character.hyphenate-limit-chars.hyphens.icon.image-orientation.image-rendering.image-resolution.ime-mode.initial-letter.initial-letter-align.inline-size.inset.inset-area.inset-block.inset-block-end.inset-block-start.inset-inline.inset-inline-end.inset-inline-start.isolation.justify-content.justify-items.justify-self.kerning.left.letter-spacing.lighting-color.line-break.line-height.line-height-step.list-style.list-style-image.list-style-position.list-style-type.margin.margin-block.margin-block-end.margin-block-start.margin-bottom.margin-inline.margin-inline-end.margin-inline-start.margin-left.margin-right.margin-top.margin-trim.marker.marker-end.marker-mid.marker-start.marks.mask.mask-border.mask-border-mode.mask-border-outset.mask-border-repeat.mask-border-slice.mask-border-source.mask-border-width.mask-clip.mask-composite.mask-image.mask-mode.mask-origin.mask-position.mask-repeat.mask-size.mask-type.masonry-auto-flow.math-depth.math-shift.math-style.max-block-size.max-height.max-inline-size.max-width.min-block-size.min-height.min-inline-size.min-width.mix-blend-mode.nav-down.nav-index.nav-left.nav-right.nav-up.none.normal.object-fit.object-position.offset.offset-anchor.offset-distance.offset-path.offset-position.offset-rotate.opacity.order.orphans.outline.outline-color.outline-offset.outline-style.outline-width.overflow.overflow-anchor.overflow-block.overflow-clip-margin.overflow-inline.overflow-wrap.overflow-x.overflow-y.overlay.overscroll-behavior.overscroll-behavior-block.overscroll-behavior-inline.overscroll-behavior-x.overscroll-behavior-y.padding.padding-block.padding-block-end.padding-block-start.padding-bottom.padding-inline.padding-inline-end.padding-inline-start.padding-left.padding-right.padding-top.page.page-break-after.page-break-before.page-break-inside.paint-order.pause.pause-after.pause-before.perspective.perspective-origin.place-content.place-items.place-self.pointer-events.position.position-anchor.position-visibility.print-color-adjust.quotes.r.resize.rest.rest-after.rest-before.right.rotate.row-gap.ruby-align.ruby-position.scale.scroll-behavior.scroll-margin.scroll-margin-block.scroll-margin-block-end.scroll-margin-block-start.scroll-margin-bottom.scroll-margin-inline.scroll-margin-inline-end.scroll-margin-inline-start.scroll-margin-left.scroll-margin-right.scroll-margin-top.scroll-padding.scroll-padding-block.scroll-padding-block-end.scroll-padding-block-start.scroll-padding-bottom.scroll-padding-inline.scroll-padding-inline-end.scroll-padding-inline-start.scroll-padding-left.scroll-padding-right.scroll-padding-top.scroll-snap-align.scroll-snap-stop.scroll-snap-type.scroll-timeline.scroll-timeline-axis.scroll-timeline-name.scrollbar-color.scrollbar-gutter.scrollbar-width.shape-image-threshold.shape-margin.shape-outside.shape-rendering.speak.speak-as.src.stop-color.stop-opacity.stroke.stroke-dasharray.stroke-dashoffset.stroke-linecap.stroke-linejoin.stroke-miterlimit.stroke-opacity.stroke-width.tab-size.table-layout.text-align.text-align-all.text-align-last.text-anchor.text-combine-upright.text-decoration.text-decoration-color.text-decoration-line.text-decoration-skip.text-decoration-skip-ink.text-decoration-style.text-decoration-thickness.text-emphasis.text-emphasis-color.text-emphasis-position.text-emphasis-style.text-indent.text-justify.text-orientation.text-overflow.text-rendering.text-shadow.text-size-adjust.text-transform.text-underline-offset.text-underline-position.text-wrap.text-wrap-mode.text-wrap-style.timeline-scope.top.touch-action.transform.transform-box.transform-origin.transform-style.transition.transition-behavior.transition-delay.transition-duration.transition-property.transition-timing-function.translate.unicode-bidi.user-modify.user-select.vector-effect.vertical-align.view-timeline.view-timeline-axis.view-timeline-inset.view-timeline-name.view-transition-name.visibility.voice-balance.voice-duration.voice-family.voice-pitch.voice-range.voice-rate.voice-stress.voice-volume.white-space.white-space-collapse.widows.width.will-change.word-break.word-spacing.word-wrap.writing-mode.x.y.z-index.zoom".split(".")).sort().reverse();
+	].sort().reverse(), l = (/* @__PURE__ */ "accent-color.align-content.align-items.align-self.alignment-baseline.all.anchor-name.animation.animation-composition.animation-delay.animation-direction.animation-duration.animation-fill-mode.animation-iteration-count.animation-name.animation-play-state.animation-range.animation-range-end.animation-range-start.animation-timeline.animation-timing-function.appearance.aspect-ratio.backdrop-filter.backface-visibility.background.background-attachment.background-blend-mode.background-clip.background-color.background-image.background-origin.background-position.background-position-x.background-position-y.background-repeat.background-size.baseline-shift.block-size.border.border-block.border-block-color.border-block-end.border-block-end-color.border-block-end-style.border-block-end-width.border-block-start.border-block-start-color.border-block-start-style.border-block-start-width.border-block-style.border-block-width.border-bottom.border-bottom-color.border-bottom-left-radius.border-bottom-right-radius.border-bottom-style.border-bottom-width.border-collapse.border-color.border-end-end-radius.border-end-start-radius.border-image.border-image-outset.border-image-repeat.border-image-slice.border-image-source.border-image-width.border-inline.border-inline-color.border-inline-end.border-inline-end-color.border-inline-end-style.border-inline-end-width.border-inline-start.border-inline-start-color.border-inline-start-style.border-inline-start-width.border-inline-style.border-inline-width.border-left.border-left-color.border-left-style.border-left-width.border-radius.border-right.border-right-color.border-right-style.border-right-width.border-spacing.border-start-end-radius.border-start-start-radius.border-style.border-top.border-top-color.border-top-left-radius.border-top-right-radius.border-top-style.border-top-width.border-width.bottom.box-align.box-decoration-break.box-direction.box-flex.box-flex-group.box-lines.box-ordinal-group.box-orient.box-pack.box-shadow.box-sizing.break-after.break-before.break-inside.caption-side.caret-color.clear.clip.clip-path.clip-rule.color.color-interpolation.color-interpolation-filters.color-profile.color-rendering.color-scheme.column-count.column-fill.column-gap.column-rule.column-rule-color.column-rule-style.column-rule-width.column-span.column-width.columns.contain.contain-intrinsic-block-size.contain-intrinsic-height.contain-intrinsic-inline-size.contain-intrinsic-size.contain-intrinsic-width.container.container-name.container-type.content.content-visibility.corner-bottom-left-shape.corner-bottom-right-shape.corner-shape.corner-top-left-shape.corner-top-right-shape.counter-increment.counter-reset.counter-set.cue.cue-after.cue-before.cursor.cx.cy.direction.display.dominant-baseline.empty-cells.enable-background.field-sizing.fill.fill-opacity.fill-rule.filter.flex.flex-basis.flex-direction.flex-flow.flex-grow.flex-shrink.flex-wrap.float.flood-color.flood-opacity.flow.font.font-display.font-family.font-feature-settings.font-kerning.font-language-override.font-optical-sizing.font-palette.font-size.font-size-adjust.font-smooth.font-smoothing.font-stretch.font-style.font-synthesis.font-synthesis-position.font-synthesis-small-caps.font-synthesis-style.font-synthesis-weight.font-variant.font-variant-alternates.font-variant-caps.font-variant-east-asian.font-variant-emoji.font-variant-ligatures.font-variant-numeric.font-variant-position.font-variation-settings.font-weight.forced-color-adjust.gap.glyph-orientation-horizontal.glyph-orientation-vertical.grid.grid-area.grid-auto-columns.grid-auto-flow.grid-auto-rows.grid-column.grid-column-end.grid-column-start.grid-gap.grid-row.grid-row-end.grid-row-start.grid-template.grid-template-areas.grid-template-columns.grid-template-rows.hanging-punctuation.height.hyphenate-character.hyphenate-limit-chars.hyphens.icon.image-orientation.image-rendering.image-resolution.ime-mode.initial-letter.initial-letter-align.inline-size.inset.inset-area.inset-block.inset-block-end.inset-block-start.inset-inline.inset-inline-end.inset-inline-start.isolation.justify-content.justify-items.justify-self.kerning.left.letter-spacing.lighting-color.line-break.line-height.line-height-step.list-style.list-style-image.list-style-position.list-style-type.margin.margin-block.margin-block-end.margin-block-start.margin-bottom.margin-inline.margin-inline-end.margin-inline-start.margin-left.margin-right.margin-top.margin-trim.marker.marker-end.marker-mid.marker-start.marks.mask.mask-border.mask-border-mode.mask-border-outset.mask-border-repeat.mask-border-slice.mask-border-source.mask-border-width.mask-clip.mask-composite.mask-image.mask-mode.mask-origin.mask-position.mask-repeat.mask-size.mask-type.masonry-auto-flow.math-depth.math-shift.math-style.max-block-size.max-height.max-inline-size.max-width.min-block-size.min-height.min-inline-size.min-width.mix-blend-mode.nav-down.nav-index.nav-left.nav-right.nav-up.none.normal.object-fit.object-position.offset.offset-anchor.offset-distance.offset-path.offset-position.offset-rotate.opacity.order.orphans.outline.outline-color.outline-offset.outline-style.outline-width.overflow.overflow-anchor.overflow-block.overflow-clip-margin.overflow-inline.overflow-wrap.overflow-x.overflow-y.overlay.overscroll-behavior.overscroll-behavior-block.overscroll-behavior-inline.overscroll-behavior-x.overscroll-behavior-y.padding.padding-block.padding-block-end.padding-block-start.padding-bottom.padding-inline.padding-inline-end.padding-inline-start.padding-left.padding-right.padding-top.page.page-break-after.page-break-before.page-break-inside.paint-order.pause.pause-after.pause-before.perspective.perspective-origin.place-content.place-items.place-self.pointer-events.position.position-anchor.position-visibility.print-color-adjust.quotes.r.resize.rest.rest-after.rest-before.right.rotate.row-gap.ruby-align.ruby-position.scale.scroll-behavior.scroll-margin.scroll-margin-block.scroll-margin-block-end.scroll-margin-block-start.scroll-margin-bottom.scroll-margin-inline.scroll-margin-inline-end.scroll-margin-inline-start.scroll-margin-left.scroll-margin-right.scroll-margin-top.scroll-padding.scroll-padding-block.scroll-padding-block-end.scroll-padding-block-start.scroll-padding-bottom.scroll-padding-inline.scroll-padding-inline-end.scroll-padding-inline-start.scroll-padding-left.scroll-padding-right.scroll-padding-top.scroll-snap-align.scroll-snap-stop.scroll-snap-type.scroll-timeline.scroll-timeline-axis.scroll-timeline-name.scrollbar-color.scrollbar-gutter.scrollbar-width.shape-image-threshold.shape-margin.shape-outside.shape-rendering.speak.speak-as.src.stop-color.stop-opacity.stroke.stroke-dasharray.stroke-dashoffset.stroke-linecap.stroke-linejoin.stroke-miterlimit.stroke-opacity.stroke-width.tab-size.table-layout.text-align.text-align-all.text-align-last.text-anchor.text-combine-upright.text-decoration.text-decoration-color.text-decoration-line.text-decoration-skip.text-decoration-skip-ink.text-decoration-style.text-decoration-thickness.text-emphasis.text-emphasis-color.text-emphasis-position.text-emphasis-style.text-indent.text-justify.text-orientation.text-overflow.text-rendering.text-shadow.text-size-adjust.text-transform.text-underline-offset.text-underline-position.text-wrap.text-wrap-mode.text-wrap-style.timeline-scope.top.touch-action.transform.transform-box.transform-origin.transform-style.transition.transition-behavior.transition-delay.transition-duration.transition-property.transition-timing-function.translate.unicode-bidi.unicode-range.user-modify.user-select.vector-effect.vertical-align.view-timeline.view-timeline-axis.view-timeline-inset.view-timeline-name.view-transition-name.visibility.voice-balance.voice-duration.voice-family.voice-pitch.voice-range.voice-rate.voice-stress.voice-volume.white-space.white-space-collapse.widows.width.will-change.word-break.word-spacing.word-wrap.writing-mode.x.y.z-index.zoom".split(".")).sort().reverse();
 	function u(e) {
 		let t = n(e), r = {
 			className: "variable",
 			begin: "\\$" + e.IDENT_RE
-		}, i = [
-			"charset",
-			"css",
-			"debug",
-			"extend",
-			"font-face",
-			"for",
-			"import",
-			"include",
-			"keyframes",
-			"media",
-			"mixin",
-			"page",
-			"warn",
-			"while"
-		], u = "(?=[.\\s\\n[:,(])";
+		};
 		return {
 			name: "Stylus",
 			aliases: ["styl"],
@@ -16124,11 +16310,11 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				e.C_BLOCK_COMMENT_MODE,
 				t.HEXCOLOR,
 				{
-					begin: "\\.[a-zA-Z][a-zA-Z0-9_-]*" + u,
+					begin: "\\.[a-zA-Z][a-zA-Z0-9_-]*(?=[.\\s\\n[:,(])",
 					className: "selector-class"
 				},
 				{
-					begin: "#[a-zA-Z][a-zA-Z0-9_-]*" + u,
+					begin: "#[a-zA-Z][a-zA-Z0-9_-]*(?=[.\\s\\n[:,(])",
 					className: "selector-id"
 				},
 				{
@@ -16159,7 +16345,22 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				},
 				{
 					className: "keyword",
-					begin: "@((-(o|moz|ms|webkit)-)?(" + i.join("|") + "))\\b"
+					begin: "@((-(o|moz|ms|webkit)-)?(" + [
+						"charset",
+						"css",
+						"debug",
+						"extend",
+						"font-face",
+						"for",
+						"import",
+						"include",
+						"keyframes",
+						"media",
+						"mixin",
+						"page",
+						"warn",
+						"while"
+					].join("|") + "))\\b"
 				},
 				r,
 				t.CSS_NUMBER_MODE,
@@ -16180,6 +16381,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 							r,
 							e.APOS_STRING_MODE,
 							t.CSS_NUMBER_MODE,
+							t.UNICODE_RANGE,
 							e.QUOTE_STRING_MODE
 						]
 					}]
@@ -16209,7 +16411,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = u;
-})), bn = /* @__PURE__ */ o(((e, t) => {
+})), xn = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "SubUnit",
@@ -16242,7 +16444,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), xn = /* @__PURE__ */ o(((e, t) => {
+})), Sn = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return e ? typeof e == "string" ? e : e.source : null;
 	}
@@ -16259,6 +16461,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 	function o(...e) {
 		return "(" + (a(e).capture ? "" : "?:") + e.map((e) => n(e)).join("|") + ")";
 	}
+	new RegExp(o(/\[(?:[^\\\]]|\\.)*\]/, /\(\?<(?![=!])[^>]+>/, /\(\?'[^']+'/, /\(\??/, /\\([1-9][0-9]*)/, /\\./));
 	var s = (e) => i(/\b/, e, /\w$/.test(e) ? /\b/ : /\B/), c = ["Protocol", "Type"].map(s), l = ["init", "self"].map(s), u = ["Any", "Self"], d = [
 		"actor",
 		"any",
@@ -16512,36 +16715,36 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				z("##"),
 				z("###")
 			]
-		}, ee = [e.BACKSLASH_ESCAPE, {
+		}, V = [e.BACKSLASH_ESCAPE, {
 			begin: /\[/,
 			end: /\]/,
 			relevance: 0,
 			contains: [e.BACKSLASH_ESCAPE]
-		}], te = {
+		}], ee = {
 			begin: /\/[^\s](?=[^/\n]*\/)/,
 			end: /\//,
-			contains: ee
-		}, V = (e) => {
+			contains: V
+		}, H = (e) => {
 			let t = i(e, /\//), n = i(/\//, e);
 			return {
 				begin: t,
 				end: n,
-				contains: [...ee, {
+				contains: [...V, {
 					scope: "comment",
 					begin: `#(?!.*${n})`,
 					end: /$/
 				}]
 			};
-		}, ne = {
+		}, te = {
 			scope: "regexp",
 			variants: [
-				V("###"),
-				V("##"),
-				V("#"),
-				te
+				H("###"),
+				H("##"),
+				H("#"),
+				ee
 			]
-		}, H = { match: i(/`/, x, /`/) }, U = [
-			H,
+		}, ne = { match: i(/`/, x, /`/) }, U = [
+			ne,
 			{
 				className: "variable",
 				match: /\$\d+/
@@ -16612,7 +16815,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			]
 		};
 		G.contains.push(re);
-		let ie = {
+		let K = {
 			begin: /\(/,
 			end: /\)/,
 			relevance: 0,
@@ -16625,7 +16828,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					relevance: 0
 				},
 				...a,
-				ne,
+				te,
 				...O,
 				...k,
 				...j,
@@ -16635,12 +16838,12 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				...W,
 				G
 			]
-		}, K = {
+		}, q = {
 			begin: /</,
 			end: />/,
 			keywords: "repeat each",
 			contains: [...a, G]
-		}, ae = {
+		}, ie = {
 			begin: /\(/,
 			end: /\)/,
 			keywords: D,
@@ -16664,36 +16867,36 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				B,
 				...W,
 				G,
-				ie
+				K
 			],
 			endsParent: !0,
 			illegal: /["']/
-		}, oe = {
+		}, ae = {
 			match: [
 				/(func|macro)/,
 				/\s+/,
-				o(H.match, x, v)
+				o(ne.match, x, v)
 			],
 			className: {
 				1: "keyword",
 				3: "title.function"
 			},
 			contains: [
-				K,
-				ae,
+				q,
+				ie,
 				t
 			],
 			illegal: [/\[/, /%/]
-		}, se = {
+		}, J = {
 			match: [/\b(?:subscript|init[?!]?)/, /\s*(?=[<(])/],
 			className: { 1: "keyword" },
 			contains: [
-				K,
-				ae,
+				q,
+				ie,
 				t
 			],
 			illegal: /\[|%/
-		}, ce = {
+		}, oe = {
 			match: [
 				/operator/,
 				/\s+/,
@@ -16703,7 +16906,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				1: "keyword",
 				3: "title"
 			}
-		}, le = {
+		}, Y = {
 			begin: [
 				/precedencegroup/,
 				/\s+/,
@@ -16716,7 +16919,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			contains: [G],
 			keywords: [...p, ...f],
 			end: /}/
-		}, q = {
+		}, X = {
 			match: [
 				/class\b/,
 				/\s+/,
@@ -16729,7 +16932,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				3: "keyword",
 				5: "title.function"
 			}
-		}, ue = {
+		}, se = {
 			match: [
 				/class\b/,
 				/\s+/,
@@ -16739,7 +16942,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				1: "keyword",
 				3: "keyword"
 			}
-		}, de = {
+		}, ce = {
 			begin: [
 				/(struct|protocol|class|extension|enum|actor)/,
 				/\s+/,
@@ -16752,7 +16955,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			},
 			keywords: D,
 			contains: [
-				K,
+				q,
 				...O,
 				{
 					begin: /:/,
@@ -16788,20 +16991,20 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			keywords: D,
 			contains: [
 				...a,
-				oe,
+				ae,
+				J,
+				X,
 				se,
-				q,
-				ue,
-				de,
 				ce,
-				le,
+				oe,
+				Y,
 				{
 					beginKeywords: "import",
 					end: /$/,
 					contains: [...a],
 					relevance: 0
 				},
-				ne,
+				te,
 				...O,
 				...k,
 				...j,
@@ -16810,12 +17013,12 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				...U,
 				...W,
 				G,
-				ie
+				K
 			]
 		};
 	}
 	t.exports = T;
-})), Sn = /* @__PURE__ */ o(((e, t) => {
+})), Cn = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "Tagger Script",
@@ -16851,7 +17054,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Cn = /* @__PURE__ */ o(((e, t) => {
+})), wn = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = "true false yes no null", n = "[\\w#;/?:@&=+$,.~*'()[\\]]+", r = {
 			className: "attr",
@@ -16994,7 +17197,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), wn = /* @__PURE__ */ o(((e, t) => {
+})), Tn = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "Test Anything Protocol",
@@ -17023,7 +17226,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Tn = /* @__PURE__ */ o(((e, t) => {
+})), En = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = e.regex, n = /[a-zA-Z_][a-zA-Z0-9_]*/, r = {
 			className: "number",
@@ -17066,7 +17269,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), En = /* @__PURE__ */ o(((e, t) => {
+})), Dn = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = [
 			"bool",
@@ -17130,7 +17333,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Dn = /* @__PURE__ */ o(((e, t) => {
+})), On = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = {
 			className: "number",
@@ -17214,7 +17417,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), On = /* @__PURE__ */ o(((e, t) => {
+})), kn = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = e.regex, n = /* @__PURE__ */ "absolute_url.asset|0.asset_version.attribute.block.constant.controller|0.country_timezones.csrf_token.cycle.date.dump.expression.form|0.form_end.form_errors.form_help.form_label.form_rest.form_row.form_start.form_widget.html_classes.include.is_granted.logout_path.logout_url.max.min.parent.path|0.random.range.relative_path.render.render_esi.source.template_from_string.url|0".split("."), r = /* @__PURE__ */ "abs.abbr_class.abbr_method.batch.capitalize.column.convert_encoding.country_name.currency_name.currency_symbol.data_uri.date.date_modify.default.escape.file_excerpt.file_link.file_relative.filter.first.format.format_args.format_args_as_text.format_currency.format_date.format_datetime.format_file.format_file_from_text.format_number.format_time.html_to_markdown.humanize.inky_to_html.inline_css.join.json_encode.keys.language_name.last.length.locale_name.lower.map.markdown.markdown_to_html.merge.nl2br.number_format.raw.reduce.replace.reverse.round.slice.slug.sort.spaceless.split.striptags.timezone_name.title.trans.transchoice.trim.u|0.upper.url_encode.yaml_dump.yaml_encode".split("."), i = /* @__PURE__ */ "apply.autoescape.block.cache.deprecated.do.embed.extends.filter.flush.for.form_theme.from.if.import.include.macro.sandbox.set.stopwatch.trans.trans_default_domain.transchoice.use.verbatim.with".split(".");
 		i = i.concat(i.map((e) => `end${e}`));
@@ -17295,7 +17498,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), kn = /* @__PURE__ */ o(((e, t) => {
+})), An = /* @__PURE__ */ o(((e, t) => {
 	var n = "[A-Za-z$_][0-9A-Za-z$_]*", r = /* @__PURE__ */ "as.in.of.if.for.while.finally.var.new.function.do.return.void.else.break.catch.instanceof.with.throw.case.default.try.switch.continue.typeof.delete.let.yield.const.class.debugger.async.await.static.import.from.export.extends.using".split("."), i = [
 		"true",
 		"false",
@@ -17340,6 +17543,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		"localStorage",
 		"sessionStorage",
 		"module",
+		"self",
 		"global"
 	], l = [].concat(s, a, o);
 	function u(e) {
@@ -17553,7 +17757,8 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			match: t.concat(/\b/, F([
 				...s,
 				"super",
-				"import"
+				"import",
+				"await"
 			].map((e) => `${e}\\s*\\(`)), d, t.lookahead(/\s*\(/)),
 			className: "title.function",
 			relevance: 0
@@ -17606,7 +17811,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				PARAMS_CONTAINS: O,
 				CLASS_REFERENCE: j
 			},
-			illegal: /#(?![$_A-z])/,
+			illegal: /#(?![$_A-Za-z])/,
 			contains: [
 				e.SHEBANG({
 					label: "shebang",
@@ -17815,7 +18020,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		}), a;
 	}
 	t.exports = d;
-})), An = /* @__PURE__ */ o(((e, t) => {
+})), jn = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "Vala",
@@ -17853,7 +18058,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), jn = /* @__PURE__ */ o(((e, t) => {
+})), Mn = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = e.regex, n = {
 			className: "string",
@@ -17921,7 +18126,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Mn = /* @__PURE__ */ o(((e, t) => {
+})), Nn = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = e.regex, n = /* @__PURE__ */ "lcase.month.vartype.instrrev.ubound.setlocale.getobject.rgb.getref.string.weekdayname.rnd.dateadd.monthname.now.day.minute.isarray.cbool.round.formatcurrency.conversions.csng.timevalue.second.year.space.abs.clng.timeserial.fixs.len.asc.isempty.maths.dateserial.atn.timer.isobject.filter.weekday.datevalue.ccur.isdate.instr.datediff.formatdatetime.replace.isnull.right.sgn.array.snumeric.log.cdbl.hex.chr.lbound.msgbox.ucase.getlocale.cos.cdate.cbyte.rtrim.join.hour.oct.typename.trim.strcomp.int.createobject.loadpicture.tan.formatnumber.mid.split.cint.sin.datepart.ltrim.sqr.time.derived.eval.date.formatpercent.exp.inputbox.left.ascw.chrw.regexp.cstr.err".split("."), r = [
 			"server",
@@ -17961,7 +18166,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Nn = /* @__PURE__ */ o(((e, t) => {
+})), Pn = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "VBScript in HTML",
@@ -17974,7 +18179,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Pn = /* @__PURE__ */ o(((e, t) => {
+})), Fn = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = e.regex, n = {
 			$pattern: /\$?[\w]+(\$[\w]+)*/,
@@ -18029,10 +18234,9 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Fn = /* @__PURE__ */ o(((e, t) => {
+})), In = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
-		let t = "\\d(_|\\d)*";
-		return "" + t, t + "", t + "", {
+		return {
 			name: "VHDL",
 			case_insensitive: !0,
 			keywords: {
@@ -18075,7 +18279,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), In = /* @__PURE__ */ o(((e, t) => {
+})), Ln = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "Vim Script",
@@ -18128,7 +18332,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Ln = /* @__PURE__ */ o(((e, t) => {
+})), Rn = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		e.regex;
 		let t = e.COMMENT(/\(;/, /;\)/);
@@ -18190,7 +18394,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Rn = /* @__PURE__ */ o(((e, t) => {
+})), zn = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = e.regex, n = /[a-zA-Z]\w*/, r = [
 			"as",
@@ -18397,7 +18601,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), zn = /* @__PURE__ */ o(((e, t) => {
+})), Bn = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "Intel x86 Assembly",
@@ -18460,7 +18664,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Bn = /* @__PURE__ */ o(((e, t) => {
+})), Vn = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = {
 			$pattern: /[a-zA-Z][a-zA-Z0-9_?]*/,
@@ -18542,7 +18746,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Vn = /* @__PURE__ */ o(((e, t) => {
+})), Hn = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		return {
 			name: "XQuery",
@@ -18688,7 +18892,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		};
 	}
 	t.exports = n;
-})), Hn = /* @__PURE__ */ o(((e, t) => {
+})), Un = /* @__PURE__ */ o(((e, t) => {
 	function n(e) {
 		let t = {
 			className: "string",
@@ -18759,49 +18963,49 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 	t.exports = n;
 })), Q = (/* @__PURE__ */ c((/* @__PURE__ */ o(((e, t) => {
 	var n = l();
-	n.registerLanguage("1c", u()), n.registerLanguage("abnf", d()), n.registerLanguage("accesslog", f()), n.registerLanguage("actionscript", p()), n.registerLanguage("ada", m()), n.registerLanguage("angelscript", h()), n.registerLanguage("apache", g()), n.registerLanguage("applescript", _()), n.registerLanguage("arcade", v()), n.registerLanguage("arduino", y()), n.registerLanguage("armasm", b()), n.registerLanguage("xml", x()), n.registerLanguage("asciidoc", S()), n.registerLanguage("aspectj", C()), n.registerLanguage("autohotkey", w()), n.registerLanguage("autoit", T()), n.registerLanguage("avrasm", E()), n.registerLanguage("awk", D()), n.registerLanguage("axapta", O()), n.registerLanguage("bash", k()), n.registerLanguage("basic", A()), n.registerLanguage("bnf", j()), n.registerLanguage("brainfuck", M()), n.registerLanguage("c", N()), n.registerLanguage("cal", P()), n.registerLanguage("capnproto", F()), n.registerLanguage("ceylon", I()), n.registerLanguage("clean", L()), n.registerLanguage("clojure", R()), n.registerLanguage("clojure-repl", z()), n.registerLanguage("cmake", B()), n.registerLanguage("coffeescript", ee()), n.registerLanguage("coq", te()), n.registerLanguage("cos", V()), n.registerLanguage("cpp", ne()), n.registerLanguage("crmsh", H()), n.registerLanguage("crystal", U()), n.registerLanguage("csharp", W()), n.registerLanguage("csp", G()), n.registerLanguage("css", re()), n.registerLanguage("d", ie()), n.registerLanguage("markdown", K()), n.registerLanguage("dart", ae()), n.registerLanguage("delphi", oe()), n.registerLanguage("diff", se()), n.registerLanguage("django", ce()), n.registerLanguage("dns", le()), n.registerLanguage("dockerfile", q()), n.registerLanguage("dos", ue()), n.registerLanguage("dsconfig", de()), n.registerLanguage("dts", fe()), n.registerLanguage("dust", J()), n.registerLanguage("ebnf", pe()), n.registerLanguage("elixir", Y()), n.registerLanguage("elm", X()), n.registerLanguage("ruby", me()), n.registerLanguage("erb", he()), n.registerLanguage("erlang-repl", ge()), n.registerLanguage("erlang", _e()), n.registerLanguage("excel", ve()), n.registerLanguage("fix", ye()), n.registerLanguage("flix", be()), n.registerLanguage("fortran", xe()), n.registerLanguage("fsharp", Se()), n.registerLanguage("gams", Ce()), n.registerLanguage("gauss", we()), n.registerLanguage("gcode", Te()), n.registerLanguage("gherkin", Ee()), n.registerLanguage("glsl", De()), n.registerLanguage("gml", Oe()), n.registerLanguage("go", Z()), n.registerLanguage("golo", ke()), n.registerLanguage("gradle", Ae()), n.registerLanguage("graphql", je()), n.registerLanguage("groovy", Me()), n.registerLanguage("haml", Ne()), n.registerLanguage("handlebars", Pe()), n.registerLanguage("haskell", Fe()), n.registerLanguage("haxe", Ie()), n.registerLanguage("hsp", Le()), n.registerLanguage("http", Re()), n.registerLanguage("hy", ze()), n.registerLanguage("inform7", Be()), n.registerLanguage("ini", Ve()), n.registerLanguage("irpf90", He()), n.registerLanguage("isbl", Ue()), n.registerLanguage("java", We()), n.registerLanguage("javascript", Ge()), n.registerLanguage("jboss-cli", Ke()), n.registerLanguage("json", qe()), n.registerLanguage("julia", Je()), n.registerLanguage("julia-repl", Ye()), n.registerLanguage("kotlin", Xe()), n.registerLanguage("lasso", Ze()), n.registerLanguage("latex", Qe()), n.registerLanguage("ldif", $e()), n.registerLanguage("leaf", et()), n.registerLanguage("less", tt()), n.registerLanguage("lisp", nt()), n.registerLanguage("livecodeserver", rt()), n.registerLanguage("livescript", it()), n.registerLanguage("llvm", at()), n.registerLanguage("lsl", ot()), n.registerLanguage("lua", st()), n.registerLanguage("makefile", ct()), n.registerLanguage("mathematica", lt()), n.registerLanguage("matlab", ut()), n.registerLanguage("maxima", dt()), n.registerLanguage("mel", ft()), n.registerLanguage("mercury", pt()), n.registerLanguage("mipsasm", mt()), n.registerLanguage("mizar", ht()), n.registerLanguage("perl", gt()), n.registerLanguage("mojolicious", _t()), n.registerLanguage("monkey", vt()), n.registerLanguage("moonscript", yt()), n.registerLanguage("n1ql", bt()), n.registerLanguage("nestedtext", xt()), n.registerLanguage("nginx", St()), n.registerLanguage("nim", Ct()), n.registerLanguage("nix", wt()), n.registerLanguage("node-repl", Tt()), n.registerLanguage("nsis", Et()), n.registerLanguage("objectivec", Dt()), n.registerLanguage("ocaml", Ot()), n.registerLanguage("openscad", kt()), n.registerLanguage("oxygene", At()), n.registerLanguage("parser3", jt()), n.registerLanguage("pf", Mt()), n.registerLanguage("pgsql", Nt()), n.registerLanguage("php", Pt()), n.registerLanguage("php-template", Ft()), n.registerLanguage("plaintext", It()), n.registerLanguage("pony", Lt()), n.registerLanguage("powershell", Rt()), n.registerLanguage("processing", zt()), n.registerLanguage("profile", Bt()), n.registerLanguage("prolog", Vt()), n.registerLanguage("properties", Ht()), n.registerLanguage("protobuf", Ut()), n.registerLanguage("puppet", Wt()), n.registerLanguage("purebasic", Gt()), n.registerLanguage("python", Kt()), n.registerLanguage("python-repl", qt()), n.registerLanguage("q", Jt()), n.registerLanguage("qml", Yt()), n.registerLanguage("r", Xt()), n.registerLanguage("reasonml", Zt()), n.registerLanguage("rib", Qt()), n.registerLanguage("roboconf", $t()), n.registerLanguage("routeros", en()), n.registerLanguage("rsl", tn()), n.registerLanguage("ruleslanguage", nn()), n.registerLanguage("rust", rn()), n.registerLanguage("sas", an()), n.registerLanguage("scala", on()), n.registerLanguage("scheme", sn()), n.registerLanguage("scilab", cn()), n.registerLanguage("scss", ln()), n.registerLanguage("shell", un()), n.registerLanguage("smali", dn()), n.registerLanguage("smalltalk", fn()), n.registerLanguage("sml", pn()), n.registerLanguage("sqf", mn()), n.registerLanguage("sql", hn()), n.registerLanguage("stan", gn()), n.registerLanguage("stata", _n()), n.registerLanguage("step21", vn()), n.registerLanguage("stylus", yn()), n.registerLanguage("subunit", bn()), n.registerLanguage("swift", xn()), n.registerLanguage("taggerscript", Sn()), n.registerLanguage("yaml", Cn()), n.registerLanguage("tap", wn()), n.registerLanguage("tcl", Tn()), n.registerLanguage("thrift", En()), n.registerLanguage("tp", Dn()), n.registerLanguage("twig", On()), n.registerLanguage("typescript", kn()), n.registerLanguage("vala", An()), n.registerLanguage("vbnet", jn()), n.registerLanguage("vbscript", Mn()), n.registerLanguage("vbscript-html", Nn()), n.registerLanguage("verilog", Pn()), n.registerLanguage("vhdl", Fn()), n.registerLanguage("vim", In()), n.registerLanguage("wasm", Ln()), n.registerLanguage("wren", Rn()), n.registerLanguage("x86asm", zn()), n.registerLanguage("xl", Bn()), n.registerLanguage("xquery", Vn()), n.registerLanguage("zephir", Hn()), n.HighlightJS = n, n.default = n, t.exports = n;
+	n.registerLanguage("1c", u()), n.registerLanguage("abnf", d()), n.registerLanguage("accesslog", f()), n.registerLanguage("actionscript", p()), n.registerLanguage("ada", m()), n.registerLanguage("angelscript", h()), n.registerLanguage("apache", g()), n.registerLanguage("applescript", _()), n.registerLanguage("arcade", v()), n.registerLanguage("arduino", y()), n.registerLanguage("armasm", b()), n.registerLanguage("xml", x()), n.registerLanguage("asciidoc", S()), n.registerLanguage("aspectj", C()), n.registerLanguage("autohotkey", w()), n.registerLanguage("autoit", T()), n.registerLanguage("avrasm", E()), n.registerLanguage("awk", D()), n.registerLanguage("axapta", O()), n.registerLanguage("bash", k()), n.registerLanguage("basic", A()), n.registerLanguage("bnf", j()), n.registerLanguage("brainfuck", M()), n.registerLanguage("c", N()), n.registerLanguage("cal", P()), n.registerLanguage("capnproto", F()), n.registerLanguage("ceylon", I()), n.registerLanguage("clean", L()), n.registerLanguage("clojure", R()), n.registerLanguage("clojure-repl", z()), n.registerLanguage("cmake", B()), n.registerLanguage("coffeescript", V()), n.registerLanguage("coq", ee()), n.registerLanguage("cos", H()), n.registerLanguage("cpp", te()), n.registerLanguage("crmsh", ne()), n.registerLanguage("crystal", U()), n.registerLanguage("csharp", W()), n.registerLanguage("csp", G()), n.registerLanguage("css", re()), n.registerLanguage("d", K()), n.registerLanguage("markdown", q()), n.registerLanguage("dart", ie()), n.registerLanguage("delphi", ae()), n.registerLanguage("diff", J()), n.registerLanguage("django", oe()), n.registerLanguage("dns", Y()), n.registerLanguage("dockerfile", X()), n.registerLanguage("dos", se()), n.registerLanguage("dsconfig", ce()), n.registerLanguage("dts", le()), n.registerLanguage("dust", ue()), n.registerLanguage("ebnf", de()), n.registerLanguage("elixir", fe()), n.registerLanguage("elm", pe()), n.registerLanguage("ruby", me()), n.registerLanguage("erb", he()), n.registerLanguage("erlang-repl", ge()), n.registerLanguage("erlang", _e()), n.registerLanguage("excel", ve()), n.registerLanguage("fix", ye()), n.registerLanguage("flix", be()), n.registerLanguage("fortran", xe()), n.registerLanguage("freedesktop", Z()), n.registerLanguage("fsharp", Se()), n.registerLanguage("gams", Ce()), n.registerLanguage("gauss", we()), n.registerLanguage("gcode", Te()), n.registerLanguage("gherkin", Ee()), n.registerLanguage("glsl", De()), n.registerLanguage("gml", Oe()), n.registerLanguage("go", ke()), n.registerLanguage("golo", Ae()), n.registerLanguage("gradle", je()), n.registerLanguage("graphql", Me()), n.registerLanguage("groovy", Ne()), n.registerLanguage("haml", Pe()), n.registerLanguage("handlebars", Fe()), n.registerLanguage("haskell", Ie()), n.registerLanguage("haxe", Le()), n.registerLanguage("hsp", Re()), n.registerLanguage("http", ze()), n.registerLanguage("hy", Be()), n.registerLanguage("inform7", Ve()), n.registerLanguage("ini", He()), n.registerLanguage("irpf90", Ue()), n.registerLanguage("isbl", We()), n.registerLanguage("java", Ge()), n.registerLanguage("javascript", Ke()), n.registerLanguage("jboss-cli", qe()), n.registerLanguage("json", Je()), n.registerLanguage("julia", Ye()), n.registerLanguage("julia-repl", Xe()), n.registerLanguage("kotlin", Ze()), n.registerLanguage("lasso", Qe()), n.registerLanguage("latex", $e()), n.registerLanguage("ldif", et()), n.registerLanguage("leaf", tt()), n.registerLanguage("less", nt()), n.registerLanguage("lisp", rt()), n.registerLanguage("livecodeserver", it()), n.registerLanguage("livescript", at()), n.registerLanguage("llvm", ot()), n.registerLanguage("lsl", st()), n.registerLanguage("lua", ct()), n.registerLanguage("makefile", lt()), n.registerLanguage("mathematica", ut()), n.registerLanguage("matlab", dt()), n.registerLanguage("maxima", ft()), n.registerLanguage("mel", pt()), n.registerLanguage("mercury", mt()), n.registerLanguage("mipsasm", ht()), n.registerLanguage("mizar", gt()), n.registerLanguage("perl", _t()), n.registerLanguage("mojolicious", vt()), n.registerLanguage("monkey", yt()), n.registerLanguage("moonscript", bt()), n.registerLanguage("n1ql", xt()), n.registerLanguage("nestedtext", St()), n.registerLanguage("nginx", Ct()), n.registerLanguage("nim", wt()), n.registerLanguage("nix", Tt()), n.registerLanguage("node-repl", Et()), n.registerLanguage("nsis", Dt()), n.registerLanguage("objectivec", Ot()), n.registerLanguage("ocaml", kt()), n.registerLanguage("openscad", At()), n.registerLanguage("oxygene", jt()), n.registerLanguage("parser3", Mt()), n.registerLanguage("pf", Nt()), n.registerLanguage("pgsql", Pt()), n.registerLanguage("php", Ft()), n.registerLanguage("php-template", It()), n.registerLanguage("plaintext", Lt()), n.registerLanguage("pony", Rt()), n.registerLanguage("powershell", zt()), n.registerLanguage("processing", Bt()), n.registerLanguage("profile", Vt()), n.registerLanguage("prolog", Ht()), n.registerLanguage("properties", Ut()), n.registerLanguage("protobuf", Wt()), n.registerLanguage("puppet", Gt()), n.registerLanguage("purebasic", Kt()), n.registerLanguage("python", qt()), n.registerLanguage("python-repl", Jt()), n.registerLanguage("q", Yt()), n.registerLanguage("qml", Xt()), n.registerLanguage("r", Zt()), n.registerLanguage("reasonml", Qt()), n.registerLanguage("rib", $t()), n.registerLanguage("roboconf", en()), n.registerLanguage("routeros", tn()), n.registerLanguage("rsl", nn()), n.registerLanguage("ruleslanguage", rn()), n.registerLanguage("rust", an()), n.registerLanguage("sas", on()), n.registerLanguage("scala", sn()), n.registerLanguage("scheme", cn()), n.registerLanguage("scilab", ln()), n.registerLanguage("scss", un()), n.registerLanguage("shell", dn()), n.registerLanguage("smali", fn()), n.registerLanguage("smalltalk", pn()), n.registerLanguage("sml", mn()), n.registerLanguage("sqf", hn()), n.registerLanguage("sql", gn()), n.registerLanguage("stan", _n()), n.registerLanguage("stata", vn()), n.registerLanguage("step21", yn()), n.registerLanguage("stylus", bn()), n.registerLanguage("subunit", xn()), n.registerLanguage("swift", Sn()), n.registerLanguage("taggerscript", Cn()), n.registerLanguage("yaml", wn()), n.registerLanguage("tap", Tn()), n.registerLanguage("tcl", En()), n.registerLanguage("thrift", Dn()), n.registerLanguage("tp", On()), n.registerLanguage("twig", kn()), n.registerLanguage("typescript", An()), n.registerLanguage("vala", jn()), n.registerLanguage("vbnet", Mn()), n.registerLanguage("vbscript", Nn()), n.registerLanguage("vbscript-html", Pn()), n.registerLanguage("verilog", Fn()), n.registerLanguage("vhdl", In()), n.registerLanguage("vim", Ln()), n.registerLanguage("wasm", Rn()), n.registerLanguage("wren", zn()), n.registerLanguage("x86asm", Bn()), n.registerLanguage("xl", Vn()), n.registerLanguage("xquery", Hn()), n.registerLanguage("zephir", Un()), n.HighlightJS = n, n.default = n, t.exports = n;
 })))())).default;
 //#endregion
 //#region plugin/highlight/plugin.js
 (function(e, t) {
-	var n, r = "hljs-ln", i = "hljs-ln-line", a = "hljs-ln-code", o = "hljs-ln-numbers", s = "hljs-ln-n", c = "data-line-number", l = /\r\n|\r|\n/g;
-	function u(e) {
+	var n, r = "hljs-ln", i = "hljs-ln-code", a = "hljs-ln-n", o = "data-line-number", s = /\r\n|\r|\n/g;
+	function c(e) {
 		for (var t = e.toString(), n = e.anchorNode; n.nodeName !== "TD";) n = n.parentNode;
 		for (var r = e.focusNode; r.nodeName !== "TD";) r = r.parentNode;
-		var i = parseInt(n.dataset.lineNumber), o = parseInt(r.dataset.lineNumber);
-		if (i == o) return t;
-		var s, l = n.textContent, u = r.textContent;
-		for (o < i && (s = i, i = o, o = s, s = l, l = u, u = s); t.indexOf(l) !== 0;) l = l.slice(1);
+		var a = parseInt(n.dataset.lineNumber), s = parseInt(r.dataset.lineNumber);
+		if (a == s) return t;
+		var c, l = n.textContent, u = r.textContent;
+		for (s < a && (c = a, a = s, s = c, c = l, l = u, u = c); t.indexOf(l) !== 0;) l = l.slice(1);
 		for (; t.lastIndexOf(u) === -1;) u = u.slice(0, -1);
 		for (var d = l, f = function(e) {
 			for (var t = e; t.nodeName !== "TABLE";) t = t.parentNode;
 			return t;
-		}(n), p = i + 1; p < o; ++p) {
-			var m = g(".{0}[{1}=\"{2}\"]", [
-				a,
-				c,
+		}(n), p = a + 1; p < s; ++p) {
+			var h = m(".{0}[{1}=\"{2}\"]", [
+				i,
+				o,
 				p
 			]);
-			d += "\n" + f.querySelector(m).textContent;
+			d += "\n" + f.querySelector(h).textContent;
 		}
 		return d += "\n" + u;
 	}
-	function d(n) {
+	function l(n) {
 		try {
 			var r = t.querySelectorAll("code.hljs,code.nohighlight");
-			for (var i in r) r.hasOwnProperty(i) && (r[i].classList.contains("nohljsln") || f(r[i], n));
+			for (var i in r) r.hasOwnProperty(i) && (r[i].classList.contains("nohljsln") || u(r[i], n));
 		} catch (t) {
 			e.console.error("LineNumbers error: ", t);
 		}
 	}
-	function f(e, t) {
-		typeof e == "object" && (e.innerHTML = p(e, t));
+	function u(e, t) {
+		typeof e == "object" && (e.innerHTML = d(e, t));
 	}
-	function p(e, t) {
-		var n, u, d = (n = e, {
+	function d(e, t) {
+		var n, c, l = (n = e, {
 			singleLine: function(e) {
 				return !!e.singleLine && e.singleLine;
-			}(u = (u = t) || {}),
+			}(c = (c = t) || {}),
 			startFrom: function(e, t) {
 				var n = 1;
 				isFinite(t.startFrom) && (n = t.startFrom);
@@ -18813,59 +19017,59 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					var n = Number(e);
 					return isFinite(n) ? n : t;
 				}(r, 1)), n;
-			}(n, u)
+			}(n, c)
 		});
 		return function e(t) {
 			var n = t.childNodes;
 			for (var r in n) {
 				var i;
-				n.hasOwnProperty(r) && (i = n[r], 0 < (i.textContent.trim().match(l) || []).length && (0 < i.childNodes.length ? e(i) : m(i.parentNode)));
+				n.hasOwnProperty(r) && (i = n[r], 0 < (i.textContent.trim().match(s) || []).length && (0 < i.childNodes.length ? e(i) : f(i.parentNode)));
 			}
 		}(e), function(e, t) {
-			var n = h(e);
+			var n = p(e);
 			if (n[n.length - 1].trim() === "" && n.pop(), 1 < n.length || t.singleLine) {
-				for (var l = "", u = 0, d = n.length; u < d; u++) l += g("<tr><td class=\"{0} {1}\" {3}=\"{5}\"><div class=\"{2}\" {3}=\"{5}\"></div></td><td class=\"{0} {4}\" {3}=\"{5}\">{6}</td></tr>", [
-					i,
-					o,
-					s,
-					c,
+				for (var s = "", c = 0, l = n.length; c < l; c++) s += m("<tr><td class=\"{0} {1}\" {3}=\"{5}\"><div class=\"{2}\" {3}=\"{5}\"></div></td><td class=\"{0} {4}\" {3}=\"{5}\">{6}</td></tr>", [
+					"hljs-ln-line",
+					"hljs-ln-numbers",
 					a,
-					u + t.startFrom,
-					0 < n[u].length ? n[u] : " "
+					o,
+					i,
+					c + t.startFrom,
+					0 < n[c].length ? n[c] : " "
 				]);
-				return g("<table class=\"{0}\">{1}</table>", [r, l]);
+				return m("<table class=\"{0}\">{1}</table>", [r, s]);
 			}
 			return e;
-		}(e.innerHTML, d);
+		}(e.innerHTML, l);
 	}
-	function m(e) {
+	function f(e) {
 		var t = e.className;
 		if (/hljs-/.test(t)) {
-			for (var n = h(e.innerHTML), r = 0, i = ""; r < n.length; r++) i += g("<span class=\"{0}\">{1}</span>\n", [t, 0 < n[r].length ? n[r] : " "]);
+			for (var n = p(e.innerHTML), r = 0, i = ""; r < n.length; r++) i += m("<span class=\"{0}\">{1}</span>\n", [t, 0 < n[r].length ? n[r] : " "]);
 			e.innerHTML = i.trim();
 		}
 	}
-	function h(e) {
-		return e.length === 0 ? [] : e.split(l);
+	function p(e) {
+		return e.length === 0 ? [] : e.split(s);
 	}
-	function g(e, t) {
+	function m(e, t) {
 		return e.replace(/\{(\d+)\}/g, function(e, n) {
 			return t[n] === void 0 ? e : t[n];
 		});
 	}
 	Q ? (Q.initLineNumbersOnLoad = function(n) {
-		t.readyState === "interactive" || t.readyState === "complete" ? d(n) : e.addEventListener("DOMContentLoaded", function() {
-			d(n);
+		t.readyState === "interactive" || t.readyState === "complete" ? l(n) : e.addEventListener("DOMContentLoaded", function() {
+			l(n);
 		});
-	}, Q.lineNumbersBlock = f, Q.lineNumbersValue = function(e, t) {
+	}, Q.lineNumbersBlock = u, Q.lineNumbersValue = function(e, t) {
 		if (typeof e == "string") {
 			var n = document.createElement("code");
-			return n.innerHTML = e, p(n, t);
+			return n.innerHTML = e, d(n, t);
 		}
-	}, (n = t.createElement("style")).type = "text/css", n.innerHTML = g(".{0}{border-collapse:collapse}.{0} td{padding:0}.{1}:before{content:attr({2})}", [
+	}, (n = t.createElement("style")).type = "text/css", n.innerHTML = m(".{0}{border-collapse:collapse}.{0} td{padding:0}.{1}:before{content:attr({2})}", [
 		r,
-		s,
-		c
+		a,
+		o
 	]), t.getElementsByTagName("head")[0].appendChild(n)) : e.console.error("highlight.js not detected!"), document.addEventListener("copy", function(e) {
 		var t, n = window.getSelection();
 		!function(e) {
@@ -18873,7 +19077,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				if (t.className && t.className.indexOf("hljs-ln-code") !== -1) return 1;
 				t = t.parentNode;
 			}
-		}(n.anchorNode) || (t = window.navigator.userAgent.indexOf("Edge") === -1 ? n.toString() : u(n), e.clipboardData.setData("text/plain", t), e.preventDefault());
+		}(n.anchorNode) || (t = window.navigator.userAgent.indexOf("Edge") === -1 ? n.toString() : c(n), e.clipboardData.setData("text/plain", t), e.preventDefault());
 	});
 })(window, document);
 var $ = {
@@ -18884,10 +19088,10 @@ var $ = {
 	hljs: Q,
 	init: function(e) {
 		let t = e.getConfig().highlight || {};
-		t.highlightOnLoad = typeof t.highlightOnLoad == "boolean" ? t.highlightOnLoad : !0, t.escapeHTML = typeof t.escapeHTML == "boolean" ? t.escapeHTML : !0, Array.from(e.getRevealElement().querySelectorAll("pre code")).forEach((e) => {
+		t.highlightOnLoad = typeof t.highlightOnLoad != "boolean" || t.highlightOnLoad, t.escapeHTML = typeof t.escapeHTML != "boolean" || t.escapeHTML, Array.from(e.getRevealElement().querySelectorAll("pre code")).forEach((e) => {
 			e.parentNode.classList.add("code-wrapper");
 			let n = e.querySelector("script[type=\"text/template\"]");
-			n && (e.textContent = n.innerHTML), e.hasAttribute("data-trim") && typeof e.innerHTML.trim == "function" && (e.innerHTML = Un(e)), t.escapeHTML && !e.hasAttribute("data-noescape") && (e.innerHTML = e.innerHTML.replace(/</g, "&lt;").replace(/>/g, "&gt;")), e.addEventListener("focusout", function(e) {
+			n && (e.textContent = n.innerHTML), e.hasAttribute("data-trim") && typeof e.innerHTML.trim == "function" && (e.innerHTML = Wn(e)), t.escapeHTML && !e.hasAttribute("data-noescape") && (e.innerHTML = e.innerHTML.replace(/</g, "&lt;").replace(/>/g, "&gt;")), e.addEventListener("focusout", function(e) {
 				Q.highlightElement(e.currentTarget);
 			}, !1);
 		}), typeof t.beforeHighlight == "function" && t.beforeHighlight(Q), t.highlightOnLoad && Array.from(e.getRevealElement().querySelectorAll("pre code")).forEach((e) => {
@@ -18967,7 +19171,8 @@ var $ = {
 						start: t,
 						end: n
 					};
-				} else return {};
+				}
+				return {};
 			});
 		});
 	},
@@ -18979,7 +19184,7 @@ var $ = {
 		}).join($.HIGHLIGHT_STEP_DELIMITER);
 	}
 };
-function Un(e) {
+function Wn(e) {
 	function t(e) {
 		return e.replace(/^[\s\uFEFF\xA0]+/g, "");
 	}
@@ -18999,6 +19204,6 @@ function Un(e) {
 }
 //#endregion
 //#region plugin/highlight/index.ts
-var Wn = () => $;
+var Gn = () => $;
 //#endregion
-export { Wn as default };
+export { Gn as default };

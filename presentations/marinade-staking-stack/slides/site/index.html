@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Inside Marinade's staking stack: liquid, native, and getting out early</title>
+		<link rel="stylesheet" href="dist/reset.css" />
+		<link rel="stylesheet" href="dist/reveal.css" />
+		<link rel="stylesheet" href="dist/theme/black.css" />
+		<link rel="stylesheet" href="theme/marinade.css" />
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section data-charset="utf-8" data-markdown="" data-markdown-parsed="true" data-background-image="images/brand-art/p-liquidity.jpg" class="cover art vcenter"><!-- -->
+
+<div class="lockup"><img src="images/marinade-white.svg" alt="">Marinade</div>
+
+<h1>Inside Marinade's staking stack</h1>
+<h2>An introductory tour of staking infrastructure on <span class="accent">Solana</span></h2>
+<div class="logo-row">
+<img src="images/solana-logo.svg" alt="Solana">
+</div>
+
+<p><span class="note">Ondra Chaloupka</span></p>
+</section><section data-charset="utf-8" data-markdown="" data-markdown-parsed="true" class="anchor-top"><!-- -->
+
+<h2>What we are going to cook through</h2>
+<!-- Lucide "square-terminal" geometry, with its second-line underscore replaced by a
+     filled block cursor. Inlined so currentColor picks up the theme. The frame is what
+     makes it read as an object rather than two marks. -->
+<svg class="slide-icon wash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.55" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
+<path d="m7 11 2-2-2-2"></path>
+<rect class="cursor" x="10.8" y="7.3" width="3.6" height="3.4" rx="0.3" fill="currentColor" stroke="none"></rect>
+</svg>
+
+<!-- Must be a div, not a span: markdown wraps a bare span in a <p>, and that <p>
+     then becomes the containing block, breaking the absolute pinning.
+     Hat only, no wordmark: the cover already showed the full lockup. -->
+<div class="brand-mark"><img src="images/marinade-white.svg" alt="Marinade"></div>
+
+<div class="slide-body"><div class="agenda">
+<div>
+<span class="agenda-name">What is staking</span>
+<span class="agenda-shout">Why a blockchain pays you to lock money up</span>
+</div>
+<div>
+<span class="agenda-name">Liquid staking</span>
+<span class="agenda-shout">The original Solana LST</span>
+</div>
+<div>
+<span class="agenda-name">Native staking</span>
+<span class="agenda-shout">Keep custody. No program ever holds your SOL.</span>
+<!-- Parked: the three strategies crowd the agenda and land better inside the Native
+     section, where the room has context. Reuse this block for a strategies slide there,
+     and spend the $BONK line as a surprise rather than a bullet.
+<ul class="agenda-sub">
+<li><strong>Max Yield</strong> 100+ validators bidding for your stake</li>
+<li><strong>Select</strong> Verified identity, zero tolerance for malicious MEV</li>
+<li><strong>Recipes</strong> Stake SOL, get paid in <span class="accent">$BONK</span></li>
+</ul>
+-->
+</div>
+<div>
+<span class="agenda-name">Bonds and instant unstake</span>
+<span class="agenda-shout">Collateral, and skipping the cooldown</span>
+</div>
+</div></div>
+
+</section><section data-charset="utf-8" data-markdown="" data-markdown-parsed="true" class=""><h2>Who talks to you</h2>
+<div class="slide-body"><div class="bio">
+<img class="bio-avatar" src="images/helmet.jpg" alt="">
+<div>
+<p class="bio-name">Ondra Chaloupka <span class="bio-handle"><a href="https://x.com/_chalda" target="_blank" rel="noopener noreferrer">@_chalda</a></span></p>
+<ul>
+<li><strong>Backend developer</strong> at <a href="https://marinade.finance" target="_blank" rel="noopener noreferrer">Marinade</a>
+<img class="bio-icon" src="images/marinade-white.svg" alt="">
+<img class="bio-icon" src="images/solana-logo.svg" alt=""></li>
+<li>Before that, <a href="https://jbossts.blogspot.com/2018/01/narayana-periodic-recovery-of-xa.html" target="_blank" rel="noopener noreferrer">Java engineer</a> at Red Hat
+<img class="bio-icon" src="images/logos/redhat.svg" alt=""></li>
+<li>Came for distributed systems, <a href="https://blog.chalda.cz/" target="_blank" rel="noopener noreferrer">stayed for Solana</a></li>
+<li>Contributor to Realms, and author of its <a href="https://www.youtube.com/watch?v=2lzzbyWYIpc" target="_blank" rel="noopener noreferrer">SPL Governance deep dive</a>
+<img class="bio-icon" src="images/logos/realms.png" alt=""></li>
+</ul>
+</div>
+</div></div>
+
+</section><section data-charset="utf-8" data-markdown="" data-markdown-parsed="true" class="with-art anchor-top"><!-- -->
+
+<h2>Who is Marinade</h2>
+<div class="side-art hat"><img src="images/marinade-white.svg" alt=""></div>
+
+<div class="slide-body"><div class="agenda">
+<div>
+<span class="agenda-name">Born in a hackathon, 2021</span>
+<span class="agenda-shout">Two projects merged, and shipped the first liquid staking token on Solana.</span>
+</div>
+<div>
+<span class="agenda-name">A DAO with a public forum</span>
+<span class="agenda-shout">MNDE holders lock their tokens to vote, and proposals are argued in the open.</span>
+</div>
+<div>
+<span class="agenda-name">A stake automation platform</span>
+<span class="agenda-shout">Marinade's own words. Chasing rewards and Solana's decentralisation at once.</span>
+</div>
+</div></div>
+
+<p class="slide-foot">Five years on one chain, bootstrapped by grants rather than venture capital.</p>
+
+</section><section data-charset="utf-8" data-markdown="" data-markdown-parsed="true" class=""><!-- .slide: -->
+
+<h2>What is staking</h2>
+<!-- Lucide "hand-coins", ISC. Thin stroke because the icon set is drawn for 24px:
+     at this size the stock stroke-width of 2 reads as heavy bars. -->
+<svg class="slide-icon wash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<path d="M11 15h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 17"></path>
+<path d="m7 21 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.75-2.91l-4.2 3.9"></path>
+<path d="m2 16 6 6"></path>
+<circle cx="16" cy="9" r="2.9"></circle>
+<circle cx="6" cy="5" r="3"></circle>
+</svg>
+
+<div class="slide-body"><div class="grid-3">
+<div class="card">
+<h3>Backing the network</h3>
+<p>Locked SOL says its security and uptime matter, and the network pays for that.</p>
+</div>
+<div class="card">
+<h3>Validators do the work</h3>
+<p>They run the hardware and vote on blocks, carrying the stake delegated to them.</p>
+</div>
+<div class="card">
+<h3>Two kinds of reward</h3>
+<p>Voting earns inflation. Building blocks earns fees.</p>
+</div>
+</div></div>
+
+<p class="slide-foot">Solana's own wording: delegating your tokens does not give the validator ownership or control over them.</p>
+
+</section><section data-charset="utf-8" data-markdown="" data-markdown-parsed="true" class=""><!-- .slide: -->
+
+<h2>Stake decides who builds</h2>
+<div class="slide-body"><div class="figure-wide"><svg class="pos" viewBox="0 0 1680 520" role="img"><title>Stakers delegate to validators. Every validator votes on every block and earns inflation, which flows back to the stakers. Stake also decides how many slots a validator gets, and the fees in those blocks stay with the validator.</title><text class="pos-head" x="95" y="44">Stakers</text><text class="pos-head" x="441" y="44">Validators</text><rect class="pos-box" x="20" y="100" width="150" height="44" rx="10"></rect><text class="pos-lbl" x="95" y="129">SOL</text><rect class="pos-box" x="20" y="166" width="150" height="44" rx="10"></rect><text class="pos-lbl" x="95" y="195">SOL</text><rect class="pos-box" x="20" y="232" width="150" height="44" rx="10"></rect><text class="pos-lbl" x="95" y="261">SOL</text><rect class="pos-box" x="20" y="298" width="150" height="44" rx="10"></rect><text class="pos-lbl" x="95" y="327">SOL</text><path class="pos-arrow" d="M186 222 H286"></path><path class="pos-arrow" d="M278 214 l10 8 -10 8"></path><text class="pos-note" x="236" y="204">delegate</text><rect class="pos-box" x="316" y="76" width="250" height="80" rx="12"></rect><text class="pos-lbl" x="352" y="124">A</text><rect class="pos-pip" x="388" y="106" width="26" height="22" rx="5"></rect><rect class="pos-pip" x="422" y="106" width="26" height="22" rx="5"></rect><rect class="pos-pip" x="456" y="106" width="26" height="22" rx="5"></rect><rect class="pos-pip" x="490" y="106" width="26" height="22" rx="5"></rect><rect class="pos-pip" x="524" y="106" width="26" height="22" rx="5"></rect><rect class="pos-box" x="316" y="186" width="250" height="80" rx="12"></rect><text class="pos-lbl" x="352" y="234">B</text><rect class="pos-pip" x="388" y="216" width="26" height="22" rx="5"></rect><rect class="pos-pip" x="422" y="216" width="26" height="22" rx="5"></rect><rect class="pos-pip" x="456" y="216" width="26" height="22" rx="5"></rect><rect class="pos-box" x="316" y="296" width="250" height="80" rx="12"></rect><text class="pos-lbl" x="352" y="344">C</text><rect class="pos-pip" x="388" y="326" width="26" height="22" rx="5"></rect><path class="pos-arrow" d="M586 116 H1300"></path><path class="pos-arrow" d="M1292 108 l10 8 -10 8"></path><text class="pos-note" x="940" y="96">all of them vote on every block</text><rect class="pos-out" x="1330" y="76" width="230" height="86" rx="12"></rect><text class="pos-out-lbl" x="1445" y="114">Inflation</text><text class="pos-out-sub" x="1445" y="144">paid every epoch</text><path class="pos-arrow" d="M586 336 H716"></path><path class="pos-arrow" d="M708 328 l10 8 -10 8"></path><text class="pos-note" x="1000" y="284">stake decides how many slots each one gets</text><rect class="pos-slot a" x="740" y="304" width="52" height="64" rx="9"></rect><text class="pos-slot-lbl" x="766" y="345">A</text><rect class="pos-slot a" x="798" y="304" width="52" height="64" rx="9"></rect><text class="pos-slot-lbl" x="824" y="345">A</text><rect class="pos-slot a" x="856" y="304" width="52" height="64" rx="9"></rect><text class="pos-slot-lbl" x="882" y="345">A</text><rect class="pos-slot a" x="914" y="304" width="52" height="64" rx="9"></rect><text class="pos-slot-lbl" x="940" y="345">A</text><rect class="pos-slot a" x="972" y="304" width="52" height="64" rx="9"></rect><text class="pos-slot-lbl" x="998" y="345">A</text><rect class="pos-slot b" x="1030" y="304" width="52" height="64" rx="9"></rect><text class="pos-slot-lbl" x="1056" y="345">B</text><rect class="pos-slot b" x="1088" y="304" width="52" height="64" rx="9"></rect><text class="pos-slot-lbl" x="1114" y="345">B</text><rect class="pos-slot b" x="1146" y="304" width="52" height="64" rx="9"></rect><text class="pos-slot-lbl" x="1172" y="345">B</text><rect class="pos-slot c" x="1204" y="304" width="52" height="64" rx="9"></rect><text class="pos-slot-lbl" x="1230" y="345">C</text><path class="pos-arrow" d="M1268 336 H1300"></path><path class="pos-arrow" d="M1292 328 l10 8 -10 8"></path><rect class="pos-out" x="1330" y="294" width="230" height="86" rx="12"></rect><text class="pos-out-lbl" x="1445" y="332">Fees</text><text class="pos-out-sub" x="1445" y="362">in the blocks they build</text><text class="pos-note" x="1445" y="410">stays with the validator</text><path class="pos-arrow dashed" d="M1560 119 H1632 V470 H95 V346"></path><path class="pos-arrow" d="M87 354 l8 -10 8 10"></path><text class="pos-note" x="800" y="500">inflation lands with the stakers, every epoch</text></svg></div></div>
+
+<p class="slide-foot">Base fee is 5,000 lamports per signature, half burned and half to the validator. Priority fees go to the validator in full.</p>
+
+</section><section data-charset="utf-8" data-markdown="" data-markdown-parsed="true" data-background-image="images/brand-art/p-rewards.jpg" class="art has-journey" data-stage="stake"><nav class="journey" aria-hidden="true"><span class="j now">Stake</span><span class="j next">Bond</span><span class="j next">Auction</span><span class="j next">Settle</span></nav><!-- -->
+
+<div class="label">Liquid staking</div>
+
+<h2>You all know what liquid staking is</h2>
+<div class="slide-body"><div class="grid-3">
+<div class="card">
+<h3>You hand over SOL</h3>
+<p>The protocol takes it. Only you can ask for your share back.</p>
+</div>
+<div class="card">
+<h3><svg class="inline-icon" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>An on-chain program holds it</h3>
+<p>Marinade delegates it, and keeps delegating it well.</p>
+</div>
+<div class="card">
+<h3>You hold <span class="token">mSOL</span></h3>
+<p>Liquidity you can use across DeFi.</p>
+</div>
+</div></div>
+
+<p class="slide-foot">First liquid staking protocol on Solana. 2021, out of two hackathon teams.</p>
+
+</section><section data-charset="utf-8" data-markdown="" data-markdown-parsed="true" class="center-text"><!-- -->
+<!-- No data-stage on purpose: the journey rail would clutter the joke. -->
+
+<h2>You staked.</h2>
+<div class="slide-body"><img class="figure" src="images/now-what.jpg" alt=""><p class="punch">Now what?</p></div>
+
+
+
+</section><section data-charset="utf-8" data-markdown="" data-markdown-parsed="true" data-stage="stake" class="has-journey"><nav class="journey" aria-hidden="true"><span class="j now">Stake</span><span class="j next">Bond</span><span class="j next">Auction</span><span class="j next">Settle</span></nav><!-- -->
+
+<div class="gears" aria-hidden="true">
+<svg class="gear gear-a" style="width:430px;height:430px;top:40px;left:100px" viewBox="0 0 24 24"><path d="M11 10.27 7 3.34"></path><path d="m11 13.73-4 6.93"></path><path d="M12 22v-2"></path><path d="M12 2v2"></path><path d="M14 12h8"></path><path d="m17 20.66-1-1.73"></path><path d="m17 3.34-1 1.73"></path><path d="M2 12h2"></path><path d="m20.66 17-1.73-1"></path><path d="m20.66 7-1.73 1"></path><path d="m3.34 17 1.73-1"></path><path d="m3.34 7 1.73 1"></path><circle cx="12" cy="12" r="2"></circle><circle cx="12" cy="12" r="8"></circle></svg>
+<svg class="gear gear-b" style="width:310px;height:310px;top:400px;left:420px" viewBox="0 0 24 24"><path d="M11 10.27 7 3.34"></path><path d="m11 13.73-4 6.93"></path><path d="M12 22v-2"></path><path d="M12 2v2"></path><path d="M14 12h8"></path><path d="m17 20.66-1-1.73"></path><path d="m17 3.34-1 1.73"></path><path d="M2 12h2"></path><path d="m20.66 17-1.73-1"></path><path d="m20.66 7-1.73 1"></path><path d="m3.34 17 1.73-1"></path><path d="m3.34 7 1.73 1"></path><circle cx="12" cy="12" r="2"></circle><circle cx="12" cy="12" r="8"></circle></svg>
+<svg class="gear gear-c" style="width:230px;height:230px;top:120px;left:480px" viewBox="0 0 24 24"><path d="M11 10.27 7 3.34"></path><path d="m11 13.73-4 6.93"></path><path d="M12 22v-2"></path><path d="M12 2v2"></path><path d="M14 12h8"></path><path d="m17 20.66-1-1.73"></path><path d="m17 3.34-1 1.73"></path><path d="M2 12h2"></path><path d="m20.66 17-1.73-1"></path><path d="m20.66 7-1.73 1"></path><path d="m3.34 17 1.73-1"></path><path d="m3.34 7 1.73 1"></path><circle cx="12" cy="12" r="2"></circle><circle cx="12" cy="12" r="8"></circle></svg>
+</div>
+
+<h2>Somebody has to choose the validators</h2>
+<div class="slide-body"><div class="grid-3">
+<div class="card">
+<h3>Watch</h3>
+<p>Every validator on Solana, every epoch.</p>
+</div>
+<div class="card">
+<h3>Judge</h3>
+<p>Who pays best, who stays up, who keeps the network spread out.</p>
+</div>
+<div class="card">
+<h3>Move</h3>
+<p>Stake follows the answer.</p>
+</div>
+</div></div>
+
+<p class="slide-foot">A validator worth staking last epoch may not be worth it in this one.</p>
+
+</section><section data-charset="utf-8" data-markdown="" data-markdown-parsed="true" data-stage="stake" class="has-journey"><nav class="journey" aria-hidden="true"><span class="j now">Stake</span><span class="j next">Bond</span><span class="j next">Auction</span><span class="j next">Settle</span></nav><!-- -->
+
+<h2>A stake account cannot move sideways</h2>
+<div class="slide-body"><div class="cycle">
+<svg viewBox="0 0 1000 460" aria-hidden="true">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#308D8A"></path></marker></defs>
+<g fill="none" stroke="#308D8A" stroke-width="2" marker-end="url(#ah)">
+<path d="M623.1 51.4 A360 190 0 0 1 838.4 165.0"></path>
+<path d="M838.4 295.0 A360 190 0 0 1 623.1 408.6"></path>
+<path d="M376.9 408.6 A360 190 0 0 1 161.6 295.0"></path>
+<path d="M161.6 165.0 A360 190 0 0 1 376.9 51.4"></path>
+</g>
+</svg>
+<div class="cycle-node" style="left:500px;top:40px"><h3>Active</h3><span>earning</span></div>
+<div class="cycle-node" style="left:860px;top:230px"><h3>Deactivating</h3><span>still earning</span></div>
+<div class="cycle-node cost" style="left:500px;top:420px"><h3>Inactive</h3><span>earning nothing</span></div>
+<div class="cycle-node cost" style="left:140px;top:230px"><h3>Activating</h3><span>earning nothing</span></div>
+<span class="cycle-edge" style="left:790px;top:78px">deactivate</span>
+<span class="cycle-edge wait" style="left:790px;top:390px">epoch</span>
+<span class="cycle-edge" style="left:215px;top:390px">delegate</span>
+<span class="cycle-edge wait" style="left:215px;top:78px">epoch</span>
+</div></div>
+
+<p class="slide-foot">There is no arrow across the middle. Solana never enabled redelegation.</p>
+
+</section><section data-charset="utf-8" data-markdown="" data-markdown-parsed="true" data-stage="bond" class="center-text has-journey"><nav class="journey" aria-hidden="true"><span class="j past">Stake</span><span class="j now">Bond</span><span class="j next">Auction</span><span class="j next">Settle</span></nav><!-- -->
+
+<div class="slide-body"><img class="figure" src="images/bond-chips.webp" alt=""><p class="punch">Bonds. Validators back their word with their own SOL.</p></div>
+
+
+
+</section><section data-charset="utf-8" data-markdown="" data-markdown-parsed="true" data-stage="auction" class="has-journey"><nav class="journey" aria-hidden="true"><span class="j past">Stake</span><span class="j past">Bond</span><span class="j now">Auction</span><span class="j next">Settle</span></nav><!-- -->
+
+<h2>Validators bid for your stake</h2>
+<div class="ladder" aria-hidden="true">
+<svg viewBox="0 0 400 300">
+<rect x="8" y="30" width="22" height="250"></rect><rect x="40" y="48" width="22" height="232"></rect><rect x="72" y="66" width="22" height="214"></rect><rect x="104" y="82" width="22" height="198"></rect><rect x="136" y="100" width="22" height="180"></rect><rect x="168" y="118" width="22" height="162"></rect><rect x="200" y="134" width="22" height="146"></rect><rect x="232" y="152" width="22" height="128"></rect><rect x="264" y="170" width="22" height="110"></rect><rect x="296" y="186" width="22" height="94"></rect><rect x="328" y="204" width="22" height="76"></rect><rect x="360" y="220" width="22" height="60"></rect>
+<line x1="0" y1="152" x2="400" y2="152"></line>
+</svg>
+</div>
+
+<div class="slide-body"><div class="steps">
+<div><div class="step-num">1</div><h3>Bid</h3>A validator offers a share of its rewards.</div>
+<div><div class="step-num">2</div><h3>Allocate</h3>Highest first, until the stake runs out.</div>
+<div><div class="step-num">3</div><h3>Clear</h3>The last winner in sets the price.</div>
+</div></div>
+
+<p class="slide-foot">Everyone who wins is paid that same clearing rate, not their own bid. Inflation and MEV come from Solana. This is the third thing you earn.</p>
+
+</section><section data-charset="utf-8" data-markdown="" data-markdown-parsed="true" data-stage="settle" class="has-journey"><nav class="journey" aria-hidden="true"><span class="j past">Stake</span><span class="j past">Bond</span><span class="j past">Auction</span><span class="j now">Settle</span></nav><!-- -->
+
+<h2>From promise to payment</h2>
+<div class="slide-body"><div class="split-media">
+<!-- Callback to the "You staked. Now what?" slide. Same duck, now doing the paperwork. -->
+<img class="figure" src="images/settle-payout.webp" alt="">
+<ol class="beats">
+<li><strong>Measure</strong> End of epoch, read what happened.</li>
+<li><strong>Calculate</strong> What each validator owes.</li>
+<li><strong>Settle</strong> Written on chain, out of the bonds.</li>
+<li><strong>Claim</strong> Bids and covered losses reach the stakers.</li>
+</ol>
+</div></div>
+
+<p class="slide-foot">Until SIMD-0123 is live, Solana has no native way to pass priority fees to stakers.</p>
+
+</section><section data-charset="utf-8" data-markdown="" data-markdown-parsed="true" data-background-image="images/brand-art/p-security.jpg" class="art has-journey" data-rail="native" data-stage="stake"><nav class="journey" aria-hidden="true"><span class="j now">Stake</span><span class="j next">Exit</span></nav><!-- -->
+
+<h2>Not everyone wants a program holding their SOL</h2>
+<div class="stamp"><svg viewBox="-8 -8 616 236" role="img"><title>Native staking</title><polygon points="300,-0 351,41 442,21 451,55 546,59 492,91 606,110 492,129 546,161 451,165 442,199 351,179 300,220 249,179 158,199 149,165 54,161 108,129 -6,110 108,91 54,59 149,55 158,21 249,41"></polygon><text x="300" y="134" text-anchor="middle">Native staking</text></svg></div>
+
+<div class="slide-body"><div class="grid-3">
+<div class="card">
+<h3>No contract risk</h3>
+<p>The SOL never leaves your possession.</p>
+</div>
+<div class="card">
+<h3>No token</h3>
+<p>Nothing to hold or explain to an auditor.</p>
+</div>
+<div class="card">
+<h3>Just the delegation</h3>
+<p>Marinade picks the validators, nothing more.</p>
+</div>
+</div></div>
+
+<p class="slide-foot">Launched July 2023. Rewards land straight in your account each epoch, so it compounds without anyone doing anything.</p>
+
+</section><section data-charset="utf-8" data-markdown="" data-markdown-parsed="true" data-rail="native" data-stage="stake" class="code-sm has-journey"><nav class="journey" aria-hidden="true"><span class="j now">Stake</span><span class="j next">Exit</span></nav><!-- -->
+
+<h2>Solana splits the keys</h2>
+<div class="slide-body"><pre class="code-wrapper"><code class="rust hljs language-rust" data-highlighted="yes"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">enum</span> <span class="hljs-title class_">StakeStateV2</span> {
+    Uninitialized, <span class="hljs-title function_ invoke__">Initialized</span>(Meta), <span class="hljs-title function_ invoke__">Stake</span>(Meta, Stake, StakeFlags), RewardsPool,
+}</code></pre><pre class="code-wrapper"><code class="text hljs language-plaintext" data-highlighted="yes">Meta            rent_exempt_reserve, authorized, lockup
+  Authorized    staker, withdrawer
+  Lockup        unix_timestamp, epoch, custodian
+Stake           delegation, credits_observed
+  Delegation    voter_pubkey, stake, activation_epoch, deactivation_epoch</code></pre><pre class="code-wrapper"><code class="rust hljs language-rust" data-highlighted="yes"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">struct</span> <span class="hljs-title class_">Authorized</span> {
+    <span class="hljs-keyword">pub</span> staker: Pubkey,     <span class="hljs-comment">// may delegate</span>
+    <span class="hljs-keyword">pub</span> withdrawer: Pubkey, <span class="hljs-comment">// may take the money</span>
+}</code></pre></div><div class="side-art"><img src="images/solana-coin.webp" alt=""></div>
+
+<p class="slide-foot">One account. Custody is in Meta, the delegation is in Stake, and Marinade only ever holds one field of the first.</p>
+
+</section><section data-charset="utf-8" data-markdown="" data-markdown-parsed="true" data-rail="native" data-stage="stake" class="has-journey"><nav class="journey" aria-hidden="true"><span class="j now">Stake</span><span class="j next">Exit</span></nav><!-- -->
+
+<!-- No heading: the line under the picture says it, and a heading saying the same
+     thing twice was the reason this slide read as annoying. -->
+
+<div class="slide-body"><img class="figure figure-xs" src="images/keys.webp" alt="Scrooge McDuck locking a vault door covered in padlocks, holding a large bunch of keys"><p class="punch">Nobody at Marinade holds a keyring like this.</p></div>
+
+
+
+<p class="slide-foot">The staking authority is a program address.</p>
+
+</section><section data-charset="utf-8" data-markdown="" data-markdown-parsed="true" data-rail="native" data-stage="stake" class="has-journey"><nav class="journey" aria-hidden="true"><span class="j now">Stake</span><span class="j next">Exit</span></nav><!-- -->
+
+<h2>Three ways to run it</h2>
+<div class="slide-body"><div class="grid-3">
+<div class="card">
+<svg class="card-dial d-max" viewBox="0 0 100 60" aria-hidden="true"><path class="dial-arc" d="M10 52 A40 40 0 0 1 90 52"></path><path class="dial-needle" d="M50 52 L80 42"></path><circle class="dial-hub" cx="50" cy="52" r="5"></circle></svg>
+<h3>Max Yield</h3>
+<p>The default. Your stake follows the winners of the auction.</p>
+</div>
+<div class="card">
+<svg class="card-dial d-mid" viewBox="0 0 100 60" aria-hidden="true"><path class="dial-arc" d="M10 52 A40 40 0 0 1 90 52"></path><path class="dial-needle" d="M50 52 L50 20"></path><circle class="dial-hub" cx="50" cy="52" r="5"></circle></svg>
+<h3>Select</h3>
+<p>A curated, identity-verified set. Built for institutions.</p>
+</div>
+<div class="card">
+<svg class="card-dial d-low" viewBox="0 0 100 60" aria-hidden="true"><path class="dial-arc" d="M10 52 A40 40 0 0 1 90 52"></path><path class="dial-needle" d="M50 52 L20 42"></path><circle class="dial-hub" cx="50" cy="52" r="5"></circle></svg>
+<h3>Recipes</h3>
+<p>Your rewards are swapped, epoch by epoch, into a token you pick.</p>
+</div>
+</div></div>
+
+<p class="slide-foot">Recipes pays out in <span class="token">$USDG</span> <span class="token">$ZBTC</span> <span class="token">$MNDE</span> <span class="token">$BONK</span> <span class="token">$FWOG</span> <span class="token">$NOBODY</span> <span class="token">$TRENCHER</span> <span class="token">$USDC</span></p>
+
+</section><section data-charset="utf-8" data-markdown="" data-markdown-parsed="true" data-rail="native" data-stage="exit" class="has-journey"><nav class="journey" aria-hidden="true"><span class="j past">Stake</span><span class="j now">Exit</span></nav><!-- -->
+
+<h2>Getting out is the hard part</h2>
+<div class="slide-body"><div class="funnel-wrap"><svg class="funnel" viewBox="0 0 900 268" role="img"><title>Many stake accounts are picked, deactivated in batches, then merged into one</title><rect class="acct drain" style="animation-delay:0.00s" x="20" y="58" width="40" height="40" rx="8"></rect><rect class="acct drain" style="animation-delay:0.34s" x="72" y="58" width="40" height="40" rx="8"></rect><rect class="acct drain" style="animation-delay:0.68s" x="124" y="58" width="40" height="40" rx="8"></rect><rect class="acct drain" style="animation-delay:1.02s" x="176" y="58" width="40" height="40" rx="8"></rect><rect class="acct drain" style="animation-delay:1.36s" x="20" y="110" width="40" height="40" rx="8"></rect><rect class="acct drain" style="animation-delay:1.70s" x="72" y="110" width="40" height="40" rx="8"></rect><rect class="acct drain" style="animation-delay:2.04s" x="124" y="110" width="40" height="40" rx="8"></rect><rect class="acct drain" style="animation-delay:2.38s" x="176" y="110" width="40" height="40" rx="8"></rect><rect class="acct drain" style="animation-delay:2.72s" x="20" y="162" width="40" height="40" rx="8"></rect><rect class="acct drain" style="animation-delay:3.06s" x="72" y="162" width="40" height="40" rx="8"></rect><rect class="acct drain" style="animation-delay:3.40s" x="124" y="162" width="40" height="40" rx="8"></rect><rect class="acct drain" style="animation-delay:3.74s" x="176" y="162" width="40" height="40" rx="8"></rect><rect class="acct batch" style="animation-delay:0.0s" x="366" y="66" width="86" height="40" rx="8"></rect><rect class="acct batch" style="animation-delay:0.8s" x="366" y="118" width="86" height="40" rx="8"></rect><rect class="acct batch" style="animation-delay:1.6s" x="366" y="170" width="86" height="40" rx="8"></rect><rect class="acct final" x="560" y="66" width="150" height="144" rx="12"></rect><path class="arrow" d="M240 138 H326"></path><path class="arrow head" d="M318 130 l10 8 -10 8"></path><path class="flow" d="M240 138 H316"></path><path class="arrow" d="M474 138 H546"></path><path class="arrow head" d="M538 130 l10 8 -10 8"></path><path class="flow" d="M474 138 H536"></path><text class="fn-step" x="283" y="120" text-anchor="middle">pick, move</text><text class="fn-step" x="510" y="120" text-anchor="middle">merge</text><text class="fn-cap" x="124" y="248" text-anchor="middle">Spread over many validators</text><text class="fn-cap" x="409" y="248" text-anchor="middle">Deactivated in batches</text><text class="fn-cap" x="635" y="248" text-anchor="middle">One withdrawal</text></svg></div></div>
+
+<p class="slide-foot">Moving an account to the exit authority is what marks it as leaving, so the authority is the state. A hundred accounts does not fit in one transaction.</p>
+
+</section><section data-charset="utf-8" data-markdown="" data-markdown-parsed="true" data-background-image="images/brand-art/p-liquidity.jpg" class="art has-journey" data-rail="instant" data-stage="exit"><nav class="journey" aria-hidden="true"><span class="j past">Stake</span><span class="j now">Exit</span></nav><!-- -->
+
+<div class="label">Instant unstake</div>
+
+<h2>Somebody buys your stake account</h2>
+<div class="slide-body"><div class="flow">
+<div>You hand over the stake account</div>
+<div>They hand over SOL</div>
+</div></div>
+
+<p class="slide-foot">One transaction. Both sides settle, or neither does. No liquid token, no cooldown, and it works on any stake account, even ones Marinade never touched.</p>
+
+</section><section data-charset="utf-8" data-markdown="" data-markdown-parsed="true" data-rail="instant" data-stage="exit" class="has-journey"><nav class="journey" aria-hidden="true"><span class="j past">Stake</span><span class="j now">Exit</span></nav><!-- -->
+
+<h2>Somebody has to want it</h2>
+<div class="slide-body"><div class="grid-3">
+<div class="card">
+<h3>You get</h3>
+<p>SOL now, a little under what the account holds.</p>
+</div>
+<div class="card">
+<h3>They get</h3>
+<p>Your stake account, and the wait that comes with it.</p>
+</div>
+<div class="card">
+<h3>The gap</h3>
+<p>The difference between the two is the price of not waiting.</p>
+</div>
+</div></div>
+
+<p class="slide-foot">No unstaking fee from Marinade, and you see the price before you sign.</p>
+
+</section><section data-charset="utf-8" data-markdown="" data-markdown-parsed="true" data-background-image="images/brand-art/p-rewards.jpg" class="art with-art has-journey" data-rail="all" data-stage="all"><nav class="journey all" aria-hidden="true"><span class="j next">Stake</span><span class="j next">Bond</span><span class="j next">Auction</span><span class="j next">Settle</span><span class="j next">Exit</span></nav><!-- -->
+
+<h2>Marinade knows how this works</h2>
+<div class="side-art hat sign-off"><img src="images/marinade-white.svg" alt=""></div>
+
+<div class="slide-body"><div class="claims">
+<p>We watch every validator, every epoch.</p>
+<p>We turn a promise into collateral you can read.</p>
+<p>We get you out again.</p>
+</div><p class="punch">The machinery is temporary. That is the point.</p></div>
+
+
+
+</section><section data-charset="utf-8" data-markdown="" data-markdown-parsed="true" data-background-image="images/brand-art/p-manage.jpg" class="cover art vcenter"><!-- -->
+
+<div class="lockup"><img src="images/marinade-white.svg" alt="">Marinade</div>
+
+<h1>Stake it till you <span class="accent">make</span> it</h1>
+<div class="columns" style="margin-top:32px">
+<div>
+
+<p><a href="https://github.com/marinade-finance" target="_blank" rel="noopener noreferrer">github.com/marinade-finance</a><br>
+<a href="https://docs.marinade.finance" target="_blank" rel="noopener noreferrer">docs.marinade.finance</a></p>
+</div>
+<div>
+
+<img class="qr" src="images/qr-marinade.svg" alt="marinade.finance">
+
+</div>
+</div>
+
+</section><section data-charset="utf-8" data-markdown="" data-markdown-parsed="true" class=""><!-- .slide: -->
+
+<div class="label">Appendix, if it comes up</div>
+
+<h2>MEV arrives as a bundle</h2>
+<div class="slide-body"><div class="grid-3">
+<div class="card">
+<h3>An ordered group</h3>
+<p>Transactions run in the order given, inside one slot, all of them or none.</p>
+</div>
+<div class="card">
+<h3>A tip, not a priority fee</h3>
+<p>Bundles compete on tips to the validator, paid on top of the normal fee.</p>
+</div>
+<div class="card">
+<h3>Split on chain</h3>
+<p>A merkle root per validator per epoch, a capped commission, and stakers claim the rest.</p>
+</div>
+</div></div>
+
+<p class="slide-foot">Marinade's auction already prices it in: expected MEV is part of what a validator can share back.</p>
+
+</section>
+			</div>
+		</div>
+		<script src="dist/reveal.js"></script>
+		<script>
+			Reveal.initialize({
+				width: 1920,
+				height: 1080,
+				margin: 0,
+				center: false,
+				hash: true,
+				slideNumber: false,
+				transition: "fade",
+			});
+
+			// The art scrim rides the background element, which reveal recreates on
+			// init, so the tag it needs cannot be baked into the markup above.
+			Reveal.on("ready", () => {
+				for (const section of document.querySelectorAll(".slides section.art")) {
+					Reveal.getSlideBackground(section)?.classList.add("art-bg");
+				}
+			});
+		</script>
+	</body>
+</html>

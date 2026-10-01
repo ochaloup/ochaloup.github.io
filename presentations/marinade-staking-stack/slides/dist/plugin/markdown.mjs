@@ -1,4 +1,4 @@
-//#region node_modules/marked/lib/marked.esm.js
+//#region node_modules/.pnpm/marked@17.0.6/node_modules/marked/lib/marked.esm.js
 function e() {
 	return {
 		async: !1,
@@ -194,8 +194,10 @@ function B(e, t) {
 		for (; --i >= 0 && n[i] === "\\";) r = !r;
 		return r ? "|" : " |";
 	}).split(o.splitPipe), r = 0;
-	if (n[0].trim() || n.shift(), n.length > 0 && !n.at(-1)?.trim() && n.pop(), t) if (n.length > t) n.splice(t);
-	else for (; n.length < t;) n.push("");
+	if (n[0].trim() || n.shift(), n.length > 0 && !n.at(-1)?.trim() && n.pop(), t) {
+		if (n.length > t) n.splice(t);
+		else for (; n.length < t;) n.push("");
+	}
 	for (; r < n.length; r++) n[r] = n[r].trim().replace(o.slashPipe, "|");
 	return n;
 }
@@ -318,8 +320,8 @@ var U = class {
 		if (t) {
 			let e = V(t[0], "\n").split("\n"), n = "", r = "", i = [];
 			for (; e.length > 0;) {
-				let t = !1, a = [], o;
-				for (o = 0; o < e.length; o++) if (this.rules.other.blockquoteStart.test(e[o])) a.push(e[o]), t = !0;
+				let t = !1, a = [], o = 0;
+				for (; o < e.length; o++) if (this.rules.other.blockquoteStart.test(e[o])) a.push(e[o]), t = !0;
 				else if (!t) a.push(e[o]);
 				else break;
 				e = e.slice(o);
@@ -335,7 +337,8 @@ ${c}` : c;
 					let t = u, a = t.raw + "\n" + e.join("\n"), o = this.blockquote(a);
 					i[i.length - 1] = o, n = n.substring(0, n.length - t.raw.length) + o.raw, r = r.substring(0, r.length - t.text.length) + o.text;
 					break;
-				} else if (u?.type === "list") {
+				}
+				if (u?.type === "list") {
 					let t = u, a = t.raw + "\n" + e.join("\n"), o = this.list(a);
 					i[i.length - 1] = o, n = n.substring(0, n.length - u.raw.length) + o.raw, r = r.substring(0, r.length - t.raw.length) + o.raw, e = a.substring(i.at(-1).raw.length).split("\n");
 					continue;
@@ -578,12 +581,13 @@ ${c}` : c;
 		let r = this.rules.inline.emStrongLDelim.exec(e);
 		if (!(!r || !r[1] && !r[2] && !r[3] && !r[4] || r[4] && n.match(this.rules.other.unicodeAlphaNumeric)) && (!(r[1] || r[3]) || !n || this.rules.inline.punctuation.exec(n))) {
 			let n = [...r[0]].length - 1, i, a, o = n, s = 0, c = r[0][0] === "*" ? this.rules.inline.emStrongRDelimAst : this.rules.inline.emStrongRDelimUnd;
-			for (c.lastIndex = 0, t = t.slice(-1 * e.length + n); (r = c.exec(t)) != null;) {
+			for (c.lastIndex = 0, t = t.slice(-1 * e.length + n); (r = c.exec(t)) !== null;) {
 				if (i = r[1] || r[2] || r[3] || r[4] || r[5] || r[6], !i) continue;
 				if (a = [...i].length, r[3] || r[4]) {
 					o += a;
 					continue;
-				} else if ((r[5] || r[6]) && n % 3 && !((n + a) % 3)) {
+				}
+				if ((r[5] || r[6]) && n % 3 && !((n + a) % 3)) {
 					s += a;
 					continue;
 				}
@@ -631,7 +635,7 @@ ${c}` : c;
 		let r = this.rules.inline.delLDelim.exec(e);
 		if (r && (!r[1] || !n || this.rules.inline.punctuation.exec(n))) {
 			let n = [...r[0]].length - 1, i, a, o = n, s = this.rules.inline.delRDelim;
-			for (s.lastIndex = 0, t = t.slice(-1 * e.length + n); (r = s.exec(t)) != null;) {
+			for (s.lastIndex = 0, t = t.slice(-1 * e.length + n); (r = s.exec(t)) !== null;) {
 				if (i = r[1] || r[2] || r[3] || r[4] || r[5] || r[6], !i || (a = [...i].length, a !== n)) continue;
 				if (r[3] || r[4]) {
 					o += a;
@@ -720,7 +724,7 @@ ${c}` : c;
 			block: F.normal,
 			inline: I.normal
 		};
-		this.options.pedantic ? (n.block = F.pedantic, n.inline = I.pedantic) : this.options.gfm && (n.block = F.gfm, this.options.breaks ? n.inline = I.breaks : n.inline = I.gfm), this.tokenizer.rules = n;
+		this.options.pedantic ? (n.block = F.pedantic, n.inline = I.pedantic) : this.options.gfm && (n.block = F.gfm, n.inline = this.options.breaks ? I.breaks : I.gfm), this.tokenizer.rules = n;
 	}
 	static get rules() {
 		return {
@@ -801,10 +805,10 @@ ${c}` : c;
 			}
 			let i = e;
 			if (this.options.extensions?.startBlock) {
-				let t = Infinity, n = e.slice(1), r;
+				let t = 1 / 0, n = e.slice(1), r;
 				this.options.extensions.startBlock.forEach((e) => {
 					r = e.call({ lexer: this }, n), typeof r == "number" && r >= 0 && (t = Math.min(t, r));
-				}), t < Infinity && t >= 0 && (i = e.substring(0, t + 1));
+				}), t < 1 / 0 && t >= 0 && (i = e.substring(0, t + 1));
 			}
 			if (this.state.top && (r = this.tokenizer.paragraph(i))) {
 				let a = t.at(-1);
@@ -822,7 +826,8 @@ ${c}` : c;
 				if (this.options.silent) {
 					console.error(t);
 					break;
-				} else throw Error(t);
+				}
+				throw Error(t);
 			}
 		}
 		return this.state.top = !0, t;
@@ -838,11 +843,11 @@ ${c}` : c;
 		let n = e, r = null;
 		if (this.tokens.links) {
 			let e = Object.keys(this.tokens.links);
-			if (e.length > 0) for (; (r = this.tokenizer.rules.inline.reflinkSearch.exec(n)) != null;) e.includes(r[0].slice(r[0].lastIndexOf("[") + 1, -1)) && (n = n.slice(0, r.index) + "[" + "a".repeat(r[0].length - 2) + "]" + n.slice(this.tokenizer.rules.inline.reflinkSearch.lastIndex));
+			if (e.length > 0) for (; (r = this.tokenizer.rules.inline.reflinkSearch.exec(n)) !== null;) e.includes(r[0].slice(r[0].lastIndexOf("[") + 1, -1)) && (n = n.slice(0, r.index) + "[" + "a".repeat(r[0].length - 2) + "]" + n.slice(this.tokenizer.rules.inline.reflinkSearch.lastIndex));
 		}
-		for (; (r = this.tokenizer.rules.inline.anyPunctuation.exec(n)) != null;) n = n.slice(0, r.index) + "++" + n.slice(this.tokenizer.rules.inline.anyPunctuation.lastIndex);
+		for (; (r = this.tokenizer.rules.inline.anyPunctuation.exec(n)) !== null;) n = n.slice(0, r.index) + "++" + n.slice(this.tokenizer.rules.inline.anyPunctuation.lastIndex);
 		let i;
-		for (; (r = this.tokenizer.rules.inline.blockSkip.exec(n)) != null;) i = r[2] ? r[2].length : 0, n = n.slice(0, r.index + i) + "[" + "a".repeat(r[0].length - i - 2) + "]" + n.slice(this.tokenizer.rules.inline.blockSkip.lastIndex);
+		for (; (r = this.tokenizer.rules.inline.blockSkip.exec(n)) !== null;) i = r[2] ? r[2].length : 0, n = n.slice(0, r.index + i) + "[" + "a".repeat(r[0].length - i - 2) + "]" + n.slice(this.tokenizer.rules.inline.blockSkip.lastIndex);
 		n = this.options.hooks?.emStrongMask?.call({ lexer: this }, n) ?? n;
 		let a = !1, o = "";
 		for (; e;) {
@@ -893,10 +898,10 @@ ${c}` : c;
 			}
 			let i = e;
 			if (this.options.extensions?.startInline) {
-				let t = Infinity, n = e.slice(1), r;
+				let t = 1 / 0, n = e.slice(1), r;
 				this.options.extensions.startInline.forEach((e) => {
 					r = e.call({ lexer: this }, n), typeof r == "number" && r >= 0 && (t = Math.min(t, r));
-				}), t < Infinity && t >= 0 && (i = e.substring(0, t + 1));
+				}), t < 1 / 0 && t >= 0 && (i = e.substring(0, t + 1));
 			}
 			if (r = this.tokenizer.inlineText(i)) {
 				e = e.substring(r.raw.length), r.raw.slice(-1) !== "_" && (o = r.raw.slice(-1)), a = !0;
@@ -909,7 +914,8 @@ ${c}` : c;
 				if (this.options.silent) {
 					console.error(t);
 					break;
-				} else throw Error(t);
+				}
+				throw Error(t);
 			}
 		}
 		return t;
@@ -1209,13 +1215,13 @@ ${e}</tr>
 	constructor(e) {
 		this.options = e || t;
 	}
-	static passThroughHooks = new Set([
+	static passThroughHooks = /* @__PURE__ */ new Set([
 		"preprocess",
 		"postprocess",
 		"processAllTokens",
 		"emStrongMask"
 	]);
-	static passThroughHooksRespectAsync = new Set([
+	static passThroughHooksRespectAsync = /* @__PURE__ */ new Set([
 		"preprocess",
 		"postprocess",
 		"processAllTokens"
@@ -1232,11 +1238,11 @@ ${e}</tr>
 	emStrongMask(e) {
 		return e;
 	}
-	provideLexer() {
-		return this.block ? W.lex : W.lexInline;
+	provideLexer(e = this.block) {
+		return e ? W.lex : W.lexInline;
 	}
-	provideParser() {
-		return this.block ? q.parse : q.parseInline;
+	provideParser(e = this.block) {
+		return e ? q.parse : q.parseInline;
 	}
 }, Y = class {
 	defaults = e();
@@ -1269,7 +1275,7 @@ ${e}</tr>
 			default: {
 				let e = r;
 				this.defaults.extensions?.childTokens?.[e.type] ? this.defaults.extensions.childTokens[e.type].forEach((r) => {
-					let i = e[r].flat(Infinity);
+					let i = e[r].flat(1 / 0);
 					n = n.concat(this.walkTokens(i, t));
 				}) : e.tokens && (n = n.concat(this.walkTokens(e.tokens, t)));
 			}
@@ -1334,14 +1340,14 @@ ${e}</tr>
 					if (!(n in t)) throw Error(`hook '${n}' does not exist`);
 					if (["options", "block"].includes(n)) continue;
 					let r = n, i = e.hooks[r], a = t[r];
-					J.passThroughHooks.has(n) ? t[r] = (e) => {
+					t[r] = J.passThroughHooks.has(n) ? (e) => {
 						if (this.defaults.async && J.passThroughHooksRespectAsync.has(n)) return (async () => {
 							let n = await i.call(t, e);
 							return a.call(t, n);
 						})();
 						let r = i.call(t, e);
 						return a.call(t, r);
-					} : t[r] = (...e) => {
+					} : (...e) => {
 						if (this.defaults.async) return (async () => {
 							let n = await i.apply(t, e);
 							return n === !1 && (n = await a.apply(t, e)), n;
@@ -1387,16 +1393,16 @@ ${e}</tr>
 			if (typeof t > "u" || t === null) return a(/* @__PURE__ */ Error("marked(): input parameter is undefined or null"));
 			if (typeof t != "string") return a(/* @__PURE__ */ Error("marked(): input parameter is of type " + Object.prototype.toString.call(t) + ", string expected"));
 			if (i.hooks && (i.hooks.options = i, i.hooks.block = e), i.async) return (async () => {
-				let n = i.hooks ? await i.hooks.preprocess(t) : t, r = await (i.hooks ? await i.hooks.provideLexer() : e ? W.lex : W.lexInline)(n, i), a = i.hooks ? await i.hooks.processAllTokens(r) : r;
+				let n = i.hooks ? await i.hooks.preprocess(t) : t, r = await (i.hooks ? await i.hooks.provideLexer(e) : e ? W.lex : W.lexInline)(n, i), a = i.hooks ? await i.hooks.processAllTokens(r) : r;
 				i.walkTokens && await Promise.all(this.walkTokens(a, i.walkTokens));
-				let o = await (i.hooks ? await i.hooks.provideParser() : e ? q.parse : q.parseInline)(a, i);
+				let o = await (i.hooks ? await i.hooks.provideParser(e) : e ? q.parse : q.parseInline)(a, i);
 				return i.hooks ? await i.hooks.postprocess(o) : o;
 			})().catch(a);
 			try {
 				i.hooks && (t = i.hooks.preprocess(t));
-				let n = (i.hooks ? i.hooks.provideLexer() : e ? W.lex : W.lexInline)(t, i);
+				let n = (i.hooks ? i.hooks.provideLexer(e) : e ? W.lex : W.lexInline)(t, i);
 				i.hooks && (n = i.hooks.processAllTokens(n)), i.walkTokens && this.walkTokens(n, i.walkTokens);
-				let r = (i.hooks ? i.hooks.provideParser() : e ? q.parse : q.parseInline)(n, i);
+				let r = (i.hooks ? i.hooks.provideParser(e) : e ? q.parse : q.parseInline)(n, i);
 				return i.hooks && (r = i.hooks.postprocess(r)), r;
 			} catch (e) {
 				return a(e);
@@ -1425,7 +1431,7 @@ Z.options = Z.setOptions = function(e) {
 	return X.walkTokens(e, t);
 }, Z.parseInline = X.parseInline, Z.Parser = q, Z.parser = q.parse, Z.Renderer = G, Z.TextRenderer = K, Z.Lexer = W, Z.lexer = W.lex, Z.Tokenizer = U, Z.Hooks = J, Z.parse = Z, Z.options, Z.setOptions, Z.use, Z.walkTokens, Z.parseInline, q.parse, W.lex;
 //#endregion
-//#region node_modules/marked-smartypants/lib/index.mjs
+//#region node_modules/.pnpm/marked-smartypants@1.1.12_marked@17.0.6/node_modules/marked-smartypants/lib/index.mjs
 var Ne = /<(\/?)(?:pre|code|kbd|script|math)[^>]*>/i, Pe = (e = "", t = "1") => {
 	var n, r, i, a, o, s = 0;
 	if (t = typeof t == "number" ? t.toString() : t.replace(/\s/g, ""), t === "0") return e;
@@ -1474,6 +1480,7 @@ function Ge({ config: e = 2 } = {}) {
 	return {
 		tokenizer: { inlineText(e) {
 			let t = this.rules.inline.text.exec(e);
+			/* istanbul ignore next */
 			if (t) return {
 				type: "text",
 				raw: t[0],
