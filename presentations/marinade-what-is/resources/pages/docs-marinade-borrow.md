@@ -4,9 +4,9 @@
 
 Borrow against mSOL collateral that keeps earning staking rewards while your loan is open.
 
-{% hint style="info" %}
+
 **TL;DR:** Marinade Borrow lets you borrow against your staked SOL without giving up staking rewards. You choose how much to borrow, Marinade puts together the collateral as mSOL, and a routing engine places your position on whichever lending venue has the best rates (currently Kamino or Jupiter Lend). Your collateral keeps earning the whole time.
-{% endhint %}
+
 
 **Borrow is live and available to everyone.** There is no waitlist, beta access, or approval step. If you have SOL, mSOL, or an existing staking position, you can open a position today.
 
@@ -23,9 +23,9 @@ This waterfall also sets your **max borrow**, which reflects the total collatera
 
 You choose what to borrow, **SOL** or **USDC**, and each shows its own borrow APY. Opening a position takes **two or three wallet signatures** depending on whether idle SOL has to be converted, so expect more than one prompt.
 
-{% hint style="warning" %}
+
 **Keep more than 0.04 SOL available in your wallet.** Every Borrow action, opening, borrowing, repaying and withdrawing, is blocked when your available SOL is too low, and the app holds back **0.04 SOL** for network fees. Closing a position takes several transactions rather than one, so leave headroom above that figure. This is higher than the roughly 0.03 SOL needed for an ordinary stake or unstake.
-{% endhint %}
+
 
 ***
 
@@ -97,9 +97,9 @@ Both are available at any time. Act before the threshold, not at it. **Borrow le
 
 You can repay part or all of your debt **whenever you want**. There are no fixed terms and no repayment schedule; interest simply accrues while the debt is open.
 
-{% hint style="warning" %}
+
 **Repaying does not return your collateral.** Repaying reduces your debt only. Once the debt is fully repaid, choose **Withdraw** from the same Manage dropdown to get your collateral back in your wallet as **mSOL**. Fully repaying and then withdrawing is what closes the position.
-{% endhint %}
+
 
 Collateral always comes back as mSOL, even if you started from a Native position or from idle SOL. You can hold it, use it elsewhere in DeFi, or unstake it back to SOL through Marinade, either instantly or through the standard unstaking cooldown. Returning to Marinade Native is a separate two-step job: unstake the mSOL, then stake the SOL again with Native, and expect about one epoch of reduced earning across the switch.
 

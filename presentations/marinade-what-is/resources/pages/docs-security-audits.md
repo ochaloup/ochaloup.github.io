@@ -10,7 +10,7 @@ You'll find here the list of our audits and code review reports.
 
 Neodyme audited two changes to Marinade's on-chain liquid staking program in May 2026: the introduction of canonical stake accounts and the addition of deposit fee functionality. The review covered both implementation security and overall design, and found no issues at any severity level. Because the changes were scoped additions to the existing program, the threat model and economic analysis from the 2023 audit remain valid.
 
-{% file src="/files/k5E0jKTthOF8F1LkwaIb" %}
+
 
 ## 2024
 
@@ -20,7 +20,7 @@ Neodyme audited Marinade's on-chain Validator Bond program during March and Apri
 
 The auditors found that Marinade’s Validator Bond program comprised a clean design and above-standard code quality, relying on the industry-standard Anchor framework.&#x20;
 
-{% file src="/files/PkTwuRDK02agZbDh3WZ0" %}
+
 
 ## 2023
 

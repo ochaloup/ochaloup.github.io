@@ -12,7 +12,7 @@ Please find official Marinade imagery below for your use. For additional info or
 
 <div><figure><img src="https://2385969780-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FHvhBFBu5z7MIlkYpgMXs%2Fuploads%2FU57YPPI5CzQFLz5fLDPj%2FMarinade-symbol-black.png?alt=media&amp;token=061c771d-9875-4cdb-9c64-ed60fbbf4c2a" alt=""><figcaption></figcaption></figure> <figure><img src="https://2385969780-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FHvhBFBu5z7MIlkYpgMXs%2Fuploads%2F2Rkin2QaERJtn554j1dO%2FMarinade-symbol-white.png?alt=media&amp;token=625ab53e-8faf-48f6-9b48-8cb5060ee5b8" alt=""><figcaption></figcaption></figure> <figure><img src="https://2385969780-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FHvhBFBu5z7MIlkYpgMXs%2Fuploads%2FV9pYZJUcGJ6r2VKxGJvM%2FSquare-symbol-dark.png?alt=media&amp;token=553ba972-eff7-425a-96fb-17d05e863261" alt=""><figcaption></figcaption></figure> <figure><img src="https://2385969780-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FHvhBFBu5z7MIlkYpgMXs%2Fuploads%2FbqjvPucitt0Jm6dX8LP9%2FSquare-symbol-light.png?alt=media&amp;token=42c1283c-0b18-47a9-9a1c-a708e84d0a7d" alt=""><figcaption></figcaption></figure></div>
 
-{% file src="/files/K96gXnGyWJwSTZzQxVwh" %}
+
 
 ## Token Logos
 
@@ -22,17 +22,17 @@ Please find official Marinade imagery below for your use. For additional info or
 
 <figure><img src="https://2385969780-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FHvhBFBu5z7MIlkYpgMXs%2Fuploads%2F6BYBjuTu1P2qMrttQFFw%2FmSOL-SOL%20LP.png?alt=media&amp;token=0573c029-35ff-4aeb-b5be-f0eb587efebd" alt="" width="340"><figcaption></figcaption></figure>
 
-{% file src="/files/v6IKZElulSs5grJzWTzM" %}
+
 
 ## Fonts
 
 Here are the main fonts used on Marinade:&#x20;
 
-{% file src="/files/ZyqprxEWRRUL2TzlLe4d" %}
+
 
 ## Illustrations
 
-{% file src="/files/MxUS7HfU5q3ElfTSY754" %}
+
 
 ## View real-time statistics about Marinade
 
@@ -44,7 +44,7 @@ You can use this [dashboard ](https://stats.marinade.finance/d/sqUQd1Onk/marinad
 
 ## Download Our Brand Book
 
-{% file src="/files/QYeRtMyHdg8URnVZwZ28" %}
+
 
 
 ---

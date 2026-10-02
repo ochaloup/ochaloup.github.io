@@ -8,9 +8,9 @@ This is a marinade typescript and anchor based SDK to interact with Marinade fro
 
 <table><thead><tr><th>Product</th><th width="243.20001220703125">Package</th><th>Repository</th></tr></thead><tbody><tr><td><strong>mSOL liquid staking</strong>, instant unstake, liquidity pool</td><td><code>@marinade.finance/marinade-ts-sdk</code></td><td><a href="https://github.com/marinade-finance/marinade-ts-sdk">marinade-ts-sdk</a></td></tr><tr><td><strong>Marinade Native</strong></td><td><code>@marinade.finance/native-staking-sdk</code></td><td><a href="https://github.com/marinade-finance/native-staking">native-staking</a></td></tr><tr><td><strong>Marinade Select</strong>, existing positions only</td><td><code>@marinade.finance/native-staking-sdk</code></td><td><a href="https://github.com/marinade-finance/native-staking">native-staking</a></td></tr><tr><td><strong>Validator bonds</strong>, SAM bidding, PSR</td><td><code>@marinade.finance/validator-bonds-cli</code></td><td><a href="https://github.com/marinade-finance/validator-bonds">validator-bonds</a></td></tr></tbody></table>
 
-{% hint style="warning" %}
+
 **Marinade Select is not currently available to stake to.** The SDK still covers Select for integrations serving existing positions, but do not build a new Select staking flow against it. Build against Marinade Native instead, or talk to the team.
-{% endhint %}
+
 
 ***
 
@@ -54,23 +54,23 @@ For the same operations from a terminal, use [marinade-ts-cli](https://github.co
 
 An Anchor CPI integration example is available:
 
-{% embed url="<https://github.com/marinade-finance/liquid-staking-referral-example-app>" %}
+<https://github.com/marinade-finance/liquid-staking-referral-example-app>
 Integration example
-{% endembed %}
 
-{% embed url="<https://github.com/marinade-finance/marinade-ts-sdk>" %}
+
+<https://github.com/marinade-finance/marinade-ts-sdk>
 Marinade SDK
-{% endembed %}
 
-{% hint style="warning" %}
+
+
 That example wraps deposits through the **referral program, which is currently paused**. No referral fees accrue to anyone while it is paused, including under agreements signed before the pause, and the partner boost is not in force. Use the repository as a reference for calling Marinade by CPI, but do not build a revenue-sharing integration on it without talking to the team first. For a plain integration, call the SDK directly as shown above.
-{% endhint %}
+
 
 ***
 
-{% hint style="info" %}
+
 If you have questions or troubles, please join our [Discord](https://discord.com/invite/yTdH8YkYKg). Marinade contributors will be there to help you.
-{% endhint %}
+
 
 
 ---

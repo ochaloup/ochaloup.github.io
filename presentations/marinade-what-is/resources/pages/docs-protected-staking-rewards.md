@@ -26,9 +26,9 @@ Note: Solana does not have a slashing mechanism yet. PSR is a bond-funded compen
 
 ### **PSR Coverage Allocation**
 
-{% hint style="warning" %}
+
 **Updated by MIP-23, effective epoch 1040.** Coverage used to split between validators and the DAO. It no longer does: validators now cover the full downtime charge on their own.
-{% endhint %}
+
 
 * **Validator's Responsibility:** Validators cover **100% of the rewards lost across the full 0% to 99% uptime range**, from their own bond.
 * **Marinade's Coverage:** None. The DAO's reserve no longer absorbs any part of a downtime shortfall.
@@ -36,7 +36,7 @@ Note: Solana does not have a slashing mechanism yet. PSR is a bond-funded compen
 
 Before epoch 1040, the DAO covered the lower half of the loss (0% to 50% uptime) and validators covered the upper half (50% to 99% uptime). That DAO share is now gone; see [MIP-23](https://forum.marinade.finance/t/mip-23-full-validator-coverage-of-psr-downtime/1998) for the proposal and rationale.
 
-{% hint style="info" %}
+
 **Example: PSR Coverage**
 
 * **Scenario 1**: Validator's uptime is 99.5% during an epoch.
@@ -48,7 +48,7 @@ Before epoch 1040, the DAO covered the lower half of the loss (0% to 50% uptime)
 * **Scenario 3**: Validator's uptime is 40% during an epoch.
   * **Validator's Responsibility**: The validator's bond covers the full 60% loss.
   * **Marinade's Coverage**: None.
-    {% endhint %}
+    
 
 ### **Setup for Validators**
 
@@ -56,14 +56,14 @@ Validators can set up and fund their bond by following the CLI instructions on G
 
 **Audit**: The bond program was audited by Neodyme and can be viewed here: [Audit Report](https://docs.marinade.finance/marinade-protocol/security/audits#audit-reports-1).
 
-{% hint style="info" %}
+
 
 #### **Track PSR Events**
 
 Each epoch, Marinade posts the results of PSR in Discord. You can see which validators fell below the performance threshold and will have SOL removed from their bond. Visit Discord and view the [**#psr-feed**](https://discord.com/invite/yTdH8YkYKg) channel for details.
 
 View each validator's current bond amount and validator stake here: [PSR Dashboard](https://psr.marinade.finance/).
-{% endhint %}
+
 
 ### **Validator FAQ for PSR Bonds**
 

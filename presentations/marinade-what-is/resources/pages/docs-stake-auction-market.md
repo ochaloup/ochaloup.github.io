@@ -12,9 +12,9 @@ For SOL stakers, Marinade's delegation flows through SAM automatically. Validato
 
 For validators looking to receive Marinade stake, this section covers how the auction works and what to set up to participate. New validators should start with the [SAM Onboarding Guide](/marinade-protocol/protocol-overview/stake-auction-market/sam-onboarding-guide.md). For tools, dashboards, repositories, and reference data, see [SAM Resources](/marinade-protocol/protocol-overview/stake-auction-market/sam-resources.md).
 
-{% hint style="info" %}
+
 A funded PSR (Protected Staking Rewards) bond is a prerequisite for SAM participation. The bond is separate from SAM itself and acts as collateral to protect staker yield. See [Protected Staking Rewards](https://docs.marinade.finance/marinade-protocol/protocol-overview/protected-staking-rewards).
-{% endhint %}
+
 
 ## How SAM Works
 
@@ -96,9 +96,9 @@ Two other actions can affect stake but are not fee-based: validators may lose el
 * [**Bond Notifications**](/marinade-protocol/protocol-overview/stake-auction-market/bond-notifications.md)**:** How validators are notified of bond-related events and changes.
 * [**SAM Resources**](/marinade-protocol/protocol-overview/stake-auction-market/sam-resources.md)**:** Dashboards, repositories, APIs, and technical reference for SAM participants.
 
-{% hint style="info" %}
+
 The SAM per-validator cap is **15% of Marinade's TVL**, live as of epoch 946 ([MIP-19](https://forum.marinade.finance/t/mip-19-improving-sam-auction-stake-priority-bond-risk-reduction-mechanism-higher-validator-caps/1969)).
-{% endhint %}
+
 
 ### Operational Notes
 

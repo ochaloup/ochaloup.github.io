@@ -10,13 +10,13 @@ Marinade's security and availability commitment: <https://public.marinade.financ
 
 A list of Marinade's on-chain smart contracts is available here:&#x20;
 
-{% content-ref url="/pages/-MgSaldkFEKrc9TetKtH" %}
-[Contracts & Tokens Addresses](/developers/contract-addresses.md)
-{% endcontent-ref %}
 
-{% hint style="info" %}
+[Contracts & Tokens Addresses](/developers/contract-addresses.md)
+
+
+
 The **referral program is paused** and there is currently no referral interface, so ordinary staking goes to Marinade's own programs. No partner fees are paid while it is paused, including under agreements signed before the pause. If the program relaunches and you stake through a referral link, the contract you interact with will be the referral program rather than Marinade's main smart contract. Either way, verify the program you are signing against the published address list above before you approve a transaction.
-{% endhint %}
+
 
 ***
 
@@ -40,13 +40,13 @@ In DeFi, any protocol can potentially be attacked by hackers. They will look for
 
 **Marinade's recipe**: We emphasize security and have been conducting formal audits all along the way. We have successfully completed **6 audits and 1 code review**, the most recent by Neodyme in May 2026. We also opened a **bug bounty** with Immunefi. Click on the pages below to access them.
 
-{% content-ref url="/pages/eRcscM4eAiImXPmN351v" %}
-[Bug Bounty](/developers/bug-bounty.md)
-{% endcontent-ref %}
 
-{% content-ref url="/pages/2CZjncZ5uKIxadVCPGoY" %}
+[Bug Bounty](/developers/bug-bounty.md)
+
+
+
 [Audits](/marinade-protocol/security/audits.md)
-{% endcontent-ref %}
+
 
 ## Financial risks
 
@@ -63,9 +63,9 @@ As you may know, DeFi can be a brutal environment, and some actors have already 
 
 Click the page below for the full breakdown, including the on-chain addresses for each layer.
 
-{% content-ref url="/pages/exT8z4HG74Dll3vHgbwK" %}
+
 [Multisig governance](/marinade-protocol/security/multisig-governance.md)
-{% endcontent-ref %}
+
 
 ### Legal risks
 
@@ -73,9 +73,9 @@ When you use Marinade, you take full responsibility for your actions. It is your
 
 **Marinade's recipe**: All our legal content can be found on the page below. If you have any doubts, please get in touch with your financial authorities for confirmation.
 
-{% content-ref url="/pages/JMLAmI4ZHC5RuIdvmZ7B" %}
+
 [Legal](/marinade-protocol/legal.md)
-{% endcontent-ref %}
+
 
 
 ---

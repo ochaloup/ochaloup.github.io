@@ -18,9 +18,9 @@ You can also migrate your existing native staked accounts into Marinade to benef
 
 A premium staking set powered by Marinade. It includes a vetted group of community-recognized validators that meet strict criteria for performance, compliance, and decentralization.
 
-{% hint style="warning" %}
+
 **Marinade Select is not currently available to stake to.** Staking new SOL to Select is not offered in the app at the moment. Existing Select positions are unaffected: they keep earning and can still be unstaked at any time. To stake new SOL today, use **Marinade Native**.
-{% endhint %}
+
 
 ### [Marinade Liquid](/marinade-protocol/protocol-overview/marinade-liquid.md)
 
@@ -57,9 +57,9 @@ Marinade Native provides a secure, non-custodial staking experience with:
 * Unstake anytime, with two exits. **Instant Unstake** returns SOL in a single transaction at a market-set rate and needs a position of 1 SOL or more. **Delayed Unstake** works at any size and becomes claimable after one epoch, or after the following epoch if you start it in the last 4 hours of the current one
 * Community-led governance through the Marinade DAO
 
-{% hint style="info" %}
+
 Marinade Native is **non-custodial**, not contract-free. Delegation is routed through Marinade's Native Staking Proxy program, which holds the stake authority through PDAs. See Marinade Native: API & SDK for the program and authority addresses.
-{% endhint %}
+
 
 There is no deposit fee and no ongoing management fee on Marinade Native. Exiting a position does carry a cost: see [Fees and Pricing](/marinade-protocol/protocol-overview/fees-and-pricing.md).
 

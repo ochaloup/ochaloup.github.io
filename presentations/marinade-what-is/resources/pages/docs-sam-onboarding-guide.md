@@ -4,17 +4,17 @@
 
 Step-by-step onboarding for validators joining the Marinade Stake Auction Marketplace.
 
-{% hint style="info" %}
+
 **TL;DR:** Install the validator bonds CLI, create and fund a bond, configure a bid, and verify on-chain. Read all penalty pages before bidding. "I didn't know" is not grounds for refund.
-{% endhint %}
+
 
 ## Overview
 
 Any active validator can participate in the Stake Auction Marketplace. The full onboarding flow is: install the CLI, create a bond, fund it, configure the bid, simulate, and wait for the next auction. This page walks through each step.
 
-{% hint style="info" %}
+
 **Read this page in full before installing the CLI or funding a bond.** Participating in SAM has financial obligations and penalty mechanics that are easy to miss when skipping ahead. At minimum, read the Bid Reduction Penalty, Activating Stake Fee, Eligibility Criteria, `maxStakeWanted` Parameter and Bond Risk Reduction Mechanism pages before configuring a bid. "I didn't know about the penalty" is not grounds for refund or removal of charges from a validator's bond.
-{% endhint %}
+
 
 ### Before Starting
 
@@ -73,9 +73,9 @@ A few rules of thumb:
 * **Eligibility minimum:** 1 SOL per 10,000 SOL of stake covers one epoch of downtime.
 * **Comfortable starting point:** 1 SOL per 2,000 SOL of target stake gives headroom for bids and settlements alongside downtime coverage.
 
-{% hint style="info" %}
+
 SOL deposited in the bond stays delegated to the validator and earns rewards for the validator. Marinade also counts it as self-stake in its own stake matching calculation. Validators relying on the bond to satisfy the [SFDP (Solana Foundation Delegation Program) self-stake requirement](https://solana.org/delegation-criteria#self-stake) should confirm that treatment with the Foundation, since that requirement is theirs and not Marinade's.
-{% endhint %}
+
 
 ### **Step 4: Configure the Bid**
 
@@ -88,9 +88,9 @@ validator-bonds -um configure-bond <bond-or-vote-account-address> \
   --max-stake-wanted <max-sol-amount-in-lamports>
 ```
 
-{% hint style="warning" %}
+
 **The CLI will not lower a bid by accident.** `configure-bond` refuses to decrease `--cpmpe` unless `--force` is also passed. That guard exists because lowering a bid while holding Marinade stake triggers the Bid Reduction Penalty. Read that page before using `--force`.
-{% endhint %}
+
 
 Both `--cpmpe` and `--max-stake-wanted` take **lamports**, not SOL.
 
@@ -110,11 +110,11 @@ validator-bonds -um show-bond <bond-or-vote-account-address>
 
 A validator's auction position can also be verified on the [Validator Dashboard](https://app.marinade.finance/network/validators/) once the next epoch begins.
 
-{% hint style="info" %}
+
 **The CLI is the source of truth.** `show-bond` reads on-chain data and reflects the bond's current state immediately after any transaction.
 
 The [PSR dashboard](https://psr.marinade.finance/) and other web dashboards refresh every few hours and are intended for reference, not real-time verification. After funding or configuring a bond, give the dashboard time to catch up before assuming something is wrong. Always cross-check with the CLI first.
-{% endhint %}
+
 
 ***
 

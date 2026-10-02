@@ -4,11 +4,11 @@
 
 Earn rewards by supporting Marinade’s mission to decentralize Solana. Marinade shares fees with both the referring partner and the staker, creating a win-win incentive.
 
-{% hint style="danger" %}
+
 **The Marinade Referral Program is paused.** It has been dormant since **8 May 2026**. While it is paused, partners **do not earn referral fees on any Marinade product**, whether mSOL, Marinade Native or Marinade Select, and referred users receive **no APY boost**. This applies to **every partner, including those holding a referral agreement signed before the pause**. No partner fees are being paid to anyone. There is no referral dashboard and no referral page in the app.
 
 The program is **paused, not retired**. A relaunch is expected, but **relaunch terms are not defined**, so nothing described below is a commitment.
-{% endhint %}
+
 
 ### What Is Open Right Now
 
@@ -20,9 +20,9 @@ If you are a partner looking to work with Marinade today, these pathways are liv
 
 To start a conversation, use the [**Marinade Partnerships form**](https://tally.so/r/wzLj1m).
 
-{% hint style="warning" %}
+
 **Marinade will never ask you to arrange a partnership or a referral code through a direct message on X, Telegram or Discord.** The Partnerships form linked above is the only official intake route. Anyone offering you a Marinade referral code or a revenue share over DM is impersonating Marinade.
-{% endhint %}
+
 
 ***
 

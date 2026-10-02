@@ -6,9 +6,9 @@ If you want to join us, here is where you can find us!
 
 These are the only official Marinade channels. If a link, wallet prompt or support request reaches you from anywhere else, it is not from Marinade.
 
-{% hint style="danger" %}
+
 **Marinade will never DM you first, never ask for your seed phrase or private key, and never ask you to "validate", "sync" or "migrate" your wallet.** Support does not happen in direct messages. Always reach the app through `app.marinade.finance` and check the domain before connecting a wallet. Anyone who contacts you claiming to be Marinade support is a scammer.
-{% endhint %}
+
 
 ***
 

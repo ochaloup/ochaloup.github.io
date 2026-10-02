@@ -4,9 +4,9 @@
 
 Marinade matches a portion of a validator's external stake with additional delegation, with no Protected Staking Rewards (PSR) slashable bond required on the matched portion.
 
-{% hint style="info" %}
+
 **TL;DR:** Marinade matches 10% of a validator's non-SFDP external stake and 30% of SFDP stake as additional delegation, with no slashable bond required on the matched portion. Bids still apply on matched stake, and matches below 1,000 SOL collapse to zero.
-{% endhint %}
+
 
 ## Overview
 
@@ -14,9 +14,9 @@ To support a broader set of validators and make participation in SAM more access
 
 Bids are still charged on matched stake, and the validator's bond must have enough SOL to cover those bids. Matching is designed to broaden validator participation across the network, not to maximize matched stake for any individual validator.
 
-{% hint style="info" %}
+
 In Marinade's source code, matched stake is referred to as **unprotected stake** (`unprotectedStakeSol`). The two terms refer to the same thing. Docs use "stake matching"; the field name in auction outputs and config uses "unprotected."
-{% endhint %}
+
 
 ## What Counts as External Stake
 
@@ -26,9 +26,9 @@ The matching base is the validator's **total activated stake minus their own sel
 * **Counts toward the SFDP base:** SFDP (Solana Foundation Delegation Program) delegation, matched at the higher rate.
 * **Excluded entirely:** The validator's own self-stake. PSR bond counts as self-stake for this calculation.
 
-{% hint style="warning" %}
+
 **Marinade's own delegation is not excluded from the base.** In `ds-sam`, the non-SFDP base is computed as `totalActivatedStake - selfStake - foundationStake`. Marinade-delegated stake (Liquid, Native, Select, and earlier matched stake) is not subtracted, so it sits inside the 10% base. Check this against the current pipeline before relying on it for planning.
-{% endhint %}
+
 
 External stake is measured from the same epoch snapshot used for all other stake calculations in the auction.
 
@@ -50,9 +50,9 @@ A validator with only third-party external stake gets exactly 10% matched. A val
 
 The result is then clipped by the per-validator matching cap, and only afterwards tested against the 1,000 SOL floor.
 
-{% hint style="warning" %}
+
 **1,000 SOL minimum, applied after the cap.** The 0.4% per-validator cap is applied first. If the **capped** value is below 1,000 SOL, it collapses to zero and no matched stake is allocated. This is the `minUnprotectedStakeToDelegateSol` parameter in the auction config. A validator with very small external stake will receive no matching.
-{% endhint %}
+
 
 #### **Caps and Constraints**
 

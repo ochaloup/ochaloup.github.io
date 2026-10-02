@@ -4,9 +4,9 @@
 
 How Marinade settles validator bids each epoch, with formula, worked example, and where to view settlements.
 
-{% hint style="info" %}
+
 **TL;DR:** Each epoch, Marinade charges the validator's bond for static bids (CPMPE x active stake) and dynamic commission differences. Settlements run automatically at the start of each epoch for the epoch that just closed.
-{% endhint %}
+
 
 ## Overview
 
@@ -38,9 +38,9 @@ Bids are only one of the reasons a bond is charged. Every settlement carries a *
 | `ProtectedEvent` / `DowntimeRevenueImpact` | Validator produced fewer vote credits than expected                                          | Validator bond, full amount | Stakers                                    |
 | `ProtectedEvent` / `CommissionSamIncrease` | Validator raised commission above the level declared to SAM                                  | Validator bond              | Stakers                                    |
 
-{% hint style="info" %}
+
 **Downtime coverage.** `DowntimeRevenueImpact` carries a 1% grace (`grace_downtime_bps: 100`), read as a threshold: a loss under that line is not charged at all. As of [MIP-23](https://forum.marinade.finance/t/mip-23-full-validator-coverage-of-psr-downtime/1998), effective epoch 1040, the validator bond covers the full downtime charge across the whole uptime range beyond the grace period, and the DAO no longer funds any part of it. Before epoch 1040, the bond covered only the upper half of the loss and a second, DAO-funded settlement covered the rest. `min_settlement_lamports` is 0.1 SOL. See Protected Staking Rewards.
-{% endhint %}
+
 
 Two further protected-event kinds, `CommissionIncrease` and `LowCredits`, exist in the program for parsing historical data only. They predate SAM and are no longer emitted.
 
@@ -121,9 +121,9 @@ Settlements have a fixed lifecycle from creation to expiry.
 * **Created at the start of the next epoch:** A settlement for epoch X is created at the start of epoch X+1, once the snapshot at the end of epoch X is processed. This is when the bond is debited.
 * **Active for 3 epochs:** During this window, stakers can claim their portion of the settlement. The 3-epoch claim window is defined in the on-chain Validator Bonds config (`epochsToClaimSettlement`, currently **3** on the SAM bidding config `vbMaRfmTCg92HWGzmd53APkMNpPnGVGZTUHwUJQkXAU`). Claiming opens after `slotsToStartSettlementClaiming`, currently **200,000 slots**, which is roughly 17 to 22 hours depending on slot times.
 
-{% hint style="info" %}
+
 **Select and institutional settlements run on a different config.** The institutional config `VbinSTyUEC8JXtzFteC4ruKSfs6dkQUUcY6wB1oJyjE` carries `epochsToClaimSettlement` of **4**, not 3, and a bond withdrawal lockup of **1 epoch** rather than 3. If you operate both a SAM bond and a Select bond, do not carry timings from one to the other. Both were read on chain on 18 September 2026.
-{% endhint %}
+
 
 * **Unclaimed funds return to the bond:** Any SOL in the settlement that is not claimed by stakers within the active window is returned to the validator's bond when the settlement expires. \* \*\*Extra SOL handling:\*\* A settlement may contain slightly more SOL from the bond than the strict charge requires. This allows Marinade to enforce the on-chain minimum of 1 SOL per stake account (\`minimumStakeLamports\`) during distribution. The unused remainder returns to the bond on expiry.
 

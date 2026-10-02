@@ -14,9 +14,9 @@ Marinade Native is an alternative to liquid staking that allows users to benefit
 * You **do not receive mSOL** when using Marinade Native. You are creating Solana stake accounts in your wallet and delegating the management of those to Marinade
 * Since you are staking natively when using Marinade Native, **rewards are directly sent to each of your stake accounts at the end of every epoch** (about every 2 days)
 
-{% hint style="info" %}
+
 Marinade Native is **non-custodial**, not contract-free. Delegation is routed through Marinade's Native Staking Proxy program, which owns the stake authority through PDAs so that Marinade's Council can rotate the bot's access. The custody guarantee comes from the authority split, not from the absence of a program. See Marinade Native: API & SDK.
-{% endhint %}
+
 
 ## How to use Marinade Native?
 
@@ -36,9 +36,9 @@ It also **protects you from commission rugging** (validators stealing their dele
 
 Slashing is also bound to be added to Solana and having your staked SOL monitored and rebalanced to avoid bad-performing and/or nefarious validators will be one of the best ways to mitigate the slashing risks.
 
-{% hint style="success" %}
+
 Marinade Native can also be used with **locked SOL.** Make sure you optimize and automate it with Marinade Native until it gets unlocked!
-{% endhint %}
+
 
 ### Is There a Minimum to Use Marinade Native?
 
@@ -78,9 +78,9 @@ If you prefer to avoid any quote or price impact, you can use Delayed Unstake:
 
 Delayed Unstake carries a **flat fee of 0.003 SOL**, whatever the size of the position. The fee covers Marinade deactivating and merging your stake accounts on your behalf, and it prevents draining attacks on that service. It is the same flat amount for Marinade Native, Marinade Select and Native positions paid in a Recipe reward token.
 
-{% hint style="info" %}
+
 Claiming is a separate Solana transaction. Keep a small SOL balance in your wallet so the claim does not fail on network fees.
-{% endhint %}
+
 
 ## Is Marinade Native safe?&#x20;
 

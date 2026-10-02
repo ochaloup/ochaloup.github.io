@@ -59,9 +59,9 @@ The USDC Vault is a yield-generating vault powered by Kamino's on-chain lending 
 * Enter the amount of USDC you want to deposit.
   * Minimum deposit: 0.01 USDC
 
-{% hint style="warning" %}
+
 Keep a small amount of SOL in your wallet to cover transaction fees, even though you are depositing USDC.
-{% endhint %}
+
 
 **Step 4: Confirm the Transaction**
 
@@ -90,9 +90,9 @@ There is no cooldown and no unbonding period. A withdrawal is a single transacti
 
 Keep a small amount of SOL in your wallet for the network fee, even though you are withdrawing USDC.
 
-{% hint style="warning" %}
+
 **Claim bonus rewards before withdrawing in full.** Vault interest is already part of your balance and needs no claiming, but campaign bonus rewards are separate. On the **My position** tab, look for a line reading "You've earned ... in bonus rewards" with a **Claim all** button, and claim before you withdraw everything.
-{% endhint %}
+
 
 **If a withdrawal does not go through.** Your USDC is supplied to Kamino's lending markets, so withdrawals depend on liquidity being available there. This is rare, but during periods of very high utilization a withdrawal can be constrained. Try a smaller amount, or try again shortly. The app lists this as **Liquidity risk** under **Strategy overview**.
 

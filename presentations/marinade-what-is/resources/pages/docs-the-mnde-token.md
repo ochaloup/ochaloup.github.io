@@ -6,9 +6,9 @@ Marinade’s MNDE token lets holders participate in the protocol's governance. T
 
 ## MNDE Details
 
-{% hint style="info" %}
+
 **This page reflects the DAO-approved burn of 300M MNDE (**[**MIP-14**](https://forum.marinade.finance/t/mip-14-burn-5-50-of-mnde-total-supply/1909)**) and the treasury allocations that followed it.** Supply and treasury balances change as the DAO acts, so this page links to live sources rather than restating figures that will drift.
-{% endhint %}
+
 
 <figure><img src="https://2385969780-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FHvhBFBu5z7MIlkYpgMXs%2Fuploads%2FtYFruvSvZ9NzEKlEBNMt%2FMNDE.png?alt=media&#x26;token=0ae468be-f17c-4519-ad5d-7290db031c09" alt=""><figcaption></figcaption></figure>
 

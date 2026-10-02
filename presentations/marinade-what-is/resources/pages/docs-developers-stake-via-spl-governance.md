@@ -20,9 +20,9 @@ If the DAO has a SOL treasury a “Stake with Marinade” proposal can be create
 
 If your DAO does not yet have an existing mSOL account, one will automatically be created for you and attached to your DAO wallet, prior to the proposal creation. In other case, you can select the according account from the dropdown menu.
 
-{% hint style="info" %}
+
 If you don't see a mSOL account on your treasury, a workaround to create it is to send a very small amount of mSOL to the treasury wallet. This will automatically create a mSOL account.&#x20;
-{% endhint %}
+
 
 You can now fill the “Stake with Marinade” form with all the required info:
 
@@ -36,9 +36,9 @@ As soon as the vote passes and the instructions are executed, SOL is converted t
 
 ![Converted mSOL is sent to the mSOL treasury](https://2385969780-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FHvhBFBu5z7MIlkYpgMXs%2Fuploads%2F5CdFh3JojbqsBAnHTz3y%2F5.png?alt=media\&token=003dc415-b637-44bb-985b-525f15543c25)
 
-{% hint style="info" %}
+
 If you encounter any blocker, please visit Marinade's [Discord](https://discord.com/invite/6EtUf4Euu6) and ask for assistance.&#x20;
-{% endhint %}
+
 
 
 ---

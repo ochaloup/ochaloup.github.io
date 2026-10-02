@@ -4,9 +4,9 @@
 
 There is no supported standalone Rust SDK. If you are building in Rust, use one of the two routes below.
 
-{% hint style="warning" %}
+
 `github.com/marinade-finance/marinade-sdk` exists but was **archived (read-only) on 2026-08-28** and has had no real commits in years. Do not build against it.
-{% endhint %}
+
 
 ### Option 1: The Shared Rust Crates
 
@@ -28,9 +28,9 @@ This is the most stable route for an external integration, because the IDL is th
 
 The TypeScript SDK is the supported, documented integration path and covers more of the protocol. See [Marinade Ts/Js SDK](/developers/marinade-ts-js-sdk.md).
 
-{% hint style="info" %}
+
 If you have questions or troubles, please join our [Discord](https://discord.com/invite/yTdH8YkYKg). Marinade contributors will be there to help you.
-{% endhint %}
+
 
 
 ---

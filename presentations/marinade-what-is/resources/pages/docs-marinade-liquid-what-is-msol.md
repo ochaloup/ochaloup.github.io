@@ -35,9 +35,9 @@ When you choose 'Deposit stake account', these operations happen under the hood:
    2. total staked (total\_stake\_orders)
 4. Marinade mints mSOL for the user according to the mSOL/SOL ratio.
 
-{% hint style="info" %}
+
 In order to be able to deposit your stake account, it needs to contain at least 1 SOL.
-{% endhint %}
+
 
 ***
 
@@ -90,9 +90,9 @@ You will receive SOL at the beginning of epoch n+1. The amount computed is `[mSO
 
 You will receive SOL at the beginning of epoch n+2. The amount computed is `[mSOL to burn]*[mSOL price]` when the unstaking starts.
 
-{% hint style="info" %}
+
 An epoch currently lasts about 2 days on the Solana blockchain, and the exact length varies with slot times. You can follow the progress of the current epoch directly in the [Marinade app](https://app.marinade.finance/).
-{% endhint %}
+
 
 ***
 

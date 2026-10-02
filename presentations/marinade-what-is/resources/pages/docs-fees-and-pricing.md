@@ -16,9 +16,9 @@ This page is the single reference for every fee and cost across Marinade's produ
 
 Delayed Unstake on the staking products completes after **1 epoch, currently about 2 days**. Instant exits settle immediately, and USDC Earn Vault withdrawals are always instant.
 
-{% hint style="info" %}
+
 **The Native, Select and Recipes Delayed Unstake fee is flat, not proportional.** It is 0.003 SOL whether you unstake 1 SOL or 100 SOL, so it is negligible on a large position and material on a very small one. The standard Solana signature fee of 0.000005 SOL applies on top.
-{% endhint %}
+
 
 ***
 

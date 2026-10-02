@@ -4,9 +4,9 @@
 
 How validators are notified of bond-related events including underfunding, auction status changes, and announcements.
 
-{% hint style="info" %}
+
 **TL;DR:** Subscribe via Telegram, email, or the CLI to get alerted on bond underfunding, auction status changes, and announcements. Critical alerts fire below 2 epochs of coverage; warnings below 10. Setting this up is the easiest way to stay ahead of the Bond Risk Reduction Mechanism.
-{% endhint %}
+
 
 ## Overview
 
@@ -36,9 +36,9 @@ Validators only receive notifications when something **changes**. The system doe
 * **SAM eligibility changed:** Validator SAM eligibility toggled (e.g., due to delinquency). Ineligibility means Marinade will not delegate to the validator even if the bid is competitive. See Eligibility Criteria.
 * **Announcements:** Broadcast messages from Marinade to all validators.
 
-{% hint style="warning" %}
+
 The notification system is currently in beta. Thresholds, priority levels, and notification frequency may change during testing.
-{% endhint %}
+
 
 ***
 
@@ -60,9 +60,9 @@ validator-bonds subscribe <BOND_OR_VOTE_ACCOUNT> \
 
 The CLI signs an off-chain message with the authority keypair to prove bond ownership. The browser then opens a Telegram deep link. Press **Start** in the bot to activate. Notifications are not delivered until confirmation in Telegram. If the browser does not open automatically, copy the link from the CLI output manually.
 
-{% hint style="info" %}
+
 Telegram activation is required **every time** a subscription is created or re-created, even for the same bond. Always go through the CLI first.
-{% endhint %}
+
 
 #### **Subscribe via Email**
 
@@ -111,9 +111,9 @@ validator-bonds unsubscribe <BOND_OR_VOTE_ACCOUNT> \
   --authority /path/to/authority-keypair.json
 ```
 
-{% hint style="info" %}
+
 Unsubscribing requires signing with the bond authority or validator identity keypair, the same as subscribing.
-{% endhint %}
+
 
 ## Viewing Notifications
 

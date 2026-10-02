@@ -4,9 +4,9 @@
 
 Requirements a validator must meet to receive stake from SAM, and how to exit cleanly.
 
-{% hint style="info" %}
+
 **TL;DR:** Validators must meet uptime, commission, version, and bond requirements to receive Marinade stake. The commission requirement in practice is that the total yield offered to stakers matches the full network rewards base, which is stricter than the 7% headline. Losing eligibility stops new allocations and gradually unstakes existing stake. Exit cleanly by withdrawing the bond, not by lowering the bid.
-{% endhint %}
+
 
 ## Overview
 
@@ -37,9 +37,9 @@ Under the configuration in force today the second floor is strictly higher than 
 
 The yield offered is the sum of four things: on-chain inflation passed through, on-chain or bond-declared MEV passed through, block rewards shared through the bond, and any static bid (CPMPE) paid from the bond.
 
-{% hint style="warning" %}
+
 **Block rewards count.** If `--block-commission` is never set on the bond, the auction treats the validator as keeping 100% of block rewards, so that stream contributes nothing to the total offered. Because block rewards are part of the floor, leaving it unset makes the bar harder to clear. See Dynamic Bids.
-{% endhint %}
+
 
 ### **Offsetting a Higher On-Chain Commission**
 
@@ -55,9 +55,9 @@ That gap can be closed with a static bid of at least `gap` in CPMPE, or by decla
 
 The per-epoch values of `inflation_base_pmpe`, `mev_base_pmpe` and `block_base_pmpe` are published in each epoch's auction inputs and outputs in the [ds-sam-pipeline auctions folder](https://github.com/marinade-finance/ds-sam-pipeline/tree/main/auctions). Use those rather than a remembered figure: they move every epoch.
 
-{% hint style="info" %}
+
 Static bids deplete bond reserves over time. Validators choosing to offset a higher on-chain commission this way should monitor their bond balance and top up as needed.
-{% endhint %}
+
 
 ***
 
@@ -87,9 +87,9 @@ Loss of eligibility is treated as a clean unstake, no penalty is charged.
 
 If a validator receives stake from SAM, the correct way to exit fully is to request a withdrawal from the bond. This allows Marinade to redelegate stake away from the validator without charging a penalty.
 
-{% hint style="warning" %}
+
 A validator who receives stake from SAM and lowers the CPMPE instead of withdrawing the bond will trigger a bond settlement for the expected yield that will be missed. The CLI blocks this by default: `configure-bond` refuses to decrease `--cpmpe` unless `--force` is passed. See Bid Reduction Penalty.
-{% endhint %}
+
 
 Setting `maxStakeWanted` to zero does **not** stop incoming stake. In the auction, a value of zero or unset means **no cap at all**, which is the opposite of what the number suggests. To reduce, rather than stop, the stake a validator holds, set `maxStakeWanted` to the level wanted and the auction will target down to it over the following epochs. To stop receiving stake from Marinade entirely, withdraw the bond. See [`maxStakeWanted` Parameter](/marinade-protocol/protocol-overview/stake-auction-market/maxstakewanted-parameter.md).
 

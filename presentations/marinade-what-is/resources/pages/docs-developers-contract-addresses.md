@@ -75,9 +75,9 @@ Main account state: `5zgEgPbWKsAAnLPjSM56ZsbLPfVM6nUzh3u45tCnm97D`\
 Upgrade authority: [Marinade council](https://app.realms.today/dao/MNDE/params) (4/7)\
 Admin authority: [Marinade council](https://app.realms.today/dao/MNDE/params) (4/7)
 
-{% hint style="info" %}
+
 Marinade also has access to Goki, Quarry and Tribeca's smart contract multisigs as their original authors left Solana. If you're using one of those products, please reach out to us so we can transfer some of the keys to you.&#x20;
-{% endhint %}
+
 
 ### Marinade Native Staking proxy
 

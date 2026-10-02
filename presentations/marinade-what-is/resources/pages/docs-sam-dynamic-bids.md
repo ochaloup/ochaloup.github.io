@@ -4,9 +4,9 @@
 
 How dynamic commission bids work and how to configure them in the validator bonds CLI.
 
-{% hint style="info" %}
+
 **TL;DR:** Configure inflation, MEV, and block commissions in basis points (validator's portion kept). The effective bid recalculates each epoch from actual rewards, keeping the validator competitive without manual updates. On-chain commission acts as a floor. A stream left unset counts as 100% kept, so it contributes nothing.
-{% endhint %}
+
 
 ## Overview
 
@@ -26,13 +26,13 @@ Each parameter is expressed in basis points (bps), where 10,000 bps = 100%. A va
 
 Together, these three settings determine the effective bid, which is the number SAM uses to rank validators in the auction each epoch. Dynamic bidding does not change how rewards work. It only changes how the auction bid is calculated.
 
-{% hint style="warning" %}
-**Unset is not the same as zero.** A commission the validator never configures is treated by the auction as **100% kept**, so that reward stream contributes nothing to the yield offered to stakers. This matters most for `--block-commission`, which most validators have never set: block rewards are part of the SAM eligibility floor, so leaving it unset makes the floor harder to clear. See Eligibility Criteria.
-{% endhint %}
 
-{% hint style="info" %}
+**Unset is not the same as zero.** A commission the validator never configures is treated by the auction as **100% kept**, so that reward stream contributes nothing to the yield offered to stakers. This matters most for `--block-commission`, which most validators have never set: block rewards are part of the SAM eligibility floor, so leaving it unset makes the floor harder to clear. See Eligibility Criteria.
+
+
+
 **Negative values are permitted.** A commission below `0` bps means the validator keeps nothing and subsidises stakers beyond the rewards that stream actually produced, funded from the bond. The auction enforces a lower bound on how negative a commission may go (`minimalCommission` in [`auction-config.json`](https://github.com/marinade-finance/ds-sam-pipeline/blob/main/auction-config.json)). This is an advanced setting: it increases the bond draw every epoch it is in force.
-{% endhint %}
+
 
 ### What It Costs
 
@@ -98,9 +98,9 @@ validator-bonds -um configure-bond <vote-account> \
 
 This shares 100% of Marinade-attributable inflation and MEV with stakers, while keeping 30% of block rewards for the validator (sharing 70%). Useful for validators whose hosting costs require a guaranteed margin floor on block rewards. The bid stays competitive in most epochs while retaining a known share of block rewards. Trade-off: in high-competition epochs, the validator may fall below the clearing price.
 
-{% hint style="info" %}
+
 **CLI notes.** Commission settings are stored in a separate on-chain configuration account, so the first `configure-bond` call that sets a commission may need `--rent-payer` to fund that account. Separately, `configure-bond` refuses to decrease `--cpmpe` unless `--force` is passed, because lowering a static bid while holding Marinade stake triggers the Bid Reduction Penalty.
-{% endhint %}
+
 
 ***
 

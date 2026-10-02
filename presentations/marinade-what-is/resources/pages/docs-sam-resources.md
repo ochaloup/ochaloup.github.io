@@ -4,9 +4,9 @@
 
 Dashboards, repositories, APIs, and technical reference for SAM participants.
 
-{% hint style="info" %}
+
 **TL;DR:** One-stop reference page. Dashboards, repositories, audits, key contract addresses, the parameters at a glance for production config, and the glossary of SAM terms.
-{% endhint %}
+
 
 ## Overview
 
@@ -80,13 +80,13 @@ Third-party security reviews.
 
 Operational parameters governing SAM auction mechanics, bond requirements, eligibility, and notifications. Values reflect production configuration at the time of writing.
 
-{% hint style="info" %}
+
 **Source of truth:** Live values are maintained in the following sources. If the values below appear stale, check the source files directly.
 
 * **Auction parameters:** [`ds-sam-pipeline/auction-config.json`](https://github.com/marinade-finance/ds-sam-pipeline/blob/main/auction-config.json)
 * **Bond program parameters:** [`vbMaRfmTCg92HWGzmd53APkMNpPnGVGZTUHwUJQkXAU`](https://solscan.io/account/vbMaRfmTCg92HWGzmd53APkMNpPnGVGZTUHwUJQkXAU) (on-chain config account)
 * **Pipeline scoring logic:** [`ds-sam`](https://github.com/marinade-finance/ds-sam) repository
-  {% endhint %}
+  
 
 #### **Auction and Decentralization**
 

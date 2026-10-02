@@ -22,9 +22,9 @@ In order to stake with Marinade native or mSOL via Fireblocks, you will need:&#x
 11. Wait for the transaction to go through the blockchain and get confirmed.&#x20;
 12. Your SOL should now be successfully staked on Marinade.
 
-{% embed url="<https://www.youtube.com/watch?v=XjwZzhgpcjM>" %}
+<https://www.youtube.com/watch?v=XjwZzhgpcjM>
 Stake SOL with Marinade using Fireblocks
-{% endembed %}
+
 
 If you want to unstake, follow the same process as above and just select "Unstake" on one of your active positions on Marinade.&#x20;
 

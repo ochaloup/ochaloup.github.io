@@ -41,9 +41,9 @@ Marinade has thought of this, and users can use the dApp to help them with the w
 
 To avoid some draining attacks (as Marinade pays for deactivation, and timely merging of all the stake accounts), a **flat fee of 0.003 SOL** is applied for this service. It does not scale with the amount being unstaked, and it applies equally to Marinade Native, Marinade Select and Native positions paid in a Recipe reward token.
 
-{% hint style="info" %}
+
 This can be integrated easily through the SDK.
-{% endhint %}
+
 
 ### **Does Marinade Native Support Locked-Up Stake Accounts?**
 
@@ -66,9 +66,9 @@ The stake authority manages the delegation of all stake accounts for its product
 
 These authorities are PDAs derived from the proxy program, so no private key exists for them, and they are controlled and can be changed by Marinade's Council.
 
-{% hint style="warning" %}
+
 **Do not enumerate Marinade Native positions by a single stake authority.** Marinade Native spans several staker authorities: Max Yield, Marinade Select, and one authority per Marinade Recipe (the `stR...` set, which grows as new recipes launch). Filtering stake accounts on `stWirqFCf2Uts1JBL1Jsd3r6VBWhgnpdPxCTe1MFjrq` alone silently misses every Select and Recipe position. Fetch the current authority set rather than hardcoding it.
-{% endhint %}
+
 
 ***
 
@@ -80,21 +80,21 @@ Base URL: `https://native-staking.marinade.finance`
 
 `{stake_authority}` is one of the addresses in the table above. The `rebalance-hint` call is an off-chain advisory and is not required for correctness: the periodic scanner picks up new stake accounts at the next epoch boundary regardless.
 
-{% hint style="warning" %}
-The `/v1/` routes are gone. Use `/v2/` only.
-{% endhint %}
 
-{% embed url="<https://native-staking.marinade.finance/docs>" %}
+The `/v1/` routes are gone. Use `/v2/` only.
+
+
+<https://native-staking.marinade.finance/docs>
 Marinade Native API reference
-{% endembed %}
+
 
 ***
 
 ## Marinade Native SDK
 
-{% embed url="<https://www.npmjs.com/package/@marinade.finance/native-staking-sdk>" %}
+<https://www.npmjs.com/package/@marinade.finance/native-staking-sdk>
 Marinade Native SDK
-{% endembed %}
+
 
 
 ---

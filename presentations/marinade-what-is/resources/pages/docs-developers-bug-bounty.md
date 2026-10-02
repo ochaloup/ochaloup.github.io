@@ -37,9 +37,9 @@ Critical vulnerabilities are further capped at **10% of economic damage**, with 
 
 However, there is a **minimum payout of USD 50,000** for Critical bug reports.
 
-{% hint style="info" %}
+
 Payouts are handled by the **Marinade Finance** team directly and are denominated in USD. However, payouts are done in **mSOL** and **MNDE**.
-{% endhint %}
+
 
 ***
 
@@ -49,9 +49,9 @@ Payouts are handled by the **Marinade Finance** team directly and are denominate
 
 The Immunefi program currently covers **one** program: [liquid-staking-program](https://github.com/marinade-finance/liquid-staking-program).
 
-{% hint style="warning" %}
+
 **Other on-chain programs are not yet in the formal Immunefi scope.** Native Staking Proxy, Validator Bonds and Directed Stake are live mainnet programs but are not listed as Immunefi assets. A finding in one of those does not qualify for an Immunefi-tier reward; report it the same way as a non-smart-contract finding, through Everything Else below.
-{% endhint %}
+
 
 #### Impacts In Scope
 

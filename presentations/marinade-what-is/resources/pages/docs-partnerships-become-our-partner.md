@@ -17,14 +17,14 @@ Marinade created the mSOL token in a way to be easy to integrate no matter the t
 * **Marinade Recipes**. Your users stake SOL and receive their rewards in a token you choose, with the principal staying in SOL. Partner-funded incentive economics are supported here today. Read more about Marinade Recipes.
 * **Custodian and institutional integrations**. If you route institutional flow through a custodian such as Fireblocks, BitGo, Anchorage, Copper or Komainu, we support the technical integration into Marinade Native. Commercial terms are negotiated case by case. **Marinade Select is not currently available to stake to**, so it is not an option for new flow; existing Select positions are unaffected.
 
-{% hint style="warning" %}
-**The Marinade referral program is currently paused.** While it is paused, partners **do not earn referral fees on any Marinade product**, whether mSOL, Marinade Native or Marinade Select, and referred users receive no APY boost. That applies to every partner, **including those holding an agreement signed before the pause**. The program is paused rather than retired and a relaunch is expected, but relaunch terms are not yet defined. See Marinade Referral Program for the detail, and use the partnership form above for anything you were planning to run through it.
-{% endhint %}
 
-{% hint style="info" %}
+**The Marinade referral program is currently paused.** While it is paused, partners **do not earn referral fees on any Marinade product**, whether mSOL, Marinade Native or Marinade Select, and referred users receive no APY boost. That applies to every partner, **including those holding an agreement signed before the pause**. The program is paused rather than retired and a relaunch is expected, but relaunch terms are not yet defined. See Marinade Referral Program for the detail, and use the partnership form above for anything you were planning to run through it.
+
+
+
 Please know that Marinade is willing to help and bring support to projects that express the desire to integrate into our ecosystem. If you require assistance in order to make this idea a reality, please contact us and we will do our best to help.\
 Nonetheless, mSOL is **permissionless** and can be integrated without contacting us or formalizing any agreement. **Simply integrating mSOL in a project is by no means an endorsement of its security or credibility by Marinade**.
-{% endhint %}
+
 
 ***
 
@@ -87,9 +87,9 @@ Here is an example of what our typical setup process looks like. This is not set
 6. **Public launch** - Launch is coordinated and announced to respective channels.
 7. **Follow-up and monitoring of the partnership** - Parties share and analyze community sentiment and metrics and refine if needed.
 
-{% hint style="info" %}
+
 Reminder: use [this form](https://tally.so/r/wzLj1m) to get in contact with our Partnerships team. It is the only official intake route. Marinade will never arrange a partnership through an unsolicited direct message.
-{% endhint %}
+
 
 
 ---

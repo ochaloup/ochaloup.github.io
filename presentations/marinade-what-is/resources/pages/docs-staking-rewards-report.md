@@ -12,9 +12,9 @@ It is designed to help users better understand rewards earned over time by prese
 
 The report is intended for **reference and transparency**, and reflects indexed staking reward data rather than wallet balance changes.
 
-{% hint style="warning" %}
+
 **Not covered: Marinade Recipes / Customized Rewards.** Although Recipes use native staking, the report only tracks rewards paid in SOL. If your position pays out in another token (USDG, USDC, cbBTC, etc.), those payouts are airdropped to your wallet each epoch and no report is generated for them. Track them in your wallet's transaction history or on a Solana explorer such as [Solscan](https://solscan.io). See Marinade Recipes for details.
-{% endhint %}
+
 
 ***
 
@@ -111,9 +111,9 @@ You'll be prompted to optionally enter an email address with the message:
 
 Providing an email is optional but recommended.
 
-{% hint style="warning" %}
+
 **Security note:** We only send notifications from **@marinade.finance**.
-{% endhint %}
+
 
 4. Click **Confirm**.\
    Your request will typically complete within **24 hours**.

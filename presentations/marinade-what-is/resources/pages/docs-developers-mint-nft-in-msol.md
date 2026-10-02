@@ -23,9 +23,9 @@ We know how cool NFTs are, so we made it possible to mint NFTs using mSOL!
 
 `yarn build`
 
-{% hint style="info" %}
+
 Before you upload the metadata and create your candy\_machine, you need to make sure that you have the right wallet configuration by using Solana CLI.
-{% endhint %}
+
 
 * Once the wallet configuration is done, prepare the metadata and upload them to Arweave (IFPS).&#x20;
 * Prepare your metadata and create an assets folder with them.&#x20;
@@ -50,9 +50,9 @@ Before you upload the metadata and create your candy\_machine, you need to make 
 
 `ts-node ./src/candy-machine-cli.ts update_candy_machine --env devnet --keypair ~/.config/solana/wallet.json --`<mark style="color:blue;">`date 1638023250`</mark>
 
-{% hint style="info" %}
+
 The `update_candy_machine` command can also be used to modify the mint price.
-{% endhint %}
+
 
 Congratulations, your candy machine is now set up in mSOL!&#x20;
 

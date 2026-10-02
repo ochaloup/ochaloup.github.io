@@ -54,9 +54,9 @@ The same five contributors also form the **Emergency Pause Council**, which hold
 
 The five seats are verifiable: the DAO's council mint `6MGwpuJ5YE1c8jJaF8FKurQdDJeYRf1adX76dovkXxRs` has a supply of exactly 5, at zero decimals, so five council tokens exist and five seats are filled.
 
-{% hint style="info" %}
+
 Marinade considers that all governance participants agree to follow this [Code of Conduct](https://forum.marinade.finance/t/marinade-dao-code-of-conduct/470), ratified by the DAO.
-{% endhint %}
+
 
 ***
 
@@ -68,17 +68,17 @@ When locking your MNDE, **make sure to choose the following settings:**
 
 <figure><img src="https://2385969780-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FHvhBFBu5z7MIlkYpgMXs%2Fuploads%2FktJ5vMNymXRrDTX6oOT7%2Fimage.png?alt=media&#x26;token=dfba016b-beb8-49c7-b9cc-0991105b838c" alt="" width="326"><figcaption><p>Make sure to set the lockup time and the number of days before confirming the transactions.</p></figcaption></figure>
 
-{% hint style="danger" %}
+
 Realms offer two options, "Deposit" and "Lock tokens". Make sure to only use "Lock tokens" as depositing tokens will not give you any voting power in Marinade governance.
-{% endhint %}
 
-{% hint style="info" %}
+
+
 **Your voting power tracks your remaining lock time.** It is calculated from how long your lock still has to run, up to a 30-day maximum. That means it **decays gradually while you are unlocking** rather than disappearing the moment you start. **You can still vote during the 30-day unlock period**, with progressively less weight as the period runs down.
-{% endhint %}
 
-{% hint style="warning" %}
+
+
 If you owned Marinade NFTs containing locked MNDE, a migration tool is available on the [MNDE migration page](https://old.marinade.finance/mnde/).
-{% endhint %}
+
 
 Once your wallet has locked MNDE tokens in Realms, you can use your veMNDE power to vote on proposals from [Marinade's governance page](https://app.marinade.finance/governance/) or directly in [Realms](https://v2.realms.today/dao/899YG3yk4F66ZgbNWLHriZHTXSKk9e1kvsKEquW7L6Mo/proposals).
 

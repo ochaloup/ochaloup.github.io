@@ -20,9 +20,9 @@ Validator selection for the pool is driven by Marinade's **Stake Auction Marketp
 
 The program instructions the crank calls are **permissionless**, so the pool can always be kept operational even if Marinade's own crank is down.
 
-{% hint style="info" %}
+
 One caveat since liquid-staking-program v2.1.0: `merge_stakes` no longer lets the caller choose the destination account. Merges now target a canonical per-validator PDA, which the crank creates ahead of merging if it does not yet exist. Any third-party cranker has to follow the same order.
-{% endhint %}
+
 
 ***
 

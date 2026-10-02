@@ -44,9 +44,9 @@ You start with the previous example and some amount of mSOL-lamports, then:
 
 `let SOL_lamports = (mSOL_lamports as u128 * marinade_state.msol_price as u128 / 0x1_0000_0000 as u128) as u64`
 
-{% hint style="info" %}
+
 mSOL uses 9 decimals, as SOL.
-{% endhint %}
+
 
 ### How much mSOL an amount of SOL represents
 

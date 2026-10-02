@@ -4,9 +4,9 @@
 
 How Marinade allocates stake each epoch, how it reduces stake when needed, and the constraints that protect network decentralization.
 
-{% hint style="info" %}
+
 **TL;DR:** Marinade ranks validators by `max_yield` and allocates stake top-down each epoch, subject to a 15% per-validator cap, 30% ASO cap, and 40% country cap. About 1% of TVL rebalances per epoch under normal conditions, with faster movement when validators lose eligibility or exit.
-{% endhint %}
+
 
 ## Overview
 

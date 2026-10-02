@@ -4,13 +4,13 @@
 
 Stake SOL and receive your rewards in a token of your choice instead of more SOL. Principal stays in SOL. Also called Customized Rewards.
 
-{% hint style="info" %}
-Marinade Recipes are also referred to as **Customized Rewards**. Both names describe the same feature. This page uses "Recipes."
-{% endhint %}
 
-{% hint style="info" %}
+Marinade Recipes are also referred to as **Customized Rewards**. Both names describe the same feature. This page uses "Recipes."
+
+
+
 **TL;DR:** Marinade Recipes lets you stake SOL and receive your staking rewards in a token of your choice, from stablecoins like USDG and USDC to BTC, ETH, gold, MNDE, and tokenized equities, instead of more SOL. Your SOL principal stays in SOL the whole time; only the yield is converted, and payouts arrive automatically each epoch.
-{% endhint %}
+
 
 ## Overview
 
@@ -22,9 +22,9 @@ Recipes launched with a single payout token and now support a range of them acro
 
 ## How It Works
 
-{% hint style="warning" %}
+
 **Open a token account for your payout token, and keep it open.** Payouts are SPL token airdrops, so your wallet must have an account for the payout token before rewards can arrive. Marinade does not open this account for you. Create it before or shortly after staking, then leave it open. If it is closed, payouts pause. Up to 2 weeks of missed payouts are recovered automatically once you reopen it, and anything older than 2 weeks is permanently lost.
-{% endhint %}
+
 
 A Recipe is a separate native staking path. It sits next to Marinade Liquid and Marinade Native and works like this:
 
@@ -35,9 +35,9 @@ A Recipe is a separate native staking path. It sits next to Marinade Liquid and 
 
 Recipes don't use SAM (Marinade Max Yield) or Marinade Select. SAM and Select decide how stake is allocated across validators. A Recipe decides how that stake's rewards are converted and routed back to you. It's a different delegation path with its own infrastructure.
 
-{% hint style="info" %}
+
 Your SOL sits in standard native stake accounts. You keep full withdrawal authority, and no Marinade contract ever holds your SOL.
-{% endhint %}
+
 
 ## Available Recipes
 
@@ -47,9 +47,9 @@ You pick your payout token when you stake. The currently available Recipes are b
 
 More Recipes are planned. Updates go out on the product page and through official Marinade channels.
 
-{% hint style="warning" %}
+
 Payout tokens are issued by third parties, and each carries its issuer's own trust model. Some of them (for example USDG and the tokenized equities) can be paused or frozen by their issuer, which would pause reward delivery and exits in that token until the pause is lifted. Tokenized equities such as SPYx and NVDAx are issued by Backed and are generally available only to non-U.S. persons. None of this affects your SOL principal, which stays in native stake accounts you control. Confirm a payout token suits your needs before choosing it.
-{% endhint %}
+
 
 ### **Fees**
 
@@ -85,9 +85,9 @@ To change it:
 * Click the **asset dropdown** and choose the token you want.
 * Confirm the change in your wallet.
 
-{% hint style="warning" %}
+
 Switching to or from SOL moves your stake between validators. This takes about one epoch, during which your stake does not earn rewards. If you switch very close to the end of an epoch, the change can miss that epoch's cutoff and take up to two epochs. Switching between two reward tokens (for example USDG to cbBTC) is seamless and does not interrupt your rewards.
-{% endhint %}
+
 
 How switching affects your stake:
 

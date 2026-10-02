@@ -4,9 +4,9 @@
 
 mTransactions is an exploration of a bandwidth marketplace for transactions on the Solana blockchain
 
-{% hint style="warning" %}
+
 **Note:** mTransactions is currently paused and unavailable. The documentation below is kept for reference purposes only.
-{% endhint %}
+
 
 The feature was released earlier as an **open beta** to explore new transaction capabilities within the Marinade ecosystem. At this time, the service has been **temporarily paused and is not active**.
 
@@ -18,9 +18,9 @@ Participating users are able to send transactions to the mTransaction service, w
 
 ### Github repository
 
-{% embed url="<https://github.com/marinade-finance/mtransaction>" %}
+<https://github.com/marinade-finance/mtransaction>
 mTransactions repository
-{% endembed %}
+
 
 
 ---

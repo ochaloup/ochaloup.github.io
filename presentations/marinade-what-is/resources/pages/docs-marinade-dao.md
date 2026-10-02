@@ -30,9 +30,9 @@ We are **approachable**. We value team **collaboration over competition. Support
 
 Every one of us is **accountable for our individual contribution**, no matter the scope. We **own our commitments** as if no one is watching. We are all **value creators**. We **stand up for the outcomes** of our work. We **learn from failures**, and we **analyze and celebrate success**. We only accept short-term wins **compatible with our long-term vision**.
 
-{% content-ref url="/pages/maDpRBtCQUHxBzY5Y7ut" %}
+
 [Contributors](/marinade-dao/contributors.md)
-{% endcontent-ref %}
+
 
 
 ---

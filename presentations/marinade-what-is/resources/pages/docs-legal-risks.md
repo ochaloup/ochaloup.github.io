@@ -8,9 +8,9 @@ Key risks associated with using the Marinade website and Services, including sma
 
 Using the Services involves significant risk. The summary below highlights the main categories. It is not exhaustive.
 
-{% hint style="warning" %}
+
 Staking and using the Services can result in the loss of some or all funds. The full risk disclosures are set out in the [Terms of Use](https://marinade.finance/terms-of-use), which are the authoritative and binding version.
-{% endhint %}
+
 
 #### Protocol and Smart Contract Risk
 

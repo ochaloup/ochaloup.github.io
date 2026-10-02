@@ -40,9 +40,9 @@ It is composed of 13 signing slots, distributed among some of the most reputable
 
 The threshold is readable on chain and does not have to be taken on trust. The multisig account `magrsHFQxkkioAy45VWnZnFBBdKVdy2ZiRoRGYT9Wed` holds **13 owner slots and a threshold of 6**, and its program-derived signer, `551FBXSXdhcRDDkdcb3ThDRg84Mwe5Zs6YjJ1EEoyzBp`, is exactly the upgrade authority recorded against the mSOL program. See the address table below.
 
-{% hint style="info" %}
+
 The multisig was **6 of 11** at mainnet launch in August 2021 and after the November 2022 signer rotation. It was later expanded to **6 of 13**. If you find the 6-of-11 figure in older Marinade writing, it is a historical state, not the current one.
-{% endhint %}
+
 
 ***
 
@@ -66,9 +66,9 @@ The Council can adjust protocol fees within DAO-set bounds, execute DAO-authoriz
 
 The Council **cannot** upgrade contracts, and it cannot commit beyond the DAO-authorized budget without a vote.
 
-{% hint style="info" %}
+
 Older documentation described a "Treasury multisig" at 4 of 7 and a separate "Operational multisig" of 5. Both have been superseded by the Marinade Council at **3 of 5**.
-{% endhint %}
+
 
 ***
 
@@ -111,11 +111,11 @@ The Council can change the operational parameters of the protocol and of the mSO
 * `staking-sol-cap`, the maximum SOL amount that can be staked in the protocol
 * `rewards-fee`, the protocol fee on staking rewards
 
-{% hint style="warning" %}
+
 **These values change.** This page deliberately does not print them, because a printed value goes stale the moment the Council adjusts it. The authoritative source is the on-chain **State account** `8szGkuLTAux9XMgZ2vtY39jVSowEcpBfFfD8hXSEqdGC`, readable with any Solana RPC client or block explorer.
 
 Two points worth knowing as of this writing, both read from the State account on 18 September 2026: the **staking SOL cap is unset**, so there is no maximum stakeable amount, and the **protocol `rewards-fee` is 0**. The program caps `rewards-fee` at 10%, so it can never be set above that.
-{% endhint %}
+
 
 For what Instant Unstake actually costs you today, see the Instant Unstake page rather than the parameter names above.
 
