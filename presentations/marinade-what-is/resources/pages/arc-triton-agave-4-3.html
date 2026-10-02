@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Google Tag Manager -->
+    
+    <!-- End Google Tag Manager -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Agave 4.3: What you need to know</title>
+    <link rel="stylesheet" href="https://blog.triton.one/assets/built/screen.css?v=Soq0lOwh6Z2Ih-2E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Work+Sans:wght@400;500&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <meta name="description" content="Agave 4.3 brings Transaction v1 into everyday traffic. Here&#x27;s what to update in your transaction sending, RPC calls and Yellowstone gRPC clients.">
+    <link rel="icon" href="https://storage.ghost.io/c/2d/1b/2d1bd4a5-8fca-4919-b94d-173e398be507/content/images/size/w256h256/2026/04/favicon.png" type="image/png">
+    <link rel="canonical" href="https://blog.triton.one/agave-4-3-what-you-need-to-know/">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <meta property="og:site_name" content="Triton One Blog">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Agave 4.3: What you need to know">
+    <meta property="og:description" content="Agave 4.3 brings Transaction v1 into everyday traffic. Here&#x27;s what to update in your transaction sending, RPC calls and Yellowstone gRPC clients.">
+    <meta property="og:url" content="https://blog.triton.one/agave-4-3-what-you-need-to-know/">
+    <meta property="og:image" content="https://storage.ghost.io/c/2d/1b/2d1bd4a5-8fca-4919-b94d-173e398be507/content/images/size/w1200/2026/09/agave43-3.png">
+    <meta property="article:published_time" content="2026-09-18T13:15:12.000Z">
+    <meta property="article:modified_time" content="2026-09-18T13:49:18.000Z">
+    <meta property="article:tag" content="Triton updates">
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Agave 4.3: What you need to know">
+    <meta name="twitter:description" content="Agave 4.3 brings Transaction v1 into everyday traffic. Here&#x27;s what to update in your transaction sending, RPC calls and Yellowstone gRPC clients.">
+    <meta name="twitter:url" content="https://blog.triton.one/agave-4-3-what-you-need-to-know/">
+    <meta name="twitter:image" content="https://storage.ghost.io/c/2d/1b/2d1bd4a5-8fca-4919-b94d-173e398be507/content/images/size/w1200/2026/09/agave43-3.png">
+    <meta name="twitter:label1" content="Written by">
+    <meta name="twitter:data1" content="Kendra Ross">
+    <meta name="twitter:label2" content="Filed under">
+    <meta name="twitter:data2" content="Triton updates">
+    <meta name="twitter:site" content="@triton_one">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="675">
+    
+    
+
+    <meta name="generator" content="Ghost 6.68">
+    <link rel="alternate" type="application/rss+xml" title="Triton One Blog" href="https://blog.triton.one/rss/">
+    <style id="gh-members-styles">.gh-post-upgrade-cta-content,
+.gh-post-upgrade-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    text-align: center;
+    width: 100%;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+.gh-post-upgrade-cta-content {
+    border-radius: 8px;
+    padding: 40px 4vw;
+}
+
+.gh-post-upgrade-cta h2 {
+    color: #ffffff;
+    font-size: 28px;
+    letter-spacing: -0.2px;
+    margin: 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta p {
+    margin: 20px 0 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta small {
+    font-size: 16px;
+    letter-spacing: -0.2px;
+}
+
+.gh-post-upgrade-cta a {
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: 500;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a:hover {
+    color: #ffffff;
+    opacity: 0.8;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a.gh-btn {
+    display: block;
+    background: #ffffff;
+    text-decoration: none;
+    margin: 28px 0 0;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.gh-post-upgrade-cta a.gh-btn:hover {
+    opacity: 0.92;
+}</style>
+    
+    
+    <link href="https://blog.triton.one/webmentions/receive/" rel="webmention">
+    
+    <link rel="stylesheet" type="text/css" href="/public/cards.min.css?v=WwnU9jw5ancNC8Gc">
+    
+    <style>:root {--ghost-accent-color: #7A4BA0;}</style>
+    <style>
+/* Wrap each code block so we can position the button */
+.gh-content pre {
+  position: relative;
+}
+/* The normal button */
+.kg-button-card a.kg-btn.kg-btn-accent,
+a.kg-btn.kg-btn-accent {
+  padding: 12px 24px;
+  background: rgb(122, 75, 160);
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 500;
+
+  border: 0;
+  box-shadow: none;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 1.7rem;
+  height: 3em;
+}
+
+.kg-button-card a.kg-btn.kg-btn-accent:hover,
+a.kg-btn.kg-btn-accent:hover {
+  background: rgb(106, 60, 145);
+}
+
+/* The code button */
+.copy-code-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font: inherit;
+  font-size: 12px;
+  line-height: 1;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(0,0,0,.15);
+  background: rgba(255,255,255,.75);
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+}
+
+.copy-code-btn:hover { background: rgba(255,255,255,.95); }
+.copy-code-btn:active { transform: translateY(1px); }
+
+/* Dark themes */
+@media (prefers-color-scheme: dark) {
+  .copy-code-btn {
+    background: rgba(30,30,30,.6);
+    color: #eee;
+    border-color: rgba(255,255,255,.2);
+  }
+  .copy-code-btn:hover { background: rgba(30,30,30,.85); }
+}
+
+/* Optional: hide on super-short code blocks */
+.gh-content pre:has(code:not(:nth-child(0))) .copy-code-btn {}
+/* You can opt-out any block by adding class "no-copy" to the code card */
+</style>
+
+<!-- Prism.js syntax highlighting -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-okaidia.min.css"> <!-- dark theme -->
+
+
+
+<!-- Add the language components you need -->
+
+
+
+
+
+<style>
+a.gh-portal-close.gh-head-link, a.gh-portal-open.gh-head-link {display: none;}
+</style>
+
+<style>
+.gh-content table:not(.gist table) {
+  display: table !important;
+  overflow-x: visible !important; 
+  white-space: normal !important;
+  width: 100% !important;
+}
+</style>
+
+<meta name="google-site-verification" content="ejFqwngQiNq6u6LxqcVuinpV03BYV75hyKycZHQR-cA" />
+
+<!-- Privacy-friendly analytics by Plausible -->
+
+
+
+<!-- LinkedIn Pixel -->
+
+
+<noscript>
+<img height="1" width="1" style="display:none;" alt="" src="https://px.ads.linkedin.com/collect/?pid=8502412&fmt=gif" />
+</noscript>
+
+
+
+<!-- Google Tag Manager -->
+
+<!-- End Google Tag Manager -->
+
+<!-- Google tag (gtag.js) -->
+
+
+
+<!-- Reddit Pixel -->
+
+
+<!-- X conversion tracking -->
+
+
+    <link rel="preconnect" href="https://fonts.bunny.net"><link rel="stylesheet" href="https://fonts.bunny.net/css?family=poppins:400,500,600"><style>:root {--gh-font-heading: Poppins;--gh-font-body: Poppins;}</style>
+</head>
+
+<body class="post-template tag-triton-updates gh-font-heading-poppins gh-font-body-poppins  is-head-left-logo">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T8R23ZRR"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+<div class="flex flex-col min-h-screen site bg-soft-white">
+
+    <header id="gh-head" class="gh-head h-20 bg-soft-white px-[var(--gap)]">
+        <div class="gh-head-inner grid grid-cols-[auto_1fr_auto] items-center h-full max-w-site-head mx-auto px-10">
+            <div class="leading-none gh-head-brand">
+                <div class="flex items-center">
+                    <a class="gh-head-logo relative font-heading text-2xl font-bold tracking-[-0.02em]" href="https://blog.triton.one">
+                            <img class="max-h-8" src="https://storage.ghost.io/c/2d/1b/2d1bd4a5-8fca-4919-b94d-173e398be507/content/images/2025/09/Triton_LogoType_Dark.png" alt="Triton One Blog">
+                    </a>
+                </div>
+                <button class="gh-search gh-icon-btn inline-flex items-center justify-center w-[30px] h-[30px] p-0 bg-transparent border-0 outline-none cursor-pointer" aria-label="Search this site" data-ghost-search><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M17.5 17.5L12.5 12.5L17.5 17.5ZM14.1667 8.33333C14.1667 9.09938 14.0158 9.85792 13.7226 10.5657C13.4295 11.2734 12.9998 11.9164 12.4581 12.4581C11.9164 12.9998 11.2734 13.4295 10.5657 13.7226C9.85792 14.0158 9.09938 14.1667 8.33333 14.1667C7.56729 14.1667 6.80875 14.0158 6.10101 13.7226C5.39328 13.4295 4.75022 12.9998 4.20854 12.4581C3.66687 11.9164 3.23719 11.2734 2.94404 10.5657C2.65088 9.85792 2.5 9.09938 2.5 8.33333C2.5 6.78624 3.11458 5.30251 4.20854 4.20854C5.30251 3.11458 6.78624 2.5 8.33333 2.5C9.88043 2.5 11.3642 3.11458 12.4581 4.20854C13.5521 5.30251 14.1667 6.78624 14.1667 8.33333Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+</button>
+                <button class="gh-burger" aria-label="Toggle menu"></button>
+            </div>
+
+            <nav class="gh-head-menu flex items-center justify-center font-heading text-sm font-medium leading-[130%] text-soft-black">
+                <ul class="nav">
+    <li class="nav-home"><a href="https://triton.one/">Home</a></li>
+    <li class="nav-docs"><a href="https://docs.triton.one/">Docs</a></li>
+    <li class="nav-github"><a href="https://github.com/rpcpool">Github</a></li>
+    <li class="nav-blog"><a href="https://blog.triton.one/">Blog</a></li>
+</ul>
+
+            </nav>
+
+            <div class="flex items-center justify-end gap-4 gh-head-actions">
+                    <button data-cta-id="nav-search" data-section="blog-nav" class="gh-search flex items-center justify-center w-[37px] h-[37px] m-0 bg-soft-white border border-primary/15 rounded-full text-primary cursor-pointer hover:bg-primary/[0.08] hover:opacity-100" aria-label="Search this site" data-ghost-search><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M17.5 17.5L12.5 12.5L17.5 17.5ZM14.1667 8.33333C14.1667 9.09938 14.0158 9.85792 13.7226 10.5657C13.4295 11.2734 12.9998 11.9164 12.4581 12.4581C11.9164 12.9998 11.2734 13.4295 10.5657 13.7226C9.85792 14.0158 9.09938 14.1667 8.33333 14.1667C7.56729 14.1667 6.80875 14.0158 6.10101 13.7226C5.39328 13.4295 4.75022 12.9998 4.20854 12.4581C3.66687 11.9164 3.23719 11.2734 2.94404 10.5657C2.65088 9.85792 2.5 9.09938 2.5 8.33333C2.5 6.78624 3.11458 5.30251 4.20854 4.20854C5.30251 3.11458 6.78624 2.5 8.33333 2.5C9.88043 2.5 11.3642 3.11458 12.4581 4.20854C13.5521 5.30251 14.1667 6.78624 14.1667 8.33333Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+</button>
+                    <div class="flex items-center gap-4 gh-head-members whitespace-nowrap">
+                        <a data-cta-id="nav-newsletter-signup" data-section="blog-nav" class="inline-flex justify-center items-center py-2.5 px-6 font-body font-semibold text-sm leading-[120%] text-primary bg-soft-white border border-primary rounded-full no-underline hover:bg-primary/[0.08]" href="#/portal/signup" data-portal="signup">Sign up for newsletter</a>
+                        <a data-cta-id="nav-start-building" data-section="blog-nav" class="inline-flex justify-center items-center py-2.5 px-6 font-body font-semibold text-sm leading-[120%] text-soft-white bg-primary border-none rounded-full no-underline hover:opacity-90" href="https://customers.triton.one/onboarding">Start building</a>
+                    </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="site-content grow pb-[30px] md:pb-0">
+        
+<main class="site-main">
+
+    <div class="flex flex-col items-center md:px-10">
+        <div class="flex flex-col items-center w-full py-10 post-page-wrapper md:py-20 max-w-site md:rounded-lg-card">
+
+
+            <div class="flex flex-row items-center gap-2.5 px-5 pb-10 md:px-20 md:pb-0 w-full">
+                <a href="https://blog.triton.one" class="font-body font-medium text-sm leading-[130%] text-soft-black/75 no-underline hover:text-soft-black">Blog</a>
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5.25 3.5L8.75 7L5.25 10.5" stroke="rgba(23,23,23,0.75)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <a href="/tag/triton-updates/" class="font-body font-medium text-sm leading-[130%] text-soft-black/75 no-underline hover:text-soft-black">Triton updates</a>
+            </div>
+
+            <article class="w-full px-5 md:px-20 md:pt-20">
+
+                <div class="flex flex-col items-start w-full gap-5">
+                    <div class="flex flex-row flex-wrap items-center gap-2.5">
+                            <span class="font-body font-normal text-base leading-[130%] text-soft-black">Kendra Ross</span>
+                    </div>
+
+                    <h1 class="font-heading font-medium text-4xl md:text-5xl leading-[120%] text-soft-black m-0 max-w-[1024px]">Agave 4.3: What you need to know</h1>
+
+                        <span class="font-body font-normal text-base leading-[130%] text-soft-black/75">Updated 18 Sep 2026</span>
+                    <div class="w-full h-px bg-[#1717171A]"></div>
+                </div>
+
+                <div id="post-body" class="flex flex-col gap-10 mt-10 lg:flex-row lg:gap-20 md:mt-16">
+
+                    <aside id="post-toc" class="hidden w-full lg:w-[250px] xl:w-[340px] lg:shrink-0">
+                        <div id="toc-card" class="lg:sticky lg:top-8 bg-[#F7F7F766] border border-soft-black/5 shadow-[0_4px_6px_rgba(23,23,23,0.05)] rounded-xl lg:rounded-sm-card overflow-hidden">
+                            <button id="toc-toggle" class="flex items-center justify-between w-full px-5 py-3.5 lg:py-2.5 cursor-pointer bg-transparent border-0 outline-none">
+                                <span class="font-heading font-medium text-base leading-[130%] text-soft-black">Contents</span>
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="transition-transform duration-200 text-primary">
+                                    <rect x="2" y="2" width="16" height="16" rx="2" stroke="currentColor" stroke-opacity="0.2" stroke-width="1.5"/>
+                                    <path d="M6 7h8M6 10h8M6 13h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                </svg>
+                            </button>
+                            <div id="toc-content" class="hidden border-t border-soft-black/10">
+                                <nav id="toc-list" class="flex flex-col gap-3.5 px-5 py-4">
+                                </nav>
+                            </div>
+                        </div>
+                    </aside>
+
+                    <div class="gh-content post-content max-w-[852px] w-full min-w-0">
+                        <h2 id="tldr">TL;DR</h2><ul><li>Agave 4.3 is coming to mainnet, and three client-side changes take effect with it</li><li>If you send or simulate transactions over HTTP/RPC, switch from base58 to base64 encoding; base58 is deprecated and can't carry full-size v1 transactions</li><li>If you call getBlock or getTransaction, set maxSupportedTransactionVersion to 1 or higher and request base64, or v1 transactions won't be returned to you</li><li>If you use Yellowstone gRPC, upgrade your client to at least 13.2.0 and your protos to at least 12.4.0, or you won't see the full fields of v1 transactions in your messages</li><li>Alpenglow does not activate with 4.3; the feature gate is expected around the 4.4 release</li></ul><p>→ <a href="https://docs.triton.one/?ref=blog.triton.one" rel="noreferrer">View the docs</a></p><p>Following our <a href="https://blog.triton.one/agave-4-2-transaction-v1-and-your-breaking-changes-checklist/" rel="noreferrer">guide to the Agave 4.2 breaking changes</a>, the network is already moving to the next release. Agave 4.3 is rolling out across mainnet.</p><p>None of this is Alpenglow. The consensus change everyone is watching ships inert in 4.3, with the feature gate expected around 4.4.&nbsp;</p><p>The changes below are now live, so here's what to update.</p><h2 id="sending-transactions-switch-to-base64">Sending transactions: switch to base64</h2><p>If you send or simulate transactions over HTTP/RPC, you now need to encode them in base64 rather than base58.</p><p>The reason is size. Transaction v1 supports transactions of up to 4096 bytes, 5464 characters when encoded to a base64 string, but the capacity for decoding base58 transactions is fixed at 1683 characters and won't be increased. Base58 is significantly slower than Base64 as the input grows, so Base58 encoding is deprecated for sending and simulating v1 transactions that grow above 1683 in characters, 1232 in bytes size.</p><p>Most Solana SDKs make this a one-line change: set the encoding to base64 wherever you build your sendTransaction and simulateTransaction calls. If you're constructing requests by hand, base64-encode the serialised transaction and pass "encoding": "base64" in the request parameters.</p><h2 id="fetching-transactions-and-blocks-opt-in-to-v1">Fetching transactions and blocks: opt in to v1</h2><p>If you call getBlock or getTransaction, you need two things for v1 transactions to be returned to you:</p><ul><li>Set maxSupportedTransactionVersion to 1 or higher in your request parameters</li><li>Request base64 encoding here as well</li></ul><p>Without the version parameter, v1 transactions won't come back in your results. Requesting base58 together with maxSupportedTransactionVersion &gt;= 1 already returned incorrect answers before 4.3, because a v1 transaction can't be represented in the base58 response shape. Agave 4.3 replaces that silently wrong answer with an explicit error indicating that base58 isn't supported in v1.&nbsp;</p><p>If you start seeing that error, the fix is the same as above: request base64.</p><h2 id="yellowstone-grpc-upgrade-your-client">Yellowstone gRPC: upgrade your client</h2><p>If you consume our Dragon's Mouth gRPC streams through yellowstone-grpc, your existing subscriptions keep working through the upgrade. You don't need to change your filters or your subscription setup, and your feed won't stop.</p><p>What you will miss without an upgrade is data.&nbsp;</p><p>Older client versions don't know about the new fields introduced in Transaction v1, so those fields won't appear in your messages. This affects block, transaction, and deshred subscriptions.</p><p>The version requirements:</p>
+<!--kg-card-begin: html-->
+<table style="border:none;border-collapse:collapse;table-layout:fixed;width:468pt"><colgroup><col><col><col></colgroup><thead><tr style="height:0pt"><th style="border-left:solid #000000 1pt;border-right:solid #000000 1pt;border-bottom:solid #000000 1pt;border-top:solid #000000 1pt;vertical-align:top;padding:5pt 5pt 5pt 5pt;overflow:hidden;overflow-wrap:break-word;" scope="col"><p dir="ltr" style="line-height:1.3800000000000001;margin-top:0pt;margin-bottom:10pt;"><span style="font-size:11pt;font-family:'Work Sans',sans-serif;color:#000000;background-color:transparent;font-weight:700;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Library</span></p></th><th style="border-left:solid #000000 1pt;border-right:solid #000000 1pt;border-bottom:solid #000000 1pt;border-top:solid #000000 1pt;vertical-align:top;padding:5pt 5pt 5pt 5pt;overflow:hidden;overflow-wrap:break-word;" scope="col"><p dir="ltr" style="line-height:1.3800000000000001;margin-top:0pt;margin-bottom:10pt;"><span style="font-size:11pt;font-family:'Work Sans',sans-serif;color:#000000;background-color:transparent;font-weight:700;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Minimum</span></p></th><th style="border-left:solid #000000 1pt;border-right:solid #000000 1pt;border-bottom:solid #000000 1pt;border-top:solid #000000 1pt;vertical-align:top;padding:5pt 5pt 5pt 5pt;overflow:hidden;overflow-wrap:break-word;" scope="col"><p dir="ltr" style="line-height:1.3800000000000001;margin-top:0pt;margin-bottom:10pt;"><span style="font-size:11pt;font-family:'Work Sans',sans-serif;color:#000000;background-color:transparent;font-weight:700;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">Recommended</span></p></th></tr></thead><tbody><tr style="height:0pt"><td style="border-left:solid #000000 1pt;border-right:solid #000000 1pt;border-bottom:solid #000000 1pt;border-top:solid #000000 1pt;vertical-align:top;padding:5pt 5pt 5pt 5pt;overflow:hidden;overflow-wrap:break-word;"><p dir="ltr" style="line-height:1.3800000000000001;margin-top:0pt;margin-bottom:10pt;"><span style="font-size:11pt;font-family:'Work Sans',sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">yellowstone-grpc-client</span></p></td><td style="border-left:solid #000000 1pt;border-right:solid #000000 1pt;border-bottom:solid #000000 1pt;border-top:solid #000000 1pt;vertical-align:top;padding:5pt 5pt 5pt 5pt;overflow:hidden;overflow-wrap:break-word;"><p dir="ltr" style="line-height:1.3800000000000001;margin-top:0pt;margin-bottom:10pt;"><span style="font-size:11pt;font-family:'Work Sans',sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">13.2.0</span></p></td><td style="border-left:solid #000000 1pt;border-right:solid #000000 1pt;border-bottom:solid #000000 1pt;border-top:solid #000000 1pt;vertical-align:top;padding:5pt 5pt 5pt 5pt;overflow:hidden;overflow-wrap:break-word;"><p dir="ltr" style="line-height:1.3800000000000001;margin-top:0pt;margin-bottom:10pt;"><span style="font-size:11pt;font-family:'Work Sans',sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">13.5.1</span></p></td></tr><tr style="height:0pt"><td style="border-left:solid #000000 1pt;border-right:solid #000000 1pt;border-bottom:solid #000000 1pt;border-top:solid #000000 1pt;vertical-align:top;padding:5pt 5pt 5pt 5pt;overflow:hidden;overflow-wrap:break-word;"><p dir="ltr" style="line-height:1.3800000000000001;margin-top:0pt;margin-bottom:10pt;"><span style="font-size:11pt;font-family:'Work Sans',sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">yellowstone-grpc-proto</span></p></td><td style="border-left:solid #000000 1pt;border-right:solid #000000 1pt;border-bottom:solid #000000 1pt;border-top:solid #000000 1pt;vertical-align:top;padding:5pt 5pt 5pt 5pt;overflow:hidden;overflow-wrap:break-word;"><p dir="ltr" style="line-height:1.3800000000000001;margin-top:0pt;margin-bottom:10pt;"><span style="font-size:11pt;font-family:'Work Sans',sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">12.4.0</span></p></td><td style="border-left:solid #000000 1pt;border-right:solid #000000 1pt;border-bottom:solid #000000 1pt;border-top:solid #000000 1pt;vertical-align:top;padding:5pt 5pt 5pt 5pt;overflow:hidden;overflow-wrap:break-word;"><p dir="ltr" style="line-height:1.3800000000000001;margin-top:0pt;margin-bottom:10pt;"><span style="font-size:11pt;font-family:'Work Sans',sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;">12.7.0</span></p></td></tr></tbody></table>
+<!--kg-card-end: html-->
+<div class="kg-card kg-callout-card kg-callout-card-purple"><div class="kg-callout-emoji">💡</div><div class="kg-callout-text">We <b><strong style="white-space: pre-wrap;">strongly</strong></b> encourage upgrading to the recommended versions now rather than waiting until you notice missing fields in production. v1 transactions are already flowing on mainnet, so the gap is real from day one.</div></div><h2 id="no-action-just-an-fyi-getinflationreward">No action, just an FYI: getInflationReward</h2><p>Agave 4.3 caps getInflationReward at 32 addresses per call; requests with more now fail with a -32602 error rather than being served.</p><p>This doesn't affect you as a Triton customer. Superbank doesn't serve getInflationReward from Agave, and the Superbank cap is 100 addresses per call, unchanged. We're noting it here only because you may see it discussed elsewhere in the ecosystem, or hit it on non-Triton endpoints.</p><h2 id="what-about-alpenglow">What about Alpenglow?</h2><p>Not yet. Alpenglow does not activate with 4.3.0. The feature gate is expected to activate around the 4.4 release, and we'll cover what that means for you well in advance.</p><p>The important distinction: everything above takes effect with 4.3, now, as the network upgrades. Don't file these changes under "later" because they arrived in the same release cycle as the Alpenglow code.</p><h2 id="your-checklist">Your checklist</h2><ul><li>Switch transaction sending and simulation to base64 encoding</li><li>Add maxSupportedTransactionVersion: 1 (or higher) and base64 encoding to your getBlock and getTransaction calls</li><li>Upgrade yellowstone-grpc-client to 13.5.1 and yellowstone-grpc-proto to 12.7.0</li></ul><p>If you run into anything unexpected after updating, we're here to help.</p><p>→ <a href="https://docs.triton.one/?ref=blog.triton.one" rel="noreferrer">View the docs</a></p>
+                    </div>
+
+                </div>
+
+                <div class="flex flex-col lg:flex-row justify-between items-start pt-10 mt-20 gap-5 lg:gap-20 border-t border-[#1717171A] px-5 lg:px-0">
+
+                    <div class="flex flex-col items-start gap-2.5 w-full lg:max-w-sm lg:min-w-0 lg:flex-1">
+                        <a href="/harmonic-x-triton-bringing-triton-preconfs-to-solana/" class="flex flex-col items-start px-5 py-6 gap-8 lg:pt-[72px] lg:pb-6 lg:gap-4 w-full bg-[#F7F7F766] hover:bg-[#F7F7F7]/80 border border-soft-black/5 rounded-md-card no-underline text-inherit">
+                            <div class="flex flex-row items-center gap-1">
+                                <svg class="w-3.5 h-3.5 lg:hidden" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M10 12L6 8L10 4" stroke="rgba(23,23,23,0.75)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <span class="font-heading font-medium text-xs lg:text-sm leading-[120%] uppercase text-soft-black/75">Previous article</span>
+                            </div>
+                            <div class="flex flex-col w-full gap-4">
+                                <div class="flex flex-row items-center w-full gap-5">
+                                        <span class="inline-flex justify-center items-center px-3 py-1 font-mono font-medium text-xs leading-[129%] tracking-[0.04em] uppercase rounded-tag whitespace-nowrap bg-transparent border border-primary text-primary">Partnerships</span>
+                                    <time class="font-body font-normal text-sm leading-[120%] text-right text-soft-black/75 flex-1" datetime="2026-09-14">
+                                        14 Sep 2026
+                                    </time>
+                                </div>
+                                <h3 class="font-heading font-medium text-xl leading-[120%] text-soft-black m-0">Harmonic x Triton: Bringing Triton Preconfs to Solana</h3>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="flex flex-col items-start lg:items-end gap-2.5 w-full lg:max-w-sm lg:min-w-0 lg:flex-1">
+                    </div>
+
+                </div>
+
+
+            </article>
+
+
+        </div>
+    </div>
+
+</main>
+
+
+
+<style>
+.copy-md-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 16px;
+  height: 34px;
+  font-family: 'Work Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+  color: #7A4BA0;
+  background-color: transparent;
+  border: 1px solid #7A4BA0;
+  border-radius: 9999px;
+  cursor: pointer;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+  /* the blog globally flattens button transitions to ~0s; override so this one actually eases */
+  transition-property: background-color, border-color, color !important;
+  transition-duration: 0.2s !important;
+  transition-timing-function: ease !important;
+}
+.copy-md-btn:hover { background-color: #7A4BA0 !important; border-color: #7A4BA0 !important; color: #F7F7F7 !important; }
+.copy-md-btn:active { background-color: #6A3C91 !important; border-color: #6A3C91 !important; color: #F7F7F7 !important; }
+.copy-md-btn.copied { background-color: #7A4BA0 !important; border-color: #7A4BA0 !important; color: #F7F7F7 !important; }
+.copy-md-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+.copy-md-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+}
+.copy-md-row.copy-md-fallback { margin: 12px 0 4px; }
+</style>
+
+
+
+    </div>
+
+      <section class="flex flex-row items-center justify-center px-10 py-10 md:py-20 md:px-8 xl:px-10 bg-soft-white">
+          <div class="flex flex-col w-full gap-10 px-0 lg:flex-row lg:items-end lg:gap-20 xl:px-20 max-w-site">
+              <div class="flex flex-col gap-2.5 lg:w-1/2">
+                  <h2 class="font-heading font-medium text-[30px] md:text-4xl leading-[130%] text-soft-black m-0">Subscribe to the Triton newsletter</h2>
+                  <p class="font-body font-normal text-lg md:text-xl leading-[130%] text-soft-black m-0">Solana infrastructure news, deep-dives, and product updates in your inbox</p>
+              </div>
+              <form data-cta-id="footer-newsletter-form" data-section="blog-footer" class="homepage-subscribe-form flex flex-row items-center pl-5 md:pl-4 pr-2.5 md:pr-2.5 py-2.5 gap-5 md:gap-8 flex-1 rounded-full lg:w-1/2" data-members-form="subscribe">
+                  <input class="homepage-subscribe-input flex-1 border-0 bg-transparent outline-none font-body font-normal text-lg md:text-xl leading-[120%] text-soft-black" type="email" required placeholder="Your email address" data-members-email>
+                  <button data-cta-id="footer-newsletter-subscribe" data-section="blog-footer" class="homepage-subscribe-btn flex flex-row justify-center items-center w-8 h-8 md:w-auto md:h-auto md:py-3 md:px-6 gap-2.5 bg-primary border border-primary/15 rounded-full font-body font-normal text-base leading-[120%] text-soft-white cursor-pointer whitespace-nowrap p-0" type="submit">
+                      <span class="hidden md:inline">Subscribe</span>
+                      <svg class="w-4 h-4 md:w-[18px] md:h-[18px]" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M6.75 3.75L12 9L6.75 14.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                  </button>
+              </form>
+          </div>
+      </section>
+
+
+    <footer class="p-0 whitespace-normal bg-transparent text-soft-white md:px-8 xl:px-10">
+        <div class="flex flex-col gap-10 max-w-site mx-auto px-5 pt-14 pb-10 bg-soft-black md:grid md:grid-cols-3 md:gap-0 md:px-8 md:pt-14 md:rounded-t-lg-card md:min-h-[238px] xl:px-20 xl:pt-[60px]">
+            <div class="md:col-span-1">
+                <a class="no-underline text-soft-white" href="https://blog.triton.one">
+                    <img class="max-h-10 md:max-h-16" src="https://blog.triton.one/assets/images/logo-light.svg?v=Ja25ob530gO4oTrz" alt="Triton One Blog">
+                </a>
+            </div>
+            <div class="flex flex-col px-2 md:col-span-2">
+                <p class="font-heading font-medium text-2xl leading-[130%] text-soft-white m-0 md:text-[30px] xl:leading-[140%]">Learn. Ship. Scale.</p>
+                <p class="font-heading font-medium text-2xl leading-[130%] text-soft-white m-0 md:text-[30px] xl:leading-[140%]">Let's <span class="gradient-text">build</span> the <span class="gradient-text">future</span> of blockchains <span class="gradient-text">together</span>.</p>
+            </div>
+            <div class="flex flex-col gap-5 pt-10 border-t border-[rgba(247,247,247,0.1)] md:col-span-3 md:grid md:grid-cols-3 md:items-end md:pt-10 md:border-t-0">
+                <div class="gh-copyright font-body font-normal text-xs leading-[130%] text-white/50 md:text-[13px] md:text-[rgba(247,247,247,0.5)]">
+                    All rights reserved &copy; Triton One Blog 2026
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</div>
+
+    <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="pswp__bg"></div>
+
+    <div class="pswp__scroll-wrap">
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<style>
+  .site-footer, .poweredby, a[href*="ghost.org"] {
+    display: none !important;
+  }
+
+  .triton-copyright {
+    max-width: 720px;   /* match your article column */
+    margin: auto;
+    box-sizing: border-box;
+    text-align: left;   /* change to center if you want */
+    white-space: initial;
+  }
+
+</style>
+
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T8R23ZRR"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+
+</body>
+</html>
