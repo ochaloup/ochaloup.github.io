@@ -1,0 +1,4 @@
+# Downloaded source pages carry GitBook {% %} tags that break the Liquid build.
+exclude:
+  - node_modules
+  - presentations/marinade-what-is/resources
