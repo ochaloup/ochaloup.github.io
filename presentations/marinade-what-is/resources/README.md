@@ -165,6 +165,29 @@ Public sources for the "What is Marinade" talk. HTML copies have scripts strippe
 | pages/verify-solblaze-simd-0123-vote.html | https://simd.solblaze.org/0123/vote | 2026-10-02 | SIMD-0123 vote passed, 74.91% yes |
 | pages/verify-blockworks-0xresearch-block-building-wars.html | https://blockworks.com/newsletter/0xresearch/issue/post_f3a5adde-8a8f-4803-bbc6-827f51659331 | 2026-10-02 | Jito vs Harmonic late-packing dispute, 8 Jan 2026 |
 | pages/verify-mainnet-rpc-feature-gates-nakamoto.md | https://api.mainnet-beta.solana.com (getMultipleAccounts, getVoteAccounts) | 2026-10-02 | Feature activation dates (SIMD-0096/0256/0286), Alpenglow and SIMD-0123 inactive, Nakamoto 18 |
+| pages/arc-solana-upgrades.html | https://solana.com/upgrades | 2026-10-02 | Agave 4.3 expected Oct 2026 (Alpenglow), 4.4 expected Nov 2026 |
+| pages/arc-solana-upgrades-alpenglow.html | https://solana.com/upgrades/alpenglow | 2026-10-02 | Vote txs leave the block, ~150 ms finality, gate pending |
+| pages/arc-solana-upgrades-bls-pubkey-vat.html | https://solana.com/upgrades/bls-pubkey-vat | 2026-10-02 | VAT 1.6 SOL/epoch burned vs ~2 SOL/epoch vote cost today |
+| pages/arc-solana-upgrades-larger-transaction-sizes.html | https://solana.com/upgrades/larger-transaction-sizes | 2026-10-02 | v1 tx 4096 bytes (SIMD-0296/0385), live 15 Sep 2026 epoch 1035 |
+| pages/arc-solana-upgrades-reduced-rent.html | https://solana.com/upgrades/reduced-rent | 2026-10-02 | SIMD-0437 rent 6,960 to 696 in five steps |
+| pages/arc-solana-upgrades-reduced-slot-times.html | https://solana.com/upgrades/reduced-slot-times | 2026-10-02 | SIMD-0525 slots 400 to 300 ms live, 250/200 ms TBD |
+| pages/arc-agave-v4-3-release-schedule.html | https://github.com/anza-xyz/agave/wiki/v4.3-Release-Schedule | 2026-10-02 | 28 Sep 2026 "Resume feature activation", no Alpenglow date |
+| pages/arc-agave-feature-gate-tracker.html | https://github.com/anza-xyz/agave/wiki/Feature-Gate-Tracker-Schedule | 2026-10-02 | Alpenglow testnet epoch 1042, devnet 1167, mainnet pending |
+| pages/arc-mainnet-rpc-feature-gates-rent-alpenglow.md | https://api.mainnet-beta.solana.com (getMultipleAccounts) | 2026-10-02 | Rent steps 1-2 active 3 and 11 Sep 2026; Alpenglow not queued |
+| pages/arc-mainnet-rpc-inflation-commission.md | https://api.mainnet-beta.solana.com (getInflationRate, getVoteAccounts) | 2026-10-02 | Inflation 3.62% epoch 1047; 0% commission 30% of stake |
+| pages/arc-triton-agave-4-3.html | https://blog.triton.one/agave-4-3-what-you-need-to-know/ | 2026-10-02 | Alpenglow gate "expected around the 4.4 release" |
+| pages/arc-solanacompass-alpenglow-devnet.html | https://solanacompass.com/news/alpenglow-is-live-on-solana-devnet-as-anza-retires-towerbft-at-slot-504148999 | 2026-10-02 | Alpenglow devnet 25 Sep, testnet 24 Sep 2026, no mainnet date |
+| pages/arc-solanacompass-alpenglow-no-mainnet-date.html | https://solanacompass.com/news/solanas-alpenglow-consensus-upgrade-hits-general-adoption-day-seven-days-from-mainnet-feature-gate | 2026-10-02 | Correction: 28 Sep was not an Alpenglow date |
+| pages/arc-solanacompass-agave-43-mainnet.html | https://solanacompass.com/news/agave-43-hits-mainnet-three-breaking-changes-for-rpc-providers-and-dapp-developers | 2026-10-02 | Agave 4.3 mainnet 18 Sep 2026, Alpenglow gate closed |
+| pages/arc-solanacompass-txv1-rent-alpenglow-dates.html | https://solanacompass.com/news/anza-developer-sets-mainnet-dates-transaction-v1-september-9-rent-reduction-this-week-alpenglow-in-october | 2026-10-02 | Late-Aug plan: tx v1, rent step 1, Alpenglow "October" |
+| pages/arc-theblock-validator-count.html | https://www.theblock.co/post/387108/solana-validator-count-below-800-vote-transactions-drop-40 | 2026-10-02 | Validators below 800 from ~2,500 peak, Jan 2026 (extract only) |
+| pages/arc-xroot-simd-0550.html | https://xroot.dev/blog/solana-inflation-double-disinflation-simd-0550 | 2026-10-02 | SIMD-0550 30% disinflation, not active as of 17 Sep 2026 |
+| pages/arc-solanacompass-simd-0607.html | https://solanacompass.com/news/simd-0607-must-merge-before-solanas-disinflation-rate-can-activate-anza-says | 2026-10-02 | SIMD-0550 waits on SIMD-0607 and Agave 4.4 |
+| pages/arc-solanacompass-governance-results.html | https://solanacompass.com/news/solanas-first-binding-governance-vote-closes-supply-cut-passes-fee-burn-plan-falls-short | 2026-10-02 | SGP-0001/0002 passed, SGP-0003 failed, 28 Aug 2026 |
+| pages/arc-solana-x-governance-results.md | https://x.com/solana/status/2093367686017245668 (text via api.fxtwitter.com) | 2026-10-02 | Official governance results, 28 Aug 2026 |
+| pages/arc-xroot-simd-0123-status.html | https://app.xroot.dev/upgrades/simd-0123-block-revenue-sharing | 2026-10-02 | SIMD-0123 not queued on any cluster |
+| pages/arc-figment-validator-anatomy.html | https://www.figment.io/insights/the-anatomy-of-a-solana-validator-where-rewards-originate-and-which-rewards-are-durable/ | 2026-10-02 | Validator reward sources and durability, May 2026 |
+| pages/arc-helius-how-to-stake.html | https://www.helius.dev/blog/how-to-stake-solana | 2026-10-02 | 0% commission to grow stake for transaction landing |
 
 ## Images
 

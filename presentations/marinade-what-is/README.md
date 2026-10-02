@@ -91,10 +91,31 @@ Three parts, reordered 2026-10-02 (second round): Marinade introduction, then th
 
 **Part 2, the Solana staking space** (numbers verified, see "Solana staking space" below)
 
-6. **Section break, "Solana staking, *today*".** Label "Zoom out", painting p-security.jpg, one muted line: who orders the block, who gets paid, and what changes next.
-7. **Who orders the block?** Transactions stream into three builder lanes (Jito BAM, Harmonic, Rakurai and others), then into the leader's block, where a sandwich pulses. Foot: the arXiv sandwich count.
-8. **Where the money goes.** Two same-scale bars: $487M to stakers (over 98% issuance) and $51.0M network revenue split three ways. Punch: SAM bids are how validators share block revenue with stakers today. Foot: Blockworks.
-9. **Clients, builders and what comes next.** Stake-share bar by client and builder (Syndica, Apr 2026), then 100M-compute-unit blocks, Alpenglow, SIMD-0123.
+6. **Section break, "Solana staking, *today*".**
+   - Arc line: "Inflation pays less every year. Validators now compete for stake and for the block."
+   - Four beats pop in: 3.6% inflation (8% at launch), Stake (won by sharing back), Ordering (the block is worth money), Data (RPC and streams pay too).
+7. **Where the money goes.** Two same-scale bars: $487M to stakers (over 98% issuance) and $51.0M network revenue split three ways. No Marinade product on it. Foot: Blockworks.
+8. **Who orders the block?** Transactions stream into three builder lanes (Jito BAM, Harmonic, Rakurai and others), then into the leader's block, where a sandwich pulses. Foot: the arXiv sandwich count.
+9. **Clients, builders and what comes next.** Stake-share bar by client and builder (Syndica, Apr 2026), then three cards:
+   - Bigger, faster blocks (100M CU, slots going from 400 ms to 200 ms).
+   - Bigger transactions, cheaper accounts (4 KB transactions, rent heading to a tenth).
+   - Alpenglow (votes no longer land onchain, about 150 ms finality, mainnet mid-October 2026 per Ondra).
+
+**The arc, and why.** Validators are becoming a commodity. Inflation falls every year, delegation-program support shrank, and the break-even stake rose. So validators compete for stake by sharing revenue back, and for income beyond issuance: block ordering and MEV, priority fees, and data businesses that need stake for transaction landing. The three slides are the evidence, in that order: who gets paid, who orders, what changes.
+
+Arc facts, all saved as `resources/pages/arc-*`:
+
+- **Inflation:** 3.62% at epoch 1047 (mainnet RPC). SIMD-0550, which doubles disinflation, was voted on 28 Aug 2026 but is not active.
+- **SFDP:** 11% to 5% of stake.
+- **Break-even at 0% commission:** 24k SOL to 87k SOL.
+- **Validator count:** about 2,500 (2023) to under 800 (The Block, Jan 2026).
+- **0% commission:** 30.4% of stake (RPC, 2 Oct 2026).
+- **Upgrades:**
+  - v1 transactions: 4,096 bytes, up from 1,232, active 15 Sep 2026.
+  - Rent: 6,960 to 696 lamports per byte in five steps. Two are live, the rest waits for Agave 4.4 (Nov 2026).
+  - Slots: 300 ms, live 25 Sep 2026.
+  - Alpenglow: testnet 24 Sep, devnet 25 Sep. Mainnet gate not queued, and no date announced.
+- **Not used:** "Alpenglow mainnet mid-October" could not be confirmed, so the slide says "expected Q4 2026". SIMD-0123 and its 2025 vote are off the slide, per Ondra.
 
 **Part 3, the building blocks**
 
@@ -308,4 +329,11 @@ Kept off the slides:
   - The brick lands last and keeps bobbing, as the invitation.
   - The rows shrank from 112px to 92px icons so five fit above the rail.
 - **2026-10-02, round 3** The four-block map moved to open Part 3, right before the block slides. The ecosystem part got an art section break, "Solana staking, *today*", using the previously unused p-security.jpg.
+- **2026-10-02, round 4** The ecosystem part now has an arc: validators commoditize, so they compete for stake and the block.
+  - New order: section break, money, ordering, clients.
+  - The SAM punch line was removed from "Where the money goes", because no Marinade product belongs there.
+  - "Revenue sharing" (SIMD-0123) was replaced by "Bigger transactions, cheaper accounts".
+  - The Alpenglow card says votes no longer land onchain, and "mainnet expected Q4 2026", because mid-October is unconfirmed.
+- **2026-10-02, round 4** Per Ondra: the slide says slots are going from 400 ms to 200 ms. Per solana.com/upgrades/reduced-slot-times, 300 ms is live and 200 ms is the target, already live on devnet and testnet.
+- **2026-10-02, round 4** Per Ondra: Alpenglow mainnet "mid-October 2026" is on the slide. Public sources on 2 Oct 2026 showed no announced date and no queued mainnet gate. The date is Ondra's call.
 - **2026-10-02, round 2** The timeline bars show product shares, not totals. The totals fell from 11.0M SOL (2023) to 7.7M (2026), and the slide's point is the mix.

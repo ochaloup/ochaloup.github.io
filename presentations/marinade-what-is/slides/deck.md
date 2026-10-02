@@ -161,11 +161,24 @@ Do not promise APY, never.
 
 # Solana staking, <span class="accent">today</span>
 
-<p class="note">Who orders the block, who gets paid, and what changes next</p>
+<p class="arc-line">Inflation pays less every year. Validators now compete for stake and for the block.</p>
+
+<div class="arc">
+<div><strong>3.6%</strong><span>inflation today, 8% at launch</span></div>
+<div><strong>Stake</strong><span>won by sharing back</span></div>
+<div><strong>Ordering</strong><span>the block is worth money</span></div>
+<div><strong>Data</strong><span>RPC and streams pay too</span></div>
+</div>
+
+<p class="slide-foot">Inflation rate: Solana mainnet, 2 Oct 2026.</p>
 
 Note:
-SECTION BREAK. Thirty seconds of context before the blocks: the room builds on Solana, so give them the map of the fight their staking build will live in.
-Say it as a question: Marinade routes stake, but what is happening around it right now?
+THE ARC OF THIS PART, one sentence: inflation pays less every year, so validators now compete for stake and for the block. The next three slides are the evidence.
+INFLATION: 3.62% today (mainnet RPC getInflationRate, epoch 1047), down from 8% at launch, falling 15% a year towards 1.5%. Governance voted on 28 Aug 2026 to double the disinflation to 30% a year (SIMD-0550). It is not active yet, so say "voted", not "live".
+THE SQUEEZE: the Solana Foundation Delegation Program fell from 11% to 5% of stake in a year (SolanaFloor and Syndica, Apr 2026). Break-even at 0% commission rose from 24k SOL to 87k SOL (Jan 2025 to Feb 2026). Validator count fell from about 2,500 in early 2023 to under 800 (The Block, Jan 2026). About 680 have stake today.
+STAKE IS WON BY SHARING BACK: 30% of stake sits with validators at 0% commission (mainnet RPC, 2 Oct 2026). They earn elsewhere: block revenue, MEV, and businesses that need stake.
+DATA: Helius states the goal of more stake is better transaction landing for its RPC customers. Stake becomes an input to a data business.
+Hand over to the next slide: so where does the money actually come from today?
 
 ---
 
@@ -230,16 +243,16 @@ THE SANDWICH NUMBER, precisely: 28,042,725 attacks by 8,631 persistent bots on "
 
 <div class="grid-3" style="margin-top:64px">
 <div class="card">
-<h3>Bigger blocks</h3>
-<p>100M compute units per block since 29 Jul 2026.</p>
+<h3>Bigger, faster blocks</h3>
+<p>100M compute units per block. Slots going from 400 ms to 200 ms.</p>
+</div>
+<div class="card">
+<h3>Bigger transactions, cheaper accounts</h3>
+<p>Transactions up to 4 KB. Rent is on its way down to a tenth.</p>
 </div>
 <div class="card">
 <h3>Alpenglow</h3>
-<p>New consensus. Votes no longer land onchain, finality in about 150 ms.</p>
-</div>
-<div class="card">
-<h3>Revenue sharing</h3>
-<p>SIMD-0123 passed a vote in 2025. Still not live.</p>
+<p>Votes no longer land onchain. Finality in about 150 ms. Mainnet mid-October 2026.</p>
 </div>
 </div>
 
@@ -251,9 +264,10 @@ WHY IT MATTERS: one codebase under almost all stake is a resilience risk, and mo
 JITO BAM, the Block Assembly Marketplace: ordering moves into trusted hardware (TEE) nodes, with plugins for apps. On mainnet since 25 Sep 2025 (SolanaFloor). 34.1% of stake on 383 of 665 validators by 9 Sep 2026 (Solana Compass, citing SolanaFloor).
 THE FIGHT, fairly: Jito accuses Harmonic of "late packing", stuffing transactions at the end of the slot. Harmonic's team disputes Jito's scoring. Blockworks 0xResearch, 8 Jan 2026. Do not take a side.
 WHAT COMES NEXT:
-BIGGER BLOCKS: 60M compute units since July 2025 (SIMD-0256), 100M since 29 Jul 2026 (SIMD-0286, epoch 1009). More room per block changes what ordering is worth.
-ALPENGLOW: votes stop being transactions, finality target about 150 ms, down from 12.8 s. Live on testnet, not activated on mainnet, no announced date. The solana.com page still says Q3 2026, which has passed.
-REVENUE SHARING: SIMD-0123, from the previous slide.
+BIGGER, FASTER BLOCKS: 60M compute units since July 2025, 100M since 29 Jul 2026 (epoch 1009). Slots are going from 400 ms to a 200 ms target in four steps. 350 ms and 300 ms are live on mainnet (300 ms since 25 Sep 2026). 250 ms and 200 ms already run on devnet and testnet, mainnet dates to be determined. At 200 ms the network makes twice as many blocks per day. More room per block changes what ordering is worth. Source: solana.com/upgrades.
+BIGGER TRANSACTIONS: the v1 transaction format, 4,096 bytes, up from 1,232, active since 15 Sep 2026 (epoch 1035). Source: solana.com/upgrades/larger-transaction-sizes.
+CHEAPER ACCOUNTS: rent drops from 6,960 to 696 lamports per byte, minus 90%, in five steps. Two steps are live (3 and 11 Sep 2026). The rest waits for Agave 4.4, expected November 2026. Source: solana.com/upgrades/reduced-rent.
+ALPENGLOW: votes stop being onchain transactions, so validators stop paying about 2 SOL per epoch in vote fees. A flat 1.6 SOL per epoch admission ticket (VAT) is burned instead. Finality target about 150 ms, down from 12.8 s. Live on testnet (24 Sep) and devnet (25 Sep). Mainnet mid-October 2026 is Ondra's date. As of 2 Oct 2026 the public pages showed no announced date and the mainnet gate was not queued, so if asked, say "planned for mid-October". Sources: solana.com/upgrades, Triton's Agave 4.3 post.
 DECENTRALIZATION, if asked: Nakamoto coefficient 18 across about 680 validators, counted from mainnet RPC on 2 Oct 2026. Per vote account, so per operator it may be lower.
 
 ---
