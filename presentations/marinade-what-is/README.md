@@ -23,7 +23,8 @@ Context, decisions, sources and the slide plan live here. Slide copy is drafted 
 marinade-what-is/
   README.md     <- this file
   slides/       <- copy of ../marinade-staking-stack/slides (reveal.js 6, Marinade theme)
-    deck.md     <- slide content, 16 slides, speaker notes under each
+    deck.md     <- slide content, speaker notes under each slide
+    images/illo <- press-kit line drawings, recoloured into the palette
     index.html  <- reveal bootstrap, loads deck.md
   resources/    <- downloaded public sources: pages/, images/, README.md index
 ```
@@ -36,7 +37,7 @@ Same theme, fonts, palette, archetypes and reveal quirks. The rationale is in `.
 
 Changes made for this deck:
 
-- `slides/index.html` title is "Marinade as building blocks: staking, DeFi, data and governance on Solana".
+- `slides/index.html` title is "Marinade staking and the Solana ecosystem: building blocks for builders".
 - **The journey rail becomes the building-blocks rail.** `RAILS.blocks` is `Staking, DeFi, Data, DAO`, lit with `data-stage="defi"` etc., or `data-stage="all"` on the summary. Same motif as the old deck, now carrying the four lines so the room always knows which block it is in.
 - `export-pdf.mjs` writes `~/Downloads/marinade-building-blocks.pdf`. `bundle.mjs` writes `~/Downloads/marinade-building-blocks/`, so it never overwrites the staking-stack bundle.
 - Exports carry no speaker notes. Do not use `--notes`.
@@ -78,24 +79,86 @@ Confidentiality, because this repo is public:
 
 ## Story spine
 
-1. **Cover.**
-2. **Who talks to you.** Reuse the bio slide from the staking-stack deck.
-3. **Marinade in one line.** "Staking is Solana's base yield layer. Marinade routes it." The four blocks shown once, as the map of the talk.
-4. **Where it came from.** Timeline 2021 to 2026, one line per year.
-5. **A bootstrapped DAO.** One picture, the MNDE crab and octopus NFT infographic. Funds raised $0, fair launch, governed by holders.
-6. **What it brings to Solana.** Stake spread over 100+ validators with concentration caps, open-source delegation strategy, public data, numbers.
-7. **Staking in one slide.** Why staking matters: security, three reward sources, stake account authorities. Kept short on purpose.
-8. **Block 1, staking.** Marinade Liquid (mSOL) and Marinade Native: two ways stake enters.
-9. **Block 1, staking.** SAM, Validator Bonds, PSR: validators bid, bonds back the promise.
-10. **Block 1, staking.** Instant Unstake: exit as an RFQ to market makers.
-11. **Block 2, DeFi.** mSOL as a DeFi primitive, plus Borrow, Recipes, USDC Vault.
-12. **Block 3, data.** Public data on every validator: APIs, dashboards, scoring.
-13. **Block 3, infrastructure.** Knowing the ecosystem: marking validators, blacklist for commission rugs and sandwich MEV, working with Solana core teams.
-14. **Block 4, DAO.** MNDE governance on Realms, SPL Governance, the tooling gaps.
-15. **Pick your block.** DeFi integration, staking data and dashboards, governance UX.
-16. **Closing.** "Build on top", links and QR.
+Three parts, reordered 2026-10-02 (second round): Marinade introduction, then the Solana staking space, then the building blocks.
 
-Slides 8 to 14 carry the building-blocks rail.
+**Part 1, Marinade**
+
+1. **Cover.** "Marinade staking and the Solana ecosystem", subtitle "Building blocks for your next *build*".
+2. **Who talks to you.** One bio line, plus the Build Station sidetrack callout with 🥳.
+3. **Marinade: a bootstrapped DAO.** The octopus NFT picture, the MNDE crest bobbing beside it, "Funds raised: $0".
+4. **Five years on one chain.** Timeline, a flipping Solana coin, and product-mix bars that grow in.
+5. **What Marinade brings to Solana.** Metrics, then three mechanisms: spread stake, validators pay up front, a market for stake.
+6. **Staking is Solana's base yield layer. Marinade routes it.** The four blocks drop in as bricks, staking at the base.
+
+**Part 2, the Solana staking space** (to be written, see "Solana staking space" below)
+
+7. **Who orders the block?**
+8. **Where the money goes.**
+
+**Part 3, the building blocks** (unchanged for now, more pictures are the next step)
+
+9. **Block 1.** "Two ways in": Marinade Liquid and Marinade Native.
+10. **Block 1.** "Validators compete for the stake": bond, bid, win, protect, with the bid ladder behind.
+11. **Block 1.** "Getting out without waiting": Instant Unstake.
+12. **Block 2, DeFi.** "mSOL is a building block".
+13. **Block 3, data.** "Public data on every validator".
+14. **Block 3, infrastructure.** "Knowing the ecosystem", with gears behind.
+15. **Block 4, DAO.** "MNDE runs the DAO".
+16. **Pick your block.**
+17. **Closing.** "Build on top".
+
+Removed: "Staking in one slide", because it carried little information.
+
+## Event
+
+Solana Build Station, Prague, 3–7 October 2026. Marinade sponsors a sidetrack: $3,000 for the best Solana staking-focused build. Accretion runs a $500 research and security sidetrack. Source: Solana Community Czech Republic (@SolanaCZE) on X, 1 Oct 2026. The talk is the pitch for the sidetrack, so every block ends on something buildable.
+
+## Solana staking space
+
+Research of 2026-10-02, saved as `resources/pages/ecosystem-*`. For the speaker first, slides second.
+
+**What the fight is about.**
+
+- One leader per slot decides which transactions go into the block and in what order.
+- Order is worth money: arbitrage, liquidations, sandwiches.
+- Solana has no public mempool, so that value flows through private pipes: Jito bundles and tips, priority fees, and competing block builders (Jito BAM, Harmonic, Rakurai, Paladin).
+- They compete on three things: revenue per block, fairness for users, and capacity.
+- The risk is concentration. Almost all stake runs Agave-derived code, and much of the block building runs through one company. That is why Firedancer matters.
+
+Facts, with dates:
+
+| Topic | Fact | Source | Confidence |
+|---|---|---|---|
+| Sandwiches | 28M attacks by 8,631 bots, Jul 2023 to Jun 2026, about $345M profit | arXiv 2609.28115, 23 Sep 2026 | high |
+| Fees | Base fee 5,000 lamports per signature, half burned. Priority fees 100% to the leader (SIMD-0096) | solana.com docs, SIMD-0096 | high, activation date unverified |
+| Block space | CU limit 48M, then 60M (SIMD-0256, Jul 2025), then 100M (SIMD-0286, 29 Jul 2026) | solana.com/upgrades/100m-cu-blocks | high |
+| Revenue sharing | SIMD-0123, block revenue sharing with stakers: passed a vote in Mar 2025, not live | xroot.dev, Agave wiki | high |
+| Network revenue Q2 2026 | $51.0M: priority fees $30.8M, Jito tips $9.9M, base and vote fees $10.3M | Blockworks Q2 report, search snippet | medium |
+| Staker income Q2 2026 | $487M, over 98% from issuance | Blockworks Q2 | medium |
+| BAM | Jito's Block Assembly Marketplace. Ordering in TEE nodes, FIFO execution, plugins. Mainnet 25 Sep 2025. 34.1% of stake on 9 Sep 2026 | helius.dev blog, solanacompass.com | high |
+| Clients, Apr 2026 | Agave family 86%, Frankendancer 11%, Firedancer 3% | blog.syndica.io, April 2026 | high for April, newer figures conflict |
+| Schedulers inside Agave | Jito 36%, JitoBAM 28%, Harmonic 18%, Rakurai 2%, vanilla 2% | Syndica, April 2026 | high |
+| Disputes | Jito accuses Harmonic of late packing. Harmonic disputes Jito's scoring | Blockworks 0xResearch, 8 Jan 2026 | high |
+| Alpenglow | New consensus. Votor on testnet 22 Sep 2026, not on mainnet. Votes stop being transactions, finality target about 150 ms | solana.com/upgrades/alpenglow | high |
+| Decentralization | Nakamoto coefficient 18 (was 31 in Mar 2023) | chainspect, 2 Oct 2026 | medium, validator counts disagree |
+
+Neutrality rule: the research also has LST size rankings. They stay off the slides, because the room would read them as a comparison with competitors.
+
+## Playful elements
+
+All CSS-only, and all start when the slide becomes `.present`. Their resting state is the final layout, so the PDF export and reduced motion need nothing special.
+
+| Element | Class | Slide |
+|---|---|---|
+| Bricks dropping in, with studs | `.blocks`, `.blk` | The four-block map |
+| Product-mix bars growing | `.mix`, `.mix-bar` | Timeline |
+| Flipping Solana coin | `.illo.flip` | Timeline |
+| Bobbing MNDE crest | `.illo.lg.bob` | Bootstrapped DAO |
+| Bobbing emoji | `.callout .emoji` | Bio, Build Station callout |
+| Breathing bid ladder | `.ladder` (from staking-stack) | Validators compete |
+| Turning gears | `.gears` (from staking-stack) | Knowing the ecosystem |
+
+The line illustrations are from the Marinade press kit, `resources/images/presskit-illustrations`. They are recoloured on copy by `sed`: `fill="black"` becomes `#94C9C8` for dark slides, or `#151A1A` for the `-dark` variants on coloured bricks. The output is in `slides/images/illo/`.
 
 ## History, with sources
 
@@ -162,7 +225,7 @@ What a builder can use today, checked on 2026-10-02: APIs answered `curl` withou
 | Data | Scoring API | scoring.marinade.finance/docs.json |
 | Data | APY API, Stats API, Snapshots API | apy., api., snapshots-api.marinade.finance/docs |
 | Data | Dashboards | psr., stats., select.marinade.finance, app.marinade.finance/network/validators |
-| DAO | Marinade DAO on Realms: SPL Governance, VSR, veMNDE, council of 5 | app.realms.today/dao/MNDE, app.marinade.finance/governance |
+| DAO | Marinade DAO on Realms: SPL Governance, VSR, veMNDE, council of 5 | v2.realms.today/dao/899YG3yk4F66ZgbNWLHriZHTXSKk9e1kvsKEquW7L6Mo (app.realms.today is the old v1), app.marinade.finance/governance |
 | DAO | Forks and plugins | github `voter-stake-registry` (archived), `vote-aggregator` (not audited), `spl-gov-notifier`, `multisig` |
 
 Gaps worth naming on stage, each grounded in what the research saw:
@@ -196,3 +259,17 @@ Kept off the slides:
 - **2026-10-02** First `deck.md` written, 16 slides, following the spine above. Rendered headless at 1600x900: no overflow, no failed requests.
 - **2026-10-02** The bootstrapped DAO slide says "Funds raised: $0", the homepage's own wording, rather than "grants, not VC", which the staking-stack deck flagged as possibly aged.
 - **2026-10-02** Closing title "Build on top", PT Serif on "top". It replaces "Stake it till you make it", because this talk asks for builders, not stakers.
+- **2026-10-02, round 2** Per Ondra: the deck is more playful, with moving parts as in staking-stack. The talk gets a Solana staking-space part between the Marinade intro and the blocks.
+- **2026-10-02, round 2** The bio is cut to one line, and the slide carries the Build Station sidetrack callout with 🥳.
+- **2026-10-02, round 2** "Staking in one slide" deleted.
+- **2026-10-02, round 2** The "What Marinade brings" cards changed:
+  - "Self-custody" and "Open by default" went, because Ondra doubted their value and accuracy.
+  - "Validators pay up front" (bonds and PSR) and "A market for stake" (SAM) replace them.
+  - "Spread stake" now states the caps.
+- **2026-10-02, round 2** The DAO slide changed:
+  - "Real decisions" (the MIP-14 burn) was replaced by "Back to Realms": Marinade's SPL Governance program changes, the deep-dive docs and the vote aggregator.
+  - The source for that card is the "Realms Ecosystem Contributions" slide of `marinade-dao-knowledgeshare`.
+  - The middle card became "Shared stack", so the word Realms does not repeat.
+- **2026-10-02, round 2** "Pick your block" now covers all four blocks as rows. Each row has the brick colour and illustration as its bullet, and the rows pop in.
+- **2026-10-02, round 2** The closing link points to Realms v2 (`v2.realms.today/dao/899YG3…`), not the v1 `app.realms.today`.
+- **2026-10-02, round 2** The timeline bars show product shares, not totals. The totals fell from 11.0M SOL (2023) to 7.7M (2026), and the slide's point is the mix.

@@ -1,0 +1,697 @@
+<!doctype html>
+<html lang="en"
+      class="geo-CZ">
+<head>
+<!-- Google tag (gtag.js) -->
+
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preload" as="font" type="font/woff2" href="https://solanacompass.com/webfonts/fa-solid-900.woff2" crossorigin>
+    <link rel="stylesheet" href="https://solanacompass.com/css/fa-subset.css?v=1785244569">
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="Aqi6LeLOqjWTtsZg1nEE4lI3sWkhrsyIs18vFoOI">
+
+    <title> Solana Liquid Stake Tokens (LSTs)  List: Compare Pool APY, Performance + Decentralization
+</title>
+    <meta name="robots" content="max-image-preview:large">
+    <link rel="icon" href="/favicon.ico" sizes="32x32">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="theme-color" content="#12162a">
+    <link rel="preload" href="/fonts/space-grotesk-wordmark.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="alternate" type="application/rss+xml" title="Solana Compass" href="https://solanacompass.com/feed.xml">
+        
+    
+    <!-- Scripts -->
+
+    
+    <link href="/css/app.css?id=e8110a9427a1f365e393045f490eee1a" rel="stylesheet">
+    
+    <link href="/css/libs.css?id=3795a2b4ea29ca1b435e1a2c9a297734" rel="stylesheet">
+    <!-- Fonts -->
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    
+    <link rel="canonical" href="https://solanacompass.com/stake-pools">
+    
+    <!-- Hotjar Tracking Code for https://solanacompass.com -->
+    
+
+    <!-- Styles -->
+
+    <style>
+        .sol-grad {
+            background: linear-gradient(133.18deg, rgba(116, 191, 255, 0.5) 13.3%, rgba(125, 229, 194, 0.5) 85.25%);
+            /*background: linear-gradient(135deg, rgba(80, 217, 246, 0.75), rgba(189, 112, 213, 0.75))*/
+            /*  background: #7F7FD5;  !* fallback for old browsers *!
+              background: -webkit-linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);  !* Chrome 10-25, Safari 5.1-6 *!
+              background: linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5); !* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ *!
+  */
+        }
+
+        .found-grad {
+            background: linear-gradient(133.18deg, rgba(116, 191, 255, 0.5) 13.3%, rgba(125, 229, 194, 0.5) 85.25%);
+            /*background: #7F7FD5;  !* fallback for old browsers *!
+            background: -webkit-linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);  !* Chrome 10-25, Safari 5.1-6 *!
+            background: linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5); !* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ *!
+*/
+        }
+
+        .fas {
+            font-size: 125%;
+            /*background: linear-gradient(135deg, rgba(80, 217, 246, 0.75), rgba(189, 112, 213, 0.75));*/
+            /*   background: #7F7FD5;  !* fallback for old browsers *!
+               background: -webkit-linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);  !* Chrome 10-25, Safari 5.1-6 *!
+               background: linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5); !* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ *!
+   */
+            background: rgba(116, 191, 255, .9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+    
+
+</head>
+<body class="app ">
+
+
+<div id="app">
+    <embed-modal></embed-modal>
+
+    <div class="page">
+        <div class="page-main">
+                        <div class="hor-header header top-header p-0">
+                <div class="container">
+                    <div class="d-flex ">
+                        <a class="animated-arrow hor-toggle horizontal-navtoggle m-0"><span></span></a>
+                        
+                                                <a class="header-brand compass-brand m-0 p-0" href="/" title="Solana Compass">
+                            <svg class="compass-brand__mark" viewBox="0 0 512 512" fill="currentColor" aria-hidden="true" focusable="false"><path  d="M255.7 21h1.1l7.5 20.4 8.6 23.6 5.4 14.5 3.8 10.8 9.1 24.7 3.2 8.6 11.3 3.7 12.9 5.9 7 3.8-.6 1.6-6.4 4.3-7 4.8-2.7-.5-11.3-4.8-6.4-2.2-2.7-6.4-9.1-25.3-7.6-20.4-8.5-23.1-6.5-18.3-.5 88.1-17.2 1.7-13.5 2.6-14.5 4.9-10.7 4.8-10.2 6.5-5.9 4.3-5.9 4.8-5.4 4.8-5.4 5.4-5.9 7.5-5.4 7.5-4.8 8.1-5.4 11.3-3.7 9.7-2.2 1.6-26.8 9.6-23.1 8.1-33.4 11.8-10.2 3.8 90.3.5 1.1 14 2.1 12.3 3.8 12.9 4.3 10.2 2.1 4.9-.5 2.1-8.6 12.9h-1.6l-4.9-8.6-6.4-14.5-3.2-8.6-5.4-2.1-26.9-9.2-23.1-8-22.5-8.1-28.5-9.6 1.1-1.1 25.8-9.2 22.5-8 35-12.4 19.8-7 2.7-.5 1.6-5.9 5.4-12.9 6.4-12.3 6.5-9.7.5-2.2-7-11.8-6.4-10.2-7-11.3-8-12.9-8.6-13.9L101 101l-2.7-4.3.6-1.1 11.2 7 11.3 7 12.4 7.5 10.2 6.5 12.3 7.5 8.6 5.4 11.3 6.9 2.2-.5 8-5.4 10.8-5.9 12.9-5.3 8-2.7 2.7-6.5 7-19.3 8.1-22 8-22.6 8.6-23.7ZM126.3 124.1l1 2.7 4.9 8.6 6.9 11.3 8.6 13.9 4.3 6.5 2.7-2.2 3.8-4.3 2.7-2.6-.6-2.2-6.4-5.9-4.3-4.3-4.3-3.8-5.9-5.9-4.3-3.7-7-6.5Zm101.5-62.3.5 1.6-8 22-1.1 2.7-12.9 3.8-11.3 3.7-10.7 4.9-8.6 4.3-11.3 6.4-8.6 5.9-2.1-.5-9.7-5.9-9.7-6.5 2.7-3.2 8.6-6.4 9.1-6 11.3-6.4 8.6-4.3 10.8-4.8 17.7-5.9 15-3.8Zm56.4.5 7 .6 14.5 3.2 14 4.3 13.9 5.4 12.4 5.9 11.3 6.4 9.6 6.5 8.6 6.4 2.7 2.2v1l-10.7 7-8.1 5.4-2.1.5-10.8-7-12.3-6.9-11.3-5.4-12.9-4.9-12.9-3.7-3.8-1.1-9.1-25.2Zm131.1 30.6v1.7l-5.9 9.6-7 10.8-7.5 11.8-8.6 13.4-5.9 9.2-5.9 9.1-7.6 11.8-5.3 8.1-7.6 11.8-8 12.3-5.9 9.2-1.6 2.1H167.6l-1.6-2.1v-3.2l4.8-5.4 3.8-4.3 8.6-9.2 8.1-8.5 5.9-6.5 3.2-1.6 92.9-.5 10.2-6.5 8.1-5.4 12.4-8 12.3-8.1 10.8-7 13.9-9.1 15.6-10.2 10.8-7 12.3-8 14-9.2Zm-9.7 38.2 2.7 2.7 3.8 4.3 7.5 10.7 7.5 12.9L433 173l5.9 14.5 4.9 15L447 216l1.1 5.3v3.8l-4.9-1.1-20.4-7-1.6-3.7-4.3-14.5-5.4-13.4-6.4-13.5-4.3-7-6.5-10.2-1.6-2.1 1.1-3.2 5.9-9.2Zm-299.8.5h1.1l4.8 8.1 7 10.7 1.1 2.7-4.3 5.9-7 11.3-6.4 12.4-5.9 14.5-4.3 13.4-1.6 5.9-8.6 3.2-12.9 4.9-4.3.5.5-5.9 3.2-14.5 3.8-12.4 3.8-10.2 4.3-9.6 4.2-8.6 5.4-9.7 8.6-12.9 5.9-7.5Zm266 52.1 2.1 2.2 4.3 7.5 5.4 12.9 3.2 9.1v1.1l2.7.5 27.9 9.7 22.6 8.1 10.8 3.7 28.4 10.2 14 4.9v1.1l-18.8 6.4-19.9 7-19.3 7-26.4 9.1-17.7 6.5-4.3 2.1-4.8 13.4-5.4 11.3-6.4 10.8-3.8 5.3 1.1 2.7 4.3 7.5 6.4 10.2 8.6 14 7.5 11.8 8.1 12.9 7.5 11.8 4.9 7.6h-1.7l-11.2-7-11.3-7-12.4-7.5-12.9-8.1-13.4-8-15-9.2-2.2-.5-8.1 5.4-12.3 7-13.4 5.3-5.9 2.2h-1.1l-.6 2.7-7.5 21.4-7.5 21.5-11.3 32.3-4.8 13.4-5.4 15-1.1-.5-10.7-30.6-8.1-23.1-8-22.6-8.6-24.7-1.6-4.8-5.4-1.6-13.4-5.4-9.2-4.8-3.7-2.7 2.1-2.2 12.4-8 12.3 5.3 8.1 3.3 4.8 13.4 9.2 25.8 8 23.1 9.1 25.2 2.7 8.1.6-90.3.5-.5 10.8-.5 13.4-2.2 10.2-2.7 11.8-4.3 10.2-4.8 11.3-7 7.5-5.9 7.5-6.5 4.9-4.8 4.8-5.9 5.4-7 6.4-10.7 4.9-10.2 4.3-11.9 5.3-2.1 21-7.5 25.8-9.2 19.9-6.9 15-5.4 9.1-3.2-90.8-.6-1-15-2.2-11.8-4.8-15.6-5.4-12.9 8.1-12.9Zm-19.9 166.6-5.4 4.8-3.7 3.2 2.7 2.7 13.4 8.1 10.2 6.4 13.4 8.1 3.2 2.1 1.1-.5-4.8-4.8-3.8-4.3-25.8-25.8ZM167.1 233.7h145.6l2.7 1.6 7.5 7.5 3.7 4.3 4.9 4.9 3.7 4.3 8.6 9.1 3.3 3.8v3.2l-2.2 2.1h-145l-3.3-2.1-4.8-4.8-3.8-4.3-4.3-4.3-3.7-4.3-7.5-8.1-4.9-5.4-2.1-3.2.5-2.7ZM64.5 282.6l5.3 1.6 19.4 7 1.6 1.6 3.8 13.4 3.7 10.8 4.3 9.6 7 13.5 5.4 8.6 4.8 7-1.1 2.6-8.6 13.5-3.2 4.8-2.1-1.1-8.1-10.7-5.4-8.1-6.4-11.2-4.8-9.2-5.4-12.9-3.8-10.7-3.2-11.3-3.2-14.5Zm382.5 0 1.6.5-1.6 10.2-4.8 17.8-4.3 12.9-8.1 17.7-6.4 11.8-7.6 11.3-4.8 6.4-4.3 5.4h-1.1l-5.3-8.6-6-9.1-1.6-3.2 8.6-12.9 7-12.4 4.8-10.2 4.9-12.9 4.3-15.6 15.6-5.9Zm-271.9 11.3h168.2l2.7 1.1 1.1 2.1-.6 2.7-4.8 5.4-6.5 6.4-3.7 4.3-3.8 3.8-3.7 4.3-8.1 8.6-2.7 2.1-1.1.5-92.9.6-6.4 3.7-22.6 15.1-8.6 5.4-12.9 8.6-11.8 7.5-12.4 8-13.4 8.6-8.1 5.4-9.1 5.9-12.9 8.1-2.7 1.6h-1.1l1.1-2.7 5.9-9.1 7.5-11.9 7.6-11.8 5.9-9.1 6.4-10.2 8.6-13.4 8.1-12.4 7-10.7 8.6-13.5 5.9-9.1 3.2-4.8Zm-20.9 97.2 2.1.6 9.7 6.4 11.3 6.4 13.4 6.5 14.5 5.4 12.4 3.7 2.1 2.2 5.9 16.6 1.7 5.9v1.7l-8.1-1.1-17.2-4.3-15.6-5.4-10.7-4.8-8.6-4.3-8.1-4.3-11.8-7.5-9.1-7-3.8-3.3 2.2-2.1 10.2-6.4Zm203.1 0 2.7.6 8 5.3 10.2 6.5v1.6l-8 6.4-12.9 8.6-11.3 6.5-15.6 7.5-12.9 4.8-16.1 4.9-12.9 2.7h-3.2l1.6-6.5 6.4-18.8 3.3-1.6 13.9-4.3 11.3-4.3 13.4-6.5 9.7-5.3 9.1-5.9Z"/></svg><span class="compass-brand__word">Compass</span>
+                        </a>
+                        <div class="mt-1 d-md-block d-none" style="flex-grow: 1; display: flex; justify-content: center; margin-left: 10px; margin-right: 10px;">
+                            <div style="max-width: 450px; width: 100%; margin: 0 auto;">
+                                <autocomplete-search></autocomplete-search>
+                            </div>
+                        </div>
+
+                        <div class="d-flex order-lg-2 ml-auto header-wallet-actions" style="margin-left:auto">
+                            <div class="d-flex flex-col align-items-center align-content-center justify-content-center">
+                                                                    <wallet-button></wallet-button>
+                                                                                                                                                                </div>
+                            <div class="dropdown d-lg-none d-flex responsive-search align-items-center">
+                                <!-- Mobile search (now at the end) -->
+                                <a href="javascript:void(0)" class="nav-link d-lg-none navsearch-icon" data-bs-toggle="dropdown" aria-expanded="false" 
+                                   data-bs-popper-config='{"modifiers": [{"name": "offset", "options": {"offset": [0,10]}}, {"name": "preventOverflow", "options": {"padding": 10}}, {"name": "flip", "options": {"padding": 10, "fallbackPlacements": ["top-end", "bottom-start", "top-start"]}}]}'>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="header-icon search-icon" width="24" height="24" viewBox="0 0 24 24"><path d="M10 18a7.952 7.952 0 0 0 4.897-1.688l4.396 4.396 1.414-1.414-4.396-4.396A7.952 7.952 0 0 0 18 10c0-4.411-3.589-8-8-8s-8 3.589-8 8 3.589 8 8 8zm0-14c3.309 0 6 2.691 6 6s-2.691 6-6 6-6-2.691-6-6 2.691-6 6-6z"></path></svg>
+                                </a>
+                                <div class="dropdown-menu header-search dropdown-menu-end" style="width: calc(100vw - 20px);">
+                                    <div class="input-group w-100 p-2">
+                                         <autocomplete-search></autocomplete-search>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- SEARCH -->
+                            <div class="dropdown d-flex hidden-sm">
+                                <a class="nav-link icon theme-layout nav-link-bg layout-setting">
+                                                      <span class="light-layout">
+                                                         <svg xmlns="http://www.w3.org/2000/svg" class="header-icon"
+                                                              width="24" height="24" viewBox="0 0 24 24">
+                                                            <path
+                                                                d="M20.742 13.045a8.088 8.088 0 0 1-2.077.271c-2.135 0-4.14-.83-5.646-2.336a8.025 8.025 0 0 1-2.064-7.723A1 1 0 0 0 9.73 2.034a10.014 10.014 0 0 0-4.489 2.582c-3.898 3.898-3.898 10.243 0 14.143a9.937 9.937 0 0 0 7.072 2.93 9.93 9.93 0 0 0 7.07-2.929 10.007 10.007 0 0 0 2.583-4.491 1.001 1.001 0 0 0-1.224-1.224zm-2.772 4.301a7.947 7.947 0 0 1-5.656 2.343 7.953 7.953 0 0 1-5.658-2.344c-3.118-3.119-3.118-8.195 0-11.314a7.923 7.923 0 0 1 2.06-1.483 10.027 10.027 0 0 0 2.89 7.848 9.972 9.972 0 0 0 7.848 2.891 8.036 8.036 0 0 1-1.484 2.059z"></path>
+                                                         </svg>
+                                                      </span>
+                                    <span class="dark-layout">
+                                                         <svg xmlns="http://www.w3.org/2000/svg" class="header-icon"
+                                                              width="24" height="24" viewBox="0 0 24 24">
+                                                            <path
+                                                                d="M6.993 12c0 2.761 2.246 5.007 5.007 5.007s5.007-2.246 5.007-5.007S14.761 6.993 12 6.993 6.993 9.239 6.993 12zM12 8.993c1.658 0 3.007 1.349 3.007 3.007S13.658 15.007 12 15.007 8.993 13.658 8.993 12 10.342 8.993 12 8.993zM10.998 19h2v3h-2zm0-17h2v3h-2zm-9 9h3v2h-3zm17 0h3v2h-3zM4.219 18.363l2.12-2.122 1.415 1.414-2.12 2.122zM16.24 6.344l2.122-2.122 1.414 1.414-2.122 2.122zM6.342 7.759 4.22 5.637l1.415-1.414 2.12 2.122zm13.434 10.605-1.414 1.414-2.122-2.122 1.414-1.414z"></path>
+                                                         </svg>
+                                                      </span>
+                                </a>
+                            </div>
+
+
+                            <div class="d-flex">
+                                <div></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="sticky">
+                <div class="horizontal-main hor-menu clearfix bg-gradient-primary ">
+                    <div class="horizontal-mainwrapper container clearfix p-0">
+                        <nav class="horizontalMenu clearfix">
+                            <div class="horizontal-overlapbg active"></div>
+
+                            <ul class="horizontalMenu-list">
+                                <li class=""><a href="/projects"><i class="fas fa-th-large"></i> Projects</a></li>
+                                <li class=""><a href="/staking"><i class="fas fa-piggy-bank"></i> Staking</a></li>
+                                <li class=""><a href="/learn"><i class="fas fa-book"></i> Learn</a></li>
+                                <li class=""><a href="/news"><i class="fas fa-newspaper"></i> News</a></li>
+                                <li><a href="/tokens"><i class="fas fa-chart-line"></i> Swap</a></li>
+                                <li><a href="/stake-pools"><i class="fas fa-water"></i> Stake Pools</a></li>
+                                <li class=""><a href="/defi/borrow-lend"><i class="fas fa-university"></i> DeFi</a></li>
+                                                                <li class=""><a href="/tools"><i class="fas fa-toolbox"></i> Tools</a></li>
+                                                                <li><a href="/validators/"><i class="fas fa-microchip"></i> Validators</a></li>
+                                <li class=""><a href="/analytics"><i class="fas fa-chart-pie"></i> Analytics</a></li>
+                                <li class=""><a href="/statistics"><i class="fas fa-calculator"></i> Statistics</a></li>
+                                
+                        </ul>
+
+                        </nav>
+                        <!--Nav-->
+
+                    </div>
+
+                </div>
+<div class="alert bg-gradient-teal text-white">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10">
+                <h4>Earn 5.30% APY staking with Solana Compass + help grow Solana's ecosystem</h4>
+                <p>Stake natively or with our LST compassSOL to earn a market leading APY</p>
+            </div>
+            <div class="col-md-2 text-right">
+                <a href="/staking" class="btn btn-lg bg-gradient-success">Earn 5.30%</a>
+            </div>
+        </div>
+    </div>
+</div>
+                <!--                    <div class="alert alert-info text-center p-3">Looking for the accounts unlocking after the Alameda fiasco? <a href="/alameda" class="text-white text-underline "><u>See them here</u></a></div>-->
+            </div>
+
+            <main class="d-n">
+                <div class="mt-0 mx-0 mb-5  w-100 " style=" margin-top:-40px; ">
+    <div class="container p-5">
+
+    <div class="text">
+        <h1 class="text-center w-80 m-auto mt-5 font-weight-semibold display-3">
+        Solana Stake Pools
+    </h1>
+    <p class="lead text-center my-5">
+        Want to stake on Solana and get a great return on your investment while helping decentralize the network - with just a couple of clicks? Then a stake pool might be for you!
+    </p>
+    <h3 class="text-center my-5">
+        Solana Stake Pool Statistics
+    </h3>
+    </div>
+    <div class="row my-5 justify-content-between">
+                    <div class="col">
+                <div class="card shadow-lg">
+                    <div class="card-body text-center">
+                        <h3>53,873,805<small> SOL</small></h3>
+                        <span class="text-muted">Total Liquid Staked</span>
+                    </div>
+                </div>
+            </div>
+                    <div class="col">
+                <div class="card shadow-lg">
+                    <div class="card-body text-center">
+                        <h3>13.47%</h3>
+                        <span class="text-muted">Stake In LSTs vs Native</span>
+                    </div>
+                </div>
+            </div>
+                    <div class="col">
+                <div class="card shadow-lg">
+                    <div class="card-body text-center">
+                        <h3>4.89%</h3>
+                        <span class="text-muted">Average APY</span>
+                    </div>
+                </div>
+            </div>
+                    <div class="col">
+                <div class="card shadow-lg">
+                    <div class="card-body text-center">
+                        <h3>495</h3>
+                        <span class="text-muted">Unique Validators</span>
+                    </div>
+                </div>
+            </div>
+                    <div class="col">
+                <div class="card shadow-lg">
+                    <div class="card-body text-center">
+                        <h3>88,244<small> SOL</small></h3>
+                        <span class="text-muted">Avg Validator Stake</span>
+                    </div>
+                </div>
+            </div>
+            </div>
+    </div>
+</div>
+<div class="container">
+
+    <div class="card my-5">
+        <div class="card-body">
+        <h3 class="mt-5">All 216 Solana Liquid Staking Tokens (LSTs) & Pools</h3>
+        
+        <el-table :data='[{"id":139,"network":"m","command":"sanctum-pools","name":null,"keybase_id":null,"logo":null,"logo_cached":"images\/pools\/AwDeTcW6BovNYR34Df1TPm4bFwswa4CJY4YPye2LXtPS.png","address":"AwDeTcW6BovNYR34Df1TPm4bFwswa4CJY4YPye2LXtPS","manager":"8JS6XsMPo2u3EyeeY3p2jvzHEhdUtCKgarHpJ3PAonyv","staker":"57V86ZRddiL4LCmVobuLybnGaxpFj41K8ZgeGwoUpyBa","stakeDepositAuthority":"ABJqs8CswmTSBn7yYzk38rWBPAEDRfr4teeTVZxbfJbD","validatorListStorageAccount":"DgSrw8Kmww4wVC1KaHFrEYE3UiCupNpLde2CcUEmGYsx","stakeWithdrawBumpSeed":255,"maxValidators":20,"reserveStake":"8H2xjMT543YWBLRjJ24BrQyBgFuQRU6MgENA3mqXoh7y","poolMint":"Comp4ssDzXcLeu2MnLuGNNFC4cmLPMng8qWHPvzAMU1h","managerFeeAccount":"ANVwYh4Tr2k3no6j7qeUtHHotxCM7vGKW39SxS1WeBtV","tokenProgramId":"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA","totalLamports":3579878769569,"poolTokenSupply":2953008571280,"lastUpdateEpoch":1047,"lockup":"{\u0022epoch\u0022: 0, \u0022custodian\u0022: \u002211111111111111111111111111111111\u0022, \u0022unixTimestamp\u0022: 0}","preferredDepositValidatorVoteAddress":null,"preferredWithdrawValidatorVoteAddress":"EARNynHRWg6GfyJCmrrizcZxARB3HVzcaasvNa8kBS72","stakeReferralFee":0,"solDepositAuthority":null,"solReferralFee":0,"solWithdrawAuthority":"11111111111111111111111111111111","poolWithdrawAuthority":"3SpAsJj9mXsDmwtaE6zSgEh78ZZE278TBnYgAAy5DHaM","lastEpochPoolTokenSupply":2952911728884,"lastEpochTotalLamports":3579020446783,"details":[],"created_at":"2024-02-15T12:23:23.000000Z","updated_at":"2026-10-02T20:32:40.000000Z","description":null,"website":null,"strategy":null,"validatorsCount":1,"ratio_apy":0.10385541113142893,"apy":{"id":120921,"stake_pool_id":139,"epoch":794,"apy":0.07219827,"created_at":"2025-05-29T03:29:26.000000Z","updated_at":"2025-05-29T07:00:37.000000Z"},"epoch_fee":{"id":2789230,"stake_pool_id":139,"fee_type":"epochFee","numerator":25,"denominator":1000,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:39:30.000000Z","updated_at":"2026-10-01T16:39:30.000000Z"},"sol_deposit_fee":{"id":2789229,"stake_pool_id":139,"fee_type":"solDepositFee","numerator":0,"denominator":100,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:39:30.000000Z","updated_at":"2026-10-01T16:39:30.000000Z"},"sol_withdrawal_fee":{"id":2789231,"stake_pool_id":139,"fee_type":"solWithdrawalFee","numerator":1,"denominator":1000,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:39:30.000000Z","updated_at":"2026-10-01T16:39:30.000000Z"},"validators":[],"currentvalidators":[],"current_validators":[],"token":{"id":15468,"chainId":101,"address":"Comp4ssDzXcLeu2MnLuGNNFC4cmLPMng8qWHPvzAMU1h","symbol":"compassSOL","name":"Compass SOL","decimals":9,"logoURI":"https:\/\/solanacompass.com\/compass.png","tags":["lst"],"extensions":null,"created_at":"2024-03-12T14:36:03.000000Z","updated_at":"2024-03-12T14:52:01.000000Z","strict":1,"poolAddress":"AwDeTcW6BovNYR34Df1TPm4bFwswa4CJY4YPye2LXtPS","$schema":"https:\/\/schema.metaplex.com\/nft1.0.json","json_uri":"https:\/\/solanacompass.com\/compassSOL.json","files":[{"uri":"https:\/\/solanacompass.com\/compass.png","cdn_uri":"https:\/\/cdn.helius-rpc.com\/cdn-cgi\/image\/\/https:\/\/solanacompass.com\/compass.png","mime":"image\/png"}],"metadata":{"description":"High performance liquid staking + MEV tips from Solana Compass validator","json_name":"Solana Compass LST","name":"Compass SOL","symbol":"compassSOL","token_standard":"Fungible"},"links":{"image":"https:\/\/solanacompass.com\/compass.png"},"chainID":101},"data_stale":false,"stale_epochs":0},{"id":93,"network":"m","command":"spl-stake-pool","name":"Jito","keybase_id":null,"logo":null,"logo_cached":"images\/pools\/Jito4APyf642JPZPx3hGc6WWJ8zPKtRbRs4P815Awbb.png","address":"Jito4APyf642JPZPx3hGc6WWJ8zPKtRbRs4P815Awbb","manager":"5eosrve6LktMZgVNszYzebgmmC7BjLK8NoWyRQtcmGTF","staker":"9BAmGVLGxzqct6bkgjWmKSv3BFB6iKYXNBQp8GWG1LDY","stakeDepositAuthority":"6hg6RMfjn3QSW6MdjH2Dg3dhF9XsVEE8CQXhjYwkRCiK","validatorListStorageAccount":"3R3nGZpQs2aZo5FDQvd2MUQ6R7KhAPainds6uT6uE2mn","stakeWithdrawBumpSeed":253,"maxValidators":10000,"reserveStake":"BgKUXdS29YcHCFrPm5M8oLHiTzZaMDjsebggjoaQ6KFL","poolMint":"J1toso1uCk3RLmjorhTtrVwY9HJ7X8V9yYac6Y7kGCPn","managerFeeAccount":"8yoigZfzZ1nNaadumY9uPVD118225UYHTDpmjpr2nrSa","tokenProgramId":"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA","totalLamports":10417008703552372,"poolTokenSupply":7987458813053183,"lastUpdateEpoch":1047,"lockup":"{\u0022epoch\u0022: 0, \u0022custodian\u0022: \u002211111111111111111111111111111111\u0022, \u0022unixTimestamp\u0022: 0}","preferredDepositValidatorVoteAddress":null,"preferredWithdrawValidatorVoteAddress":null,"stakeReferralFee":0,"solDepositAuthority":null,"solReferralFee":0,"solWithdrawAuthority":null,"poolWithdrawAuthority":"6iQKfEyhr3bZMotVkW6beNZz5CPAkiwvgV2CTje9pVSS","lastEpochPoolTokenSupply":7983873088073418,"lastEpochTotalLamports":10410543092517960,"details":[],"created_at":"2022-10-30T00:30:08.000000Z","updated_at":"2026-10-02T20:30:37.000000Z","description":null,"website":"https:\/\/jito.network\/staking\/?ref=compass","strategy":null,"validatorsCount":304,"ratio_apy":0.048556114812311035,"apy":{"id":122479,"stake_pool_id":93,"epoch":796,"apy":0.07186375,"created_at":"2025-06-02T14:03:22.000000Z","updated_at":"2025-06-03T05:03:58.000000Z"},"epoch_fee":{"id":2783552,"stake_pool_id":93,"fee_type":"epochFee","numerator":4,"denominator":100,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:36:25.000000Z","updated_at":"2026-10-01T16:36:25.000000Z"},"sol_deposit_fee":{"id":2783551,"stake_pool_id":93,"fee_type":"solDepositFee","numerator":0,"denominator":0,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:36:25.000000Z","updated_at":"2026-10-01T16:36:25.000000Z"},"sol_withdrawal_fee":{"id":2783553,"stake_pool_id":93,"fee_type":"solWithdrawalFee","numerator":1,"denominator":1000,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:36:25.000000Z","updated_at":"2026-10-01T16:36:25.000000Z"},"validators":[],"currentvalidators":[],"current_validators":[],"token":{"id":14127,"chainId":101,"address":"J1toso1uCk3RLmjorhTtrVwY9HJ7X8V9yYac6Y7kGCPn","symbol":"JitoSOL","name":"Jito Staked SOL","decimals":9,"logoURI":"https:\/\/storage.googleapis.com\/token-metadata\/JitoSOL-256.png","tags":["lst"],"extensions":{"coingeckoId":"jito-staked-sol"},"created_at":"2024-03-12T14:07:51.000000Z","updated_at":"2024-03-12T14:46:21.000000Z","strict":1,"poolAddress":"Jito4APyf642JPZPx3hGc6WWJ8zPKtRbRs4P815Awbb","$schema":"https:\/\/schema.metaplex.com\/nft1.0.json","json_uri":"https:\/\/storage.googleapis.com\/token-metadata\/JitoSOL.json","files":[{"uri":"https:\/\/storage.googleapis.com\/token-metadata\/JitoSOL-256.png","cdn_uri":"https:\/\/cdn.helius-rpc.com\/cdn-cgi\/image\/\/https:\/\/storage.googleapis.com\/token-metadata\/JitoSOL-256.png","mime":"image\/png"}],"metadata":{"description":"MEV-Powered Liquid Staking Token","json_name":"Jito Staked SOL","name":"Jito Staked SOL","symbol":"JitoSOL","token_standard":"Fungible"},"links":{"image":"https:\/\/storage.googleapis.com\/token-metadata\/JitoSOL-256.png","external_url":"https:\/\/jito.network"},"chainID":101},"data_stale":false,"stale_epochs":0},{"id":231,"network":"m","command":"spl-stake-pool","name":null,"keybase_id":null,"logo":null,"logo_cached":"images\/pools\/Hr9pzexrBge3vgmBNRR8u42CNQgBXdHm4UkUN2DH4a7r.png","address":"Hr9pzexrBge3vgmBNRR8u42CNQgBXdHm4UkUN2DH4a7r","manager":"E225dEh1dSTAXkxAmkD59pjcd8F27Utkn5MjJz3BZ5gt","staker":"GBJ4MZe8fqpA6UVgjh19BwJPMb79KDfMv78XnFVxgH2Q","stakeDepositAuthority":"6ZAm8uw4L4PaJFDDxDGtvA4eEZdDfVPyqmHEDqku1hcA","validatorListStorageAccount":"FQxPPqmKKiRH3q2Sqb1xvdafqbbVyBPpMUnDug4AjtkX","stakeWithdrawBumpSeed":254,"maxValidators":2350,"reserveStake":"9xcCvbbAAT9XSFsMAsCeR8CEbxutj15m5BfNr4DEMQKn","poolMint":"BNso1VUJnh4zcfpZa6986Ea66P6TCp59hvtNJ8b1X85","managerFeeAccount":"3ZC6mkJr9hnFSrVHzXXcPopw3SArgKGm8agcah1vhy2Z","tokenProgramId":"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA","totalLamports":10250842326504885,"poolTokenSupply":9039384795630387,"lastUpdateEpoch":1047,"lockup":"{\u0022epoch\u0022: 0, \u0022custodian\u0022: \u002211111111111111111111111111111111\u0022, \u0022unixTimestamp\u0022: 0}","preferredDepositValidatorVoteAddress":null,"preferredWithdrawValidatorVoteAddress":null,"stakeReferralFee":0,"solDepositAuthority":null,"solReferralFee":0,"solWithdrawAuthority":"E225dEh1dSTAXkxAmkD59pjcd8F27Utkn5MjJz3BZ5gt","poolWithdrawAuthority":"75NPzpxoh8sXGuSENFMREidq6FMzEx4g2AfcBEB6qjCV","lastEpochPoolTokenSupply":9034693815750637,"lastEpochTotalLamports":10243836990935272,"details":[],"created_at":"2024-08-26T08:00:49.000000Z","updated_at":"2026-10-02T20:30:55.000000Z","description":null,"website":null,"strategy":null,"validatorsCount":5,"ratio_apy":0.0467382834534571,"apy":{"id":122621,"stake_pool_id":231,"epoch":796,"apy":0.06629674,"created_at":"2025-06-02T14:08:10.000000Z","updated_at":"2025-06-02T14:08:10.000000Z"},"epoch_fee":{"id":2784735,"stake_pool_id":231,"fee_type":"epochFee","numerator":10000,"denominator":100000,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:37:12.000000Z","updated_at":"2026-10-01T16:37:12.000000Z"},"sol_deposit_fee":{"id":2784734,"stake_pool_id":231,"fee_type":"solDepositFee","numerator":0,"denominator":0,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:37:12.000000Z","updated_at":"2026-10-01T16:37:12.000000Z"},"sol_withdrawal_fee":{"id":2784736,"stake_pool_id":231,"fee_type":"solWithdrawalFee","numerator":1,"denominator":1000,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:37:12.000000Z","updated_at":"2026-10-01T16:37:12.000000Z"},"validators":[],"currentvalidators":[],"current_validators":[],"token":{"address":"BNso1VUJnh4zcfpZa6986Ea66P6TCp59hvtNJ8b1X85","chainID":101,"decimals":9,"tags":["lst"],"name":"Binance Staked SOL","symbol":"BNSOL","poolAddress":"Hr9pzexrBge3vgmBNRR8u42CNQgBXdHm4UkUN2DH4a7r","logoURI":"https:\/\/arweave.net\/LepI-hea-JrbLMb4L_HpMzaq9k0aHY2-lVSGiBtwvFM?ext=png","$schema":"https:\/\/schema.metaplex.com\/nft1.0.json","json_uri":"https:\/\/arweave.net\/27IIs9ILSTPBlDykcWdiM-8WwjXfudFZwnV34C7S2sA","files":[{"uri":"https:\/\/arweave.net\/LepI-hea-JrbLMb4L_HpMzaq9k0aHY2-lVSGiBtwvFM?ext=png","cdn_uri":"https:\/\/cdn.helius-rpc.com\/cdn-cgi\/image\/\/https:\/\/arweave.net\/LepI-hea-JrbLMb4L_HpMzaq9k0aHY2-lVSGiBtwvFM?ext=png","mime":"image\/png"}],"metadata":{"description":"BNSOL unlocks your staked Solana (SOL) liquidity, it accumulates SOL staking rewards by growing in value in relation to SOL, even when it is used in Binance products or DeFi projects.","json_name":"Binance Staked SOL","name":"Binance Staked SOL","symbol":"BNSOL","token_standard":"Fungible"},"links":{"image":"https:\/\/arweave.net\/LepI-hea-JrbLMb4L_HpMzaq9k0aHY2-lVSGiBtwvFM?ext=png"}},"data_stale":false,"stale_epochs":0},{"id":186,"network":"m","command":"sanctum-multi","name":null,"keybase_id":null,"logo":null,"logo_cached":"images\/pools\/8VpRhuxa7sUUepdY3kQiTmX9rS5vx4WgaXiAnXq4KCtr.png","address":"8VpRhuxa7sUUepdY3kQiTmX9rS5vx4WgaXiAnXq4KCtr","manager":"8JS6XsMPo2u3EyeeY3p2jvzHEhdUtCKgarHpJ3PAonyv","staker":"57V86ZRddiL4LCmVobuLybnGaxpFj41K8ZgeGwoUpyBa","stakeDepositAuthority":"HTKRKG472CK7RuoBBgMHGyDip8RHH8pk5ukSmfWTb4iM","validatorListStorageAccount":"AXL4v4bbzRkqwHmLc9A1YzHQmRhmG9Q93i1e6CPG2bEK","stakeWithdrawBumpSeed":255,"maxValidators":10000,"reserveStake":"FMAWbzuxsgbgndArunedwxXPA6sweaVUGGgadCpSxau2","poolMint":"jupSoLaHXQiZZTSfEWMTRRgpnyFm8f6sZdosWBjx93v","managerFeeAccount":"GbvFCpMqKX65gQ8KNeob9JUAL7vHCHFSg8YN5bnpPT8g","tokenProgramId":"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA","totalLamports":5165653464350239,"poolTokenSupply":4261299314781417,"lastUpdateEpoch":1047,"lockup":"{\u0022epoch\u0022: 0, \u0022custodian\u0022: \u002211111111111111111111111111111111\u0022, \u0022unixTimestamp\u0022: 0}","preferredDepositValidatorVoteAddress":null,"preferredWithdrawValidatorVoteAddress":null,"stakeReferralFee":0,"solDepositAuthority":null,"solReferralFee":0,"solWithdrawAuthority":null,"poolWithdrawAuthority":"EMjuABxELpYWYEwjkKmQKBNCwdaFAy4QYAs6W9bDQDNw","lastEpochPoolTokenSupply":4259521140978072,"lastEpochTotalLamports":5162515019996921,"details":[],"created_at":"2024-05-20T16:30:34.000000Z","updated_at":"2026-10-02T20:30:32.000000Z","description":null,"website":null,"strategy":null,"validatorsCount":4,"ratio_apy":0.05413886111118904,"apy":{"id":122457,"stake_pool_id":186,"epoch":796,"apy":0.07191567,"created_at":"2025-06-02T14:02:17.000000Z","updated_at":"2025-06-03T05:02:30.000000Z"},"epoch_fee":{"id":2783401,"stake_pool_id":186,"fee_type":"epochFee","numerator":50,"denominator":1000,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:35:17.000000Z","updated_at":"2026-10-01T16:35:17.000000Z"},"sol_deposit_fee":{"id":2783400,"stake_pool_id":186,"fee_type":"solDepositFee","numerator":0,"denominator":100,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:35:17.000000Z","updated_at":"2026-10-01T16:35:17.000000Z"},"sol_withdrawal_fee":{"id":2783402,"stake_pool_id":186,"fee_type":"solWithdrawalFee","numerator":1,"denominator":1000,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:35:17.000000Z","updated_at":"2026-10-01T16:35:17.000000Z"},"validators":[],"currentvalidators":[],"current_validators":[],"token":{"address":"jupSoLaHXQiZZTSfEWMTRRgpnyFm8f6sZdosWBjx93v","chainID":101,"decimals":9,"tags":["lst"],"name":"Jupiter Staked SOL","symbol":"JupSOL","poolAddress":"8VpRhuxa7sUUepdY3kQiTmX9rS5vx4WgaXiAnXq4KCtr","logoURI":"https:\/\/static.jup.ag\/jupSOL\/icon.png","$schema":"https:\/\/schema.metaplex.com\/nft1.0.json","json_uri":"https:\/\/static.jup.ag\/jupSOL\/metadata.json","files":[{"uri":"https:\/\/static.jup.ag\/jupSOL\/icon.png","cdn_uri":"https:\/\/cdn.helius-rpc.com\/cdn-cgi\/image\/\/https:\/\/static.jup.ag\/jupSOL\/icon.png","mime":"image\/png"}],"metadata":{"description":"JupSOL is a token representing SOL-staked with Jupiter\u0027s validators","json_name":"Jupiter Staked SOL","name":"Jupiter Staked SOL","symbol":"JupSOL","token_standard":"Fungible"},"links":{"image":"https:\/\/static.jup.ag\/jupSOL\/icon.png","external_url":"https:\/\/jup.ag\/"}},"data_stale":false,"stale_epochs":0},{"id":144,"network":"m","command":"sanctum-pools","name":null,"keybase_id":null,"logo":null,"logo_cached":null,"address":"9mhGNSPArRMHpLDMSmxAvuoizBqtBGqYdT8WGuqgxNdn","manager":"8JS6XsMPo2u3EyeeY3p2jvzHEhdUtCKgarHpJ3PAonyv","staker":"57V86ZRddiL4LCmVobuLybnGaxpFj41K8ZgeGwoUpyBa","stakeDepositAuthority":"7PTvgktZK4Eq9N5FZcyDQbhX5sDhpZo2Tz23ahcr7ZJt","validatorListStorageAccount":"4dRHzwW2npecE4riAKibHccnMib5jBu9RdFf8bQ2o7Mo","stakeWithdrawBumpSeed":255,"maxValidators":20,"reserveStake":"4RjzgujRmdadbLjyh2L1Qn5ECsQ1qfjaapTfeWKYtsC3","poolMint":"Dso1bDeDjCQxTrWHqUUi63oBvV7Mdm6WaobLbQ7gnPQ","managerFeeAccount":"4ipvqrPR7dvkRPJ9iHhAxY7NfcgCSrZw5KLH3K8aAbCM","tokenProgramId":"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA","totalLamports":2822953771748328,"poolTokenSupply":2318083394607191,"lastUpdateEpoch":1047,"lockup":"{\u0022epoch\u0022: 0, \u0022custodian\u0022: \u002211111111111111111111111111111111\u0022, \u0022unixTimestamp\u0022: 0}","preferredDepositValidatorVoteAddress":null,"preferredWithdrawValidatorVoteAddress":null,"stakeReferralFee":0,"solDepositAuthority":null,"solReferralFee":0,"solWithdrawAuthority":"11111111111111111111111111111111","poolWithdrawAuthority":"6727ZvQ2YEz8jky1Z9fqDFG5mYuAvC9G34o2MxwzmrUK","lastEpochPoolTokenSupply":2318082594224234,"lastEpochTotalLamports":2822453238373589,"details":[],"created_at":"2024-02-15T12:23:23.000000Z","updated_at":"2026-10-02T20:32:35.000000Z","description":null,"website":null,"strategy":null,"validatorsCount":1,"ratio_apy":0.049820692232141806,"apy":{"id":120731,"stake_pool_id":144,"epoch":794,"apy":0.07209206,"created_at":"2025-05-29T02:26:02.000000Z","updated_at":"2025-05-29T06:57:55.000000Z"},"epoch_fee":{"id":2788790,"stake_pool_id":144,"fee_type":"epochFee","numerator":25,"denominator":1000,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:39:22.000000Z","updated_at":"2026-10-01T16:39:22.000000Z"},"sol_deposit_fee":{"id":2788789,"stake_pool_id":144,"fee_type":"solDepositFee","numerator":0,"denominator":100,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:39:22.000000Z","updated_at":"2026-10-01T16:39:22.000000Z"},"sol_withdrawal_fee":{"id":2788791,"stake_pool_id":144,"fee_type":"solWithdrawalFee","numerator":1,"denominator":1000,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:39:22.000000Z","updated_at":"2026-10-01T16:39:22.000000Z"},"validators":[],"currentvalidators":[],"current_validators":[],"token":{"id":15076,"chainId":101,"address":"Dso1bDeDjCQxTrWHqUUi63oBvV7Mdm6WaobLbQ7gnPQ","symbol":"dSOL","name":"Drift Staked Sol","decimals":9,"logoURI":"https:\/\/drift-public.s3.eu-central-1.amazonaws.com\/dSOL.svg","tags":["lst"],"extensions":null,"created_at":"2024-03-12T14:30:42.000000Z","updated_at":"2024-03-12T14:51:57.000000Z","strict":1,"poolAddress":"9mhGNSPArRMHpLDMSmxAvuoizBqtBGqYdT8WGuqgxNdn","$schema":"https:\/\/schema.metaplex.com\/nft1.0.json","json_uri":"https:\/\/drift-public.s3.eu-central-1.amazonaws.com\/dSOL.json","files":[{"uri":"https:\/\/drift-public.s3.eu-central-1.amazonaws.com\/dSOL.svg","cdn_uri":"https:\/\/cdn.helius-rpc.com\/cdn-cgi\/image\/\/https:\/\/drift-public.s3.eu-central-1.amazonaws.com\/dSOL.svg","mime":"image\/svg+xml"}],"metadata":{"description":"Solana Liquid Staking Token","json_name":"Drift Staked SOL","name":"Drift Staked Sol","symbol":"dSOL","token_standard":"Fungible"},"links":{"image":"https:\/\/drift-public.s3.eu-central-1.amazonaws.com\/dSOL.svg","external_url":"https:\/\/www.drift.foundation\/"},"chainID":101},"data_stale":false,"stale_epochs":0},{"id":21,"network":"m","command":"marinade","name":"Marinade","keybase_id":"marinadefi","logo":"https:\/\/s3.amazonaws.com\/keybase_processed_uploads\/eba99a4a3b019716e45b7377a0e64d05_360_360.jpg","logo_cached":"\/images\/pools\/marinade.png","address":"marinade","manager":"MckGXZC1GbLqTK1vaSWsjRvWg5G3tj8hpXfaHYBqqKy","staker":null,"stakeDepositAuthority":null,"validatorListStorageAccount":null,"stakeWithdrawBumpSeed":null,"maxValidators":3000,"reserveStake":"Du3Ysj1wKbxPKkuPPnvzQLQh8oMSVifs3jGZjJWXFmHN","poolMint":"mSoLzYCxHdYgdzU16g5QSh3i5K3z3KZK7ytfqcJm7So","managerFeeAccount":null,"tokenProgramId":null,"totalLamports":2284488925947900,"poolTokenSupply":1599943517340690,"lastUpdateEpoch":1047,"lockup":null,"preferredDepositValidatorVoteAddress":null,"preferredWithdrawValidatorVoteAddress":null,"stakeReferralFee":null,"solDepositAuthority":null,"solReferralFee":null,"solWithdrawAuthority":null,"poolWithdrawAuthority":"9eG63CdHjsfhHmobHgLtESGC8GabbmRcaSpHAZrtmhco","lastEpochPoolTokenSupply":null,"lastEpochTotalLamports":null,"details":[],"created_at":"2021-11-15T10:06:48.000000Z","updated_at":"2026-10-02T20:30:18.000000Z","description":"The easiest way to\nstake Solana","website":"https:\/\/solanacompass.com\/go\/marinade","strategy":"\u003Cp\u003EMarinade uses open-source code to compute a score awarded to validators based on performance, commission and decentralization objectives. For example, a validator will get points added for good performance, low delinquency and low commission, but will get all points deducted if its already one of the top concentrated validators (measured by stake) in the Solana ecosystem.\n\u003C\/p\u003E\u003Cp\u003EBased on points received, validators are automatically awarded a percentage of the total stake. As users stake and unstake, Marinade bot distributes stake and unstake operations as to match staked percentage with score (i.e. changes in score are slowly applied as users stake and unstake). \u003C\/p\u003E","validatorsCount":56,"ratio_apy":0.05020329020846459,"apy":{"id":123030,"stake_pool_id":21,"epoch":961,"apy":0.05859878,"created_at":"2026-04-23T15:30:32.000000Z","updated_at":"2026-04-24T13:30:27.000000Z"},"epoch_fee":{"id":2792490,"stake_pool_id":21,"fee_type":"epochFee","numerator":6,"denominator":100,"lastUpdateEpoch":1047,"created_at":"2026-10-01T17:00:30.000000Z","updated_at":"2026-10-01T17:00:30.000000Z"},"sol_deposit_fee":null,"sol_withdrawal_fee":null,"validators":[],"currentvalidators":[],"current_validators":[],"token":{"id":1023,"chainId":101,"address":"mSoLzYCxHdYgdzU16g5QSh3i5K3z3KZK7ytfqcJm7So","symbol":"mSOL","name":"Marinade staked SOL (mSOL)","decimals":9,"logoURI":"https:\/\/raw.githubusercontent.com\/solana-labs\/token-list\/main\/assets\/mainnet\/mSoLzYCxHdYgdzU16g5QSh3i5K3z3KZK7ytfqcJm7So\/logo.png","tags":["lst"],"extensions":{"coingeckoId":"msol"},"created_at":"2021-11-11T17:46:10.000000Z","updated_at":"2024-03-12T14:46:22.000000Z","strict":1,"poolAddress":"marinade","$schema":"https:\/\/schema.metaplex.com\/nft1.0.json","json_uri":"","files":[{"uri":"https:\/\/raw.githubusercontent.com\/solana-labs\/token-list\/main\/assets\/mainnet\/mSoLzYCxHdYgdzU16g5QSh3i5K3z3KZK7ytfqcJm7So\/logo.png","cdn_uri":"https:\/\/cdn.helius-rpc.com\/cdn-cgi\/image\/\/https:\/\/raw.githubusercontent.com\/solana-labs\/token-list\/main\/assets\/mainnet\/mSoLzYCxHdYgdzU16g5QSh3i5K3z3KZK7ytfqcJm7So\/logo.png","mime":"image\/png"}],"metadata":{"name":"Marinade staked SOL (mSOL)","symbol":"mSOL","description":"The easiest way to\nstake Solana"},"links":{"image":"https:\/\/raw.githubusercontent.com\/solana-labs\/token-list\/main\/assets\/mainnet\/mSoLzYCxHdYgdzU16g5QSh3i5K3z3KZK7ytfqcJm7So\/logo.png"},"chainID":101},"data_stale":false,"stale_epochs":0},{"id":1872,"network":"m","command":"sanctum-pools","name":null,"keybase_id":null,"logo":null,"logo_cached":"images\/pools\/2iZHumJq19hyCYkD3xFoZ6dbiFbJ5nqbwALMdJBYQsJa.jpeg","address":"2iZHumJq19hyCYkD3xFoZ6dbiFbJ5nqbwALMdJBYQsJa","manager":"8JS6XsMPo2u3EyeeY3p2jvzHEhdUtCKgarHpJ3PAonyv","staker":"57V86ZRddiL4LCmVobuLybnGaxpFj41K8ZgeGwoUpyBa","stakeDepositAuthority":"5qCzn63TnAS24QL4AQC6TA4ZAQt4WR3unZDYKp2dTsVM","validatorListStorageAccount":"Gfj8Zfvwfb7Jw38GLBHHkCUpgonB477gPKK75KvRt4s4","stakeWithdrawBumpSeed":255,"maxValidators":1000,"reserveStake":"FDjBN7LDysGEDvyy4hgh8sSP9ugVyGAS7spoYBkUnbTb","poolMint":"cPQPBN7WubB3zyQDpzTK2ormx1BMdAym9xkrYUJsctm","managerFeeAccount":"65Yk58ozpXDEgywHewvP1Z7KWhW4w7aSftwiDrsj48V8","tokenProgramId":"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA","totalLamports":2171216343472609,"poolTokenSupply":2064312604736179,"lastUpdateEpoch":1047,"lockup":"{\u0022epoch\u0022: 0, \u0022custodian\u0022: \u002211111111111111111111111111111111\u0022, \u0022unixTimestamp\u0022: 0}","preferredDepositValidatorVoteAddress":null,"preferredWithdrawValidatorVoteAddress":null,"stakeReferralFee":0,"solDepositAuthority":null,"solReferralFee":0,"solWithdrawAuthority":null,"poolWithdrawAuthority":"3ndMuPC9Cz5VC4RJkpoPaZz6Px6eVXtRenw9Yi1o2xnA","lastEpochPoolTokenSupply":2064301879436661,"lastEpochTotalLamports":2170805926027333,"details":[],"created_at":"2025-10-13T20:33:17.000000Z","updated_at":"2026-10-02T20:31:51.000000Z","description":null,"website":null,"strategy":null,"validatorsCount":1,"ratio_apy":0.05146047922899344,"apy":null,"epoch_fee":{"id":2785465,"stake_pool_id":1872,"fee_type":"epochFee","numerator":25,"denominator":1000,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:37:53.000000Z","updated_at":"2026-10-01T16:37:53.000000Z"},"sol_deposit_fee":{"id":2785464,"stake_pool_id":1872,"fee_type":"solDepositFee","numerator":0,"denominator":0,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:37:53.000000Z","updated_at":"2026-10-01T16:37:53.000000Z"},"sol_withdrawal_fee":{"id":2785466,"stake_pool_id":1872,"fee_type":"solWithdrawalFee","numerator":1,"denominator":1000,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:37:53.000000Z","updated_at":"2026-10-01T16:37:53.000000Z"},"validators":[],"currentvalidators":[],"current_validators":[],"token":{"address":"cPQPBN7WubB3zyQDpzTK2ormx1BMdAym9xkrYUJsctm","chainID":101,"decimals":9,"tags":["lst"],"name":"Forward Industries Staked SOL","symbol":"fwdSOL","poolAddress":"2iZHumJq19hyCYkD3xFoZ6dbiFbJ5nqbwALMdJBYQsJa","logoURI":"https:\/\/arweave.net\/sCrxsrKza0FmAjP5ijzBGyLasIK9mYJFNUy04fNNAeA","$schema":"https:\/\/schema.metaplex.com\/nft1.0.json","json_uri":"https:\/\/arweave.net\/2bCncVDSiuK7RCi3iU4k5RPTZ8aB2XNKTNOhYaVvw7k","files":[{"uri":"https:\/\/arweave.net\/sCrxsrKza0FmAjP5ijzBGyLasIK9mYJFNUy04fNNAeA","cdn_uri":"https:\/\/cdn.helius-rpc.com\/cdn-cgi\/image\/\/https:\/\/arweave.net\/sCrxsrKza0FmAjP5ijzBGyLasIK9mYJFNUy04fNNAeA","mime":"image\/png"}],"metadata":{"description":"Ride along with Solana\u0027s largest DAT: take your SOL forward with fwdSOL and stack with us.","json_name":"Forward Industries Staked SOL","name":"Forward Industries Staked SOL","symbol":"fwdSOL","token_standard":"Fungible"},"links":{"image":"https:\/\/arweave.net\/sCrxsrKza0FmAjP5ijzBGyLasIK9mYJFNUy04fNNAeA"}},"data_stale":false,"stale_epochs":0},{"id":1004,"network":"m","command":"sanctum-pools","name":null,"keybase_id":null,"logo":null,"logo_cached":"images\/pools\/pyZMBjpWsVjKANAYK5mpNbKiws2krjRPZ2N2UYCSnbP.jpeg","address":"pyZMBjpWsVjKANAYK5mpNbKiws2krjRPZ2N2UYCSnbP","manager":"8JS6XsMPo2u3EyeeY3p2jvzHEhdUtCKgarHpJ3PAonyv","staker":"57V86ZRddiL4LCmVobuLybnGaxpFj41K8ZgeGwoUpyBa","stakeDepositAuthority":"E4RWxEAxuxtwmfqJ9JVBS3Mmz4j9P66VknfzzXm3uXuv","validatorListStorageAccount":"6rVhWZ2JnWd8L7Ar7mJTSBAvDSixpuNSiLYrMMnyDm3d","stakeWithdrawBumpSeed":255,"maxValidators":10,"reserveStake":"CqVtn1fw7LJQ2u8oNd2KktYy19tZmQFjnNb1pCgKb7bX","poolMint":"sctmB7GPi5L2Q5G9tUSzXvhZ4YiDMEGcRov9KfArQpx","managerFeeAccount":"2bYnNsPqkJmxnE7VjtGLDZomN3KdnsuFFJ6QVFku7jEf","tokenProgramId":"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA","totalLamports":1831484995021573,"poolTokenSupply":1662920115592722,"lastUpdateEpoch":1047,"lockup":"{\u0022epoch\u0022: 0, \u0022custodian\u0022: \u002211111111111111111111111111111111\u0022, \u0022unixTimestamp\u0022: 0}","preferredDepositValidatorVoteAddress":null,"preferredWithdrawValidatorVoteAddress":null,"stakeReferralFee":0,"solDepositAuthority":null,"solReferralFee":0,"solWithdrawAuthority":null,"poolWithdrawAuthority":"7cWNhDsHe1m36ttDkJVBgbee1hRFvPqWZT2iWaBAyYGW","lastEpochPoolTokenSupply":1662826864071285,"lastEpochTotalLamports":1831056178122731,"details":[],"created_at":"2025-02-12T16:36:41.000000Z","updated_at":"2026-10-02T20:31:47.000000Z","description":null,"website":null,"strategy":null,"validatorsCount":1,"ratio_apy":0.04953183051656773,"apy":{"id":122724,"stake_pool_id":1004,"epoch":796,"apy":0.06432925,"created_at":"2025-06-03T06:34:12.000000Z","updated_at":"2025-06-03T06:34:12.000000Z"},"epoch_fee":{"id":2785075,"stake_pool_id":1004,"fee_type":"epochFee","numerator":25,"denominator":1000,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:37:47.000000Z","updated_at":"2026-10-01T16:37:47.000000Z"},"sol_deposit_fee":{"id":2785074,"stake_pool_id":1004,"fee_type":"solDepositFee","numerator":0,"denominator":100,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:37:47.000000Z","updated_at":"2026-10-01T16:37:47.000000Z"},"sol_withdrawal_fee":{"id":2785076,"stake_pool_id":1004,"fee_type":"solWithdrawalFee","numerator":1,"denominator":1000,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:37:47.000000Z","updated_at":"2026-10-01T16:37:47.000000Z"},"validators":[],"currentvalidators":[],"current_validators":[],"token":{"address":"sctmB7GPi5L2Q5G9tUSzXvhZ4YiDMEGcRov9KfArQpx","chainID":101,"decimals":9,"tags":["lst"],"name":"DeFi Development Corp Staked SOL","symbol":"dfdvSOL","poolAddress":"pyZMBjpWsVjKANAYK5mpNbKiws2krjRPZ2N2UYCSnbP","logoURI":"https:\/\/pbs.twimg.com\/profile_images\/1897064824317861888\/I02i5oX3_400x400.jpg","$schema":"https:\/\/schema.metaplex.com\/nft1.0.json","json_uri":"https:\/\/vjwwubhivg3yjo7fx2z7vr4y6sdrewlaloihlcz46o2katqinc4q.arweave.net\/qm1qBOipt4S75b6z-seY9IcSWWBbkHWLPPO0oE4IaLk","files":[{"uri":"https:\/\/pbs.twimg.com\/profile_images\/1897064824317861888\/I02i5oX3_400x400.jpg","cdn_uri":"https:\/\/cdn.helius-rpc.com\/cdn-cgi\/image\/\/https:\/\/pbs.twimg.com\/profile_images\/1897064824317861888\/I02i5oX3_400x400.jpg","mime":"image\/jpeg"}],"metadata":{"description":"Crypto Born. TradFi Fueled. Built to Stack Solana.","json_name":"DeFi Development Corp Staked SOL","name":"DeFi Development Corp Staked SOL","symbol":"dfdvSOL","token_standard":"Fungible"},"links":{"image":"https:\/\/pbs.twimg.com\/profile_images\/1897064824317861888\/I02i5oX3_400x400.jpg"}},"data_stale":false,"stale_epochs":0},{"id":535,"network":"m","command":"sanctum-pools","name":null,"keybase_id":null,"logo":null,"logo_cached":"images\/pools\/E2fVGkhB4No2KJiXCfVqLUPjjiuyJwmPod8BtcHXkcZk.png","address":"E2fVGkhB4No2KJiXCfVqLUPjjiuyJwmPod8BtcHXkcZk","manager":"8JS6XsMPo2u3EyeeY3p2jvzHEhdUtCKgarHpJ3PAonyv","staker":"57V86ZRddiL4LCmVobuLybnGaxpFj41K8ZgeGwoUpyBa","stakeDepositAuthority":"44byxLumkWF8Y5ZbHZXdBCwv5XvDQyFwqp6oYQWXGxih","validatorListStorageAccount":"GftrivazeycrApmqNRJWv2WpGSjyhomz8MYWDySmLqDZ","stakeWithdrawBumpSeed":254,"maxValidators":10,"reserveStake":"CUES1CeBVRPmLe8jPTUYMMeXachdfaUnwDpURzZVvSeK","poolMint":"sctmAy9zFfZznZUWxEMgGtF6PHZ3gwoiCGcfwRua1AZ","managerFeeAccount":"63L6zAyzYWQCqvodZwWGpJmvUoiEE8GS4fugL3t9JxwD","tokenProgramId":"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA","totalLamports":1745558894806709,"poolTokenSupply":1563414859200074,"lastUpdateEpoch":1047,"lockup":"{\u0022epoch\u0022: 0, \u0022custodian\u0022: \u002211111111111111111111111111111111\u0022, \u0022unixTimestamp\u0022: 0}","preferredDepositValidatorVoteAddress":null,"preferredWithdrawValidatorVoteAddress":null,"stakeReferralFee":0,"solDepositAuthority":"6utAm5grcWt4jCtLHPNWJQXmakQzC35dYyqMRnHmNr79","solReferralFee":0,"solWithdrawAuthority":"6utAm5grcWt4jCtLHPNWJQXmakQzC35dYyqMRnHmNr79","poolWithdrawAuthority":"5rxZiXpLsiuuyFpAocu5dbxmM6HUpygJ6aChmfr5s8Av","lastEpochPoolTokenSupply":1563414859200074,"lastEpochTotalLamports":1745243744764236,"details":[],"created_at":"2025-02-12T15:01:25.000000Z","updated_at":"2026-10-02T20:32:56.000000Z","description":null,"website":null,"strategy":null,"validatorsCount":2,"ratio_apy":0.050639819603771175,"apy":{"id":121236,"stake_pool_id":535,"epoch":794,"apy":0.0722,"created_at":"2025-05-29T07:09:42.000000Z","updated_at":"2025-05-29T07:09:42.000000Z"},"epoch_fee":{"id":2790686,"stake_pool_id":535,"fee_type":"epochFee","numerator":0,"denominator":1000,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:40:01.000000Z","updated_at":"2026-10-01T16:40:01.000000Z"},"sol_deposit_fee":{"id":2790685,"stake_pool_id":535,"fee_type":"solDepositFee","numerator":0,"denominator":100,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:40:01.000000Z","updated_at":"2026-10-01T16:40:01.000000Z"},"sol_withdrawal_fee":{"id":2790688,"stake_pool_id":535,"fee_type":"solWithdrawalFee","numerator":0,"denominator":100,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:40:01.000000Z","updated_at":"2026-10-01T16:40:01.000000Z"},"validators":[],"currentvalidators":[],"current_validators":[],"token":{"address":"sctmAy9zFfZznZUWxEMgGtF6PHZ3gwoiCGcfwRua1AZ","chainID":101,"decimals":9,"tags":["lst"],"name":"Sanctum Staked SOL","symbol":"sctmSOL","poolAddress":"E2fVGkhB4No2KJiXCfVqLUPjjiuyJwmPod8BtcHXkcZk","logoURI":"https:\/\/solana-validator-website-italo-casas.vercel.app\/sanctum.png","$schema":"https:\/\/schema.metaplex.com\/nft1.0.json","json_uri":"https:\/\/lst-metadata.sanctum.so\/v1\/mint\/sctmAy9zFfZznZUWxEMgGtF6PHZ3gwoiCGcfwRua1AZ","files":[{"uri":"https:\/\/solana-validator-website-italo-casas.vercel.app\/sanctum.png","cdn_uri":"https:\/\/cdn.helius-rpc.com\/cdn-cgi\/image\/\/https:\/\/solana-validator-website-italo-casas.vercel.app\/sanctum.png","mime":"image\/png"}],"metadata":{"description":"Sanctum automated lst. More info at https:\/\/blog.sanctum.so\/lst-for-all","json_name":"(Sanctum Automated) LSTQq","name":"Sanctum Staked SOL","symbol":"sctmSOL","token_standard":"Fungible"},"links":{"image":"https:\/\/solana-validator-website-italo-casas.vercel.app\/sanctum.png"}},"data_stale":false,"stale_epochs":0},{"id":1759,"network":"m","command":"spl-stake-pool","name":null,"keybase_id":null,"logo":null,"logo_cached":"images\/pools\/DpooSqZRL3qCmiq82YyB4zWmLfH3iEqx2gy8f2B6zjru.png","address":"DpooSqZRL3qCmiq82YyB4zWmLfH3iEqx2gy8f2B6zjru","manager":"4657qH7S8mEMpLnjocd6swH8JwzKf3bEz2TDN86kD8qW","staker":"4657qH7S8mEMpLnjocd6swH8JwzKf3bEz2TDN86kD8qW","stakeDepositAuthority":"CTL2vBpgNQELvbEfCuZTJN3UkLhPwEeo8j83ez6PW8Bb","validatorListStorageAccount":"6dcmsnbDr63BAfgTw6RptWfHQmH2xXULqNvkRiNEZh4s","stakeWithdrawBumpSeed":252,"maxValidators":2000,"reserveStake":"Fmbdah5ZEMbMHPJZ6Jt2eBPt1M2vCRNv5vY39tegANRU","poolMint":"DYNoyS3x5qgbccZg7RPXagm4xQzfnm5iwd9o8pMyJtdE","managerFeeAccount":"Gkh6CzdVFxUb4yLbFQPPUstSKi5FaxRchZPgxyXAxH6S","tokenProgramId":"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA","totalLamports":1667796984205475,"poolTokenSupply":1548599002066404,"lastUpdateEpoch":1047,"lockup":"{\u0022epoch\u0022: 0, \u0022custodian\u0022: \u002211111111111111111111111111111111\u0022, \u0022unixTimestamp\u0022: 0}","preferredDepositValidatorVoteAddress":null,"preferredWithdrawValidatorVoteAddress":null,"stakeReferralFee":0,"solDepositAuthority":null,"solReferralFee":0,"solWithdrawAuthority":null,"poolWithdrawAuthority":"BqPJdYKKpReEfXHv8kgdmRcBfLToBSHpt1qThtb52GSs","lastEpochPoolTokenSupply":1548585329426660,"lastEpochTotalLamports":1667502340098126,"details":[],"created_at":"2025-04-21T11:21:58.000000Z","updated_at":"2026-10-02T20:30:51.000000Z","description":null,"website":null,"strategy":null,"validatorsCount":72,"ratio_apy":0.04750751874130943,"apy":{"id":122656,"stake_pool_id":1759,"epoch":796,"apy":1.0e-8,"created_at":"2025-06-03T05:08:01.000000Z","updated_at":"2025-06-03T05:08:01.000000Z"},"epoch_fee":{"id":2784488,"stake_pool_id":1759,"fee_type":"epochFee","numerator":5,"denominator":100,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:37:01.000000Z","updated_at":"2026-10-01T16:37:01.000000Z"},"sol_deposit_fee":{"id":2784487,"stake_pool_id":1759,"fee_type":"solDepositFee","numerator":0,"denominator":0,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:37:01.000000Z","updated_at":"2026-10-01T16:37:01.000000Z"},"sol_withdrawal_fee":{"id":2784489,"stake_pool_id":1759,"fee_type":"solWithdrawalFee","numerator":1,"denominator":1000,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:37:01.000000Z","updated_at":"2026-10-01T16:37:01.000000Z"},"validators":[],"currentvalidators":[],"current_validators":[],"token":{"address":"DYNoyS3x5qgbccZg7RPXagm4xQzfnm5iwd9o8pMyJtdE","chainID":101,"decimals":9,"tags":["lst"],"name":"dynoSOL","symbol":"dynoSOL","poolAddress":"DpooSqZRL3qCmiq82YyB4zWmLfH3iEqx2gy8f2B6zjru","logoURI":"https:\/\/ycfcqd4kivi3yuj7dy6djscn2a7mql24ntvvufef7ltbqri5fila.arweave.net\/wIooD4pFUbxRPx48NMhN0D7IL1xs61oUhfrmGEUdKhY","$schema":"https:\/\/schema.metaplex.com\/nft1.0.json","json_uri":"https:\/\/obpb4p6szwh36wau5eag45tjk2mvkrryj3gyck5ncf6x3pldlkfa.arweave.net\/cF4eP9LNj79YFOkAbnZpVplVRjhOzYErrRF9fb1jWoo","files":[{"uri":"https:\/\/ycfcqd4kivi3yuj7dy6djscn2a7mql24ntvvufef7ltbqri5fila.arweave.net\/wIooD4pFUbxRPx48NMhN0D7IL1xs61oUhfrmGEUdKhY","cdn_uri":"https:\/\/cdn.helius-rpc.com\/cdn-cgi\/image\/\/https:\/\/ycfcqd4kivi3yuj7dy6djscn2a7mql24ntvvufef7ltbqri5fila.arweave.net\/wIooD4pFUbxRPx48NMhN0D7IL1xs61oUhfrmGEUdKhY","mime":"image\/png"}],"metadata":{"description":"dynoSOL","json_name":"dynoSOL","name":"dynoSOL","symbol":"dynoSOL","token_standard":"Fungible"},"links":{"image":"https:\/\/ycfcqd4kivi3yuj7dy6djscn2a7mql24ntvvufef7ltbqri5fila.arweave.net\/wIooD4pFUbxRPx48NMhN0D7IL1xs61oUhfrmGEUdKhY"}},"data_stale":false,"stale_epochs":0},{"id":1745,"network":"m","command":"spl-stake-pool","name":null,"keybase_id":null,"logo":null,"logo_cached":"images\/pools\/pSPcvR8GmG9aKDUbn9nbKYjkxt9hxMS7kF1qqKJaPqJ.png","address":"pSPcvR8GmG9aKDUbn9nbKYjkxt9hxMS7kF1qqKJaPqJ","manager":"87RkDTy3dEsEP9Rbfb4KoFHuQ2JNvT4xnagQLL6DKCH9","staker":"7QNebA2TGunDiiX8gpSvo2QJKck6nPYLisSMEGTQZv7g","stakeDepositAuthority":"31uA4gEUEEiM574TMAW1D8D5ePHZEPn2L18wKDXVeM3n","validatorListStorageAccount":"pVL7vSfdos7UypiJqAybWdrx6K8i45Jo9trGi8zGggU","stakeWithdrawBumpSeed":255,"maxValidators":2350,"reserveStake":"pRERruHknFdCVq4vU21TR7NWPmxh3CB7kNJoEtH8ew5","poolMint":"pSo1f9nQXWgXibFtKf7NWYxb5enAM4qfP6UJSiXRQfL","managerFeeAccount":"4DT8ffnyaaYxeDD9nyQFpfc213TjL2xeMiFZeCyhKeXQ","tokenProgramId":"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA","totalLamports":1606887642539708,"poolTokenSupply":1461181635602502,"lastUpdateEpoch":1047,"lockup":"{\u0022epoch\u0022: 0, \u0022custodian\u0022: \u002211111111111111111111111111111111\u0022, \u0022unixTimestamp\u0022: 0}","preferredDepositValidatorVoteAddress":null,"preferredWithdrawValidatorVoteAddress":null,"stakeReferralFee":0,"solDepositAuthority":null,"solReferralFee":0,"solWithdrawAuthority":null,"poolWithdrawAuthority":"2zeXA69dFoMLFLdzCfcff35aL7Y7uBZnjKBGWtESgVfS","lastEpochPoolTokenSupply":1457923214852652,"lastEpochTotalLamports":1602978886197133,"details":[],"created_at":"2025-03-26T10:37:54.000000Z","updated_at":"2026-10-02T20:30:41.000000Z","description":null,"website":null,"strategy":null,"validatorsCount":1,"ratio_apy":0.05340248190380503,"apy":{"id":122501,"stake_pool_id":1745,"epoch":796,"apy":0.06258303,"created_at":"2025-06-02T14:04:04.000000Z","updated_at":"2025-06-03T05:04:34.000000Z"},"epoch_fee":{"id":2783738,"stake_pool_id":1745,"fee_type":"epochFee","numerator":0,"denominator":10000,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:36:39.000000Z","updated_at":"2026-10-01T16:36:39.000000Z"},"sol_deposit_fee":{"id":2783736,"stake_pool_id":1745,"fee_type":"solDepositFee","numerator":0,"denominator":10000,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:36:39.000000Z","updated_at":"2026-10-01T16:36:39.000000Z"},"sol_withdrawal_fee":{"id":2783739,"stake_pool_id":1745,"fee_type":"solWithdrawalFee","numerator":10,"denominator":10000,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:36:39.000000Z","updated_at":"2026-10-01T16:36:39.000000Z"},"validators":[],"currentvalidators":[],"current_validators":[],"token":{"address":"pSo1f9nQXWgXibFtKf7NWYxb5enAM4qfP6UJSiXRQfL","chainID":101,"decimals":9,"tags":["lst"],"name":"Phantom Staked SOL","symbol":"PSOL","poolAddress":"pSPcvR8GmG9aKDUbn9nbKYjkxt9hxMS7kF1qqKJaPqJ","logoURI":"https:\/\/assets.phantom.app\/assets\/metadata\/PSOL.png","$schema":"https:\/\/schema.metaplex.com\/nft1.0.json","json_uri":"https:\/\/assets.phantom.app\/assets\/metadata\/PSOL.json","files":[{"uri":"https:\/\/assets.phantom.app\/assets\/metadata\/PSOL.png","cdn_uri":"https:\/\/cdn.helius-rpc.com\/cdn-cgi\/image\/\/https:\/\/assets.phantom.app\/assets\/metadata\/PSOL.png","mime":"image\/png"}],"metadata":{"description":"Phantom Liquid Staking Token","json_name":"Phantom Staked SOL","name":"Phantom Staked SOL","symbol":"PSOL","token_standard":"Fungible"},"links":{"image":"https:\/\/assets.phantom.app\/assets\/metadata\/PSOL.png","external_url":"https:\/\/phantom.com\/"}},"data_stale":false,"stale_epochs":0},{"id":226,"network":"m","command":"sanctum-pools","name":null,"keybase_id":null,"logo":null,"logo_cached":"images\/pools\/2aMLkB5p5gVvCwKkdSo5eZAL1WwhZbxezQr1wxiynRhq.png","address":"2aMLkB5p5gVvCwKkdSo5eZAL1WwhZbxezQr1wxiynRhq","manager":"GnTFrdUzWgdbfXVYZiGQn56e9HXiqYCBbHRZTmxcz6Fs","staker":"57V86ZRddiL4LCmVobuLybnGaxpFj41K8ZgeGwoUpyBa","stakeDepositAuthority":"3PsXP9ZjTAjWqM4YQJsKuT3DcyhqHaJ8vrXRfMf68Xoy","validatorListStorageAccount":"BPVx5RBixdZVecvoDSFECMc8jXkLNTmQp65WYKJz9nr5","stakeWithdrawBumpSeed":255,"maxValidators":10,"reserveStake":"7huMsYqSXb1m4okiAJgQLPTamgHD2GvWhAou7vhzF51r","poolMint":"Bybit2vBJGhPF52GBdNaQfUJ6ZpThSgHBobjWZpLPb4B","managerFeeAccount":"HcacehDEp8W4wSdy2oi4HgVoSWwMJDr1kZwXUBSuFfKK","tokenProgramId":"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA","totalLamports":1354167446727405,"poolTokenSupply":1154566920292192,"lastUpdateEpoch":1047,"lockup":"{\u0022epoch\u0022: 0, \u0022custodian\u0022: \u002211111111111111111111111111111111\u0022, \u0022unixTimestamp\u0022: 0}","preferredDepositValidatorVoteAddress":null,"preferredWithdrawValidatorVoteAddress":null,"stakeReferralFee":0,"solDepositAuthority":null,"solReferralFee":0,"solWithdrawAuthority":null,"poolWithdrawAuthority":"3pFTQjRVwcJHSpUNH5n1hx6Jwx7V3EzJDDHaKuwExyGJ","lastEpochPoolTokenSupply":1088299768818753,"lastEpochTotalLamports":1276226044777171,"details":[],"created_at":"2024-08-21T10:30:32.000000Z","updated_at":"2026-10-02T20:31:50.000000Z","description":null,"website":null,"strategy":null,"validatorsCount":1,"ratio_apy":0.04822366602181427,"apy":{"id":122786,"stake_pool_id":226,"epoch":796,"apy":0.06759443,"created_at":"2025-06-03T06:36:17.000000Z","updated_at":"2025-06-03T06:36:17.000000Z"},"epoch_fee":{"id":2785390,"stake_pool_id":226,"fee_type":"epochFee","numerator":50,"denominator":1000,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:37:52.000000Z","updated_at":"2026-10-01T16:37:52.000000Z"},"sol_deposit_fee":{"id":2785389,"stake_pool_id":226,"fee_type":"solDepositFee","numerator":0,"denominator":100,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:37:52.000000Z","updated_at":"2026-10-01T16:37:52.000000Z"},"sol_withdrawal_fee":{"id":2785391,"stake_pool_id":226,"fee_type":"solWithdrawalFee","numerator":1,"denominator":1000,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:37:52.000000Z","updated_at":"2026-10-01T16:37:52.000000Z"},"validators":[],"currentvalidators":[],"current_validators":[],"token":{"address":"Bybit2vBJGhPF52GBdNaQfUJ6ZpThSgHBobjWZpLPb4B","chainID":101,"decimals":9,"tags":["lst"],"name":"BybitSOL","symbol":"bbSOL","poolAddress":"2aMLkB5p5gVvCwKkdSo5eZAL1WwhZbxezQr1wxiynRhq","logoURI":"https:\/\/static.bymj.io\/web3\/staking\/bbsol\/bbsol2.png","$schema":"https:\/\/schema.metaplex.com\/nft1.0.json","json_uri":"https:\/\/static.bymj.io\/web3\/staking\/bbsol\/off-lst2.json","files":[{"uri":"https:\/\/static.bymj.io\/web3\/staking\/bbsol\/bbsol2.png","cdn_uri":"https:\/\/cdn.helius-rpc.com\/cdn-cgi\/image\/\/https:\/\/static.bymj.io\/web3\/staking\/bbsol\/bbsol2.png","mime":"image\/png"}],"metadata":{"description":"BybitSOL is Bybit\u0027s gateway into the Solana DeFi ecosystem, giving users multiple options to earn from multiple off and on-chain yield sources.","json_name":"BybitSOL","name":"BybitSOL","symbol":"bbSOL","token_standard":"Fungible"},"links":{"image":"https:\/\/static.bymj.io\/web3\/staking\/bbsol\/bbsol2.png"}},"data_stale":false,"stale_epochs":0},{"id":153,"network":"m","command":"spl-stake-pool","name":null,"keybase_id":null,"logo":null,"logo_cached":"images\/pools\/Fu9BYC6tWBo1KMKaP3CFoKfRhqv9akmy3DuYwnCyWiyC.png","address":"Fu9BYC6tWBo1KMKaP3CFoKfRhqv9akmy3DuYwnCyWiyC","manager":"F3yy3FVpwq9MV321AzALFcDWZp9XBBHbMas3t4AtEtCW","staker":"7TiPpyvDqqdEZtTDZ6QWFVMo5pDx7d6EctJcjTbV6eN7","stakeDepositAuthority":"2LfSHWRxKgs7gRiikxJsetXov8aKkXKLqhXdLAKBzW5V","validatorListStorageAccount":"3wsE11pAjCE3sCwokhD5kgi5cjv6hi3DGAkxXB5MMHKL","stakeWithdrawBumpSeed":254,"maxValidators":2950,"reserveStake":"CCavXvmMgfW4Ky2PX3E9Nij8TMxLmSsMZuHUtxXUL1aN","poolMint":"vSoLxydx6akxyMD9XEcPvGYNGq6Nn66oqVb3UkGkei7","managerFeeAccount":"Bk2qhUpf3hHZWwpYSudZkbrkA9DVKrNNhQfnH7zF67Ji","tokenProgramId":"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA","totalLamports":1332930251679119,"poolTokenSupply":1135387723647253,"lastUpdateEpoch":1047,"lockup":"{\u0022epoch\u0022: 0, \u0022custodian\u0022: \u002211111111111111111111111111111111\u0022, \u0022unixTimestamp\u0022: 0}","preferredDepositValidatorVoteAddress":null,"preferredWithdrawValidatorVoteAddress":null,"stakeReferralFee":20,"solDepositAuthority":null,"solReferralFee":20,"solWithdrawAuthority":null,"poolWithdrawAuthority":"GdNXJobf8fbTR5JSE7adxa6niaygjx4EEbnnRaDCHMMW","lastEpochPoolTokenSupply":1135290474731890,"lastEpochTotalLamports":1332588202152747,"details":[],"created_at":"2024-03-12T03:30:38.000000Z","updated_at":"2026-10-02T20:30:52.000000Z","description":null,"website":null,"strategy":null,"validatorsCount":126,"ratio_apy":0.04802855862498423,"apy":{"id":122605,"stake_pool_id":153,"epoch":796,"apy":0.06959413,"created_at":"2025-06-02T14:07:39.000000Z","updated_at":"2025-06-03T05:08:22.000000Z"},"epoch_fee":{"id":2784583,"stake_pool_id":153,"fee_type":"epochFee","numerator":5,"denominator":100,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:37:05.000000Z","updated_at":"2026-10-01T16:37:05.000000Z"},"sol_deposit_fee":{"id":2784582,"stake_pool_id":153,"fee_type":"solDepositFee","numerator":0,"denominator":100,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:37:05.000000Z","updated_at":"2026-10-01T16:37:05.000000Z"},"sol_withdrawal_fee":{"id":2784584,"stake_pool_id":153,"fee_type":"solWithdrawalFee","numerator":15,"denominator":10000,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:37:05.000000Z","updated_at":"2026-10-01T16:37:05.000000Z"},"validators":[],"currentvalidators":[],"current_validators":[],"token":{"address":"vSoLxydx6akxyMD9XEcPvGYNGq6Nn66oqVb3UkGkei7","chainID":101,"decimals":9,"tags":["lst"],"name":"vSOL","symbol":"vSOL","poolAddress":"Fu9BYC6tWBo1KMKaP3CFoKfRhqv9akmy3DuYwnCyWiyC","logoURI":"https:\/\/gateway.irys.xyz\/DTBps6awrJWectiBhMubYke4TBnE9kkVqyCVP4MB4irB","$schema":"https:\/\/schema.metaplex.com\/nft1.0.json","json_uri":"https:\/\/gateway.irys.xyz\/A2h4aFwi2vW2yXbixX6mvwhWB7P5bebrDbVza9XkJxHv","files":[{"uri":"https:\/\/gateway.irys.xyz\/DTBps6awrJWectiBhMubYke4TBnE9kkVqyCVP4MB4irB","cdn_uri":"https:\/\/cdn.helius-rpc.com\/cdn-cgi\/image\/\/https:\/\/gateway.irys.xyz\/DTBps6awrJWectiBhMubYke4TBnE9kkVqyCVP4MB4irB","mime":"image\/png"}],"metadata":{"description":"MEV-enabled Liquid staking protocol","json_name":"vSOL","name":"vSOL","symbol":"vSOL","token_standard":"Fungible"},"links":{"image":"https:\/\/gateway.irys.xyz\/DTBps6awrJWectiBhMubYke4TBnE9kkVqyCVP4MB4irB","external_url":"https:\/\/thevault.finance"}},"data_stale":false,"stale_epochs":0},{"id":17,"network":"m","command":"spl-stake-pool","name":"JPool \u00b7 high-yield Stake Pool","keybase_id":"jpool","logo":"https:\/\/s3.amazonaws.com\/keybase_processed_uploads\/d581e17db3864ca4239c201cf4018705_360_360.jpg","logo_cached":null,"address":"CtMyWsrUtAwXWiGr9WjHT5fC3p3fgV8cyGpLTo2LJzG1","manager":"BvcR2NhG9KC8aFoDtPTJGHxqaEUhHD8MvMCUSku6NUiN","staker":"Fs7cpbxQp5eCTwmF7y7hEAydpkTMRSiV2bu3z5JpUMi6","stakeDepositAuthority":"GCjhUMwq9TxMDG6omiWq2qmjikSDE6jEqU7M6HQA16nT","validatorListStorageAccount":"Ei2LhH2tDKPERnoNjQV5darTToZmbg45vDvftFFLNNWd","stakeWithdrawBumpSeed":255,"maxValidators":1000,"reserveStake":"AXu3DTw9AFq9FDTzX4vqA3XiT7LjrS5DpbsZaPpEx6qR","poolMint":"7Q2afV64in6N6SeZsAAB81TJzwDoD6zpqmHkzi9Dcavn","managerFeeAccount":"GLysLmE2bwaTNCioDoadMvt9A4RvdFokE4BZwuFoeSn4","tokenProgramId":"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA","totalLamports":1240421314584760,"poolTokenSupply":899671324300877,"lastUpdateEpoch":1047,"lockup":"{\u0022epoch\u0022: 0, \u0022custodian\u0022: \u002211111111111111111111111111111111\u0022, \u0022unixTimestamp\u0022: 0}","preferredDepositValidatorVoteAddress":null,"preferredWithdrawValidatorVoteAddress":null,"stakeReferralFee":0,"solDepositAuthority":null,"solReferralFee":0,"solWithdrawAuthority":null,"poolWithdrawAuthority":"HbJTxftxnXgpePCshA8FubsRj9MW4kfPscfuUfn44fnt","lastEpochPoolTokenSupply":900179651624542,"lastEpochTotalLamports":1240909300221749,"details":[],"created_at":"2021-11-11T17:45:48.000000Z","updated_at":"2026-10-02T20:30:50.000000Z","description":"JPool is a Solana staking pool implementation with a number of advantages: low fees, advanced smart strategy, and attractive UI\/UX. It is based on a secure smart contract maintained by the Solana Foundation.","website":"https:\/\/jpool.one","strategy":"\u003Cp\u003EThe Validators in the pool are evaluated based on two dimensions:\u003C\/p\u003E\n\u003Cul\u003E\n\u003Cli\u003EDirect returns for the Delegator (A coefficient)\u003C\/li\u003E\n\u003Cli\u003ECommon good for the Solana network (N coefficient)\u003C\/li\u003E\n\u003C\/ul\u003E\n\u003Cp\u003EFor this purpose, the following coefficients are first calculated:\u003C\/p\u003E\n\u003Cul\u003E\n\u003Cli\u003EA is calculated directly from Validator\u0027s APR with 1 normalization.\u003C\/li\u003E\n\u003Cli\u003EC1 through C4 are calculated based on stake concentration:\u003C\/li\u003E\n\u003Cli\u003EC1: Validator\u0027s own delegated stake.\u003C\/li\u003E\n\u003Cli\u003EC2: Total stake in the same ASN.\u003C\/li\u003E\n\u003Cli\u003EC3: Total stake in the same data center.\u003C\/li\u003E\n\u003Cli\u003EC4: Total stake in the same country.\u003C\/li\u003E\n\u003C\/ul\u003E\n","validatorsCount":109,"ratio_apy":0.048328501252908884,"apy":{"id":122589,"stake_pool_id":17,"epoch":796,"apy":0.0691385,"created_at":"2025-06-02T14:07:04.000000Z","updated_at":"2025-06-02T14:07:04.000000Z"},"epoch_fee":{"id":2784433,"stake_pool_id":17,"fee_type":"epochFee","numerator":7,"denominator":100,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:36:58.000000Z","updated_at":"2026-10-01T16:36:58.000000Z"},"sol_deposit_fee":{"id":2784432,"stake_pool_id":17,"fee_type":"solDepositFee","numerator":0,"denominator":0,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:36:58.000000Z","updated_at":"2026-10-01T16:36:58.000000Z"},"sol_withdrawal_fee":{"id":2784434,"stake_pool_id":17,"fee_type":"solWithdrawalFee","numerator":81,"denominator":16000,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:36:58.000000Z","updated_at":"2026-10-01T16:36:58.000000Z"},"validators":[],"currentvalidators":[],"current_validators":[],"token":{"id":57,"chainId":101,"address":"7Q2afV64in6N6SeZsAAB81TJzwDoD6zpqmHkzi9Dcavn","symbol":"JSOL","name":"JPool Staked SOL","decimals":9,"logoURI":"https:\/\/raw.githubusercontent.com\/solana-labs\/token-list\/main\/assets\/mainnet\/7Q2afV64in6N6SeZsAAB81TJzwDoD6zpqmHkzi9Dcavn\/logo.svg","tags":["lst"],"extensions":{"coingeckoId":"jpool"},"created_at":"2021-11-11T17:46:07.000000Z","updated_at":"2024-03-12T14:49:54.000000Z","strict":1,"poolAddress":"CtMyWsrUtAwXWiGr9WjHT5fC3p3fgV8cyGpLTo2LJzG1","$schema":"https:\/\/schema.metaplex.com\/nft1.0.json","json_uri":"https:\/\/arweave.net\/qsH9dw0EmG_9pBSxl3N1nVj-YvyNg_k_8HoCyDw6jkE","files":[{"uri":"https:\/\/raw.githubusercontent.com\/solana-labs\/token-list\/main\/assets\/mainnet\/7Q2afV64in6N6SeZsAAB81TJzwDoD6zpqmHkzi9Dcavn\/logo.svg","cdn_uri":"https:\/\/cdn.helius-rpc.com\/cdn-cgi\/image\/\/https:\/\/raw.githubusercontent.com\/solana-labs\/token-list\/main\/assets\/mainnet\/7Q2afV64in6N6SeZsAAB81TJzwDoD6zpqmHkzi9Dcavn\/logo.svg","mime":"image\/svg+xml"}],"metadata":{"description":"JSOL is a token that represents SOL staked in JPool, a Solana liquid pool.","json_name":"JPool Staked SOL","name":"JPool Staked SOL","symbol":"JSOL","token_standard":"Fungible"},"links":{"image":"https:\/\/raw.githubusercontent.com\/solana-labs\/token-list\/main\/assets\/mainnet\/7Q2afV64in6N6SeZsAAB81TJzwDoD6zpqmHkzi9Dcavn\/logo.svg"},"chainID":101},"data_stale":false,"stale_epochs":0},{"id":138,"network":"m","command":"spl-stake-pool","name":"Shinobi Performance Pool","keybase_id":null,"logo":"https:\/\/xshin.fi\/icons\/xSHIN_3d.png","logo_cached":"images\/pools\/spp1mo6shdcrRyqDK2zdurJ8H5uttZE6H6oVjHxN1QN.png","address":"spp1mo6shdcrRyqDK2zdurJ8H5uttZE6H6oVjHxN1QN","manager":"DaZecg9hiMSkTCnut5r9taHQCR2LPzH2MXX2ZNCUFQgi","staker":"perf1AbQC7pDUAAVSN9G5CEyBS2hEkeMc5cpx25aQiE","stakeDepositAuthority":"7rZAebKtdxZErdi9jpTnhkmsi42hGvYD1y9NDpnbnrxj","validatorListStorageAccount":"3At6ZhUsTshb7Nf9Vebf5LTJG49K9X4aqGQ7PEw1NGSq","stakeWithdrawBumpSeed":254,"maxValidators":10000,"reserveStake":"Bz2TwrNkjFseLBLSSymxWF7L5mT3WZUqZcLh7J7JKNBE","poolMint":"xSoL18r4U1k2ALa4yF857VDZJqCKecLtty92nscre3o","managerFeeAccount":"EzgCtBq1Ls1TEdqufpHsHuPE4LERXdnPzydcaKMvcaeq","tokenProgramId":"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA","totalLamports":1128037857155292,"poolTokenSupply":955577913126440,"lastUpdateEpoch":1047,"lockup":"{\u0022epoch\u0022: 0, \u0022custodian\u0022: \u002211111111111111111111111111111111\u0022, \u0022unixTimestamp\u0022: 0}","preferredDepositValidatorVoteAddress":null,"preferredWithdrawValidatorVoteAddress":"B1w6SZcyvjyp6zEyStcc8u9AxXAh2AbYvNzMmP9rRKE9","stakeReferralFee":0,"solDepositAuthority":null,"solReferralFee":0,"solWithdrawAuthority":null,"poolWithdrawAuthority":"EpH4ZKSeViL5qAHA9QANYVHxdmuzbUH2T79f32DmSCaM","lastEpochPoolTokenSupply":955569629735465,"lastEpochTotalLamports":1127842273250813,"details":[],"created_at":"2024-02-13T20:00:48.000000Z","updated_at":"2026-10-02T20:30:42.000000Z","description":"Distribute your stake automatically across the top validators with deep stats that go all the way back to Solana genesis.  It\u0027s not just great returns -- invest in the vitality of Solana.","website":"https:\/\/xsol.fi","strategy":null,"validatorsCount":42,"ratio_apy":0.04677899057454882,"apy":{"id":122505,"stake_pool_id":138,"epoch":796,"apy":0.057788,"created_at":"2025-06-02T14:04:14.000000Z","updated_at":"2025-06-03T05:04:41.000000Z"},"epoch_fee":{"id":2783774,"stake_pool_id":138,"fee_type":"epochFee","numerator":500,"denominator":10000,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:36:40.000000Z","updated_at":"2026-10-01T16:36:40.000000Z"},"sol_deposit_fee":{"id":2783773,"stake_pool_id":138,"fee_type":"solDepositFee","numerator":0,"denominator":0,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:36:40.000000Z","updated_at":"2026-10-01T16:36:40.000000Z"},"sol_withdrawal_fee":{"id":2783775,"stake_pool_id":138,"fee_type":"solWithdrawalFee","numerator":3,"denominator":10000,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:36:40.000000Z","updated_at":"2026-10-01T16:36:40.000000Z"},"validators":[],"currentvalidators":[],"current_validators":[],"token":{"address":"xSoL18r4U1k2ALa4yF857VDZJqCKecLtty92nscre3o","chainID":101,"decimals":9,"tags":["lst"],"name":"Shinobi Performance Pool Token","symbol":"xSHIN","poolAddress":"spp1mo6shdcrRyqDK2zdurJ8H5uttZE6H6oVjHxN1QN","logoURI":"https:\/\/xshin.fi\/icons\/xSHIN_3d.png","$schema":"https:\/\/schema.metaplex.com\/nft1.0.json","json_uri":"https:\/\/xshin.fi\/json\/xSHIN_metadata.json","files":[{"uri":"https:\/\/xshin.fi\/icons\/xSHIN_3d.png","cdn_uri":"https:\/\/cdn.helius-rpc.com\/cdn-cgi\/image\/\/https:\/\/xshin.fi\/icons\/xSHIN_3d.png","mime":"image\/png"}],"metadata":{"description":"Performance-based Solana validator pool.  Invest in the vitality of Solana.","json_name":"Shinobi Performance Pool Token","name":"Shinobi Performance Pool Token","symbol":"xSHIN","token_standard":"Fungible"},"links":{"image":"https:\/\/xshin.fi\/icons\/xSHIN_3d.png"}},"data_stale":false,"stale_epochs":0},{"id":210,"network":"m","command":"spl-stake-pool","name":null,"keybase_id":null,"logo":null,"logo_cached":"images\/pools\/aero2ePURjuEgLKTzcUmF6RypBncBGd7pMUYCoSsVJ6.png","address":"aero2ePURjuEgLKTzcUmF6RypBncBGd7pMUYCoSsVJ6","manager":"aerorbeRSPU57GtKccocmjCbABfMQv5GcsXDy87LbMN","staker":"aerorbeRSPU57GtKccocmjCbABfMQv5GcsXDy87LbMN","stakeDepositAuthority":"4Y6XeEZ2Dg2zXU9NJgdmAG9xpwAsNusLReSTLzJxtZJ8","validatorListStorageAccount":"aero4efZ7zHhWpqXQj4Uqw59koxj8KXqMCPUuvmhgUQ","stakeWithdrawBumpSeed":255,"maxValidators":500,"reserveStake":"aeroivis36SwDvAJpzQCDX9Y7cCLXBdv9vTn1DtDnVC","poolMint":"aeroXvCT6tjGVNyTvZy86tFDwE4sYsKCh7FbNDcrcxF","managerFeeAccount":"55Kw1KRAVTjqzNf1ZXoYAJk3o7Q2NifpPh3VtGeiyMpo","tokenProgramId":"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA","totalLamports":1099258916553887,"poolTokenSupply":952393808059130,"lastUpdateEpoch":1047,"lockup":"{\u0022epoch\u0022: 0, \u0022custodian\u0022: \u002211111111111111111111111111111111\u0022, \u0022unixTimestamp\u0022: 0}","preferredDepositValidatorVoteAddress":null,"preferredWithdrawValidatorVoteAddress":null,"stakeReferralFee":0,"solDepositAuthority":null,"solReferralFee":0,"solWithdrawAuthority":null,"poolWithdrawAuthority":"AKJt3m2xJ6ANda9adBGqb5BMrheKJSwxyCfYkLuZNmjn","lastEpochPoolTokenSupply":952452379939671,"lastEpochTotalLamports":1099139515700661,"details":[],"created_at":"2024-06-09T21:30:23.000000Z","updated_at":"2026-10-02T20:30:41.000000Z","description":null,"website":null,"strategy":null,"validatorsCount":104,"ratio_apy":0.046884144685552354,"apy":{"id":122634,"stake_pool_id":210,"epoch":796,"apy":0.07031676,"created_at":"2025-06-03T05:04:20.000000Z","updated_at":"2025-06-03T05:04:20.000000Z"},"epoch_fee":{"id":2783655,"stake_pool_id":210,"fee_type":"epochFee","numerator":5,"denominator":100,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:36:36.000000Z","updated_at":"2026-10-01T16:36:36.000000Z"},"sol_deposit_fee":{"id":2783654,"stake_pool_id":210,"fee_type":"solDepositFee","numerator":5,"denominator":10000,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:36:36.000000Z","updated_at":"2026-10-01T16:36:36.000000Z"},"sol_withdrawal_fee":{"id":2783656,"stake_pool_id":210,"fee_type":"solWithdrawalFee","numerator":5,"denominator":10000,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:36:36.000000Z","updated_at":"2026-10-01T16:36:36.000000Z"},"validators":[],"currentvalidators":[],"current_validators":[],"token":{"address":"aeroXvCT6tjGVNyTvZy86tFDwE4sYsKCh7FbNDcrcxF","chainID":101,"decimals":9,"tags":["lst"],"name":"Phase Delegation Staked SOL","symbol":"pdSOL","poolAddress":"aero2ePURjuEgLKTzcUmF6RypBncBGd7pMUYCoSsVJ6","logoURI":"https:\/\/gateway.irys.xyz\/FouZryx1hPxt59BQBxT3TznE1EqZz6i2nF4aSnCB8d3B","$schema":"https:\/\/schema.metaplex.com\/nft1.0.json","json_uri":"https:\/\/gateway.irys.xyz\/AaPmmExF6YTsEDYJjru71CmhPcUpokmn8hoQZCar1orD","files":[{"uri":"https:\/\/gateway.irys.xyz\/FouZryx1hPxt59BQBxT3TznE1EqZz6i2nF4aSnCB8d3B","cdn_uri":"https:\/\/cdn.helius-rpc.com\/cdn-cgi\/image\/\/https:\/\/gateway.irys.xyz\/FouZryx1hPxt59BQBxT3TznE1EqZz6i2nF4aSnCB8d3B","mime":"image\/png"}],"metadata":{"description":"Phase Delegation Staked SOL","json_name":"Phase Delegation Staked SOL","name":"Phase Delegation Staked SOL","symbol":"pdSOL","token_standard":"Fungible"},"links":{"image":"https:\/\/gateway.irys.xyz\/FouZryx1hPxt59BQBxT3TznE1EqZz6i2nF4aSnCB8d3B"}},"data_stale":false,"stale_epochs":0},{"id":168,"network":"m","command":"sanctum-pools","name":null,"keybase_id":null,"logo":null,"logo_cached":"images\/pools\/3wK2g8ZdzAH8FJ7PKr2RcvGh7V9VYson5hrVsJM5Lmws.png","address":"3wK2g8ZdzAH8FJ7PKr2RcvGh7V9VYson5hrVsJM5Lmws","manager":"8JS6XsMPo2u3EyeeY3p2jvzHEhdUtCKgarHpJ3PAonyv","staker":"57V86ZRddiL4LCmVobuLybnGaxpFj41K8ZgeGwoUpyBa","stakeDepositAuthority":"G7Py7AJd8SGgjpWw7T5JXj9758QmVJffYHzRj9i7JqoK","validatorListStorageAccount":"TCxWHorDSe3vWydw6MGwyexcqm3ZU9RT7VTqiCcN6y9","stakeWithdrawBumpSeed":254,"maxValidators":1,"reserveStake":"xdmLgScxrbbUu2gx7j2iqQXVKZYBCTDiCtR7AsHHJYQ","poolMint":"he1iusmfkpAdwvxLNGV8Y1iSbj4rUy6yMhEA3fotn9A","managerFeeAccount":"C1mXWyT6CpiatsC2ob4tTTdT6nHJBVmcPzrV5oAXXDT5","tokenProgramId":"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA","totalLamports":950175045973601,"poolTokenSupply":799030436641909,"lastUpdateEpoch":1047,"lockup":"{\u0022epoch\u0022: 0, \u0022custodian\u0022: \u002211111111111111111111111111111111\u0022, \u0022unixTimestamp\u0022: 0}","preferredDepositValidatorVoteAddress":null,"preferredWithdrawValidatorVoteAddress":null,"stakeReferralFee":0,"solDepositAuthority":null,"solReferralFee":0,"solWithdrawAuthority":null,"poolWithdrawAuthority":"2rMuGTyXCqCHZBSu6NZR9Aq8MhZX9gLkCHoQsPhSj2YF","lastEpochPoolTokenSupply":798433914793948,"lastEpochTotalLamports":949295016569623,"details":[],"created_at":"2024-04-19T11:31:05.000000Z","updated_at":"2026-10-02T20:31:55.000000Z","description":null,"website":null,"strategy":null,"validatorsCount":1,"ratio_apy":0.05108003046155418,"apy":{"id":122899,"stake_pool_id":168,"epoch":796,"apy":0.0723,"created_at":"2025-06-03T06:40:07.000000Z","updated_at":"2025-06-03T06:40:07.000000Z"},"epoch_fee":{"id":2786015,"stake_pool_id":168,"fee_type":"epochFee","numerator":25,"denominator":1000,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:38:03.000000Z","updated_at":"2026-10-01T16:38:03.000000Z"},"sol_deposit_fee":{"id":2786014,"stake_pool_id":168,"fee_type":"solDepositFee","numerator":0,"denominator":100,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:38:03.000000Z","updated_at":"2026-10-01T16:38:03.000000Z"},"sol_withdrawal_fee":{"id":2786016,"stake_pool_id":168,"fee_type":"solWithdrawalFee","numerator":1,"denominator":1000,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:38:03.000000Z","updated_at":"2026-10-01T16:38:03.000000Z"},"validators":[],"currentvalidators":[],"current_validators":[],"token":{"address":"he1iusmfkpAdwvxLNGV8Y1iSbj4rUy6yMhEA3fotn9A","chainID":101,"decimals":9,"tags":["lst"],"name":"Helius Staked SOL","symbol":"hSOL","poolAddress":"3wK2g8ZdzAH8FJ7PKr2RcvGh7V9VYson5hrVsJM5Lmws","logoURI":"https:\/\/raw.githubusercontent.com\/igneous-labs\/lst-offchain-metadata\/master\/hSOL\/hSOL.png","$schema":"https:\/\/schema.metaplex.com\/nft1.0.json","json_uri":"https:\/\/raw.githubusercontent.com\/igneous-labs\/lst-offchain-metadata\/master\/hSOL\/hSOL.json","files":[{"uri":"https:\/\/raw.githubusercontent.com\/igneous-labs\/lst-offchain-metadata\/master\/hSOL\/hSOL.png","cdn_uri":"https:\/\/cdn.helius-rpc.com\/cdn-cgi\/image\/\/https:\/\/raw.githubusercontent.com\/igneous-labs\/lst-offchain-metadata\/master\/hSOL\/hSOL.png","mime":"image\/png"}],"metadata":{"description":"The LST for the Helius validator","json_name":"Helius Staked SOL","name":"Helius Staked SOL","symbol":"hSOL","token_standard":"Fungible"},"links":{"image":"https:\/\/raw.githubusercontent.com\/igneous-labs\/lst-offchain-metadata\/master\/hSOL\/hSOL.png"}},"data_stale":false,"stale_epochs":0},{"id":66,"network":"m","command":"spl-stake-pool","name":"BlazeStake - stake.solblaze.org","keybase_id":"solblaze","logo":"https:\/\/s3.amazonaws.com\/keybase_processed_uploads\/fe17f56432c46810a5c6184710b5f905_360_360.jpg","logo_cached":"images\/pools\/stk9ApL5HeVAwPLr3TLhDXdZS8ptVu7zp6ov8HFDuMi.png","address":"stk9ApL5HeVAwPLr3TLhDXdZS8ptVu7zp6ov8HFDuMi","manager":"b1azeTfpBiKN6AhEGVd1iPBsX3vmZqnFmS7Kqau7a2w","staker":"rebaAg2Q1tjxWXgU1JAJ6XyfZ7CLJEUUFk5P35uZvmC","stakeDepositAuthority":"CbnZJt3kzAobmKFsrVEDxa2ujUFY2N5gEtDs278i41HY","validatorListStorageAccount":"1istpXjy8BM7Vd5vPfA485frrV7SRJhgq5vs3sskWmc","stakeWithdrawBumpSeed":253,"maxValidators":2950,"reserveStake":"rsrxDvYUXjH1RQj2Ke36LNZEVqGztATxFkqNukERqFT","poolMint":"bSo13r4TkiE4KumL71LsHTPpL2euBYLFx6h9HP3piy1","managerFeeAccount":"Dpo148tVGewDPyh2FkGV18gouWctbdX2fHJopJGe9xv1","tokenProgramId":"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA","totalLamports":907830145304525,"poolTokenSupply":688521106946135,"lastUpdateEpoch":1047,"lockup":"{\u0022epoch\u0022: 0, \u0022custodian\u0022: \u002211111111111111111111111111111111\u0022, \u0022unixTimestamp\u0022: 0}","preferredDepositValidatorVoteAddress":null,"preferredWithdrawValidatorVoteAddress":null,"stakeReferralFee":0,"solDepositAuthority":null,"solReferralFee":100,"solWithdrawAuthority":null,"poolWithdrawAuthority":"6WecYymEARvjG5ZyqkrVQ6YkhPfujNzWpSPwNKXHCbV2","lastEpochPoolTokenSupply":688905605924909,"lastEpochTotalLamports":908184911579095,"details":[],"created_at":"2022-05-07T02:10:11.000000Z","updated_at":"2026-10-02T20:30:42.000000Z","description":null,"website":"https:\/\/stake.solblaze.org\/app\/?validator=EARNynHRWg6GfyJCmrrizcZxARB3HVzcaasvNa8kBS72\u0026ref=NMnh1gSaTYLhZjadfJ5haaj4wGSVRnTGk1gXjTgMpfe\u0026r=92b24fcb819d3928","strategy":null,"validatorsCount":135,"ratio_apy":0.04743149498148558,"apy":{"id":122508,"stake_pool_id":66,"epoch":796,"apy":0.07026246,"created_at":"2025-06-02T14:04:20.000000Z","updated_at":"2025-06-02T14:04:20.000000Z"},"epoch_fee":{"id":2783840,"stake_pool_id":66,"fee_type":"epochFee","numerator":500,"denominator":10000,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:36:42.000000Z","updated_at":"2026-10-01T16:36:42.000000Z"},"sol_deposit_fee":{"id":2783839,"stake_pool_id":66,"fee_type":"solDepositFee","numerator":8,"denominator":10000,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:36:42.000000Z","updated_at":"2026-10-01T16:36:42.000000Z"},"sol_withdrawal_fee":{"id":2783841,"stake_pool_id":66,"fee_type":"solWithdrawalFee","numerator":10,"denominator":10000,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:36:42.000000Z","updated_at":"2026-10-01T16:36:42.000000Z"},"validators":[],"currentvalidators":[],"current_validators":[],"token":{"id":4987,"chainId":101,"address":"bSo13r4TkiE4KumL71LsHTPpL2euBYLFx6h9HP3piy1","symbol":"bSOL","name":"BlazeStake Staked SOL (bSOL)","decimals":9,"logoURI":"https:\/\/raw.githubusercontent.com\/solana-labs\/token-list\/main\/assets\/mainnet\/bSo13r4TkiE4KumL71LsHTPpL2euBYLFx6h9HP3piy1\/logo.png","tags":["lst"],"extensions":{"coingeckoId":"blazestake-staked-sol"},"created_at":"2021-12-28T23:49:28.000000Z","updated_at":"2024-03-12T14:46:22.000000Z","strict":1,"poolAddress":"stk9ApL5HeVAwPLr3TLhDXdZS8ptVu7zp6ov8HFDuMi","$schema":"https:\/\/schema.metaplex.com\/nft1.0.json","json_uri":"","files":[{"uri":"https:\/\/raw.githubusercontent.com\/solana-labs\/token-list\/main\/assets\/mainnet\/bSo13r4TkiE4KumL71LsHTPpL2euBYLFx6h9HP3piy1\/logo.png","cdn_uri":"https:\/\/cdn.helius-rpc.com\/cdn-cgi\/image\/\/https:\/\/raw.githubusercontent.com\/solana-labs\/token-list\/main\/assets\/mainnet\/bSo13r4TkiE4KumL71LsHTPpL2euBYLFx6h9HP3piy1\/logo.png","mime":"image\/png"}],"metadata":{"name":"BlazeStake Staked SOL (bSOL)","symbol":"bSOL","description":null},"links":{"image":"https:\/\/raw.githubusercontent.com\/solana-labs\/token-list\/main\/assets\/mainnet\/bSo13r4TkiE4KumL71LsHTPpL2euBYLFx6h9HP3piy1\/logo.png"},"chainID":101},"data_stale":false,"stale_epochs":0},{"id":263,"network":"m","command":"spl-stake-pool","name":null,"keybase_id":null,"logo":null,"logo_cached":"images\/pools\/jagEdDepWUgexiu4jxojcRWcVKKwFqgZBBuAoGu2BxM.png","address":"jagEdDepWUgexiu4jxojcRWcVKKwFqgZBBuAoGu2BxM","manager":"juLhMmaqDu6Bj3YtThDy1Hz4jV5GammQfTgxp7EHPGf","staker":"8kZ6w5FuVfLUWZm866RwajHQLGSbjR6d5enyG9CeeWxU","stakeDepositAuthority":"HKgfKP2qDiNATnpYbESD536E1tz6nkvknuho4WGe14LN","validatorListStorageAccount":"jagK16E4oVcC5bpLCNEcprFqqq66vbTaU94UozWkvAB","stakeWithdrawBumpSeed":255,"maxValidators":2350,"reserveStake":"jagDaER73YqodaLRGpYMvEjRjVCx962LLebG9QGh11X","poolMint":"jag58eRBC1c88LaAsRPspTMvoKJPbnzw9p9fREzHqyV","managerFeeAccount":"FmgHwwS3kobaG8JGWktihfS5DEC8oWvNpD1uKBMqtcAz","tokenProgramId":"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA","totalLamports":767195747127547,"poolTokenSupply":687783134582061,"lastUpdateEpoch":1047,"lockup":"{\u0022epoch\u0022: 0, \u0022custodian\u0022: \u002211111111111111111111111111111111\u0022, \u0022unixTimestamp\u0022: 0}","preferredDepositValidatorVoteAddress":"jag77EXci8uf5uGmKE5izaYvxBCS5H9U2rxWYh8BUUf","preferredWithdrawValidatorVoteAddress":null,"stakeReferralFee":0,"solDepositAuthority":null,"solReferralFee":0,"solWithdrawAuthority":null,"poolWithdrawAuthority":"Hodkwm8xf43JzRuKNYPGnYJ7V9cXZ7LJGNy96TWQiSGN","lastEpochPoolTokenSupply":687775111973999,"lastEpochTotalLamports":767060447125221,"details":[],"created_at":"2024-11-24T17:05:33.000000Z","updated_at":"2026-10-02T20:30:41.000000Z","description":null,"website":null,"strategy":null,"validatorsCount":72,"ratio_apy":0.04590432761439733,"apy":{"id":122496,"stake_pool_id":263,"epoch":796,"apy":0.06165487,"created_at":"2025-06-02T14:03:54.000000Z","updated_at":"2025-06-03T05:04:23.000000Z"},"epoch_fee":{"id":2783693,"stake_pool_id":263,"fee_type":"epochFee","numerator":5,"denominator":100,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:36:38.000000Z","updated_at":"2026-10-01T16:36:38.000000Z"},"sol_deposit_fee":{"id":2783692,"stake_pool_id":263,"fee_type":"solDepositFee","numerator":0,"denominator":0,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:36:38.000000Z","updated_at":"2026-10-01T16:36:38.000000Z"},"sol_withdrawal_fee":{"id":2783694,"stake_pool_id":263,"fee_type":"solWithdrawalFee","numerator":1,"denominator":1000,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:36:38.000000Z","updated_at":"2026-10-01T16:36:38.000000Z"},"validators":[],"currentvalidators":[],"current_validators":[],"token":{"address":"jag58eRBC1c88LaAsRPspTMvoKJPbnzw9p9fREzHqyV","chainID":101,"decimals":9,"tags":["lst"],"name":"JagPool Staked SOL","symbol":"jagSOL","poolAddress":"jagEdDepWUgexiu4jxojcRWcVKKwFqgZBBuAoGu2BxM","logoURI":"https:\/\/www.jagpool.xyz\/images\/jagSOL.png","$schema":"https:\/\/schema.metaplex.com\/nft1.0.json","json_uri":"https:\/\/www.jagpool.xyz\/data\/metadata.json","files":[{"uri":"https:\/\/www.jagpool.xyz\/images\/jagSOL.png","cdn_uri":"https:\/\/cdn.helius-rpc.com\/cdn-cgi\/image\/\/https:\/\/www.jagpool.xyz\/images\/jagSOL.png","mime":"image\/png"}],"metadata":{"description":"JagPool Staked SOL","json_name":"JagPool Staked SOL","name":"JagPool Staked SOL","symbol":"jagSOL","token_standard":"Fungible"},"links":{"image":"https:\/\/www.jagpool.xyz\/images\/jagSOL.png","external_url":"https:\/\/www.jagpool.xyz\/"}},"data_stale":false,"stale_epochs":0},{"id":1793,"network":"m","command":"spl-stake-pool","name":null,"keybase_id":null,"logo":null,"logo_cached":"images\/pools\/3fV1sdGeXaNEZj6EPDTpub82pYxcRXwt2oie6jkSzeWi.png","address":"3fV1sdGeXaNEZj6EPDTpub82pYxcRXwt2oie6jkSzeWi","manager":"dzfeL3J2rUsPiuW6GNFNS5gx4VEzjrREhhrnyrx1NeQ","staker":"dzfHSMcd7Egu1uFnyKZqRNAC3odS4hm92n8osxiKg1Y","stakeDepositAuthority":"Ewb5s8pgcWgcuWeat6qzS2r3BKLHiQn61iohnYtVUzyW","validatorListStorageAccount":"8qKn25tR14VkgpeJAVypFKi21cBF5hLRVoxVQCzTGKb9","stakeWithdrawBumpSeed":255,"maxValidators":1000,"reserveStake":"FFtERWBSCkScg8spA2mNB9zN5SdH16NqQywXw3bbB1aJ","poolMint":"Gekfj7SL2fVpTDxJZmeC46cTYxinjB6gkAnb6EGT6mnn","managerFeeAccount":"GhN6PpyP6Ln4ycWcyvqsNcowLfYjpUcA9uWKAcFBjj2D","tokenProgramId":"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA","totalLamports":696627709324946,"poolTokenSupply":651720474103884,"lastUpdateEpoch":1047,"lockup":"{\u0022epoch\u0022: 0, \u0022custodian\u0022: \u002211111111111111111111111111111111\u0022, \u0022unixTimestamp\u0022: 0}","preferredDepositValidatorVoteAddress":null,"preferredWithdrawValidatorVoteAddress":null,"stakeReferralFee":0,"solDepositAuthority":null,"solReferralFee":0,"solWithdrawAuthority":null,"poolWithdrawAuthority":"4cpnpiwgBfUgELVwNYiecwGti45YHSH3R72CPkFTiwJt","lastEpochPoolTokenSupply":651713935471566,"lastEpochTotalLamports":696509226782304,"details":[],"created_at":"2025-06-18T00:04:51.000000Z","updated_at":"2026-10-02T20:30:44.000000Z","description":null,"website":null,"strategy":null,"validatorsCount":323,"ratio_apy":0.045535271030545,"apy":null,"epoch_fee":{"id":2784031,"stake_pool_id":1793,"fee_type":"epochFee","numerator":6,"denominator":100,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:36:45.000000Z","updated_at":"2026-10-01T16:36:45.000000Z"},"sol_deposit_fee":{"id":2784029,"stake_pool_id":1793,"fee_type":"solDepositFee","numerator":5,"denominator":10000,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:36:45.000000Z","updated_at":"2026-10-01T16:36:45.000000Z"},"sol_withdrawal_fee":{"id":2784033,"stake_pool_id":1793,"fee_type":"solWithdrawalFee","numerator":5,"denominator":10000,"lastUpdateEpoch":1047,"created_at":"2026-10-01T16:36:45.000000Z","updated_at":"2026-10-01T16:36:45.000000Z"},"validators":[],"currentvalidators":[],"current_validators":[],"token":{"address":"Gekfj7SL2fVpTDxJZmeC46cTYxinjB6gkAnb6EGT6mnn","chainID":101,"decimals":9,"tags":["lst"],"name":"DoubleZero Staked SOL","symbol":"dzSOL","poolAddress":"3fV1sdGeXaNEZj6EPDTpub82pYxcRXwt2oie6jkSzeWi","logoURI":"https:\/\/doublezero.xyz\/dzSOL\/icon.png","$schema":"https:\/\/schema.metaplex.com\/nft1.0.json","json_uri":"https:\/\/doublezero.xyz\/dzSOL\/metadata.json","files":[{"uri":"https:\/\/doublezero.xyz\/dzSOL\/icon.png","cdn_uri":"https:\/\/cdn.helius-rpc.com\/cdn-cgi\/image\/\/https:\/\/doublezero.xyz\/dzSOL\/icon.png","mime":"image\/png"}],"metadata":{"description":"Performance Boosted Liquid Staking Token","json_name":"DoubleZero Staked SOL","name":"DoubleZero Staked SOL","symbol":"dzSOL","token_standard":"Fungible"},"links":{"image":"https:\/\/doublezero.xyz\/dzSOL\/icon.png","external_url":"https:\/\/doublezero.xyz\/"}},"data_stale":false,"stale_epochs":0}]' style="width:100%" :row-class-name="({ row }) => row.address === 'AwDeTcW6BovNYR34Df1TPm4bFwswa4CJY4YPye2LXtPS' ? 'featured-pool-row' : ''">
+            <el-table-column prop="name" label="Stake Pool" min-width="220">
+                <template #default="data">
+                    <div class="row">
+                        <div class="col text-center" style="max-width:70px">
+                            <img v-if="data.row.logo_cached" class="brround mx-auto" style="width:25px" :src="'https://solanacompass.com/' + data.row.logo_cached">
+                            <img v-else-if="data.row.logo || data.row.token?.logoURI || data.row.token?.metadata?.image" class="brround mx-auto" style="width:50px" :src="$proxiedImage(data.row.logo || data.row.token?.logoURI || data.row.token?.metadata?.image, { width: 50, height: 50 })">
+                        </div>
+                        <div class="col">
+                            <div v-if="!data.row.token?.metadata?.name">
+                                <a :href="'/stake-pools/' + data.row.address " class=" font-weight-semibold">
+                                    <span v-if="data.row.name">{{ data.row.name }}</span>
+                                    <span v-else class="text-muted "><em>Unknown pool</em></span><br>
+                                    <small class="text-muted">{{ data.row.address }}</small>
+                                </a>
+                            </div>
+                            <div v-else>
+                                <a :href="'/stake-pools/' + data.row.address " class=" font-weight-semibold">
+                                    {{ data.row.token?.metadata?.name }} - {{ data.row.token?.metadata?.symbol }}
+                                </a><br>
+                            </div>
+                            <small v-if="data.row.data_stale" class="d-block text-warning">
+                                Data delayed · last updated epoch {{ data.row.lastUpdateEpoch ?? 'unknown' }}
+                            </small>
+                        </div>
+                    </div>
+                </template>
+            </el-table-column>
+                        <el-table-column prop="ratio_apy" label="APY (10 epochs)" sortable>
+                <template #header>
+                    <span title="Annualised growth in each pool token's SOL value over the last 10 epochs: what holders actually earned, including MEV and any fees paid into the pool.">APY (10 epochs)</span>
+                </template>
+                <template #default="data">
+                    <span>{{ (data.row.ratio_apy*100).toFixed(2) }}%</span>
+                </template>
+            </el-table-column>
+                        <el-table-column prop="validatorsCount" label="Validators Staked" align="right"></el-table-column>
+            <el-table-column prop="command" label="Program" align="center">
+                <template #default="data">
+                    <span class="small badge bg-success">{{ data.row.command }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column prop="totallamports" label="Active Stake" align="right">
+                <template #default="data">
+                    {{ Math.floor(data.row.totalLamports * 1E-9).toLocaleString() }} SOL
+                </template>
+            </el-table-column>
+        </el-table>
+
+        
+        <div class="d-flex justify-content-center mt-4">
+            <nav>
+        <ul class="pagination">
+            
+                            <li class="page-item disabled" aria-disabled="true" aria-label="&laquo; Previous">
+                    <span class="page-link" aria-hidden="true">&lsaquo;</span>
+                </li>
+            
+            
+                            
+                
+                
+                                                                                        <li class="page-item active" aria-current="page"><span class="page-link">1</span></li>
+                                                                                                <li class="page-item"><a class="page-link" href="https://solanacompass.com/stake-pools?page=2">2</a></li>
+                                                                                                <li class="page-item"><a class="page-link" href="https://solanacompass.com/stake-pools?page=3">3</a></li>
+                                                                                                <li class="page-item"><a class="page-link" href="https://solanacompass.com/stake-pools?page=4">4</a></li>
+                                                                                                <li class="page-item"><a class="page-link" href="https://solanacompass.com/stake-pools?page=5">5</a></li>
+                                                                                                <li class="page-item"><a class="page-link" href="https://solanacompass.com/stake-pools?page=6">6</a></li>
+                                                                                                <li class="page-item"><a class="page-link" href="https://solanacompass.com/stake-pools?page=7">7</a></li>
+                                                                                                <li class="page-item"><a class="page-link" href="https://solanacompass.com/stake-pools?page=8">8</a></li>
+                                                                                                <li class="page-item"><a class="page-link" href="https://solanacompass.com/stake-pools?page=9">9</a></li>
+                                                                                                <li class="page-item"><a class="page-link" href="https://solanacompass.com/stake-pools?page=10">10</a></li>
+                                                                                                <li class="page-item"><a class="page-link" href="https://solanacompass.com/stake-pools?page=11">11</a></li>
+                                                                        
+            
+                            <li class="page-item">
+                    <a class="page-link" href="https://solanacompass.com/stake-pools?page=2" rel="next" aria-label="Next &raquo;">&rsaquo;</a>
+                </li>
+                    </ul>
+    </nav>
+
+        </div>
+
+        </div>
+    </div>
+
+    <h2 class="mt-5"></h2>
+
+<hr>
+
+    <div class="text-center">
+        <h1>Solana Stake Pools Guide: How They Work, Fees + The Best Pools</h1>
+        <p class="lead">Learn how stake pools on Solana can help keep your staking rewards consistent while securing the Solana network</p>
+    </div>
+
+    <div class="card lead mt-5">
+        <div class="card-body">
+        <details>
+            <summary class="text-primary" style="cursor:pointer">[Table of contents]</summary>
+                    <nav id="TableOfContents">
+                        <ul>
+                            <li>
+                                <a href="#what-is-staking">What Is Staking?</a>
+                            </li>
+                            <li>
+                                <a href="#what-are-staking-pools-in-solana">What are staking pools in Solana?</a>
+                                <ul>
+                                    <li>
+                                        <a href="#how-do-stake-pools-reduce-the-impact-of-validator-downtime">How do stake pools reduce the impact of validator downtime?</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#why-did-the-solana-foundation-create-the-stake-pools-program">Why Did the Solana Foundation Create the Stake Pools Program?</a>
+                            </li>
+                            <li>
+                                <a href="#how-do-stake-pools-help-solanas-ecosystem-and-meet-its-goals-of-decentralizing-stake">How Do Stake Pools Help Solana’s Ecosystem and Meet Its Goals of Decentralizing Stake?</a>
+                            </li>
+                            <li>
+                                <a href="#how-to-participate-in-solana-stake-pools">How to Participate in Solana Stake Pools</a>
+                            </li>
+                            <li>
+                                <a href="#the-mechanics-of-staking-pools">The Mechanics of Staking Pools</a>
+                                <ul>
+                                    <li>
+                                        <a href="#receiving-a-token-for-your-sol">Receiving a Token for Your SOL</a>
+                                    </li>
+                                    <li>
+                                        <a href="#why-your-token-rises-in-value-as-the-stake-pool-receives-more-rewards">Why Your Token Rises in Value as the Stake Pool Receives More Rewards</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#are-stake-pools-safe-could-i-get-rugged">Are stake pools safe? Could I get rugged?</a>
+                            </li>
+                            <li>
+                                <a href="#are-there-any-costs-or-fees-involved-in-stake-pools">Are there any costs or fees involved in stake pools?</a>
+                            </li>
+                            <li>
+                                <a href="#how-to-connect-to-a-stake-pool-and-start-staking">How to Connect to a Stake Pool and Start Staking</a>
+                            </li>
+                            <li>
+                                <a href="#what-are-the-top-pools">What Are the Top Pools?</a>
+                                <ul>
+                                    <li>
+                                        <a href="#marinade">Marinade</a>
+                                    </li>
+                                    <li>
+                                        <a href="#socean">Socean</a>
+                                    </li>
+                                    <li>
+                                        <a href="#jpool">JPool</a>
+                                    </li>
+                                    <li>
+                                        <a href="#lido">Lido</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#what-else-can-you-do-with-their-tokens">What Else Can You Do with Their Tokens?</a>
+                            </li>
+                            <li>
+                                <a href="#pool-faqs">FAQs for Stake Pool Managers</a>
+                            </li>
+                        </ul>
+                    </nav>
+        </details>
+        <h1 id="solana-staking-pools-explained" class="mt-2">Solana Staking Pools Explained</h1>
+        <p>If you are a blockchain enthusiast, you have probably heard about the popular Solana Network. Solana is an open-source and decentralized blockchain network, where consensus is reached through Proof of History (PoH) and Proof of Stake (PoS).</p>
+        <p>The network has an internal cryptocurrency called Solana (SOL). Also, the network has unparalleled scalability in the market as it can support up to 50,000 Transactions Per Second (TPS), thanks to its founder-Anatoly Yakovenko.</p>
+        <p>The Solana Foundation recently launched a <a href="https://spl.solana.com/stake-pool">Stake Pool program</a> as a means to reward SOL holders while improving network security. This program allows you to put your SOL tokens in a common pool with other SOL dealers and earn SOL tokens without managing your stakes. </p>
+        <p>If you are interested in SOL, keep reading to learn more about Solana staking pools to see how they can benefit you.</p>
+        <hr>
+
+        <h2 id="what-is-staking">What Is Staking? <a href="#what-is-staking" class="anchor invisible" aria-hidden="true">#</a>
+        </h2>
+        <p>You’ve heard of mining cryptocurrency, but did you know you could stake it too?</p>
+        <p>Staking involves keeping your cryptocurrency in a wallet. While your coins are held in the exchange, you can support your cryptocurrency’s transmission, security, and access while earning rewards.</p>
+        <p>Staking uses the Proof of Stake (PoS) framework instead of the Proof of Work (PoW), meaning not all currencies are compatible with it. Solana uses a <a href="https://solana.com/news/proof-of-history---a-clock-for-blockchain">Proof of History</a> (PoH) and the PoS framework, which has kept it relevant in the crypto sphere. </p>
+        <p>Many crypto investors have turned to staking to make passive income. Mining cryptocurrency requires a lot of power, which can lead to financial issues. Cold staking lets you continue earning money offline, and you can trade on different exchanges.</p>
+        <h2 id="what-are-staking-pools-in-solana">What are staking pools in Solana? <a href="#what-are-staking-pools-in-solana" class="anchor invisible" aria-hidden="true">#</a>
+        </h2>
+        <p>Solana’s staking pools allow you to delegate your stake to a manager, who collects stake from multiple individuals then decides which validators to delegate to.</p>
+        <p>While it is easy for people to stake directly with a single validator, if a user wishes to spread their stake around multiple validators to improve decentralization it can get considerably harder to manage multiple stakes across tens or hundreds of validators. In reality the majority choose the simplest option and as a result, the majority of stake in the Solana network has become concentrated among a small group of validators.</p>
+        <p>Stake pools aim to fight this by deliberately spreading the stake they control across tens or even hundreds of smaller validators.</p>
+        <p>This has two great benefits for the users: reducing the impact of downtime at their chosen validator and so protecting their returns, and increasing the security and sustainability of their investment in SOL by helping secure the network. In exchange they may take a small percentage fee for managing your stake, and some also take a small fee on deposits or withdrawals.</p>
+        <h3 id="how-do-stake-pools-reduce-the-impact-of-validator-downtime">How do stake pools reduce the impact of validator downtime? <a href="#how-do-stake-pools-reduce-the-impact-of-validator-downtime" class="anchor invisible" aria-hidden="true">#</a>
+        </h3>
+        <p>When you stake with a single validator you only receive rewards while that validator is generating blocks. If a validator has a technical problem which means they need to restart their server you may miss out on some rewards. Most validators are very pro-active, using SMS alerts to immediately notify themselves of any technical problems, and will leap out of bed to fix issues, even at 4am.</p>
+        <p>Sadly however with 1,000s of validators around the world this doesn’t always happen, and a quick glance at <a href="http://Solanabeach.io">Solanabeach.io</a> shows there are currently 79 validators flagged as ‘delinquent’ - eg they are no longer producing blocks. Usually these downtimes are short, but this is not always the case. </p>
+        <p>Today’s biggest validator that is delinquent holds almost 500,000 SOL in delegated stake - a cool $75m. Annual rewards on that would be worth $6m, and the delegator has so far been down for 8 days - so to date, stakers with that validator have lost out on an estimated $130,000 in rewards.</p>
+        <p>If instead those stakers had used a stake pool they may only have 0.3-1% of their stake with any single validator, so while there would be a minor impact in their expected 7% rewards they would likely not notice the difference.</p>
+        <p>More importantly still, most stake pools will update their stake delegation every epoch, so any validator that was down for an entire epoch would lose their delegated stake immediately, so rather than stakers suffering a 100% loss on their rewards for a period of 8 days as we see here, it’s likely they would only see a sub 1% drop in rewards for a period of just 2-3 days.</p>
+        <h2 id="why-did-the-solana-foundation-create-the-stake-pools-program">Why Did the Solana Foundation Create the Stake Pools Program? <a href="#why-did-the-solana-foundation-create-the-stake-pools-program" class="anchor invisible" aria-hidden="true">#</a>
+        </h2>
+        <p>The Solana Foundation launched a Stake Pools program to reward SOL holders, boost network security, and resist censorship. They enabled this program with an on-chain governance process.</p>
+        <p>The Stake Pools program helps Solana withstand attacks. They look at the “superminority”, who hold the largest amount of delegated stake and so make up the smallest group of validators needed to attack.</p>
+        <p>As more stake accumulates to the biggest validators the risk of an attack on the network grows, as fewer validators would need to be compromised for an attach to succeed. The stake pool program helps fight this threat by making it simple for stakers to spread their stake evenly across the network rather than depositing it all with the top validators.</p>
+        <p>Users keep their SOL between independent validators to earn incentives. More stake distribution means more network security.</p>
+        <h2 id="how-do-stake-pools-help-solanas-ecosystem-and-meet-its-goals-of-decentralizing-stake">How Do Stake Pools Help Solana’s Ecosystem and Meet Its Goals of Decentralizing Stake? <a href="#how-do-stake-pools-help-solanas-ecosystem-and-meet-its-goals-of-decentralizing-stake" class="anchor invisible" aria-hidden="true">#</a>
+        </h2>
+        <p>Solana has a <a href="https://solana.com/ecosystem">decentralized ecosystem</a> that focuses on throughput and transaction speed. Since they use the PoH and PoS algorithms, they experience increased efficiency and security. </p>
+        <p>Fun fact: Proof of Stake algorithms help the actual ecosystem by reducing the amount of electrical power used for transactions!</p>
+        <p>This is in contrast to a network like Bitcoin which relies on complex and energy-expensive mathematical calculations to secure the network. In effect, by delegating stake to a validator, holders of Solana ‘vouch’ for that validator to vote fairly on network transactions. Consensus is formed among validators as each validator votes on random transaction in the network. The more widely the stake is spread among diverse validators, the more secure the voting system becomes.</p>
+        <p>Staking pools help them spread stakes between thousands of validators rather than a small group, which encourages network security.</p>
+        <p>Solana has a superminority group of 19, but they wish to improve this metric further to resist more attacks.</p>
+        <p>Solana decentralizes their ecosystem with these eight technologies:</p>
+        <ul>
+            <li>Archivers</li>
+            <li>Cloudbreak</li>
+            <li>Gulf stream</li>
+            <li>Pipelining</li>
+            <li>Proof of History</li>
+            <li>Sealevel</li>
+            <li>Tower BFT</li>
+            <li>Turbine</li>
+        </ul>
+        <p>These technologies help blocks transmit cryptocurrency around the clock. The algorithms validate blocks quickly and remove the need for timestamps by creating a verifiable order of transactions.</p>
+        <p>Solana uses decentralized exchanges to improve trade speed and lower gas fees and costs. However, attacks can compromise the ecosystem.</p>
+        <p>Staking pools allow for many approved validators, which increases the stake distribution. By increasing stake distribution, the system becomes more robust and decentralized.</p>
+        <h2 id="how-to-participate-in-solana-stake-pools">How to Participate in Solana Stake Pools <a href="#how-to-participate-in-solana-stake-pools" class="anchor invisible" aria-hidden="true">#</a>
+        </h2>
+        <p>It’s easy to start staking your SOL with a stake pool. For most of the pools listed below, it’s a simple matter of connecting your Solana wallet to their website, and entering the amount of SOL you wish to stake in the pool. In exchange you receive pool tokens equivalent to the value of SOL you put in, which represents your share of the pool’s total SOL holdings.</p>
+        <p>Over time the amount of SOL in the pool grows, as the stake pool manager collects the rewards from staking all the SOL people have put in the pool. This in turn increases the value of the tokens themselves.</p>
+        <p>If your SOL is already staked at a validator, it’s possible to deposit your stake account instead. In this situation, you pass authority over your stake account to the stake pool manager in exchange for the equivalent amount of pool tokens. The manager is able to unstake and redelegate your SOL across multiple validators.</p>
+        <h2 id="the-mechanics-of-staking-pools">The Mechanics of Staking Pools <a href="#the-mechanics-of-staking-pools" class="anchor invisible" aria-hidden="true">#</a>
+        </h2>
+        <p>The mechanics of staking pools are fairly simple. In short:</p>
+        <ol>
+            <li>You deposit your Solana coins (or an active staking account) to your chosen stake pool</li>
+            <li>You receive SPL tokens equivalent to the size of your stake in the pool. These are generally branded with the stake pools name (eg mSOL, SOCEN, and prtSOL)</li>
+            <li>The stake pool owner then chooses which validators to delegate stake to. <ol>
+                    <li>Most stake pools publish their selection criteria on their website</li>
+                    <li>Ideally you should choose a pool that prioritizes decentralization and your own returns</li>
+                </ol>
+            </li>
+            <li>It may take an epoch for your stake to be delegated, but your SPL tokens effectively make you a part owner of the pool, so you begin receiving rewards proportional to your stake immediately</li>
+            <li>As the pool collects more rewards in SOL, the total amount of Solana in the pool increases, but the amount of tokens remains consistent with the amount of SOL deposited. This increases the value of the tokens you hold</li>
+            <li>When you come to withdraw your Solana, you exchange your tokens back for SOL.</li>
+            <li>The withdrawn SOL is placed in a new stake account that belongs to you. You can then withdraw from your stake account back to your primary wallet.</li>
+        </ol>
+        <p>As an example:</p>
+        <ol>
+            <li>You deposit 100 SOL into a stake pool and receive 100 ‘poolSOL’ tokens in exchange, as each poolSOL is worth 1 SOL</li>
+            <li>After 1 year the average rewards to the pool are 7.6%, and the total SOL has increased accordingly</li>
+            <li>Each poolSOL is now worth 1.076 SOL</li>
+            <li>When you withdraw your SOL you exchange 100 poolSOL for 107.6 SOL</li>
+        </ol>
+        <h3 id="receiving-a-token-for-your-sol">Receiving a Token for Your SOL <a href="#receiving-a-token-for-your-sol" class="anchor invisible" aria-hidden="true">#</a>
+        </h3>
+        <p>When you invest SOL into a stake pool, you get SPL tokens that represent how much you deposited. You will earn rewards based on these tokens.</p>
+        <p>If you want to withdraw from the pool, you can take out your SPL tokens at any time and get your SOL stake account back.</p>
+        <h3 id="why-your-token-rises-in-value-as-the-stake-pool-receives-more-rewards">Why Your Token Rises in Value as the Stake Pool Receives More Rewards <a href="#why-your-token-rises-in-value-as-the-stake-pool-receives-more-rewards" class="anchor invisible" aria-hidden="true">#</a>
+        </h3>
+        <p>Over time, the stakes gain staking rewards that drive up the SPL token value. The rewards are based on the total number of SOL in the network, the inflation rate, and the validator’s commission and uptime.</p>
+        <p>These rewards are added to your SPL token, which increases its value. Every epoch, you should see an increase in your rewards. Keep in mind that you might accrue rewards while rebalancing, which can lead to an imbalance pool.</p>
+        <p>In general, you should generate about 7-8% of your investment in rewards each year.</p>
+        <h2 id="are-stake-pools-safe-could-i-get-rugged">Are stake pools safe? Could I get rugged? <a href="#are-stake-pools-safe-could-i-get-rugged" class="anchor invisible" aria-hidden="true">#</a>
+        </h2>
+        <p>Yes, stake pools are a safe way to earn rewards from the Solana ecosystem. The Solana foundation have developed and independently audited the stake pool program to ensure the security of delegator’s funds. A manger has the right to move stake between validators but there is no mechanism by which they could withdraw stake to their own accounts.</p>
+        <p>While the stake pool ecosystem is in its infancy, we expect to see many more new pools set up using the foundation’s code, unmodified. That said, you should do your own due diligence before staking: some operators have forked the stake pool program and introduced their own code. Most reliable operators will publish the details of any modifications and whether their modifications have also been audited on their websites.</p>
+        <p>The goal of the stake pool program is to make staking on Solana even more secure than it already is, by reducing lost rewards due to downtime, and further securing the network. Much as the main risk when staking directly with a validator would be downtime, the primary risk we can forsee with a staking pool is a delinquent manager: for example, a manager may fail to delegate stake and allow it to accumulate in the reserve account where it earns no rewards. Thankfully, Solana have also provided tools for the automatic management and delegation of stake, and most stake pool operators should be relying on bots to move funds around to a set of given rules each epoch.</p>
+        <h2 id="are-there-any-costs-or-fees-involved-in-stake-pools">Are there any costs or fees involved in stake pools? <a href="#are-there-any-costs-or-fees-involved-in-stake-pools" class="anchor invisible" aria-hidden="true">#</a>
+        </h2>
+        <p>Solana’s stake pool program allows operators to set a few key fees:</p>
+        <ul>
+            <li>A deposit fee (as a percentage of your stake)</li>
+            <li>A stake rewards fee (as a percentage of the rewards generated) and</li>
+            <li>A withdrawal fee</li>
+        </ul>
+        <p>We only know of one pool that currently publishes their fees transparently, Socean.fi. At the time of writing their fees are 0.1% on deposits, 0.3% on withdrawals, and a ‘management fee’ of ‘~0.16% pa’. Working backwards from this number we assume the last fee is roughly 2% of the rewards generated by the pool, much as a validator might charge a 5-10% commission. Though of course any stake rewards fee charged by a pool will be on top of, not instead of, the fees charged by a validator.</p>
+        <h2 id="how-to-connect-to-a-stake-pool-and-start-staking">How to Connect to a Stake Pool and Start Staking <a href="#how-to-connect-to-a-stake-pool-and-start-staking" class="anchor invisible" aria-hidden="true">#</a>
+        </h2>
+        <p>To begin, a stake pool manager will create a stake pool. Then, the staker adds validator stake accounts which will hold the stake the manager wishes to delegate to each validator.</p>
+        <p>A user can delegate their SOL directly to the stake pool. From there, the SOL enters the pool’s reserve account for the staker to redistribute at the start of the next epoch.</p>
+        <p>Users can also deposit stake accounts into the pool if they hold an account at one of the validators the manager has already created an account for. Their stake account is merged with the manager’s stake account in exchange for pool tokens, and the manager can now choose to redistribute that stake in line with their delegation strategy.</p>
+        <h2 id="what-are-the-top-pools">What Are the Top Pools? <a href="#what-are-the-top-pools" class="anchor invisible" aria-hidden="true">#</a>
+        </h2>
+        <p>Here are some of the top Solana staking pools.</p>
+        <h3 id="marinade">Marinade <a href="#marinade" class="anchor invisible" aria-hidden="true">#</a>
+        </h3>
+        <p>
+            <a href="https://marinade.finance/">Marinade</a> makes staking SOL easy. You can skip the unstaking period and use your resources whenever you want. Also, they choose many validators to create a more decentralized and secure system. Marinade manages your stake accounts, monitors validators, and rebalances your tokens, so you can passively earn income.
+        </p>
+        <p>First, you choose how much SOL you want to stake with the Marinade liquid staking protocol. Then, you get liquid SOL (mSOL) that increases in value with staking rewards. You can now use your mSOL tokens in DeFi or exchange them for SOL whenever you want, allowing you to earn additional rewards on your stake (albeit at a higher risk than keeping it in the pool).</p>
+        <h3 id="socean">Socean <a href="#socean" class="anchor invisible" aria-hidden="true">#</a>
+        </h3>
+        <p>
+            <a href="https://docs.socean.fi/">Socean</a> is another popular Solana staking pool. The goals include:
+        </p>
+        <ul>
+            <li>Making the monitoring and managing of stake easier</li>
+            <li>Unlocking the staked SOL value to use in the Solana ecosystem</li>
+            <li>Increasing censorship resistance and decentralization</li>
+            <li>Improving staking returns</li>
+            <li>Incentivizing validators</li>
+        </ul>
+        <p>Socean developers are working to make the platform data-driven, autonomous, and algorithmic. They try to differentiate themselves from other stake pools by giving everyone a fair chance at becoming a validator. You get SOCN tokens when you deposit SOL. Also, like Marinade they have partnered with several members of the Solana DeFi ecosystem allowing you to invest your SOCN if you wish.</p>
+        <p>We like the fact that Socean have clearly published their fee schedule on their website, while others such as Marinade simply offer a blended ‘average APY’ for rewards, which feels unnecessarily opaque.</p>
+        <h3 id="jpool">Jpool</h3>
+        <p>JPool is a stake pool using Solana Foundation’s 3x audited stake pool program, which makes it inherently a more secure option than any pool with a proprietary smart contract: your funds are 100% insulated from the pool.
+            JPool uses a smart delegation strategy ensuring high APY while also improving Solana’s decentralization and censorship resistance.</p>
+        <p>It also offers liquid staking with its JSOL token which you can use to mine liquidity on Raydium or Saber (with many more DeFi integrations underway).
+            Instant unstaking possible either directly via pool (as long as there is sufficient reserve balance) with a small fee of .05% or by swapping JSOL to SOL or USDC in one of the LPs.</p
+        <h3 id="lido">Lido <a href="#lido" class="anchor invisible" aria-hidden="true">#</a>
+        </h3>
+        <p>
+            <a href="https://lido.fi/solana">Lido</a> allows for liquid Solana staking, letting you earn rewards with flexibility. You can sell your tokens without holdups, integrate with many DeFi protocols, enjoy security from the diversification amongst many providers, and participate in one-click staking.
+        </p>
+        <p>Your liquid SOL takes on the form of stSOL, which you use in DeFi. Lido offers a vast support system across many platforms, so you can readily stake SOL even as a beginner. Lido have taken their own approach to decentralization, which is to ask some of the largest validators to set up independent validation machines to hold the pool’s stake.</p>
+        <p>While these validators are experienced and should achieve high returns, in our view this is decentralization on a technicality: if the same large networks are still managing your stake on a separate box, your stake is not really fully decentralized.</p>
+
+        <h2 id="what-else-can-you-do-with-their-tokens">What Else Can You Do with Their Tokens? <a href="#what-else-can-you-do-with-their-tokens" class="anchor invisible" aria-hidden="true">#</a>
+        </h2>
+        <p>For the most part, you can use SPL, mSOL, SOCN, stSOL, and prtSOL in the same way you’d use standard SOL.</p>
+        <p>Solana is a blockchain that runs DeFi apps, similar to Ethereum. You can also trade NFTs with Solana. Many of the new programs built with Solana are NFT markets.</p>
+        <p>Among the top stake pools a common activity is to then provide your own pool tokens to provide liquidity for users who are in a hurry to unstake, and wish to trade their tokens for another currency such as SOL or USDC.</p>
+        <p>By participating in these liquidity pools you can gain additional rewards from the trading fees generated by token exchanges, but you can also expose yourself to the risk of impermanent loss, as the prices of the coins in the liquidity pool fluctuate.</p>
+        <h2 class="my-5" id="pool-faqs">FAQ for Stake Pool Operators</h2>
+
+        <h3>How can I add my stake pool to the list?</h3>
+        <p>We use Solana's on chain program to index and gather data on all stake pools. If you are using the spl-stake-pool to operate your pool, and your pool has at least 1SOL in active stake, then your pool will be automatically added here. If you are using a custom program please DM @solanaguide  on twitter to discuss inclusion.</p>
+
+
+        <h3>My pool's address is on the dashboard - how can I add my name and logo?</h3>
+        <p>To automatically collect your pool's address and logo, we use the precedent set by Stakeview.app: using the existing validator-info system to assoicate your pool with a Keybase ID, name, logo and website. Please follow the instructions in Solana's docs to create a validator identity using your stake pool manager pubkey.</p>
+        </div>
+    </div>
+
+
+
+
+</div>
+
+                
+                                            </main>
+
+            <!-- Footer with columns for submenus -->
+            <footer class="footer">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-6 col-sm-12">
+                            <h3>Solana Compass 🧭</h3>
+                            <p class="lead">Solana Compass has been operating a validator and helping build the Solana
+                                ecosystem since September 2021</p>
+                            <p class="small text-muted">
+                                Please note that all content is provided for information only and does not constitute a
+                                recommendation or financial advice. This site is community run and not affiliated with
+                                Solana Labs or Foundation.
+                            </p>
+                            <a href="https://solresearch.institute" target="_blank" rel="noopener">
+                                <img src="/sri-badge.svg" alt="Sol Research Institute" class="img-fluid" loading="lazy">
+                            </a>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-12">
+                            <h5 class="footer-title">Staking With Solana Compass</h5>
+                            <ul class="list-unstyled">
+                                <li><a href="/staking">Compass Validator</a></li>
+                                <li><a href="/validators">Solana Validators</a></li>
+                                <li><a href="/staking/liquid-staking">Liquid Staking</a></li>
+                                <li><a href="/stake-pools">Explore stake pools</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 col-sm-12">
+                            <h5 class="footer-title">Solana Statistics</h5>
+                            <ul class="list-unstyled">
+                                <li aria-haspopup="true"><a class="docs-link rounded active"
+                                                            href="https://solanacompass.com/">Solana Performance +
+                                        TPS</a></li>
+                                <li aria-haspopup="true"><a class="docs-link rounded active"
+                                                            href="https://solanacompass.com/statistics/decentralization">Solana
+                                        Decentralization Dashboard</a></li>
+                                <li aria-haspopup="true"><a class="docs-link rounded active"
+                                                            href="https://solanacompass.com/blocks" rel="nofollow">Solana
+                                        Block Summary Explorer</a></li>
+                                <li aria-haspopup="true"><a class="docs-link rounded active"
+                                                            href="https://solanacompass.com/statistics/fees">Solana Fee
+                                        Tracker</a></li>
+                                
+                                                                <li aria-haspopup="true"><a class="docs-link rounded active"
+                                                            href="/tools/solana-token-account-rent-reclaim">Solana Rent Reclaim</a></li>
+                                                                                                <li aria-haspopup="true"><a class="docs-link rounded active"
+                                                            href="/tools/create-solana-token">Create Solana Token</a></li>
+                                                                <li aria-haspopup="true"><a class="docs-link rounded active"
+                                                            href="https://solanacompass.com/statistics/staking">Solana
+                                        Staking Statistics</a></li>
+                                <li aria-haspopup="true"><a class="docs-link rounded active"
+                                                            href="https://solanacompass.com/tokenomics" rel="nofollow">Solana
+                                        Tokenomics</a></li>
+                                <li aria-haspopup="true"><a class="docs-link rounded active"
+                                                            href="/docs/api">API Documentation</a></li>
+                               <li aria-haspopup="true"><a class="docs-link rounded active"
+                                                            href="/skills">Solana Openclaw Agent Skill</a></li>
+
+                            </ul>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 col-sm-12">
+                            <h5 class="footer-title">About</h5>
+                            <ul class="list-unstyled">
+                                <li><a href="/author/solana-compass">About the publisher</a></li>
+                                <li><a href="/editorial-standards">Editorial standards</a></li>
+                                <li><a href="/press">Solana Compass in the press</a></li>
+                                <li><a href="/news">Solana News</a></li>
+                                <li><a href="https://x.com/solanacompass" target="_blank" rel="noopener">X / Twitter</a></li>
+                                <li><a href="https://github.com/solanaguide" target="_blank" rel="noopener">GitHub</a></li>
+                            </ul>
+                        </div>
+
+                    </div>
+
+                </div>
+            </footer>
+        </div>
+
+
+            </div>
+        </div>
+    
+    
+
+    <!-- Twitter universal website tag code -->
+    
+    
+
+
+
+<style>
+/* Live price flash animations — used by TokenWidget and LivePriceUpdater */
+.live-flash-up { animation: live-pulse-green 0.8s ease-out; }
+.live-flash-down { animation: live-pulse-red 0.8s ease-out; }
+@keyframes  live-pulse-green {
+    0% { background-color: rgba(38, 166, 154, 0.25); }
+    100% { background-color: transparent; }
+}
+@keyframes  live-pulse-red {
+    0% { background-color: rgba(239, 83, 80, 0.25); }
+    100% { background-color: transparent; }
+}
+</style>
+
+</body>
+</html>

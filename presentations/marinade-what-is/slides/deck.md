@@ -2,9 +2,9 @@
 
 <div class="lockup"><img src="images/marinade-white.svg" alt="">Marinade</div>
 
-# Marinade as building blocks
+# Marinade staking and the Solana ecosystem
 
-## Staking, DeFi, data and governance on <span class="accent">Solana</span>
+## Building blocks for your next <span class="accent">build</span>
 
 <div class="logo-row">
 <img src="images/solana-logo.svg" alt="Solana">
@@ -14,7 +14,7 @@
 
 Note:
 THE OPENING, word for word: "Marinade is five years of staking on Solana. Today I want to show it to you as parts you can build with."
-Then the shape of the talk in one breath: where it came from, what it is made of, and where you could plug in.
+Then the shape of the talk in one breath: where Marinade came from, what the Solana staking space is fighting about, and the blocks you can plug into.
 The room knows Solana. Do not explain the chain, do not thank the organisers first.
 
 ---
@@ -29,85 +29,30 @@ The room knows Solana. Do not explain the chain, do not thank the organisers fir
 <li><strong>Backend developer</strong> at <a href="https://marinade.finance">Marinade</a>
 <img class="bio-icon" src="images/marinade-white.svg" alt="">
 <img class="bio-icon" src="images/solana-logo.svg" alt=""></li>
-<li>Before that, <a href="https://jbossts.blogspot.com/2018/01/narayana-periodic-recovery-of-xa.html">Java engineer</a> at Red Hat
-<img class="bio-icon" src="images/logos/redhat.svg" alt=""></li>
-<li>Came for distributed systems, <a href="https://blog.chalda.cz/">stayed for Solana</a></li>
-<li>Contributor to Realms, and author of its <a href="https://www.youtube.com/watch?v=2lzzbyWYIpc">SPL Governance deep dive</a>
-<img class="bio-icon" src="images/logos/realms.png" alt=""></li>
 </ul>
 </div>
 </div>
 
+<div class="callout">
+<span class="emoji" aria-hidden="true">🥳</span>
+<div>
+<strong>Marinade sponsors a Build Station sidetrack</strong>
+$3,000 for the best Solana staking-focused build. Prague, Oct 3–7. We are waiting for your team.
+</div>
+</div>
+
 Note:
-Fifteen seconds. The Realms line matters later: the governance block ends on a Realms gap, and this is why I can speak to it.
+Ten seconds on me, then the reason this talk exists: the sidetrack.
+SAY IT CLEARLY: $3,000 for the best staking-focused build on Solana, Build Station Prague, October 3 to 7. Everything after this slide is a menu of things you could build for it.
+Source: Solana Community Czech Republic on X, 1 Oct 2026.
 
 ---
 
 <!-- .slide: -->
 
-## Staking is Solana's base yield layer. Marinade routes it.
+## Marinade: a bootstrapped DAO
 
-<div class="grid-4">
-<div class="card">
-<h3>Staking</h3>
-<p>Marinade Liquid, Marinade Native, and an auction where validators compete for stake.</p>
-</div>
-<div class="card">
-<h3>DeFi</h3>
-<p>mSOL as collateral and liquidity, plus products built on staking rewards.</p>
-</div>
-<div class="card">
-<h3>Data</h3>
-<p>Public data on every validator, every epoch, through open APIs.</p>
-</div>
-<div class="card">
-<h3>DAO</h3>
-<p>MNDE holders govern the protocol on Realms.</p>
-</div>
-</div>
-
-<p class="slide-foot">The four blocks of this talk. Each one has a place where you can build.</p>
-
-Note:
-THE MAP OF THE TALK, and the one sentence to remember: staking is Solana's base yield layer, and Marinade routes it.
-mSOL is the liquid version of that stake. MNDE runs the DAO. And every validator decision is backed by data anybody can read.
-Do not walk all four cards now. Name them, say "we come back to each", and move on.
-DO NOT call Marinade "a staking protocol". It is a platform that puts SOL to work, self-custodial, no lockups.
-Leaves the question: where did all this come from?
-
----
-
-<!-- .slide: -->
-
-## Five years on one chain
-
-<div class="timeline">
-<div><span class="when">2021</span>Hackathon prototype. First liquid staking on Solana mainnet. MNDE fair launch.</div>
-<div><span class="when">2022</span>Onchain DAO governance. Through FTX with no treasury exposure.</div>
-<div><span class="when">2023</span>Marinade Native. Governance moves to Realms.</div>
-<div><span class="when">2024</span>Protected Staking Rewards. Stake Auction Marketplace.</div>
-<div><span class="when">2025</span>Select, SOC 2 Type II, Instant Unstake, a Solana ETF.</div>
-<div><span class="when">2026</span>USDC Vault. A first step to Marinade Borrow.</div>
-</div>
-
-<p class="slide-foot">Every product here was an answer to something stakers kept asking for.</p>
-
-Note:
-TELL IT AS A GROWTH STORY, not a list. Each year added a block because users hit a wall.
-2021: Solana x Serum hackathon in March, 3rd place with a liquid staking prototype. Merged with the Smart Pool team in April. Mainnet on 2 August, the 100k SOL cap filled in two and a half days. MNDE fair launch on 7 October, no sale, no investors.
-2022: onchain governance on Tribeca in April, with NFTs, next slide. November, FTX: Alameda, Serum and Saber were rotated off the multisig, and the treasury had no exposure.
-2023: Marinade Native on 19 July. Your stake account stays in your wallet. Same month governance moved to Realms.
-2024: Protected Staking Rewards (PSR) in April, the Stake Auction Marketplace (SAM) in August.
-2025: Marinade Select in May, SOC 2 Type II in July, Instant Unstake with Anza in October, and the Canary Marinade Solana ETF in November, with Marinade as staking provider.
-2026: USDC Vault in March, the first step to Marinade Borrow in May.
-THE FOOT LINE is the bridge to the building blocks: none of these were planned in 2021.
-Sources for every date are in the README history table.
-
----
-
-<!-- .slide: -->
-
-## A bootstrapped DAO
+<div class="illo lg bob"><img src="images/illo/mnde-crest.svg" alt=""></div>
 
 <img class="figure" src="images/octopus-voting.jpg" alt="Get MNDE, lock it and receive an NFT, vote with the NFTs, burn the NFT to get MNDE back">
 
@@ -119,7 +64,49 @@ Note:
 ONE PICTURE, ONE POINT: Marinade was not built on a venture round. It is a DAO that bootstrapped itself.
 The picture is the 2022 governance flow: get MNDE, lock it, receive a Chef NFT, the NFTs are your voting power, burn the NFT to get the MNDE back.
 "Funds raised $0" is on the marinade.finance homepage today. Say it as a fact, not a boast.
+MNDE was a fair launch in October 2021: no sale, no investors.
 Do not explain the NFT mechanics further. They are history, today it is Realms, and the DAO block comes back to that.
+
+---
+
+<!-- .slide: -->
+
+## Five years on one chain
+
+<div class="illo flip"><img src="images/illo/solana-coin.svg" alt=""></div>
+
+<div class="timeline">
+<div><span class="when">2021</span>Hackathon prototype. First liquid staking on Solana mainnet. MNDE fair launch.</div>
+<div><span class="when">2022</span>Onchain DAO governance with Chef NFTs.</div>
+<div><span class="when">2023</span>Marinade Native. Governance moves to Realms.</div>
+<div><span class="when">2024</span>Protected Staking Rewards. Stake Auction Marketplace.</div>
+<div><span class="when">2025</span>Select, SOC 2, Instant Unstake, a Solana ETF.</div>
+<div><span class="when">2026</span>USDC Vault. A first step to Marinade Borrow.</div>
+</div>
+
+<div class="mix" aria-label="Share of SOL by product at each year end">
+<div><div class="mix-bar"><span class="m-liquid" style="width:100%"></span></div></div>
+<div><div class="mix-bar"><span class="m-liquid" style="width:100%"></span></div></div>
+<div><div class="mix-bar"><span class="m-liquid" style="width:63%"></span><span class="m-native" style="width:37%"></span></div></div>
+<div><div class="mix-bar"><span class="m-liquid" style="width:64%"></span><span class="m-native" style="width:36%"></span></div></div>
+<div><div class="mix-bar"><span class="m-liquid" style="width:37%"></span><span class="m-native" style="width:34%"></span><span class="m-select" style="width:29%"></span></div></div>
+<div><div class="mix-bar"><span class="m-liquid" style="width:30%"></span><span class="m-native" style="width:48%"></span><span class="m-select" style="width:22%"></span></div></div>
+</div>
+
+<div class="mix-legend"><span><i class="m-liquid"></i>Marinade Liquid</span><span><i class="m-native"></i>Marinade Native</span><span><i class="m-select"></i>Marinade Select</span></div>
+
+<p class="slide-foot">Bars: share of SOL in each product at year end, 2026 as of 1 October. Source: DefiLlama.</p>
+
+Note:
+TELL IT AS A GROWTH STORY, not a list. Each year added a block because users hit a wall. The bars grow in as you talk: watch one product become three.
+2021: Solana x Serum hackathon in March, 3rd place with a liquid staking prototype. Merged with the Smart Pool team in April. Mainnet on 2 August, the 100k SOL cap filled in two and a half days. MNDE fair launch on 7 October.
+2022: onchain governance on Tribeca in April, voting through Chef NFTs, then Shark NFTs in November.
+2023: Marinade Native on 19 July. Your stake account stays in your wallet. Same month governance moved to Realms.
+2024: Protected Staking Rewards (PSR) in April, the Stake Auction Marketplace (SAM) in August.
+2025: Marinade Select in May, SOC 2 Type II in July, Instant Unstake with Anza in October, and the Canary Marinade Solana ETF in November, with Marinade as staking provider.
+2026: USDC Vault in March, the first step to Marinade Borrow in May.
+THE BARS are shares, not totals, on purpose: the point is the mix. Year-end SOL from the DefiLlama API: 2021 8.07M Liquid; 2023 6.99M Liquid, 4.05M Native; 2025 3.48M Liquid, 3.13M Native, 2.75M Select; 1 Oct 2026 2.30M Liquid, 3.72M Native, 1.68M Select.
+Sources for every date are in the README history table.
 
 ---
 
@@ -133,57 +120,81 @@ Do not explain the NFT mechanics further. They are history, today it is Realms, 
 <div><div class="metric">150K+</div><div class="metric-label">holders</div></div>
 </div>
 
-<div class="grid-3" style="margin-top:72px">
+<div class="grid-4" style="margin-top:72px">
 <div class="card">
+<img class="card-illo" src="images/illo/scales.svg" alt="">
 <h3>Spread stake</h3>
-<p>Caps per validator, hosting provider and country keep the network decentralized.</p>
+<p>Caps per validator, hosting provider and country.</p>
 </div>
 <div class="card">
-<h3>Self-custody</h3>
-<p>With Marinade Native the staker keeps the withdraw authority.</p>
+<img class="card-illo" src="images/illo/padlock.svg" alt="">
+<h3>Protected rewards</h3>
+<p>Validator down or commission raised: stakers get the lost rewards back.</p>
 </div>
 <div class="card">
-<h3>Open by default</h3>
-<p>Programs, delegation strategy and auction logic are public on GitHub.</p>
+<img class="card-illo" src="images/illo/wallet.svg" alt="">
+<h3>Instant exit</h3>
+<p>Any stake account to SOL in one transaction, no epoch wait.</p>
+</div>
+<div class="card">
+<img class="card-illo" src="images/illo/scroll.svg" alt="">
+<h3>A market for stake</h3>
+<p>Validators bid every epoch for the stake.</p>
 </div>
 </div>
 
 Note:
 NUMBERS FIRST, and refresh them the day before: DefiLlama API and the homepage. As of 1 Oct 2026: 7.70M SOL, of which Liquid 2.30M, Native 3.72M, Select 1.68M.
-THE CAPS, if somebody asks: SAM limits any one validator to 15% of Marinade TVL, any hosting provider to 30%, any country to 40%.
-Marinade's own words, from the docs: a stake automation platform that maximizes rewards "while supporting the decentralization and performance of the Solana network." Founded as a public good.
+FOUR THINGS SOLANA GETS FROM MARINADE, each one a mechanism, not a slogan. Each comes back later in the staking block.
+SPREAD STAKE: the SAM caps, 15% of Marinade stake per validator, 30% per hosting provider, 40% per country. Big stake that refuses to concentrate is good for the Nakamoto coefficient.
+PROTECTED REWARDS: Protected Staking Rewards (PSR). Paid from the validator's own bond. Solana has no slashing today, so this is how a validator's promise gets teeth.
+INSTANT EXIT: Instant Unstake, built with Anza, works on any natively staked SOL, even accounts Marinade never touched. That is exit liquidity for the whole network.
+A MARKET FOR STAKE: the Stake Auction Marketplace. Validators compete on what they share with stakers, instead of a committee picking them.
+Marinade's own words, from the docs: a stake automation platform that maximizes rewards "while supporting the decentralization and performance of the Solana network."
 Do not promise APY, never.
-Leaves the question: before the blocks, thirty seconds on what staking actually does.
 
 ---
 
-<!-- .slide: data-stage="staking" -->
+<!-- .slide: -->
 
-## Staking in one slide
+## Staking is Solana's base yield layer. Marinade routes it.
 
-<div class="grid-3">
-<div class="card">
-<h3>Security</h3>
-<p>Stake weights votes and decides who builds blocks.</p>
+<div class="blocks">
+<div class="blk b-defi"><img src="images/illo/wallet-dark.svg" alt=""><div><h3>DeFi</h3><p>mSOL as collateral and liquidity</p></div></div>
+<div class="blk b-data"><img src="images/illo/chart-dark.svg" alt=""><div><h3>Data</h3><p>Public data on every validator</p></div></div>
+<div class="blk b-dao"><img src="images/illo/mnde-diamond-dark.svg" alt=""><div><h3>DAO</h3><p>MNDE holders govern</p></div></div>
+<div class="blk b-base"><img src="images/illo/coin-box-dark.svg" alt=""><div><h3>Staking</h3><p>Marinade Liquid, Marinade Native, and an auction where validators compete for stake</p></div></div>
 </div>
-<div class="card">
-<h3>Rewards</h3>
-<p>Inflation, priority fees and MEV tips, shared with stakers.</p>
-</div>
-<div class="card">
-<h3>Two keys</h3>
-<p>A stake account splits who delegates from who withdraws.</p>
-</div>
-</div>
-
-<p class="slide-foot">Stake moves at epoch boundaries, roughly every two days. Solana does not slash stake today.</p>
 
 Note:
-KEEP IT SHORT. The room knows Solana, half of it has never thought about staking mechanics.
-SECURITY: proof of stake. More stake means more vote weight and more leader slots.
-REWARDS: inflation is paid every epoch. Priority fees go to the block producer in full, base fees half burned. MEV tips arrive on top.
-TWO KEYS is the one to land, because Marinade Native is built on it: the stake authority delegates, the withdraw authority takes the money out. They can be different people.
-DO NOT say Solana slashes. It does not today, a bad validator costs rewards, not principal.
+THE MAP OF THE REST OF THE TALK. The blocks drop in one by one: staking first, because everything else stands on it.
+The one sentence to remember: staking is Solana's base yield layer, and Marinade routes it. mSOL is the liquid version of that stake. MNDE runs the DAO. And every validator decision is backed by data anybody can read.
+Name the four, say "we come back to each", and move on.
+DO NOT call Marinade "a staking protocol". It is a platform that puts SOL to work, self-custodial, no lockups.
+
+---
+
+<!-- .slide: -->
+
+<div class="label">The Solana staking space</div>
+
+## Who orders the block?
+
+<div class="figure-wide"><svg class="order" viewBox="0 0 1760 440" role="img"><title>Transactions stream through three competing block builders into the leader's block. Inside the block, a victim's swap sits between two attacker trades: a sandwich.</title><text class="head" x="160" y="30">Transactions</text><rect class="tx" x="60" y="92" width="26" height="26" rx="5"/><rect class="tx" x="60" y="92" width="26" height="26" rx="5"/><rect class="tx" x="60" y="92" width="26" height="26" rx="5"/><rect class="tx" x="60" y="212" width="26" height="26" rx="5"/><rect class="tx" x="60" y="212" width="26" height="26" rx="5"/><rect class="tx" x="60" y="212" width="26" height="26" rx="5"/><rect class="tx" x="60" y="332" width="26" height="26" rx="5"/><rect class="tx" x="60" y="332" width="26" height="26" rx="5"/><rect class="tx" x="60" y="332" width="26" height="26" rx="5"/><text class="head" x="650" y="30">Builders compete to order them</text><text class="head" x="1470" y="30">The leader's block</text><rect class="lane" x="420" y="60" width="460" height="90" rx="14"/><text class="lane-lbl" x="650" y="116">Jito BAM</text><rect class="lane" x="420" y="180" width="460" height="90" rx="14"/><text class="lane-lbl" x="650" y="236">Harmonic</text><rect class="lane" x="420" y="300" width="460" height="90" rx="14"/><text class="lane-lbl" x="650" y="356">Rakurai and others</text><rect class="blockbox" x="1220" y="60" width="500" height="330" rx="14"/><rect class="slot" x="1246" y="84" width="100" height="56" rx="8"/><rect class="slot" x="1362" y="84" width="100" height="56" rx="8"/><rect class="slot" x="1478" y="84" width="100" height="56" rx="8"/><rect class="slot" x="1594" y="84" width="100" height="56" rx="8"/><rect class="slot" x="1246" y="160" width="100" height="56" rx="8"/><rect class="slot" x="1362" y="160" width="100" height="56" rx="8"/><rect class="slot" x="1478" y="160" width="100" height="56" rx="8"/><rect class="slot" x="1594" y="160" width="100" height="56" rx="8"/><g class="sandwich"><rect class="sw" x="1246" y="236" width="100" height="56" rx="8"/><rect class="victim" x="1362" y="236" width="100" height="56" rx="8"/><rect class="sw" x="1478" y="236" width="100" height="56" rx="8"/></g><rect class="slot" x="1594" y="236" width="100" height="56" rx="8"/><rect class="slot" x="1246" y="312" width="100" height="56" rx="8"/><rect class="slot" x="1362" y="312" width="100" height="56" rx="8"/><rect class="slot" x="1478" y="312" width="100" height="56" rx="8"/><rect class="slot" x="1594" y="312" width="100" height="56" rx="8"/><text class="sw-lbl" x="1470" y="430">sandwich: buy, your swap, sell</text></svg></div>
+
+<div class="columns-3 text-sm" style="margin-top:48px">
+<div>One leader per slot decides what goes in, and in what order.</div>
+<div>Order is worth money. That value is MEV.</div>
+<div>No public mempool, so block builders compete for the order flow.</div>
+</div>
+
+Note:
+THE FIGHT IN ONE SENTENCE: who decides the order of transactions in a Solana block, and who keeps the money that ordering earns.
+ONE LEADER: every slot has one leader validator. It alone picks which transactions go in and in what order.
+MEV: maximal extractable value, the profit from choosing order, inclusion or exclusion. Arbitrage and liquidations are the harmless kind. A sandwich is the harmful kind: buy just before your swap, sell just after, and you pay the difference.
+WHY BUILDERS: Solana has no public mempool, so ordering runs through side channels. Jito's bundles and tips, and now competing block builders: Jito BAM, Harmonic, Rakurai. They plug into the validator client and compete on revenue per block, fairness and speed.
+WHERE MARINADE FITS, one line: the stake auction only admits validators that are not on the sandwich blacklist, so stake itself becomes the lever against harmful MEV.
+[NUMBERS PENDING VERIFICATION]
 
 ---
 
@@ -220,6 +231,13 @@ Builder hooks: marinade-ts-sdk and native-staking-sdk on npm, Anchor IDLs on doc
 <!-- .slide: data-stage="staking" -->
 
 ## Validators compete for the stake
+
+<div class="ladder" aria-hidden="true">
+<svg viewBox="0 0 400 300">
+<rect x="8" y="30" width="22" height="250"/><rect x="40" y="48" width="22" height="232"/><rect x="72" y="66" width="22" height="214"/><rect x="104" y="82" width="22" height="198"/><rect x="136" y="100" width="22" height="180"/><rect x="168" y="118" width="22" height="162"/><rect x="200" y="134" width="22" height="146"/><rect x="232" y="152" width="22" height="128"/><rect x="264" y="170" width="22" height="110"/><rect x="296" y="186" width="22" height="94"/><rect x="328" y="204" width="22" height="76"/><rect x="360" y="220" width="22" height="60"/>
+<line x1="0" y1="152" x2="400" y2="152"/>
+</svg>
+</div>
 
 <div class="steps">
 <div><span class="step-num">1</span><h3>Bond</h3>The validator funds an onchain bond.</div>
@@ -332,6 +350,12 @@ THE GAPS: validator comparison pages, embeddable widgets, Discord and Telegram b
 
 ## Knowing the ecosystem
 
+<div class="gears" aria-hidden="true">
+<svg class="gear gear-a" style="width:430px;height:430px;top:40px;left:100px" viewBox="0 0 24 24"><path d="M11 10.27 7 3.34"/><path d="m11 13.73-4 6.93"/><path d="M12 22v-2"/><path d="M12 2v2"/><path d="M14 12h8"/><path d="m17 20.66-1-1.73"/><path d="m17 3.34-1 1.73"/><path d="M2 12h2"/><path d="m20.66 17-1.73-1"/><path d="m20.66 7-1.73 1"/><path d="m3.34 17 1.73-1"/><path d="m3.34 7 1.73 1"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="12" r="8"/></svg>
+<svg class="gear gear-b" style="width:310px;height:310px;top:400px;left:420px" viewBox="0 0 24 24"><path d="M11 10.27 7 3.34"/><path d="m11 13.73-4 6.93"/><path d="M12 22v-2"/><path d="M12 2v2"/><path d="M14 12h8"/><path d="m17 20.66-1-1.73"/><path d="m17 3.34-1 1.73"/><path d="M2 12h2"/><path d="m20.66 17-1.73-1"/><path d="m20.66 7-1.73 1"/><path d="m3.34 17 1.73-1"/><path d="m3.34 7 1.73 1"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="12" r="8"/></svg>
+<svg class="gear gear-c" style="width:230px;height:230px;top:120px;left:480px" viewBox="0 0 24 24"><path d="M11 10.27 7 3.34"/><path d="m11 13.73-4 6.93"/><path d="M12 22v-2"/><path d="M12 2v2"/><path d="M14 12h8"/><path d="m17 20.66-1-1.73"/><path d="m17 3.34-1 1.73"/><path d="M2 12h2"/><path d="m20.66 17-1.73-1"/><path d="m20.66 7-1.73 1"/><path d="m3.34 17 1.73-1"/><path d="m3.34 7 1.73 1"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="12" r="8"/></svg>
+</div>
+
 <div class="grid-3">
 <div class="card">
 <h3>Marking validators</h3>
@@ -370,12 +394,12 @@ A gap worth naming for Rust builders: there is no maintained Rust client crate. 
 <p>MNDE is locked into veMNDE and votes on Marinade Improvement Proposals (MIPs).</p>
 </div>
 <div class="card">
-<h3>On Realms</h3>
-<p>SPL Governance with the Voter Stake Registry, the shared stack of Solana DAOs.</p>
+<h3>Shared stack</h3>
+<p>SPL Governance and the Voter Stake Registry, the programs most Solana DAOs run on.</p>
 </div>
 <div class="card">
-<h3>Real decisions</h3>
-<p>MIP-14 burned 30% of the MNDE supply. Votes also steer stake to validators.</p>
+<h3>Back to Realms</h3>
+<p>Marinade contributed SPL Governance program changes, deep-dive docs and the vote aggregator plugin.</p>
 </div>
 </div>
 
@@ -384,8 +408,8 @@ A gap worth naming for Rust builders: there is no maintained Rust client crate. 
 Note:
 GOVERNANCE AS A BUILDING BLOCK, and the one I know best.
 LOCK AND VOTE: MNDE goes into the Voter Stake Registry and becomes veMNDE. Vote at app.marinade.finance/governance or on Realms.
-ON REALMS: SPL Governance, the same program most Solana DAOs use. Anything you build here works for every Realm, not just Marinade.
-REAL DECISIONS: MIP-14 burned 300M of the 1B MNDE. veMNDE votes also direct part of the stake to validators. Snapshots of those votes are in the snapshots API.
+SHARED STACK: SPL Governance on Realms, the same program most Solana DAOs use. Anything you build here works for every Realm, not just Marinade.
+BACK TO REALMS: Marinade does not only use Realms, it builds for it. Program changes to SPL Governance (PRs by ochaloup on solana-program-library), the SPL Governance deep dive at docs.realms.today/spl-governance, and the vote aggregator plugin at github.com/marinade-finance/vote-aggregator, which pools many voters' power into one voting actor. Say the aggregator is evaluation-grade, not audited.
 THE GAP: the open-source governance UI, now under Mythic-Project, has been idle since February 2026. Other gaps: a veMNDE voting-power viewer, an audited vote aggregator, proposal notifications for any Realm.
 
 ---
@@ -394,27 +418,19 @@ THE GAP: the open-source governance UI, now under Mythic-Project, has been idle 
 
 ## Pick your block
 
-<div class="grid-3">
-<div class="card">
-<h3>DeFi integration</h3>
-<p>Take mSOL, route yield, track Recipes payouts.</p>
-</div>
-<div class="card">
-<h3>Staking data and dashboards</h3>
-<p>Validators, auction, bonds and APY, all open.</p>
-</div>
-<div class="card">
-<h3>Governance UX</h3>
-<p>A Realms UI people want to use.</p>
-</div>
+<div class="pick">
+<div><span class="pick-icon b-base"><img src="images/illo/coin-box-dark.svg" alt=""></span><strong>Staking</strong><span>Bond health alerts, a SAM bid simulator, a Rust client from the IDLs.</span></div>
+<div><span class="pick-icon b-defi"><img src="images/illo/wallet-dark.svg" alt=""></span><strong>DeFi</strong><span>Integrate mSOL, compare yield venues, track Recipes payouts.</span></div>
+<div><span class="pick-icon b-data"><img src="images/illo/chart-dark.svg" alt=""></span><strong>Data</strong><span>Validator pages, widgets and bots on the open APIs.</span></div>
+<div><span class="pick-icon b-dao"><img src="images/illo/mnde-diamond-dark.svg" alt=""></span><strong>DAO</strong><span>A Realms UI people want to use, a veMNDE voting-power viewer.</span></div>
 </div>
 
 <p class="slide-foot">SDKs on npm, IDLs and APIs on docs.marinade.finance, code on github.com/marinade-finance.</p>
 
 Note:
-THE ASK, and the whole rail is lit: all four blocks are covered.
+THE ASK, and the whole rail is lit: all four blocks are covered. The rows pop in one by one, same colours as the bricks on the map slide.
 Say Ondra's line: staking is Solana's base yield layer, Marinade routes it. mSOL as the liquid version, MNDE to manage the DAO, and public data on every validator. Pick whichever part you want to improve.
-One sentence per card, then stop. Point people to the docs and to me after the talk.
+One sentence per row, then close with the sidetrack: $3,000 at Build Station for the best staking-focused build.
 
 ---
 
@@ -429,7 +445,7 @@ One sentence per card, then stop. Point people to the docs and to me after the t
 
 [docs.marinade.finance](https://docs.marinade.finance)<br>
 [github.com/marinade-finance](https://github.com/marinade-finance)<br>
-[app.realms.today/dao/MNDE](https://app.realms.today/dao/MNDE)
+[Marinade DAO on Realms](https://v2.realms.today/dao/899YG3yk4F66ZgbNWLHriZHTXSKk9e1kvsKEquW7L6Mo)
 
 </div>
 <div>

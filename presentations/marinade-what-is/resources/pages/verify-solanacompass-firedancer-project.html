@@ -1,0 +1,2235 @@
+<!doctype html>
+<html lang="en"
+      class="geo-US">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-17078753164"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'AW-17078753164');
+</script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preload" as="font" type="font/woff2" href="https://solanacompass.com/webfonts/fa-solid-900.woff2" crossorigin>
+    <link rel="stylesheet" href="https://solanacompass.com/css/fa-subset.css?v=1785244569">
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="GVC69IwrpiHgSNwQdq5hW9FEtc2Wo3yp3iEYdnRg">
+
+    <title>Firedancer on Solana: Project Review, Programs, Token, Metrics | Solana Compass</title>
+    <meta name="robots" content="max-image-preview:large">
+    <link rel="icon" href="/favicon.ico" sizes="32x32">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="theme-color" content="#12162a">
+    <link rel="preload" href="/fonts/space-grotesk-wordmark.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="alternate" type="application/rss+xml" title="Solana Compass" href="https://solanacompass.com/feed.xml">
+    <link rel="canonical" href="https://solanacompass.com/projects/firedancer">
+<style>
+    /* ============= Project show — visual overrides ============= */
+
+    /* Hero — full-width band */
+    .proj-hero {
+        display: flex; align-items: center; gap: 1.25rem;
+        padding: 1.25rem 1.25rem;
+        background: var(--compass-bg, #fff);
+        border: 1px solid var(--compass-border, rgba(139,92,246,0.12));
+        border-radius: var(--compass-radius, 12px);
+        margin-bottom: 1rem;
+    }
+    .dark-mode .proj-hero { background: rgba(255,255,255,0.02); }
+    @media (max-width: 575px) {
+        .proj-hero { flex-wrap: wrap; gap: 0.85rem; padding: 1rem; }
+        .proj-hero__main { flex: 1 1 calc(100% - 88px); }
+        .proj-hero__actions { flex: 1 1 100%; flex-wrap: wrap; }
+    }
+
+    /* Page layout —
+       Desktop: 2-col (main left, rail right). Rail is a vertical flex column
+                holding tokens + links + project + related at their natural heights.
+       Mobile:  Single column. We flatten the rail with display:contents and let the
+                page grid place its children individually so tokens lands above main. */
+    .page-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 1rem;
+        grid-template-areas:
+            "tokens"
+            "main"
+            "links"
+            "project"
+            "related";
+    }
+    @media (max-width: 991px) {
+        /* Flatten the rail wrapper so its children take their grid-area slots */
+        .ga-rail { display: contents; }
+    }
+    .ga-tokens   { grid-area: tokens; min-width: 0; }
+    .ga-main     { grid-area: main;   min-width: 0; }
+    .ga-links    { grid-area: links; }
+    .ga-project  { grid-area: project; }
+    .ga-related  { grid-area: related; }
+
+    @media (min-width: 992px) {
+        .page-grid {
+            grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+            align-items: start;
+            column-gap: 1.5rem;
+            row-gap: 1rem;
+            grid-template-areas:
+                "main rail";
+        }
+        /* Tokens and rail items sit inside the rail flex column on desktop;
+           clear the mobile grid-areas so the flex stack works. */
+        .ga-tokens, .ga-links, .ga-project, .ga-related { grid-area: auto; }
+        .ga-rail {
+            grid-area: rail;
+            display: flex; flex-direction: column; gap: 1rem;
+            min-width: 0;
+        }
+    }
+    .proj-hero__logo {
+        flex: 0 0 auto; width: 72px; height: 72px;
+        border-radius: 14px; object-fit: contain;
+        background: #f8f9fa; padding: 6px;
+    }
+    .proj-hero__main { flex: 1 1 auto; min-width: 0; }
+    .proj-hero__crumbs { font-size: 0.78rem; opacity: 0.65; margin-bottom: 0.25rem; }
+    .proj-hero__crumbs a { color: inherit; text-decoration: none; }
+    .proj-hero__crumbs a:hover { color: var(--compass-purple, #8b5cf6); }
+    .proj-hero h1 { font-size: 1.75rem; font-weight: 700; margin: 0 0 0.15rem; }
+    .proj-hero__tagline { font-size: 1rem; opacity: 0.75; margin: 0; }
+
+    .proj-hero__actions { flex: 0 0 auto; display: flex; gap: 0.4rem; align-items: center; }
+    .proj-hero__cta {
+        background: var(--compass-gradient); color: #fff;
+        border: none; border-radius: 8px;
+        padding: 0.55rem 1.1rem; font-weight: 600; text-decoration: none;
+        font-size: 0.9rem;
+        display: inline-flex; align-items: center; gap: 0.45rem;
+        letter-spacing: 0.01em;
+    }
+    .proj-hero__cta:hover { color: #fff; filter: brightness(1.05); }
+    .proj-hero__cta::after { content: '↗'; font-size: 0.95em; opacity: 0.85; }
+    .proj-hero__icon {
+        display: inline-flex; align-items: center; justify-content: center;
+        width: 32px; height: 32px;
+        color: var(--body-color, #6b7280); text-decoration: none; opacity: 0.8;
+        border: none; background: transparent;
+        transition: color 0.15s, opacity 0.15s;
+    }
+    .proj-hero__icon:hover { color: var(--compass-purple, #8b5cf6); opacity: 1; }
+
+    .proj-categories { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.5rem; }
+    .proj-categories a {
+        font-size: 0.8rem; font-weight: 500;
+        padding: 0.25rem 0.7rem; border-radius: 999px;
+        background: rgba(139, 92, 246, 0.08);
+        color: var(--compass-purple, #8b5cf6);
+        text-decoration: none;
+        display: inline-flex; align-items: center; gap: 0.4rem;
+    }
+    .proj-categories a:hover { background: rgba(139, 92, 246, 0.18); }
+    .proj-categories .rank { font-variant-numeric: tabular-nums; font-size: 0.7rem; font-weight: 700; opacity: 0.8; }
+
+    /* Section heads */
+    .proj-section { margin: 1.5rem 0 1rem; }
+    .proj-section__head {
+        display: flex; justify-content: space-between; align-items: baseline;
+        margin-bottom: 0.5rem; padding-bottom: 0.4rem;
+        border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+    .dark-mode .proj-section__head { border-bottom-color: rgba(255,255,255,0.08); }
+    .proj-section__eyebrow {
+        font-size: 0.68rem; letter-spacing: 0.10em; text-transform: uppercase;
+        opacity: 0.55; font-weight: 700; display: block;
+    }
+    .proj-section__head h2 { font-size: 1.1rem; font-weight: 700; margin: 0.1rem 0 0; }
+    .proj-section__see-all { font-size: 0.8rem; text-decoration: none; opacity: 0.7; align-self: flex-end; }
+    .proj-section__see-all:hover { opacity: 1; }
+
+    /* Program rows — flat, single border around shell, breathing space between rows */
+    .program-row {
+        display: block; text-decoration: none; color: inherit;
+        padding: 1.1rem 0 1.25rem;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+        transition: background 0.12s;
+    }
+    .dark-mode .program-row { border-bottom-color: rgba(255,255,255,0.05); }
+    .program-row:hover { color: inherit; background: rgba(139, 92, 246, 0.03); }
+    .program-row:last-child { border-bottom: none; }
+    .program-row__head { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 0.5rem; }
+    .program-row__title { margin: 0; font-size: 1rem; font-weight: 600; }
+    .program-row__addr { font-family: var(--compass-font-mono); font-size: 0.7rem; opacity: 0.45; word-break: break-all; line-height: 1.3; margin-top: 0.15rem; }
+    .program-row__desc { font-size: 0.85rem; opacity: 0.72; margin: 0.4rem 0 0; line-height: 1.45; max-width: 64ch; }
+    .program-row__open { font-size: 0.78rem; text-decoration: none; opacity: 0.6; white-space: nowrap; align-self: center; }
+    .program-row__open:hover { opacity: 1; color: var(--compass-purple, #8b5cf6); }
+
+    .program-row__metrics {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1.5rem;
+        margin-top: 1rem;
+    }
+    .program-row__metric .label {
+        font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase;
+        opacity: 0.55; font-weight: 600; display: block; margin-bottom: 0.15rem;
+    }
+    .program-row__metric .value-line {
+        display: flex; align-items: baseline; gap: 0.4rem;
+    }
+    .program-row__metric .value { font-size: 1.05rem; font-weight: 700; line-height: 1.1; font-variant-numeric: tabular-nums; }
+    .program-row__metric .scope { font-size: 0.65rem; opacity: 0.5; letter-spacing: 0.04em; text-transform: uppercase; font-weight: 600; }
+    @media (max-width: 767px) {
+        .program-row__head { flex-wrap: wrap; }
+        .program-row__head > div { flex: 1 1 100% !important; min-width: 0; }
+        .program-row__open { align-self: flex-start; margin-top: 0.4rem; }
+    }
+    @media (max-width: 575px) {
+        .program-row__metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+        .program-row__metric .value-line { flex-wrap: wrap; gap: 0.25rem; }
+        .programs-shell { padding: 0 1rem; }
+    }
+
+    .programs-shell, .description-shell {
+        background: var(--compass-bg, #fff);
+        border: 1px solid var(--compass-border, rgba(139,92,246,0.10));
+        border-radius: var(--compass-radius, 12px);
+        padding: 0 1.5rem;
+    }
+    .dark-mode .programs-shell, .dark-mode .description-shell { background: rgba(255,255,255,0.02); }
+    .description-shell { padding: 1.25rem 1.5rem; }
+
+    /* Project links — flat icon row, no per-button borders */
+    .proj-links { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+    .proj-links a {
+        display: inline-flex; align-items: center; gap: 0.35rem;
+        padding: 0.4rem 0.65rem;
+        font-size: 0.78rem; font-weight: 500;
+        color: var(--body-color, #6b7280); text-decoration: none;
+        border-radius: 6px;
+        background: transparent;
+        transition: background 0.12s, color 0.12s;
+    }
+    .proj-links a:hover { background: rgba(139,92,246,0.10); color: var(--compass-purple, #8b5cf6); }
+    .proj-links a i { font-size: 0.85rem; }
+
+    /* Tiny labels in the demoted score block */
+    .score-tiny__label { letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; opacity: 0.55; font-size: 0.62rem; }
+
+    /* Related projects — clickable rows, no nested cards */
+    .related-list { display: flex; flex-direction: column; }
+    .related-row {
+        display: flex; align-items: center; gap: 0.6rem;
+        padding: 0.55rem 0;
+        border-top: 1px solid rgba(0,0,0,0.06);
+        text-decoration: none; color: inherit;
+        font-size: 0.88rem;
+    }
+    .dark-mode .related-row { border-top-color: rgba(255,255,255,0.07); }
+    .related-row:first-child { border-top: none; }
+    .related-row:hover { color: var(--compass-purple, #8b5cf6); }
+    .related-row img { width: 28px; height: 28px; border-radius: 6px; object-fit: contain; background: #f8f9fa; flex-shrink: 0; padding: 2px; }
+    .related-row__name { font-weight: 600; }
+    .related-row__score { margin-left: auto; font-size: 0.7rem; opacity: 0.55; font-variant-numeric: tabular-nums; }
+</style>
+    
+    
+    <!-- Scripts -->
+
+    <script src="/js/app.js?id=5fb8a9f3ece243f590fc2e31bd192252" defer></script>
+    <link href="/css/app.css?id=e8110a9427a1f365e393045f490eee1a" rel="stylesheet">
+    
+    <link href="/css/libs.css?id=3795a2b4ea29ca1b435e1a2c9a297734" rel="stylesheet">
+    <!-- Fonts -->
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    <script type="text/javascript">
+        window.geo = 'US'
+                window.maxComputeUnits = 100000000;
+        window.blockComputeLimits = {"2024-01-01":48000000,"2025-07-23":60000000,"2026-07-29 05:15":100000000}; // UTC date => per-block CU limit
+        window.swapConfig = {
+            jupiter: {
+                feeBps: 0,
+                feeAccount: null,
+                referralAccount: null,
+                apiKey: null
+            },
+            rpcEndpoint: "https:\/\/specific-lanny-fast-mainnet.helius-rpc.com\/"
+        };
+    </script>
+    <!-- Hotjar Tracking Code for https://solanacompass.com -->
+    <script>
+        (function (h, o, t, j, a, r) {
+            h.hj = h.hj || function () {
+                (h.hj.q = h.hj.q || []).push(arguments)
+            };
+            h._hjSettings = {hjid: 2875148, hjsv: 6};
+            a = o.getElementsByTagName('head')[0];
+            r = o.createElement('script');
+            r.async = 1;
+            r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
+            a.appendChild(r);
+        })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
+    </script>
+
+    <!-- Styles -->
+
+    <style>
+        .sol-grad {
+            background: linear-gradient(133.18deg, rgba(116, 191, 255, 0.5) 13.3%, rgba(125, 229, 194, 0.5) 85.25%);
+            /*background: linear-gradient(135deg, rgba(80, 217, 246, 0.75), rgba(189, 112, 213, 0.75))*/
+            /*  background: #7F7FD5;  !* fallback for old browsers *!
+              background: -webkit-linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);  !* Chrome 10-25, Safari 5.1-6 *!
+              background: linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5); !* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ *!
+  */
+        }
+
+        .found-grad {
+            background: linear-gradient(133.18deg, rgba(116, 191, 255, 0.5) 13.3%, rgba(125, 229, 194, 0.5) 85.25%);
+            /*background: #7F7FD5;  !* fallback for old browsers *!
+            background: -webkit-linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);  !* Chrome 10-25, Safari 5.1-6 *!
+            background: linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5); !* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ *!
+*/
+        }
+
+        .fas {
+            font-size: 125%;
+            /*background: linear-gradient(135deg, rgba(80, 217, 246, 0.75), rgba(189, 112, 213, 0.75));*/
+            /*   background: #7F7FD5;  !* fallback for old browsers *!
+               background: -webkit-linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);  !* Chrome 10-25, Safari 5.1-6 *!
+               background: linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5); !* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ *!
+   */
+            background: rgba(116, 191, 255, .9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+    <script>
+        var clicky_custom = clicky_custom || {};
+        clicky_custom.href = window.location.pathname + window.location.search;
+        clicky_custom.title = document.title;
+        clicky_custom.split = {
+            name: 'Conversion Page',
+            version: window.location.pathname,
+        }
+    </script>
+
+</head>
+<body class="app ">
+<script>
+    try {
+        if (localStorage.getItem('dark-mode') === 'dark') {
+            document.body.classList.add('dark-mode');
+        }
+    } catch (error) {
+        // Keep the default theme when storage is unavailable.
+    }
+</script>
+
+<div id="app">
+    <embed-modal></embed-modal>
+
+    <div class="page">
+        <div class="page-main">
+                        <div class="hor-header header top-header p-0">
+                <div class="container">
+                    <div class="d-flex ">
+                        <a class="animated-arrow hor-toggle horizontal-navtoggle m-0"><span></span></a>
+                        
+                                                <a class="header-brand compass-brand m-0 p-0" href="/" title="Solana Compass">
+                            <svg class="compass-brand__mark" viewBox="0 0 512 512" fill="currentColor" aria-hidden="true" focusable="false"><path  d="M255.7 21h1.1l7.5 20.4 8.6 23.6 5.4 14.5 3.8 10.8 9.1 24.7 3.2 8.6 11.3 3.7 12.9 5.9 7 3.8-.6 1.6-6.4 4.3-7 4.8-2.7-.5-11.3-4.8-6.4-2.2-2.7-6.4-9.1-25.3-7.6-20.4-8.5-23.1-6.5-18.3-.5 88.1-17.2 1.7-13.5 2.6-14.5 4.9-10.7 4.8-10.2 6.5-5.9 4.3-5.9 4.8-5.4 4.8-5.4 5.4-5.9 7.5-5.4 7.5-4.8 8.1-5.4 11.3-3.7 9.7-2.2 1.6-26.8 9.6-23.1 8.1-33.4 11.8-10.2 3.8 90.3.5 1.1 14 2.1 12.3 3.8 12.9 4.3 10.2 2.1 4.9-.5 2.1-8.6 12.9h-1.6l-4.9-8.6-6.4-14.5-3.2-8.6-5.4-2.1-26.9-9.2-23.1-8-22.5-8.1-28.5-9.6 1.1-1.1 25.8-9.2 22.5-8 35-12.4 19.8-7 2.7-.5 1.6-5.9 5.4-12.9 6.4-12.3 6.5-9.7.5-2.2-7-11.8-6.4-10.2-7-11.3-8-12.9-8.6-13.9L101 101l-2.7-4.3.6-1.1 11.2 7 11.3 7 12.4 7.5 10.2 6.5 12.3 7.5 8.6 5.4 11.3 6.9 2.2-.5 8-5.4 10.8-5.9 12.9-5.3 8-2.7 2.7-6.5 7-19.3 8.1-22 8-22.6 8.6-23.7ZM126.3 124.1l1 2.7 4.9 8.6 6.9 11.3 8.6 13.9 4.3 6.5 2.7-2.2 3.8-4.3 2.7-2.6-.6-2.2-6.4-5.9-4.3-4.3-4.3-3.8-5.9-5.9-4.3-3.7-7-6.5Zm101.5-62.3.5 1.6-8 22-1.1 2.7-12.9 3.8-11.3 3.7-10.7 4.9-8.6 4.3-11.3 6.4-8.6 5.9-2.1-.5-9.7-5.9-9.7-6.5 2.7-3.2 8.6-6.4 9.1-6 11.3-6.4 8.6-4.3 10.8-4.8 17.7-5.9 15-3.8Zm56.4.5 7 .6 14.5 3.2 14 4.3 13.9 5.4 12.4 5.9 11.3 6.4 9.6 6.5 8.6 6.4 2.7 2.2v1l-10.7 7-8.1 5.4-2.1.5-10.8-7-12.3-6.9-11.3-5.4-12.9-4.9-12.9-3.7-3.8-1.1-9.1-25.2Zm131.1 30.6v1.7l-5.9 9.6-7 10.8-7.5 11.8-8.6 13.4-5.9 9.2-5.9 9.1-7.6 11.8-5.3 8.1-7.6 11.8-8 12.3-5.9 9.2-1.6 2.1H167.6l-1.6-2.1v-3.2l4.8-5.4 3.8-4.3 8.6-9.2 8.1-8.5 5.9-6.5 3.2-1.6 92.9-.5 10.2-6.5 8.1-5.4 12.4-8 12.3-8.1 10.8-7 13.9-9.1 15.6-10.2 10.8-7 12.3-8 14-9.2Zm-9.7 38.2 2.7 2.7 3.8 4.3 7.5 10.7 7.5 12.9L433 173l5.9 14.5 4.9 15L447 216l1.1 5.3v3.8l-4.9-1.1-20.4-7-1.6-3.7-4.3-14.5-5.4-13.4-6.4-13.5-4.3-7-6.5-10.2-1.6-2.1 1.1-3.2 5.9-9.2Zm-299.8.5h1.1l4.8 8.1 7 10.7 1.1 2.7-4.3 5.9-7 11.3-6.4 12.4-5.9 14.5-4.3 13.4-1.6 5.9-8.6 3.2-12.9 4.9-4.3.5.5-5.9 3.2-14.5 3.8-12.4 3.8-10.2 4.3-9.6 4.2-8.6 5.4-9.7 8.6-12.9 5.9-7.5Zm266 52.1 2.1 2.2 4.3 7.5 5.4 12.9 3.2 9.1v1.1l2.7.5 27.9 9.7 22.6 8.1 10.8 3.7 28.4 10.2 14 4.9v1.1l-18.8 6.4-19.9 7-19.3 7-26.4 9.1-17.7 6.5-4.3 2.1-4.8 13.4-5.4 11.3-6.4 10.8-3.8 5.3 1.1 2.7 4.3 7.5 6.4 10.2 8.6 14 7.5 11.8 8.1 12.9 7.5 11.8 4.9 7.6h-1.7l-11.2-7-11.3-7-12.4-7.5-12.9-8.1-13.4-8-15-9.2-2.2-.5-8.1 5.4-12.3 7-13.4 5.3-5.9 2.2h-1.1l-.6 2.7-7.5 21.4-7.5 21.5-11.3 32.3-4.8 13.4-5.4 15-1.1-.5-10.7-30.6-8.1-23.1-8-22.6-8.6-24.7-1.6-4.8-5.4-1.6-13.4-5.4-9.2-4.8-3.7-2.7 2.1-2.2 12.4-8 12.3 5.3 8.1 3.3 4.8 13.4 9.2 25.8 8 23.1 9.1 25.2 2.7 8.1.6-90.3.5-.5 10.8-.5 13.4-2.2 10.2-2.7 11.8-4.3 10.2-4.8 11.3-7 7.5-5.9 7.5-6.5 4.9-4.8 4.8-5.9 5.4-7 6.4-10.7 4.9-10.2 4.3-11.9 5.3-2.1 21-7.5 25.8-9.2 19.9-6.9 15-5.4 9.1-3.2-90.8-.6-1-15-2.2-11.8-4.8-15.6-5.4-12.9 8.1-12.9Zm-19.9 166.6-5.4 4.8-3.7 3.2 2.7 2.7 13.4 8.1 10.2 6.4 13.4 8.1 3.2 2.1 1.1-.5-4.8-4.8-3.8-4.3-25.8-25.8ZM167.1 233.7h145.6l2.7 1.6 7.5 7.5 3.7 4.3 4.9 4.9 3.7 4.3 8.6 9.1 3.3 3.8v3.2l-2.2 2.1h-145l-3.3-2.1-4.8-4.8-3.8-4.3-4.3-4.3-3.7-4.3-7.5-8.1-4.9-5.4-2.1-3.2.5-2.7ZM64.5 282.6l5.3 1.6 19.4 7 1.6 1.6 3.8 13.4 3.7 10.8 4.3 9.6 7 13.5 5.4 8.6 4.8 7-1.1 2.6-8.6 13.5-3.2 4.8-2.1-1.1-8.1-10.7-5.4-8.1-6.4-11.2-4.8-9.2-5.4-12.9-3.8-10.7-3.2-11.3-3.2-14.5Zm382.5 0 1.6.5-1.6 10.2-4.8 17.8-4.3 12.9-8.1 17.7-6.4 11.8-7.6 11.3-4.8 6.4-4.3 5.4h-1.1l-5.3-8.6-6-9.1-1.6-3.2 8.6-12.9 7-12.4 4.8-10.2 4.9-12.9 4.3-15.6 15.6-5.9Zm-271.9 11.3h168.2l2.7 1.1 1.1 2.1-.6 2.7-4.8 5.4-6.5 6.4-3.7 4.3-3.8 3.8-3.7 4.3-8.1 8.6-2.7 2.1-1.1.5-92.9.6-6.4 3.7-22.6 15.1-8.6 5.4-12.9 8.6-11.8 7.5-12.4 8-13.4 8.6-8.1 5.4-9.1 5.9-12.9 8.1-2.7 1.6h-1.1l1.1-2.7 5.9-9.1 7.5-11.9 7.6-11.8 5.9-9.1 6.4-10.2 8.6-13.4 8.1-12.4 7-10.7 8.6-13.5 5.9-9.1 3.2-4.8Zm-20.9 97.2 2.1.6 9.7 6.4 11.3 6.4 13.4 6.5 14.5 5.4 12.4 3.7 2.1 2.2 5.9 16.6 1.7 5.9v1.7l-8.1-1.1-17.2-4.3-15.6-5.4-10.7-4.8-8.6-4.3-8.1-4.3-11.8-7.5-9.1-7-3.8-3.3 2.2-2.1 10.2-6.4Zm203.1 0 2.7.6 8 5.3 10.2 6.5v1.6l-8 6.4-12.9 8.6-11.3 6.5-15.6 7.5-12.9 4.8-16.1 4.9-12.9 2.7h-3.2l1.6-6.5 6.4-18.8 3.3-1.6 13.9-4.3 11.3-4.3 13.4-6.5 9.7-5.3 9.1-5.9Z"/></svg><span class="compass-brand__word">Compass</span>
+                        </a>
+                        <div class="mt-1 d-md-block d-none" style="flex-grow: 1; display: flex; justify-content: center; margin-left: 10px; margin-right: 10px;">
+                            <div style="max-width: 450px; width: 100%; margin: 0 auto;">
+                                <autocomplete-search></autocomplete-search>
+                            </div>
+                        </div>
+
+                        <div class="d-flex order-lg-2 ml-auto header-wallet-actions" style="margin-left:auto">
+                            <div class="d-flex flex-col align-items-center align-content-center justify-content-center">
+                                                                    <wallet-button></wallet-button>
+                                                                                                                                        <a href="/login" class="btn btn-info py-2 mt-1 " title="Log In" style="margin-left:10px;max-height:38px">
+                                        <el-icon size="125%" ><Avatar /></el-icon>
+                                    </a>
+                                                                                                </div>
+                            <div class="dropdown d-lg-none d-flex responsive-search align-items-center">
+                                <!-- Mobile search (now at the end) -->
+                                <a href="javascript:void(0)" class="nav-link d-lg-none navsearch-icon" data-bs-toggle="dropdown" aria-expanded="false" 
+                                   data-bs-popper-config='{"modifiers": [{"name": "offset", "options": {"offset": [0,10]}}, {"name": "preventOverflow", "options": {"padding": 10}}, {"name": "flip", "options": {"padding": 10, "fallbackPlacements": ["top-end", "bottom-start", "top-start"]}}]}'>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="header-icon search-icon" width="24" height="24" viewBox="0 0 24 24"><path d="M10 18a7.952 7.952 0 0 0 4.897-1.688l4.396 4.396 1.414-1.414-4.396-4.396A7.952 7.952 0 0 0 18 10c0-4.411-3.589-8-8-8s-8 3.589-8 8 3.589 8 8 8zm0-14c3.309 0 6 2.691 6 6s-2.691 6-6 6-6-2.691-6-6 2.691-6 6-6z"></path></svg>
+                                </a>
+                                <div class="dropdown-menu header-search dropdown-menu-end" style="width: calc(100vw - 20px);">
+                                    <div class="input-group w-100 p-2">
+                                         <autocomplete-search></autocomplete-search>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- SEARCH -->
+                            <div class="dropdown d-flex hidden-sm">
+                                <a class="nav-link icon theme-layout nav-link-bg layout-setting">
+                                                      <span class="light-layout">
+                                                         <svg xmlns="http://www.w3.org/2000/svg" class="header-icon"
+                                                              width="24" height="24" viewBox="0 0 24 24">
+                                                            <path
+                                                                d="M20.742 13.045a8.088 8.088 0 0 1-2.077.271c-2.135 0-4.14-.83-5.646-2.336a8.025 8.025 0 0 1-2.064-7.723A1 1 0 0 0 9.73 2.034a10.014 10.014 0 0 0-4.489 2.582c-3.898 3.898-3.898 10.243 0 14.143a9.937 9.937 0 0 0 7.072 2.93 9.93 9.93 0 0 0 7.07-2.929 10.007 10.007 0 0 0 2.583-4.491 1.001 1.001 0 0 0-1.224-1.224zm-2.772 4.301a7.947 7.947 0 0 1-5.656 2.343 7.953 7.953 0 0 1-5.658-2.344c-3.118-3.119-3.118-8.195 0-11.314a7.923 7.923 0 0 1 2.06-1.483 10.027 10.027 0 0 0 2.89 7.848 9.972 9.972 0 0 0 7.848 2.891 8.036 8.036 0 0 1-1.484 2.059z"></path>
+                                                         </svg>
+                                                      </span>
+                                    <span class="dark-layout">
+                                                         <svg xmlns="http://www.w3.org/2000/svg" class="header-icon"
+                                                              width="24" height="24" viewBox="0 0 24 24">
+                                                            <path
+                                                                d="M6.993 12c0 2.761 2.246 5.007 5.007 5.007s5.007-2.246 5.007-5.007S14.761 6.993 12 6.993 6.993 9.239 6.993 12zM12 8.993c1.658 0 3.007 1.349 3.007 3.007S13.658 15.007 12 15.007 8.993 13.658 8.993 12 10.342 8.993 12 8.993zM10.998 19h2v3h-2zm0-17h2v3h-2zm-9 9h3v2h-3zm17 0h3v2h-3zM4.219 18.363l2.12-2.122 1.415 1.414-2.12 2.122zM16.24 6.344l2.122-2.122 1.414 1.414-2.122 2.122zM6.342 7.759 4.22 5.637l1.415-1.414 2.12 2.122zm13.434 10.605-1.414 1.414-2.122-2.122 1.414-1.414z"></path>
+                                                         </svg>
+                                                      </span>
+                                </a>
+                            </div>
+
+
+                            <div class="d-flex">
+                                <div></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="sticky">
+                <div class="horizontal-main hor-menu clearfix bg-gradient-primary ">
+                    <div class="horizontal-mainwrapper container clearfix p-0">
+                        <nav class="horizontalMenu clearfix">
+                            <div class="horizontal-overlapbg active"></div>
+
+                            <ul class="horizontalMenu-list">
+                                <li class="nav-active"><a href="/projects"><i class="fas fa-th-large"></i> Projects</a></li>
+                                <li class=""><a href="/staking"><i class="fas fa-piggy-bank"></i> Staking</a></li>
+                                <li class=""><a href="/learn"><i class="fas fa-book"></i> Learn</a></li>
+                                <li class=""><a href="/news"><i class="fas fa-newspaper"></i> News</a></li>
+                                <li><a href="/tokens"><i class="fas fa-chart-line"></i> Swap</a></li>
+                                <li><a href="/stake-pools"><i class="fas fa-water"></i> Stake Pools</a></li>
+                                <li class=""><a href="/defi/borrow-lend"><i class="fas fa-university"></i> DeFi</a></li>
+                                                                <li class=""><a href="/tools"><i class="fas fa-toolbox"></i> Tools</a></li>
+                                                                <li><a href="/validators/"><i class="fas fa-microchip"></i> Validators</a></li>
+                                <li class=""><a href="/analytics"><i class="fas fa-chart-pie"></i> Analytics</a></li>
+                                <li class=""><a href="/statistics"><i class="fas fa-calculator"></i> Statistics</a></li>
+                                
+                        </ul>
+
+                        </nav>
+                        <!--Nav-->
+
+                    </div>
+
+                </div>
+<div class="compass-submenu-bar horizontal-main">
+    <div class="horizontal-mainwrapper container clearfix p-0">
+        <nav class="compass-submenu-nav">
+            <div class="compass-submenu-links">
+                                                                                    <a href="/projects/category/infrastructure" class="compass-submenu-link ">
+                            Infrastructure &amp; Development
+                        </a>
+                                                                                                        <a href="/projects/category/identity" class="compass-submenu-link ">
+                            Wallets &amp; Identity
+                        </a>
+                                                                                                        <a href="/projects/category/nft" class="compass-submenu-link ">
+                            NFTs &amp; Digital Collectibles
+                        </a>
+                                                                                                        <a href="/projects/category/security" class="compass-submenu-link ">
+                            Security &amp; Audits
+                        </a>
+                                                                                                        <a href="/projects/category/defi" class="compass-submenu-link ">
+                            DeFi
+                        </a>
+                                                                                                        <a href="/projects/category/web3" class="compass-submenu-link ">
+                            Web3 Platforms
+                        </a>
+                                                                                                        <a href="/projects/category/blockchain" class="compass-submenu-link ">
+                            Blockchain Infrastructure
+                        </a>
+                                                                                                        <a href="/projects/category/gaming" class="compass-submenu-link ">
+                            On-Chain Gaming &amp; GameFi
+                        </a>
+                                                                                                        <a href="/projects/category/rwa" class="compass-submenu-link ">
+                            Real World Assets (RWA)
+                        </a>
+                                                                                                        <a href="/projects/category/real-world-assets" class="compass-submenu-link ">
+                            Real World Assets (RWA)
+                        </a>
+                                                </div>
+        </nav>
+    </div>
+</div>
+<div class="alert bg-gradient-teal text-white">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10">
+                <h4>Earn 5.30% APY staking with Solana Compass + help grow Solana's ecosystem</h4>
+                <p>Stake natively or with our LST compassSOL to earn a market leading APY</p>
+            </div>
+            <div class="col-md-2 text-right">
+                <a href="/staking" class="btn btn-lg bg-gradient-success">Earn 5.30%</a>
+            </div>
+        </div>
+    </div>
+</div>
+                <!--                    <div class="alert alert-info text-center p-3">Looking for the accounts unlocking after the Alameda fiasco? <a href="/alameda" class="text-white text-underline "><u>See them here</u></a></div>-->
+            </div>
+
+            <main class="d-n">
+                <div class="container my-4">
+
+    
+    
+    <div class="proj-hero">
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fmedia.thegrid.id%2F110%2F7%2F941%2Fid1761223287-yofTwDGNQzWuWUaALp4d4Q%2Fimage-1762950349.jpg&amp;w=120&amp;h=120&amp;dpr=2&amp;quality=80&amp;output=webp" alt="Firedancer logo" class="proj-hero__logo">
+                <div class="proj-hero__main">
+            <div class="proj-hero__crumbs"><a href="/projects">Solana Projects</a> &rsaquo; Firedancer</div>
+            <h1>Firedancer</h1>
+            <p class="proj-hero__tagline">Built from the ground up for performance.</p>
+        </div>
+        <div class="proj-hero__actions">
+                            <a href="https://firedancer.io/?utm_source=solanacompass.com&amp;utm_medium=project-directory&amp;utm_campaign=Solana+Compass&amp;utm_content=external-link" target="_blank" rel="nofollow noopener" class="proj-hero__cta">Visit</a>
+                                        <a href="https://x.com/jump_firedancer" target="_blank" rel="nofollow noopener" class="proj-hero__icon" title="Twitter"><i class="fab fa-twitter"></i></a>
+                                                        </div>
+    </div>
+
+    
+    <div class="proj-categories">
+                    <a href="https://solanacompass.com/projects/category/infrastructure">
+                                Infrastructure &amp; Development
+            </a>
+                    <a href="https://solanacompass.com/projects/category/infrastructure/rpc-nodes">
+                                RPC Nodes &amp; Infrastructure
+            </a>
+            </div>
+
+    
+    
+    
+    <div class="page-grid">
+
+        
+
+        
+        <section class="ga-main">
+
+            
+                            <div class="proj-section">
+                    <div class="proj-section__head">
+                        <div>
+                            <span class="proj-section__eyebrow">Programs · 24h on-chain</span>
+                            <h2>On-chain activity</h2>
+                        </div>
+                        <a href="/analytics/programs" class="proj-section__see-all">All programs →</a>
+                    </div>
+                                                            <div class="programs-shell">
+                                                                                                                <div class="program-row" style="opacity:0.7;">
+                                    <div class="program-row__head">
+                                        <div style="min-width:0; flex:1;">
+                                            <h3 class="program-row__title">Firedancer</h3>
+                                                                                            <p class="program-row__desc">Firedancer is a validator client for Solana designed for speed, security, and independence. It features a high-performance architecture with optimized Solana primitives, offering fast transaction processing and a secure design that operates within a restrictive sandbox with minimal system calls.</p>
+                                                                                    </div>
+                                                                                    <a href="https://jumpcrypto.com/firedancer" target="_blank" rel="noopener nofollow" class="program-row__open">Visit <i class="fas fa-external-link-alt fa-xs ms-1"></i></a>
+                                                                            </div>
+                                </div>
+                                                                        </div>
+                </div>
+            
+            <section class="entity-feed">
+        <header class="entity-feed__head">
+                            <span class="entity-feed__eyebrow">Project content</span>
+                        <h2 class="entity-feed__title">Firedancer news, features &amp; analysis</h2>
+                            <p class="entity-feed__subtitle">Matched from published articles, podcasts, and talks using the project name, token name, or token symbol.</p>
+                    </header>
+
+        <ol class="entity-feed__list">
+                                            <li class="entity-feed__row">
+                                        <a href="/news/anzas-wattenhofer-proposes-a-geo-aware-solana-leader-schedule-in-simd-0674" class="entity-feed__link">
+                        <div class="entity-feed__date" aria-hidden="true">
+                                                            <span class="entity-feed__date-month">Sep</span>
+                                <span class="entity-feed__date-day">30</span>
+                                <span class="entity-feed__date-year">2026</span>
+                                                    </div>
+                        <div class="entity-feed__body">
+                            <div class="entity-feed__meta">
+                                                                    <span>Infrastructure &amp; Development</span>
+                                                                                                    <span>Article</span>
+                                                                                            </div>
+                            <h3 class="entity-feed__heading">Anza Researchers Propose a Geo-Aware Solana Leader Schedule in SIMD-0674 and SIMD-0675</h3>
+                                                            <p class="entity-feed__excerpt">
+                                                                            Anza researchers Quentin Kniep and Roger Wattenhofer wrote SIMD-0674 and SIMD-0675, a geo-aware Solana leader schedule that cut simulated handover delay 53%.
+                                                                    </p>
+                                                    </div>
+                        <span class="entity-feed__cue" aria-hidden="true">Read<i class="fas fa-arrow-right"></i></span>
+                    </a>
+                                    </li>
+                                            <li class="entity-feed__row">
+                                        <a href="/news/simd-0649-closed-without-merging-as-solanas-priority-ordering-rule-waits-on" class="entity-feed__link">
+                        <div class="entity-feed__date" aria-hidden="true">
+                                                            <span class="entity-feed__date-month">Sep</span>
+                                <span class="entity-feed__date-day">27</span>
+                                <span class="entity-feed__date-year">2026</span>
+                                                    </div>
+                        <div class="entity-feed__body">
+                            <div class="entity-feed__meta">
+                                                                    <span>Tokenomics &amp; Incentive Design</span>
+                                                                                                    <span>Article</span>
+                                                                                            </div>
+                            <h3 class="entity-feed__heading">SIMD-0649 Closed Without Merging as Solana&#039;s Priority-Ordering Rule Waits on</h3>
+                                                            <p class="entity-feed__excerpt">
+                                                                            Reviewer Objections: Firedancer Replay and Batch Boundaries ... A commenter posting as cavemanloverboy wrote that &quot;all firedancer entries have a transaction batch of length 1,&quot; so the original rule would change nothing on Firedancer, and that the check would force replay to stall &quot;until the whole batch is deserialized and checked,&quot; because Firedancer starts replaying partially received batches.
+                                                                    </p>
+                                                    </div>
+                        <span class="entity-feed__cue" aria-hidden="true">Read<i class="fas fa-arrow-right"></i></span>
+                    </a>
+                                    </li>
+                                            <li class="entity-feed__row">
+                                        <a href="/news/alpenglow-is-live-on-solana-testnet-as-anza-retires-towerbft-and-votor-takes" class="entity-feed__link">
+                        <div class="entity-feed__date" aria-hidden="true">
+                                                            <span class="entity-feed__date-month">Sep</span>
+                                <span class="entity-feed__date-day">24</span>
+                                <span class="entity-feed__date-year">2026</span>
+                                                    </div>
+                        <div class="entity-feed__body">
+                            <div class="entity-feed__meta">
+                                                                    <span>Infrastructure &amp; Development</span>
+                                                                                                    <span>Article</span>
+                                                                                            </div>
+                            <h3 class="entity-feed__heading">Alpenglow Is Live on Solana Testnet as Anza Retires TowerBFT and Votor Takes</h3>
+                                                            <p class="entity-feed__excerpt">
+                                                                            &#039;Alpenglow is live on Solana testnet: Anza says TowerBFT was retired
+                                                                    </p>
+                                                    </div>
+                        <span class="entity-feed__cue" aria-hidden="true">Read<i class="fas fa-arrow-right"></i></span>
+                    </a>
+                                    </li>
+                                            <li class="entity-feed__row">
+                                        <a href="/news/alpenglow-activates-on-solana-testnet-as-frankendancer-era-ends-agave-v44-schedule-targets-november-9-mainnet-activation" class="entity-feed__link">
+                        <div class="entity-feed__date" aria-hidden="true">
+                                                            <span class="entity-feed__date-month">Sep</span>
+                                <span class="entity-feed__date-day">22</span>
+                                <span class="entity-feed__date-year">2026</span>
+                                                    </div>
+                        <div class="entity-feed__body">
+                            <div class="entity-feed__meta">
+                                                                    <span>Infrastructure &amp; Development</span>
+                                                                                                    <span>Article</span>
+                                                                                            </div>
+                            <h3 class="entity-feed__heading">Alpenglow Heads to Solana Testnet as Frankendancer Era Ends; Anza Publishes Agave v4.4 Schedule</h3>
+                                                            <p class="entity-feed__excerpt">
+                                                                            Anza says Alpenglow activates on Solana testnet this week, ending Frankendancer&#039;s testnet run. Devnet follows, then mainnet after an observation period; no date yet.
+                                                                    </p>
+                                                    </div>
+                        <span class="entity-feed__cue" aria-hidden="true">Read<i class="fas fa-arrow-right"></i></span>
+                    </a>
+                                    </li>
+                                            <li class="entity-feed__row">
+                                        <a href="/news/simd-0607-must-merge-before-solanas-disinflation-rate-can-activate-anza-says" class="entity-feed__link">
+                        <div class="entity-feed__date" aria-hidden="true">
+                                                            <span class="entity-feed__date-month">Aug</span>
+                                <span class="entity-feed__date-day">29</span>
+                                <span class="entity-feed__date-year">2026</span>
+                                                    </div>
+                        <div class="entity-feed__body">
+                            <div class="entity-feed__meta">
+                                                                    <span>Tokenomics &amp; Incentive Design</span>
+                                                                                                    <span>Article</span>
+                                                                                            </div>
+                            <h3 class="entity-feed__heading">SIMD-0607 Must Merge Before Solana&#039;s Disinflation Rate Can Activate, Anza Says</h3>
+                                                            <p class="entity-feed__excerpt">
+                                                                            SIMD-0607 must merge before SIMD-0550 activates. Anza explains why deterministic integer math must replace floating-point staking rewards in Agave v4.4 first.
+                                                                    </p>
+                                                    </div>
+                        <span class="entity-feed__cue" aria-hidden="true">Read<i class="fas fa-arrow-right"></i></span>
+                    </a>
+                                    </li>
+                                            <li class="entity-feed__row">
+                                        <a href="/news/solana-marks-30-consecutive-months-without-a-network-wide-outage" class="entity-feed__link">
+                        <div class="entity-feed__date" aria-hidden="true">
+                                                            <span class="entity-feed__date-month">Aug</span>
+                                <span class="entity-feed__date-day">10</span>
+                                <span class="entity-feed__date-year">2026</span>
+                                                    </div>
+                        <div class="entity-feed__body">
+                            <div class="entity-feed__meta">
+                                                                                                    <span>Article</span>
+                                                                                            </div>
+                            <h3 class="entity-feed__heading">Solana Marks 30 Consecutive Months Without a Network-Wide Outage</h3>
+                                                            <p class="entity-feed__excerpt">
+                                                                            Firedancer, QUIC, and Priority Fees: What Changed Between 2023 and Now ... Our Breakpoint 25 coverage of the Firedancer launch details the client architecture and its performance profile on mainnet.
+                                                                    </p>
+                                                    </div>
+                        <span class="entity-feed__cue" aria-hidden="true">Read<i class="fas fa-arrow-right"></i></span>
+                    </a>
+                                    </li>
+                                            <li class="entity-feed__row">
+                                        <a href="/news/coinbase-q2-2026-validator-report-4163m-sol-at-652-apy-as-full-fleet-moves" class="entity-feed__link">
+                        <div class="entity-feed__date" aria-hidden="true">
+                                                            <span class="entity-feed__date-month">Aug</span>
+                                <span class="entity-feed__date-day">5</span>
+                                <span class="entity-feed__date-year">2026</span>
+                                                    </div>
+                        <div class="entity-feed__body">
+                            <div class="entity-feed__meta">
+                                                                                                    <span>Article</span>
+                                                                                            </div>
+                            <h3 class="entity-feed__heading">&#039;Coinbase Q2 2026 Validator Report: 41.63M SOL at 6.52% APY as Full Fleet Moves</h3>
+                                                            <p class="entity-feed__excerpt">
+                                                                            Coinbase&#039;
+                                                                    </p>
+                                                    </div>
+                        <span class="entity-feed__cue" aria-hidden="true">Read<i class="fas fa-arrow-right"></i></span>
+                    </a>
+                                    </li>
+                                            <li class="entity-feed__row">
+                                        <a href="/news/overclock-validators-narya-ed25519-cuts-solana-signature-verify-tile-count" class="entity-feed__link">
+                        <div class="entity-feed__date" aria-hidden="true">
+                                                            <span class="entity-feed__date-month">Jul</span>
+                                <span class="entity-feed__date-day">27</span>
+                                <span class="entity-feed__date-year">2026</span>
+                                                    </div>
+                        <div class="entity-feed__body">
+                            <div class="entity-feed__meta">
+                                                                    <span>DeFi</span>
+                                                                                                    <span>Article</span>
+                                                                                            </div>
+                            <h3 class="entity-feed__heading">Overclock Validator&#039;s narya-ed25519 Cuts Solana Signature-Verify Tile Count</h3>
+                                                            <p class="entity-feed__excerpt">
+                                                                            Overclock Validator&#039;s narya-ed25519 uses AVX-512 IFMA to verify Ed25519 sigs 5.8x faster than Go stdlib, cutting Solana verify tiles from 72 to ~8 at 1M TPS.
+                                                                    </p>
+                                                    </div>
+                        <span class="entity-feed__cue" aria-hidden="true">Read<i class="fas fa-arrow-right"></i></span>
+                    </a>
+                                    </li>
+                                            <li class="entity-feed__row">
+                                        <a href="/news/mithril-produces-blocks-on-alpenglow-test-cluster-making-solanas-fourth-validator-client-a-reality" class="entity-feed__link">
+                        <div class="entity-feed__date" aria-hidden="true">
+                                                            <span class="entity-feed__date-month">Jun</span>
+                                <span class="entity-feed__date-day">24</span>
+                                <span class="entity-feed__date-year">2026</span>
+                                                    </div>
+                        <div class="entity-feed__body">
+                            <div class="entity-feed__meta">
+                                                                    <span>DeFi</span>
+                                                                                                    <span>Article</span>
+                                                                                            </div>
+                            <h3 class="entity-feed__heading">Mithril Produces Blocks on Alpenglow Test Cluster, Making Solana&#039;s Fourth Validator Client a Reality</h3>
+                                                            <p class="entity-feed__excerpt">
+                                                                            Overclock Validator&#039;s Mithril, a Go-based Solana full-node client targeting consumer hardware, produced blocks on the Alpenglow community test cluster on June 24, 2026.
+                                                                    </p>
+                                                    </div>
+                        <span class="entity-feed__cue" aria-hidden="true">Read<i class="fas fa-arrow-right"></i></span>
+                    </a>
+                                    </li>
+                                            <li class="entity-feed__row">
+                                        <a href="/learn/breakpoint-25/scaling-the-read-layer-to-1m-tps-fluxbeam-fluxrpc-rugcheck" class="entity-feed__link">
+                        <div class="entity-feed__date" aria-hidden="true">
+                                                            <span class="entity-feed__date-month">Dec</span>
+                                <span class="entity-feed__date-day">13</span>
+                                <span class="entity-feed__date-year">2025</span>
+                                                    </div>
+                        <div class="entity-feed__body">
+                            <div class="entity-feed__meta">
+                                                                    <span>Breakpoint 25</span>
+                                                                                                    <span>Conference Talk</span>
+                                                                                                    <span>8 min read</span>
+                                                            </div>
+                            <h3 class="entity-feed__heading">Scaling the Read Layer to 1M TPS: FluxBeam / FluxRPC / RugCheck</h3>
+                                                            <p class="entity-feed__excerpt">
+                                                                            As Solana prepares for Firedancer&#039;s promised million transactions per second, FluxBeam has unveiled a groundbreaking solution to what could become the network&#039;s next major bottleneck: reading all that data. ... While Firedancer promises to dramatically increase the network&#039;s transaction throughput to potentially one million TPS, the existing infrastructure for reading blockchain data wasn&#039;t designed for this scale.
+                                                                    </p>
+                                                    </div>
+                        <span class="entity-feed__cue" aria-hidden="true">Read<i class="fas fa-arrow-right"></i></span>
+                    </a>
+                                    </li>
+                    </ol>
+    </section>
+
+            
+            <div class="proj-section">
+                <div class="proj-section__head">
+                    <div>
+                        <span class="proj-section__eyebrow">About</span>
+                        <h2>Firedancer</h2>
+                    </div>
+                </div>
+                <div class="description-shell">
+                    <div class="project-description">
+                        
+                                                <div >
+    <h1>Firedancer</h1>
+<p>Firedancer is Jump Trading Group's independent validator client for Solana, built entirely in C from the ground up. Announced in early 2022 and released to mainnet in December 2025, it is the first fully independent alternative to the Agave (formerly Solana Labs) client. Where Agave is written in Rust and carries the lineage of the original Solana implementation, Firedancer starts from a clean slate — rewriting every primitive, from networking and signature verification to block production and transaction execution, with low-latency trading infrastructure as its design north star.</p>
+<p><a class="anchor" name="why-client-diversity-matters"></a></p>
+<h2>Why Client Diversity Matters</h2>
+<p>Before Firedancer, Solana ran almost entirely on a single validator codebase. That meant a critical bug in Agave could halt the entire network — a vulnerability that contributed to several high-profile outages. Firedancer directly addresses this. With two independently implemented clients, a bug in one does not affect the other. The network can continue producing blocks even if an edge-case vulnerability disables every Agave node simultaneously. This is the same resilience principle that underpins Ethereum's multi-client model, and it is widely considered a precondition for a production-grade, institutional-grade network.</p>
+<p><a class="anchor" name="architecture-tiles-and-kernel-bypass-networking"></a></p>
+<h2>Architecture: Tiles and Kernel-Bypass Networking</h2>
+<p>Firedancer's distinguishing engineering choice is its tile-based architecture. Rather than running validator logic in a monolithic process, Firedancer divides work into specialized, independently schedulable &quot;tiles&quot; — discrete pipeline stages that handle transaction ingestion, deduplication, signature verification, block packing, and data availability. Each tile runs in isolation, can be optimized independently, and communicates with adjacent tiles through high-speed ring buffers. The result is a validator that saturates hardware resources rather than leaving cores idle.</p>
+<p>The networking stack is similarly rebuilt from first principles. Firedancer implements kernel-bypass networking for both ingress (QUIC and UDP) and egress, bypassing the operating system's network stack to eliminate latency and CPU overhead. Signature verification uses AVX512-optimized ED25519 implementations that process multiple signatures in parallel on a single core. The block production pipeline uses a custom erasure coding system rather than relying on standard libraries. Every component reflects Jump's two decades of experience building latency-sensitive trading infrastructure.</p>
+<p><a class="anchor" name="frankendancer-the-hybrid-bridge"></a></p>
+<h2>Frankendancer: The Hybrid Bridge</h2>
+<p>Because rewriting a complete Solana validator is a multi-year effort, Jump introduced an intermediate configuration called Frankendancer. Frankendancer grafts Firedancer's networking layer and block production logic onto the existing Agave runtime and consensus code. Operators running Frankendancer benefit from Firedancer's superior transaction ingestion, deduplication, and DoS mitigation while Agave continues handling execution and consensus.</p>
+<p>Frankendancer shipped to Solana testnet in 2024 and to mainnet later that year, carrying the v0.x version series. By the time full Firedancer launched in December 2025, Frankendancer had accumulated roughly 26% validator adoption — evidence that the Solana operator community was ready to run non-Agave software in production.</p>
+<p><a class="anchor" name="full-firedancer-mainnet-launch"></a></p>
+<h2>Full Firedancer: Mainnet Launch</h2>
+<p>The full Firedancer client — an entirely independent validator with no Agave code in the critical path — first reached testnet in July 2025 as v1.1.0. After more than 100 days of continuous testnet operation producing over 50,000 blocks without major issues, the full client was declared mainnet-ready. Jump announced the launch at Solana Breakpoint in Abu Dhabi on December 12, 2025.</p>
+<p>Kevin Bowers, Chief Scientist of Jump Trading Group and the technical lead behind Firedancer, demonstrated at Breakpoint 2024 that Firedancer can sustain over 1 million transactions per second on commodity hardware. That number — achieved across six nodes in a controlled lab environment — has become the headline benchmark for Firedancer's potential. An earlier single-core fd_quic test in May 2023 clocked 1.4 million TPS with small transactions and 270,000 TPS with larger ones, with network throughput reaching 5.8 Gbps on a single core.</p>
+<p>In real-world mainnet conditions, throughput is bounded by the slowest widely-adopted client. Full performance gains become available as network-wide Firedancer adoption grows and as complementary protocol upgrades — including Alpenglow consensus (targeting sub-150ms finality) and the removal of block compute caps via SIMD-0370 — are activated.</p>
+<p><a class="anchor" name="adoption-as-of-august-2026"></a></p>
+<h2>Adoption as of August 2026</h2>
+<p>Firedancer's rollout has been deliberate. As of August 10, 2026, the full Firedancer client runs on 57 of 698 active validators, accounting for 11.64% of total staked SOL, according to the wenfiredancer.com adoption tracker. Combined with Frankendancer's continuing presence, the Jump codebase represents a meaningful share of the network's consensus-producing capacity.</p>
+<p>The team's published roadmap targets 50% network stake running Firedancer-derived software by mid-to-late 2026. Adoption has grown without a hard cutover: operators migrate at their own pace, the hybrid Frankendancer path remains available for those who want an incremental step, and the <code>fdctl</code> binary handles both configurations through a single control interface.</p>
+<p><a class="anchor" name="wiredancer-and-post-quantum-research"></a></p>
+<h2>Wiredancer and Post-Quantum Research</h2>
+<p>Jump's infrastructure investment extends beyond software. Wiredancer, announced in August 2025, deploys FPGA-based hardware acceleration cards at the network edge of validators. Two daisy-chained FPGAs handle transaction deduplication and ED25519 signature verification at line rate in hardware, delivering clean, verified traffic directly into the validator before software processes it. In stress tests on a Solana mini-network, a simulated DDoS attack with invalid signatures cut throughput by over 50% on unprotected nodes; nodes with Wiredancer saw almost no impact.</p>
+<p>On the cryptography side, the Firedancer team has been building post-quantum readiness into the stack. They developed a Falcon-512 signature verification implementation that runs at 3.6 microseconds on Zen5 hardware — 2.6 times faster than the reference implementation — in anticipation of SIMD-0416, a proposed syscall that would expose post-quantum signature verification to Solana smart contracts. The team's quantum migration research also explores lattice-based approaches for future consensus and transaction signature schemes.</p>
+<p><a class="anchor" name="security-and-open-source"></a></p>
+<h2>Security and Open Source</h2>
+<p>Firedancer's security model reflects its architecture. Each tile runs with the minimum system calls required for its function, enabling highly restrictive sandboxing. An independent security audit by Neodyme was completed during the testnet phase. A public bug bounty program remains active. All code is available under the Apache 2.0 license at github.com/firedancer-io/firedancer, and the team provides a live validator GUI dashboard at gui.firedancer.io for monitoring network health and client distribution.</p>
+<p>Hardware requirements for running Firedancer are similar to those for Agave: a minimum of 24 CPU cores, 256 GB RAM, and a 2 TB NVMe SSD, with AVX512 support recommended for full signature-verification performance.</p>
+
+</div>
+                        <h4>Contents</h4>
+                        <ul >
+    <li>
+                    
+            <a href="#why-client-diversity-matters">
+                Why Client Diversity Matters
+            </a>
+
+            
+                                                
+                
+                                    </li>
+                    <li>
+                            
+            <a href="#architecture-tiles-and-kernel-bypass-networking">
+                Architecture: Tiles and Kernel-Bypass Networking
+            </a>
+
+            
+                                                
+                
+                                    </li>
+                    <li>
+                            
+            <a href="#frankendancer-the-hybrid-bridge">
+                Frankendancer: The Hybrid Bridge
+            </a>
+
+            
+                                                
+                
+                                    </li>
+                    <li>
+                            
+            <a href="#full-firedancer-mainnet-launch">
+                Full Firedancer: Mainnet Launch
+            </a>
+
+            
+                                                
+                
+                                    </li>
+                    <li>
+                            
+            <a href="#adoption-as-of-august-2026">
+                Adoption as of August 2026
+            </a>
+
+            
+                                                
+                
+                                    </li>
+                    <li>
+                            
+            <a href="#wiredancer-and-post-quantum-research">
+                Wiredancer and Post-Quantum Research
+            </a>
+
+            
+                                                
+                
+                                    </li>
+                    <li>
+                            
+            <a href="#security-and-open-source">
+                Security and Open Source
+            </a>
+
+            
+                        </li>
+</ul>
+                        <em><small>Note: inclusion in Solana Compass directory does not indicate a recommendation or endorsement of this project, its token(s) or its products. Data sourced with thanks from <a href="https://thegrid.id">The Grid</a> to aid in building these pages.</small></em>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        
+        <aside class="ga-rail">
+
+        
+        <section class="rail-block">
+            <span class="rail-block__head">Links</span>
+                <div class="proj-links">
+                                            <a href="https://firedancer.io/?utm_source=solanacompass.com&amp;utm_medium=project-directory&amp;utm_campaign=Solana+Compass&amp;utm_content=external-link" target="_blank" rel="nofollow noopener"><i class="fas fa-globe"></i> Website</a>
+                                                                <a href="https://x.com/jump_firedancer" target="_blank" rel="nofollow noopener"><i class="fab fa-twitter"></i> Twitter</a>
+                                                                                                                            <a href="https://jumpcrypto.com/writing" target="_blank" rel="nofollow noopener"><i class="fas fa-rss"></i> Blog</a>
+                                                                <a href="https://firedancer-io.github.io/firedancer" target="_blank" rel="nofollow noopener"><i class="fas fa-book"></i> Docs</a>
+                                                        </div>
+        </section>
+
+        
+        <section class="rail-block">
+            <span class="rail-block__head">Project</span>
+            <div class="d-flex align-items-center gap-3 mb-2">
+                                    <div>
+                        <div class="score-tiny__label">Founded</div>
+                        <div class="fw-semibold small">Mar 2022</div>
+                    </div>
+                                                <div class="ms-auto text-end">
+                    <div class="score-tiny__label">Community</div>
+                    <project-vote-score
+                        :project="{&quot;id&quot;:434,&quot;name&quot;:&quot;Firedancer&quot;,&quot;slug&quot;:&quot;Firedancer&quot;,&quot;logo&quot;:&quot;https:\/\/media.thegrid.id\/110\/7\/941\/id1761223287-yofTwDGNQzWuWUaALp4d4Q\/image-1762950349.jpg&quot;,&quot;tag_line&quot;:&quot;Built from the ground up for performance.&quot;,&quot;description_short&quot;:&quot;Jump Trading Group&#039;s independent Solana validator client, written from scratch in C. Firedancer brings true client diversity to Solana through a modular tile-based architecture capable of over 1 million TPS in lab conditions. The full client launched on mainnet in December 2025 and held 11.6% of staked SOL by August 2026.&quot;,&quot;description_long&quot;:&quot;Firedancer is an advanced validator client designed by Jump Crypto to enhance the scalability and security of the Solana blockchain. It optimizes networking throughput, resilience, and efficiency, contributing to its performance and reliability. Firedancer aims to play a key role in supporting decentralized applications and services, ensuring the Solana network can meet the growing demand within the ecosystem.&quot;,&quot;content&quot;:&quot;# Firedancer\n\nFiredancer is Jump Trading Group&#039;s independent validator client for Solana, built entirely in C from the ground up. Announced in early 2022 and released to mainnet in December 2025, it is the first fully independent alternative to the Agave (formerly Solana Labs) client. Where Agave is written in Rust and carries the lineage of the original Solana implementation, Firedancer starts from a clean slate \u2014 rewriting every primitive, from networking and signature verification to block production and transaction execution, with low-latency trading infrastructure as its design north star.\n\n## Why Client Diversity Matters\n\nBefore Firedancer, Solana ran almost entirely on a single validator codebase. That meant a critical bug in Agave could halt the entire network \u2014 a vulnerability that contributed to several high-profile outages. Firedancer directly addresses this. With two independently implemented clients, a bug in one does not affect the other. The network can continue producing blocks even if an edge-case vulnerability disables every Agave node simultaneously. This is the same resilience principle that underpins Ethereum&#039;s multi-client model, and it is widely considered a precondition for a production-grade, institutional-grade network.\n\n## Architecture: Tiles and Kernel-Bypass Networking\n\nFiredancer&#039;s distinguishing engineering choice is its tile-based architecture. Rather than running validator logic in a monolithic process, Firedancer divides work into specialized, independently schedulable \&quot;tiles\&quot; \u2014 discrete pipeline stages that handle transaction ingestion, deduplication, signature verification, block packing, and data availability. Each tile runs in isolation, can be optimized independently, and communicates with adjacent tiles through high-speed ring buffers. The result is a validator that saturates hardware resources rather than leaving cores idle.\n\nThe networking stack is similarly rebuilt from first principles. Firedancer implements kernel-bypass networking for both ingress (QUIC and UDP) and egress, bypassing the operating system&#039;s network stack to eliminate latency and CPU overhead. Signature verification uses AVX512-optimized ED25519 implementations that process multiple signatures in parallel on a single core. The block production pipeline uses a custom erasure coding system rather than relying on standard libraries. Every component reflects Jump&#039;s two decades of experience building latency-sensitive trading infrastructure.\n\n## Frankendancer: The Hybrid Bridge\n\nBecause rewriting a complete Solana validator is a multi-year effort, Jump introduced an intermediate configuration called Frankendancer. Frankendancer grafts Firedancer&#039;s networking layer and block production logic onto the existing Agave runtime and consensus code. Operators running Frankendancer benefit from Firedancer&#039;s superior transaction ingestion, deduplication, and DoS mitigation while Agave continues handling execution and consensus.\n\nFrankendancer shipped to Solana testnet in 2024 and to mainnet later that year, carrying the v0.x version series. By the time full Firedancer launched in December 2025, Frankendancer had accumulated roughly 26% validator adoption \u2014 evidence that the Solana operator community was ready to run non-Agave software in production.\n\n## Full Firedancer: Mainnet Launch\n\nThe full Firedancer client \u2014 an entirely independent validator with no Agave code in the critical path \u2014 first reached testnet in July 2025 as v1.1.0. After more than 100 days of continuous testnet operation producing over 50,000 blocks without major issues, the full client was declared mainnet-ready. Jump announced the launch at Solana Breakpoint in Abu Dhabi on December 12, 2025.\n\nKevin Bowers, Chief Scientist of Jump Trading Group and the technical lead behind Firedancer, demonstrated at Breakpoint 2024 that Firedancer can sustain over 1 million transactions per second on commodity hardware. That number \u2014 achieved across six nodes in a controlled lab environment \u2014 has become the headline benchmark for Firedancer&#039;s potential. An earlier single-core fd_quic test in May 2023 clocked 1.4 million TPS with small transactions and 270,000 TPS with larger ones, with network throughput reaching 5.8 Gbps on a single core.\n\nIn real-world mainnet conditions, throughput is bounded by the slowest widely-adopted client. Full performance gains become available as network-wide Firedancer adoption grows and as complementary protocol upgrades \u2014 including Alpenglow consensus (targeting sub-150ms finality) and the removal of block compute caps via SIMD-0370 \u2014 are activated.\n\n## Adoption as of August 2026\n\nFiredancer&#039;s rollout has been deliberate. As of August 10, 2026, the full Firedancer client runs on 57 of 698 active validators, accounting for 11.64% of total staked SOL, according to the wenfiredancer.com adoption tracker. Combined with Frankendancer&#039;s continuing presence, the Jump codebase represents a meaningful share of the network&#039;s consensus-producing capacity.\n\nThe team&#039;s published roadmap targets 50% network stake running Firedancer-derived software by mid-to-late 2026. Adoption has grown without a hard cutover: operators migrate at their own pace, the hybrid Frankendancer path remains available for those who want an incremental step, and the `fdctl` binary handles both configurations through a single control interface.\n\n## Wiredancer and Post-Quantum Research\n\nJump&#039;s infrastructure investment extends beyond software. Wiredancer, announced in August 2025, deploys FPGA-based hardware acceleration cards at the network edge of validators. Two daisy-chained FPGAs handle transaction deduplication and ED25519 signature verification at line rate in hardware, delivering clean, verified traffic directly into the validator before software processes it. In stress tests on a Solana mini-network, a simulated DDoS attack with invalid signatures cut throughput by over 50% on unprotected nodes; nodes with Wiredancer saw almost no impact.\n\nOn the cryptography side, the Firedancer team has been building post-quantum readiness into the stack. They developed a Falcon-512 signature verification implementation that runs at 3.6 microseconds on Zen5 hardware \u2014 2.6 times faster than the reference implementation \u2014 in anticipation of SIMD-0416, a proposed syscall that would expose post-quantum signature verification to Solana smart contracts. The team&#039;s quantum migration research also explores lattice-based approaches for future consensus and transaction signature schemes.\n\n## Security and Open Source\n\nFiredancer&#039;s security model reflects its architecture. Each tile runs with the minimum system calls required for its function, enabling highly restrictive sandboxing. An independent security audit by Neodyme was completed during the testnet phase. A public bug bounty program remains active. All code is available under the Apache 2.0 license at github.com\/firedancer-io\/firedancer, and the team provides a live validator GUI dashboard at gui.firedancer.io for monitoring network health and client distribution.\n\nHardware requirements for running Firedancer are similar to those for Agave: a minimum of 24 CPU cores, 256 GB RAM, and a 2 TB NVMe SSD, with AVX512 support recommended for full signature-verification performance.&quot;,&quot;summary&quot;:&quot;\nFiredancer is a high-performance validator client for the Solana blockchain, developed by Jump Crypto to enhance the network&#039;s throughput, resilience, and efficiency. With a unique architecture designed to optimize transaction processing, Firedancer aims to significantly boost Solana&#039;s performance while maintaining the highest standards of security and decentralization. \n\nJump Crypto&#039;s expertise in building high-performance systems positions them well to tackle the challenges of developing a powerful validator client for Solana. Firedancer&#039;s modular design, written in C, allows for greater flexibility and easier upgrades as the network evolves.\n\nThe introduction of Firedancer brings several potential benefits to Solana, including increased transaction throughput, enhanced security, greater decentralization, and improved reliability. Currently in active development with the Frankendancer testnet live, Firedancer is expected to launch on Solana mainnet in Q2 2024. As an open-source project, Firedancer welcomes community involvement to collaboratively drive its future development and set a new standard for blockchain infrastructure.\n&quot;,&quot;founding_date&quot;:&quot;2022-03-01T00:00:00.000000Z&quot;,&quot;twitter_url&quot;:null,&quot;discord_url&quot;:null,&quot;reddit_url&quot;:null,&quot;url_blog&quot;:&quot;https:\/\/jumpcrypto.com\/writing&quot;,&quot;url_documentation&quot;:&quot;https:\/\/firedancer-io.github.io\/firedancer&quot;,&quot;url_main&quot;:&quot;https:\/\/firedancer.io&quot;,&quot;url_whitepaper&quot;:null,&quot;category_id&quot;:null,&quot;profile_sector_id&quot;:12,&quot;profile_status_id&quot;:2,&quot;profile_type_id&quot;:2,&quot;social_links&quot;:{&quot;github_url&quot;:null,&quot;reddit_url&quot;:null,&quot;discord_url&quot;:null,&quot;twitter_url&quot;:&quot;https:\/\/x.com\/jump_firedancer&quot;},&quot;external_taxonomy&quot;:{&quot;the_grid_id&quot;:&quot;941&quot;,&quot;profile_type&quot;:&quot;Company&quot;,&quot;profile_sector&quot;:&quot;Infrastructure&quot;,&quot;profile_status&quot;:&quot;Active&quot;,&quot;profile_type_id&quot;:&quot;2&quot;,&quot;profile_sector_id&quot;:&quot;12&quot;,&quot;profile_status_id&quot;:&quot;2&quot;},&quot;ownership_status&quot;:&quot;community_published&quot;,&quot;claimed_by_user_id&quot;:null,&quot;created_by_user_id&quot;:null,&quot;created_at&quot;:&quot;2024-11-11T13:29:47.000000Z&quot;,&quot;updated_at&quot;:&quot;2026-08-10T06:34:50.000000Z&quot;,&quot;deleted_at&quot;:null,&quot;assets&quot;:[],&quot;products&quot;:[{&quot;id&quot;:598,&quot;project_id&quot;:434,&quot;name&quot;:&quot;Firedancer&quot;,&quot;description_short&quot;:&quot;Firedancer is a validator client for Solana designed for speed, security, and independence. It features a high-performance architecture with optimized Solana primitives, offering fast transaction processing and a secure design that operates within a restrictive sandbox with minimal system calls.&quot;,&quot;url_to_product&quot;:&quot;https:\/\/jumpcrypto.com\/firedancer&quot;,&quot;launch_date&quot;:null,&quot;product_address&quot;:null,&quot;product_status_id&quot;:null,&quot;product_type_id&quot;:null,&quot;external_taxonomy&quot;:{&quot;the_grid_id&quot;:&quot;1304&quot;,&quot;product_type&quot;:&quot;Validator&quot;,&quot;asset_standard&quot;:null,&quot;product_status&quot;:&quot;Live&quot;,&quot;is_main_product&quot;:true,&quot;deployed_on_product&quot;:&quot;Solana Mainnet&quot;},&quot;created_at&quot;:&quot;2024-11-11T13:29:47.000000Z&quot;,&quot;updated_at&quot;:&quot;2026-04-28T16:28:23.000000Z&quot;,&quot;deleted_at&quot;:null,&quot;active_programs&quot;:[]}],&quot;categories&quot;:[{&quot;id&quot;:119,&quot;name&quot;:&quot;Infrastructure &amp; Development&quot;,&quot;slug&quot;:&quot;infrastructure&quot;,&quot;description&quot;:&quot;As blockchain technology continues to evolve, Solana&#039;s high-performance network has become a powerhouse for infrastructure and development projects. With its lightning-fast transactions and low fees, Solana provides the perfect foundation for builders creating the future of Web3. From development toolkits and node infrastructure to cross-chain bridges and data indexing solutions, the ecosystem offers essential building blocks for both novice developers and established teams.\n\nIn this curated collection, we&#039;ll explore the most impactful infrastructure and development tools in the Solana ecosystem. These applications are fundamental to creating robust decentralized applications (dApps), managing blockchain data, and scaling projects efficiently. Whether you&#039;re a developer looking to streamline your workflow or a project manager seeking reliable infrastructure solutions, these top picks represent the backbone of Solana&#039;s development landscape.&quot;,&quot;parent_id&quot;:null,&quot;created_at&quot;:&quot;2025-01-11T17:11:08.000000Z&quot;,&quot;updated_at&quot;:&quot;2025-01-11T17:38:27.000000Z&quot;,&quot;deleted_at&quot;:null,&quot;project_h1&quot;:&quot;Infrastructure &amp; Development Platforms&quot;,&quot;project_seo_title&quot;:&quot;Best Infrastructure Apps On Solana: Top Development Platforms&quot;,&quot;category_h1&quot;:&quot;Infrastructure &amp; Development On Solana&quot;,&quot;category_seo_title&quot;:&quot;Solana Infrastructure News, Guides + Development Resources&quot;,&quot;outro&quot;:&quot;The infrastructure and development tools highlighted above represent just a fraction of the innovative solutions available in the Solana ecosystem. As the blockchain continues to grow and evolve, these fundamental building blocks become increasingly crucial for developers and projects looking to create scalable, efficient applications.\n\nWhether you&#039;re building the next big DeFi protocol, launching an NFT marketplace, or developing Web3 tools, Solana&#039;s robust infrastructure ecosystem provides the foundation needed for success. By leveraging these powerful development resources, you can focus on what matters most \u2013 creating value for your users while benefiting from Solana&#039;s speed, cost-effectiveness, and reliability.\n\nRemember to stay updated with the latest tools and infrastructure solutions, as the ecosystem is constantly expanding with new innovations and improvements to help developers build the future of blockchain technology.&quot;,&quot;pivot&quot;:{&quot;project_id&quot;:434,&quot;category_id&quot;:119,&quot;description&quot;:&quot;Firedancer represents a major advancement in Solana&#039;s infrastructure development landscape as a high-performance validator client. Built by Jump Crypto with a focus on maximizing transaction throughput and network reliability, it demonstrates how specialized infrastructure can dramatically improve blockchain performance. The client&#039;s architecture, written entirely in C, showcases sophisticated engineering practices aimed at optimizing system resource utilization.By offering a second validator client implementation, Firedancer strengthens Solana&#039;s infrastructure diversity while maintaining security and performance standards. Its ability to process over 600,000 transactions per second in testing environments highlights its potential to significantly enhance the network&#039;s processing capabilities. The project&#039;s development approach, including the Frankendancer testnet phase, exemplifies best practices in blockchain infrastructure deployment and testing.&quot;,&quot;created_at&quot;:&quot;2025-01-11T18:49:48.000000Z&quot;,&quot;updated_at&quot;:&quot;2025-01-11T18:49:48.000000Z&quot;},&quot;parent&quot;:null},{&quot;id&quot;:76,&quot;name&quot;:&quot;RPC Nodes &amp; Infrastructure&quot;,&quot;slug&quot;:&quot;infrastructure\/rpc-nodes&quot;,&quot;description&quot;:&quot;Reliable RPC (Remote Procedure Call) nodes and infrastructure services are the backbone of any successful blockchain ecosystem, and Solana is no exception. As one of the fastest and most scalable Layer 1 blockchains, Solana requires robust infrastructure to maintain its high performance and low-cost transactions. Whether you&#039;re a developer building decentralized applications (dApps), a validator supporting the network, or an enterprise seeking dependable blockchain infrastructure, choosing the right RPC node provider is crucial for ensuring smooth operations and optimal user experience.\n\nIn this guide, we&#039;ll explore the leading RPC node providers and infrastructure solutions in the Solana ecosystem. These services offer various features, from basic endpoint access to advanced analytics, load balancing, and dedicated node deployments, helping you maintain reliable connections to the Solana blockchain while scaling your projects effectively.&quot;,&quot;parent_id&quot;:119,&quot;created_at&quot;:&quot;2025-01-11T16:55:46.000000Z&quot;,&quot;updated_at&quot;:&quot;2025-01-11T20:01:08.000000Z&quot;,&quot;deleted_at&quot;:null,&quot;project_h1&quot;:&quot;RPC Node Solutions&quot;,&quot;project_seo_title&quot;:&quot;Best RPC Node Providers On Solana: Top Infrastructure Solutions&quot;,&quot;category_h1&quot;:&quot;RPC Nodes &amp; Infrastructure On Solana&quot;,&quot;category_seo_title&quot;:&quot;Solana RPC News, Guides + Infrastructure Updates&quot;,&quot;outro&quot;:&quot;As the Solana ecosystem continues to grow and evolve, having access to reliable RPC infrastructure becomes increasingly important. The providers listed above represent some of the most trusted solutions for accessing the Solana network, each offering unique features and capabilities to meet different needs and use cases.\n\nWhether you&#039;re looking for high-performance endpoints, enterprise-grade infrastructure, or developer-friendly tools, these services can help you build and maintain robust blockchain applications on Solana. Remember to consider factors such as uptime guarantees, geographical distribution, pricing models, and additional features when selecting an RPC provider for your specific requirements.\n\n*Always ensure to regularly monitor your RPC node performance and have backup providers in place to maintain uninterrupted service for your applications.*&quot;,&quot;pivot&quot;:{&quot;project_id&quot;:434,&quot;category_id&quot;:76,&quot;description&quot;:&quot;As an RPC node and infrastructure solution, Firedancer brings industrial-grade performance optimizations to Solana&#039;s validator network. The client&#039;s unique architecture, featuring advanced networking protocols and efficient data transmission techniques, enables it to handle massive transaction volumes while maintaining low latency and high reliability. Jump Crypto&#039;s expertise in building high-performance trading systems has been leveraged to create a validator client that sets new standards for blockchain infrastructure.Firedancer&#039;s modular design and focus on networking optimization make it particularly valuable for RPC node operators seeking to maximize performance. Its ability to operate within a restrictive sandbox while minimizing system calls demonstrates a strong focus on security without compromising on speed. The implementation of state-of-the-art encryption and continuous monitoring capabilities ensures that node operators can maintain both high performance and robust security measures.&quot;,&quot;created_at&quot;:&quot;2025-01-11T18:49:48.000000Z&quot;,&quot;updated_at&quot;:&quot;2025-01-11T18:49:48.000000Z&quot;},&quot;parent&quot;:{&quot;id&quot;:119,&quot;name&quot;:&quot;Infrastructure &amp; Development&quot;,&quot;slug&quot;:&quot;infrastructure&quot;,&quot;description&quot;:&quot;As blockchain technology continues to evolve, Solana&#039;s high-performance network has become a powerhouse for infrastructure and development projects. With its lightning-fast transactions and low fees, Solana provides the perfect foundation for builders creating the future of Web3. From development toolkits and node infrastructure to cross-chain bridges and data indexing solutions, the ecosystem offers essential building blocks for both novice developers and established teams.\n\nIn this curated collection, we&#039;ll explore the most impactful infrastructure and development tools in the Solana ecosystem. These applications are fundamental to creating robust decentralized applications (dApps), managing blockchain data, and scaling projects efficiently. Whether you&#039;re a developer looking to streamline your workflow or a project manager seeking reliable infrastructure solutions, these top picks represent the backbone of Solana&#039;s development landscape.&quot;,&quot;parent_id&quot;:null,&quot;created_at&quot;:&quot;2025-01-11T17:11:08.000000Z&quot;,&quot;updated_at&quot;:&quot;2025-01-11T17:38:27.000000Z&quot;,&quot;deleted_at&quot;:null,&quot;project_h1&quot;:&quot;Infrastructure &amp; Development Platforms&quot;,&quot;project_seo_title&quot;:&quot;Best Infrastructure Apps On Solana: Top Development Platforms&quot;,&quot;category_h1&quot;:&quot;Infrastructure &amp; Development On Solana&quot;,&quot;category_seo_title&quot;:&quot;Solana Infrastructure News, Guides + Development Resources&quot;,&quot;outro&quot;:&quot;The infrastructure and development tools highlighted above represent just a fraction of the innovative solutions available in the Solana ecosystem. As the blockchain continues to grow and evolve, these fundamental building blocks become increasingly crucial for developers and projects looking to create scalable, efficient applications.\n\nWhether you&#039;re building the next big DeFi protocol, launching an NFT marketplace, or developing Web3 tools, Solana&#039;s robust infrastructure ecosystem provides the foundation needed for success. By leveraging these powerful development resources, you can focus on what matters most \u2013 creating value for your users while benefiting from Solana&#039;s speed, cost-effectiveness, and reliability.\n\nRemember to stay updated with the latest tools and infrastructure solutions, as the ecosystem is constantly expanding with new innovations and improvements to help developers build the future of blockchain technology.&quot;}}]}"
+                        :is-authenticated="false"
+                    ></project-vote-score>
+                </div>
+            </div>
+            <a href="#comments" class="small text-decoration-none" style="opacity:0.75;">
+                Be the first to review &rarr;
+            </a>
+        </section>
+
+        <section class="rail-block">
+        <span class="rail-block__head">Related projects</span>
+        <div class="related-list">
+                            <a href="https://solanacompass.com/projects/anza" class="related-row">
+                                            <img src="https://wsrv.nl/?url=https%3A%2F%2Fpbs.twimg.com%2Fprofile_images%2F1749554947790888960%2FWJt7lC2S.jpg&amp;w=40&amp;h=40&amp;dpr=2&amp;quality=80&amp;output=webp" alt="Anza logo" loading="lazy">
+                                        <span class="related-row__name">Anza</span>
+                                            <span class="related-row__score">1410</span>
+                                    </a>
+                            <a href="https://solanacompass.com/projects/composable-finance" class="related-row">
+                                            <img src="https://wsrv.nl/?url=https%3A%2F%2Fimg.thegrid.id%2Fupload%2F7e29b703fcd8411a0a0a9e390849d1f241919f9eac80bc31af2c31eb1d5d7486.svg&amp;w=40&amp;h=40&amp;dpr=2&amp;quality=80&amp;output=webp" alt="Composable Finance logo" loading="lazy">
+                                        <span class="related-row__name">Composable Finance</span>
+                                    </a>
+                            <a href="https://solanacompass.com/projects/crossmint" class="related-row">
+                                            <img src="https://wsrv.nl/?url=https%3A%2F%2Fmedia.thegrid.id%2F112%2F7%2F942%2Fid1761223287-yofTwDGNQzWuWUaALp4d4Q%2Fimage-1773922134.svg&amp;w=40&amp;h=40&amp;dpr=2&amp;quality=80&amp;output=webp" alt="Crossmint logo" loading="lazy">
+                                        <span class="related-row__name">Crossmint</span>
+                                    </a>
+                            <a href="https://solanacompass.com/projects/marinade" class="related-row">
+                                            <img src="https://wsrv.nl/?url=https%3A%2F%2Fmedia.thegrid.id%2F61%2F7%2F167%2Fid1761223287-yofTwDGNQzWuWUaALp4d4Q%2Fimage-1762950207.png&amp;w=40&amp;h=40&amp;dpr=2&amp;quality=80&amp;output=webp" alt="Marinade logo" loading="lazy">
+                                        <span class="related-row__name">Marinade</span>
+                                    </a>
+                            <a href="https://solanacompass.com/projects/jump-crypto" class="related-row">
+                                            <img src="https://wsrv.nl/?url=https%3A%2F%2Fmedia.thegrid.id%2F118%2F7%2F948%2Fid1761223287-yofTwDGNQzWuWUaALp4d4Q%2Fimage-1762950355.jpg&amp;w=40&amp;h=40&amp;dpr=2&amp;quality=80&amp;output=webp" alt="Jump Crypto logo" loading="lazy">
+                                        <span class="related-row__name">Jump Crypto</span>
+                                    </a>
+                            <a href="https://solanacompass.com/projects/staking-facilities" class="related-row">
+                                            <img src="https://wsrv.nl/?url=https%3A%2F%2Fmedia.thegrid.id%2F114%2F7%2F944%2Fid1761223287-yofTwDGNQzWuWUaALp4d4Q%2Fimage-1762950352.png&amp;w=40&amp;h=40&amp;dpr=2&amp;quality=80&amp;output=webp" alt="Staking Facilities logo" loading="lazy">
+                                        <span class="related-row__name">Staking Facilities</span>
+                                    </a>
+                    </div>
+    </section>
+        </aside>
+    </div>
+
+    
+    <div class="reviews-section mt-4">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="rail-block">
+                    <h3 id="comments" class="h5 mb-3">Reviews</h3>
+
+                    <div class="average-rating mb-4">
+                        <div class="d-flex align-items-center">
+                            <div class="h2 mb-0 me-2">0.0</div>
+                            <div>
+                                <el-rate
+                                    model-value="0.0"
+                                    disabled
+                                    show-score
+                                    text-color="#ff9900"
+                                />
+                                <div class="text-muted small">0 reviews</div>
+                            </div>
+                        </div>
+                    </div>
+
+                                            <div class="alert alert-info">
+                            Please <a href="https://solanacompass.com/login">login</a> to write a review.
+                        </div>
+                    
+                    <div class="reviews-list">
+                                            </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+                
+                                                    <div class="container my-5">
+    <div class="d-flex justify-content-between align-items-baseline mb-2 section-head">
+        <div>
+            <div class="section-eyebrow">Solana tokens</div>
+            <h2>Solana Token Markets</h2>
+        </div>
+        <a href="/tokens">Explore all tokens →</a>
+    </div>
+    <div class="card compass-styled">
+        <div class="card-body p-0">
+            <div class="ssr-tabs" role="tablist" aria-label="Token markets">
+                <div class="ssr-tab-bar">
+                                            <button type="button"
+                                role="tab"
+                                class="ssr-tab is-active"
+                                aria-selected="true"
+                                aria-controls="ssr-tab-panel-majors"
+                                data-ssr-tab="majors">Majors</button>
+                                            <button type="button"
+                                role="tab"
+                                class="ssr-tab "
+                                aria-selected="false"
+                                aria-controls="ssr-tab-panel-volume"
+                                data-ssr-tab="volume">Volume</button>
+                                            <button type="button"
+                                role="tab"
+                                class="ssr-tab "
+                                aria-selected="false"
+                                aria-controls="ssr-tab-panel-traders"
+                                data-ssr-tab="traders">Traders</button>
+                                            <button type="button"
+                                role="tab"
+                                class="ssr-tab "
+                                aria-selected="false"
+                                aria-controls="ssr-tab-panel-stocks"
+                                data-ssr-tab="stocks">Stocks</button>
+                                            <button type="button"
+                                role="tab"
+                                class="ssr-tab "
+                                aria-selected="false"
+                                aria-controls="ssr-tab-panel-rising"
+                                data-ssr-tab="rising">Rising</button>
+                                    </div>
+                                    <div role="tabpanel"
+                         id="ssr-tab-panel-majors"
+                         class="ssr-tab-panel"
+                         data-ssr-panel="majors"
+                         >
+                        <div class="token-grid" style="--grid-cols: 4;">
+        <a href="https://solanacompass.com/tokens/solana"
+       class="token-grid__item"
+       data-mint="So11111111111111111111111111111111111111112"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsolana-labs%2Ftoken-list%2Fmain%2Fassets%2Fmainnet%2FSo11111111111111111111111111111111111111112%2Flogo.png&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="SOL" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">SOL</div>
+            <div class="token-grid__price mono-num" data-field="price">$117.96</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +0.9%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/A7bdiYdS5GjqGFtxf17ppRHtDKPkkRqbKtR27dxvQXaS"
+       class="token-grid__item"
+       data-mint="A7bdiYdS5GjqGFtxf17ppRHtDKPkkRqbKtR27dxvQXaS"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Farweave.net%2FQSYqnmB7NYlB7n1R6rz935Y07dlRK0tIuKe2mof5Sho&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="ZEC" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">ZEC</div>
+            <div class="token-grid__price mono-num" data-field="price">$1,282.43</div>
+        </div>
+        <span class="token-grid__change text-danger" data-field="change">
+            -17.2%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/98sMhvDwXj1RQi5c5Mndm3vPe9cBqPrbLaufMXFNMh5g"
+       class="token-grid__item"
+       data-mint="98sMhvDwXj1RQi5c5Mndm3vPe9cBqPrbLaufMXFNMh5g"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Farweave.net%2FQBRdRop8wI4PpScSRTKyibv-fQuYBua-WOvC7tuJyJo&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="HYPE" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">HYPE</div>
+            <div class="token-grid__price mono-num" data-field="price">$86.58</div>
+        </div>
+        <span class="token-grid__change text-danger" data-field="change">
+            -5.9%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs"
+       class="token-grid__item"
+       data-mint="7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsolana-labs%2Ftoken-list%2Fmain%2Fassets%2Fmainnet%2F7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs%2Flogo.png&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="WETH" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">WETH</div>
+            <div class="token-grid__price mono-num" data-field="price">$2,665.78</div>
+        </div>
+        <span class="token-grid__change text-danger" data-field="change">
+            -0.7%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/BPxxfRCXkUVhig4HS1Lh7kZqV6SPJhzfEk4x6fVBjPCy"
+       class="token-grid__item"
+       data-mint="BPxxfRCXkUVhig4HS1Lh7kZqV6SPJhzfEk4x6fVBjPCy"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Ftrek-labs.github.io%2Fheart-metadata%2Fbp%2Fbp.png&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="BP" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">BP</div>
+            <div class="token-grid__price mono-num" data-field="price">$1.17</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +10.0%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/bitcoin"
+       class="token-grid__item"
+       data-mint="3NZ9JMVBmGAqocybic2c7LQCJScmgsAZ6vQqTDzcqmJh"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsolana-labs%2Ftoken-list%2Fmain%2Fassets%2Fmainnet%2F3NZ9JMVBmGAqocybic2c7LQCJScmgsAZ6vQqTDzcqmJh%2Flogo.png&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="WBTC" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">BTC</div>
+            <div class="token-grid__price mono-num" data-field="price">$84,495.78</div>
+        </div>
+        <span class="token-grid__change text-danger" data-field="change">
+            -14.3%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/3ZLekZYq2qkZiSpnSvabjit34tUkjSwD1JFuW9as9wBG"
+       class="token-grid__item"
+       data-mint="3ZLekZYq2qkZiSpnSvabjit34tUkjSwD1JFuW9as9wBG"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fbafkreiekxdv4uxm7ctijvj7wql6bto3cokws6xvfdbg7ylrvt2vtimnqri.ipfs.w3s.link&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="NEAR" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">NEAR</div>
+            <div class="token-grid__price mono-num" data-field="price">$4.65</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +0.6%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/GbbesPbaYh5uiAZSYNXTc7w9jty1rpg3P9L4JeN4LkKc"
+       class="token-grid__item"
+       data-mint="GbbesPbaYh5uiAZSYNXTc7w9jty1rpg3P9L4JeN4LkKc"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Farweave.net%2FaO9owy2SUH92KGJ2CH3BFowep6XFAoYjjpRyDKObkww&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="TRX" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">TRX</div>
+            <div class="token-grid__price mono-num" data-field="price">$0.33</div>
+        </div>
+        <span class="token-grid__change text-danger" data-field="change">
+            -1.5%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/suifhC9gU1VbJAPYPTBkHJyyyStKGLLYPVDTmPoqbvA"
+       class="token-grid__item"
+       data-mint="suifhC9gU1VbJAPYPTBkHJyyyStKGLLYPVDTmPoqbvA"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Farweave.net%2FB8MRbgRcrHoMXBhOKV9Jem5awh74XTY7gPLnLXHZj0s&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="SUI" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">SUI</div>
+            <div class="token-grid__price mono-num" data-field="price">$1.13</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +10.6%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/AavE1kKKnesPw4MuRJmJ9jZs9QzEE8CPxQ3ViczUDfc1"
+       class="token-grid__item"
+       data-mint="AavE1kKKnesPw4MuRJmJ9jZs9QzEE8CPxQ3ViczUDfc1"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Farweave.net%2Fa1RHlEizdwipsW3liDLWqzg5omSZvBc5wiFGa7O0Y6I&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="AAVE" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">AAVE</div>
+            <div class="token-grid__price mono-num" data-field="price">$181.08</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +22.1%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/72QvBVwpxqmheEPfaCwWSWqEFsUy3rhWt6JhQBMNTwD1"
+       class="token-grid__item"
+       data-mint="72QvBVwpxqmheEPfaCwWSWqEFsUy3rhWt6JhQBMNTwD1"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Farweave.net%2FpIih7vHnV7Wzv5N3y6Vk8mP5nRp9caKW-XprHZXFfrA&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="ENA" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">ENA</div>
+            <div class="token-grid__price mono-num" data-field="price">$0.23</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +5.7%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/4Zp52aF4hZi9fzH19xpbWKYKQvgLyCN67KFbrQDqeTKh"
+       class="token-grid__item"
+       data-mint="4Zp52aF4hZi9fzH19xpbWKYKQvgLyCN67KFbrQDqeTKh"
+       data-live-flash>
+                    <div class="token-grid__logo-placeholder">Z</div>
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">ZAMA</div>
+            <div class="token-grid__price mono-num" data-field="price">$0.07</div>
+        </div>
+        <span class="token-grid__change text-danger" data-field="change">
+            -15.4%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/ARXwZkNAtzPfdcoqQiduJn8EPv9fKiDfGn2KyggyDrFs"
+       class="token-grid__item"
+       data-mint="ARXwZkNAtzPfdcoqQiduJn8EPv9fKiDfGn2KyggyDrFs"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fstatic.arcium.com%2Farx%2Ficon.png&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="ARX" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">ARX</div>
+            <div class="token-grid__price mono-num" data-field="price">$0.27</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +3.4%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/EicWvteVi2fWepEzS3FYWsnuPoP6caZfjnKqNvydLjCH"
+       class="token-grid__item"
+       data-mint="EicWvteVi2fWepEzS3FYWsnuPoP6caZfjnKqNvydLjCH"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Farweave.net%2FtShwtnzLqUjqtZc-Ysok67ppQcOUIHhX3PgEYlO02mE&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="LIT" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">LIT</div>
+            <div class="token-grid__price mono-num" data-field="price">$3.58</div>
+        </div>
+        <span class="token-grid__change text-danger" data-field="change">
+            -29.4%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/uniswap"
+       class="token-grid__item"
+       data-mint="uniHfuPhEQSrtpzXpJZDCSq53yaejKKpNhFUiKoHKHV"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Farweave.net%2Fjzfz6jBoNu4QSUsmZGfQ2s98wgmxLoXR7lOINp5ZPtY&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="UNI" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">UNI</div>
+            <div class="token-grid__price mono-num" data-field="price">$8.72</div>
+        </div>
+        <span class="token-grid__change text-danger" data-field="change">
+            -4.9%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/avaxGHCq3T7hoxd73oY2KY9hJSTaeMibXvHy5KNzh5D"
+       class="token-grid__item"
+       data-mint="avaxGHCq3T7hoxd73oY2KY9hJSTaeMibXvHy5KNzh5D"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Farweave.net%2FlNHrGDNhDfzgAhMxU5jezz7WU1_H3QqR6rh1iHIha9M&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="AVAX" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">AVAX</div>
+            <div class="token-grid__price mono-num" data-field="price">$10.59</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +3.3%
+        </span>
+    </a>
+    </div>
+                        <div class="ssr-tab-footer">
+                            <a href="/tokens/category/majors">View all Majors →</a>
+                        </div>
+                    </div>
+                                    <div role="tabpanel"
+                         id="ssr-tab-panel-volume"
+                         class="ssr-tab-panel"
+                         data-ssr-panel="volume"
+                         hidden>
+                        <div class="token-grid" style="--grid-cols: 4;">
+        <a href="https://solanacompass.com/tokens/EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+       class="token-grid__item"
+       data-mint="EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsolana-labs%2Ftoken-list%2Fmain%2Fassets%2Fmainnet%2FEPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v%2Flogo.png&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="USDC" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">USDC</div>
+            <div class="token-grid__price mono-num" data-field="price">$1.00</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +0.4%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB"
+       class="token-grid__item"
+       data-mint="Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsolana-labs%2Ftoken-list%2Fmain%2Fassets%2Fmainnet%2FEs9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB%2Flogo.svg&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="USDT" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">USDT</div>
+            <div class="token-grid__price mono-num" data-field="price">$1.00</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +0.1%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/A7bdiYdS5GjqGFtxf17ppRHtDKPkkRqbKtR27dxvQXaS"
+       class="token-grid__item"
+       data-mint="A7bdiYdS5GjqGFtxf17ppRHtDKPkkRqbKtR27dxvQXaS"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Farweave.net%2FQSYqnmB7NYlB7n1R6rz935Y07dlRK0tIuKe2mof5Sho&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="ZEC" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">ZEC</div>
+            <div class="token-grid__price mono-num" data-field="price">$1,282.43</div>
+        </div>
+        <span class="token-grid__change text-danger" data-field="change">
+            -9.8%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/2u1tszSeqZ3qBWF3uNGPFc8TzMk2tdiwknnRMWGWjGWH"
+       class="token-grid__item"
+       data-mint="2u1tszSeqZ3qBWF3uNGPFc8TzMk2tdiwknnRMWGWjGWH"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2F424565.fs1.hubspotusercontent-na1.net%2Fhubfs%2F424565%2FGDN-USDG-Token-512x512.png&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="USDG" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">USDG</div>
+            <div class="token-grid__price mono-num" data-field="price">$1.00</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +0.0%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/98sMhvDwXj1RQi5c5Mndm3vPe9cBqPrbLaufMXFNMh5g"
+       class="token-grid__item"
+       data-mint="98sMhvDwXj1RQi5c5Mndm3vPe9cBqPrbLaufMXFNMh5g"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Farweave.net%2FQBRdRop8wI4PpScSRTKyibv-fQuYBua-WOvC7tuJyJo&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="HYPE" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">HYPE</div>
+            <div class="token-grid__price mono-num" data-field="price">$86.58</div>
+        </div>
+        <span class="token-grid__change text-danger" data-field="change">
+            -2.3%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/CARDSccUMFKoPRZxt5vt3ksUbxEFEcnZ3H2pd3dKxYjp"
+       class="token-grid__item"
+       data-mint="CARDSccUMFKoPRZxt5vt3ksUbxEFEcnZ3H2pd3dKxYjp"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fgateway.irys.xyz%2F2wrjAk4pYAACF3siDHAxt7yJY7kHgt57TZAkbgecKHMR&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="CARDS" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">CARDS</div>
+            <div class="token-grid__price mono-num" data-field="price">$0.25</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +30.2%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs"
+       class="token-grid__item"
+       data-mint="7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsolana-labs%2Ftoken-list%2Fmain%2Fassets%2Fmainnet%2F7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs%2Flogo.png&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="WETH" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">WETH</div>
+            <div class="token-grid__price mono-num" data-field="price">$2,665.78</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +0.1%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx"
+       class="token-grid__item"
+       data-mint="6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fgateway.irys.xyz%2Fem5twmyoeTJw9eZDj25xoKbBjHYhbeXYCcZ55o23Ztg&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="STONK" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">STONK</div>
+            <div class="token-grid__price mono-num" data-field="price">$0.23</div>
+        </div>
+        <span class="token-grid__change text-danger" data-field="change">
+            -11.3%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo"
+       class="token-grid__item"
+       data-mint="2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2F424565.fs1.hubspotusercontent-na1.net%2Fhubfs%2F424565%2FPYUSDLOGO.png&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="PYUSD" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">PYUSD</div>
+            <div class="token-grid__price mono-num" data-field="price">$1.00</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +0.0%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/DEW9dSN6QpWyNthphCpMmAbZP1Q4cEKR9xQXAri98WDP"
+       class="token-grid__item"
+       data-mint="DEW9dSN6QpWyNthphCpMmAbZP1Q4cEKR9xQXAri98WDP"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Faxiomtrading.sfo3.cdn.digitaloceanspaces.com%2F7ovByu4CKE2ogdbYTRx8o9z1XarkNMA3hXyxThWamoon.webp&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="SI" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">SI</div>
+            <div class="token-grid__price mono-num" data-field="price">$0.04</div>
+        </div>
+        <span class="token-grid__change text-danger" data-field="change">
+            -37.6%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/BPxxfRCXkUVhig4HS1Lh7kZqV6SPJhzfEk4x6fVBjPCy"
+       class="token-grid__item"
+       data-mint="BPxxfRCXkUVhig4HS1Lh7kZqV6SPJhzfEk4x6fVBjPCy"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Ftrek-labs.github.io%2Fheart-metadata%2Fbp%2Fbp.png&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="BP" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">BP</div>
+            <div class="token-grid__price mono-num" data-field="price">$1.17</div>
+        </div>
+        <span class="token-grid__change text-danger" data-field="change">
+            -9.4%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/CASHx9KJUStyftLFWGvEVf59SGeG9sh5FfcnZMVPCASH"
+       class="token-grid__item"
+       data-mint="CASHx9KJUStyftLFWGvEVf59SGeG9sh5FfcnZMVPCASH"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Ftoken-metadata.bridge.xyz%2Fimages%2Fcash.png&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="CASH" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">CASH</div>
+            <div class="token-grid__price mono-num" data-field="price">$1.00</div>
+        </div>
+        <span class="token-grid__change text-danger" data-field="change">
+            0.0%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/6p6xgHyF7AeE6TZkSmFsko444wqoP15icUSqi2jfGiPN"
+       class="token-grid__item"
+       data-mint="6p6xgHyF7AeE6TZkSmFsko444wqoP15icUSqi2jfGiPN"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Farweave.net%2FVQrPjACwnQRmxdKBTqNwPiyo65x7LAT773t8Kd7YBzw&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="TRUMP" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">TRUMP</div>
+            <div class="token-grid__price mono-num" data-field="price">$2.04</div>
+        </div>
+        <span class="token-grid__change text-danger" data-field="change">
+            -0.6%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/3NZ9JMVBmGAqocybic2c7LQCJScmgsAZ6vQqTDzcqmJh"
+       class="token-grid__item"
+       data-mint="3NZ9JMVBmGAqocybic2c7LQCJScmgsAZ6vQqTDzcqmJh"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsolana-labs%2Ftoken-list%2Fmain%2Fassets%2Fmainnet%2F3NZ9JMVBmGAqocybic2c7LQCJScmgsAZ6vQqTDzcqmJh%2Flogo.png&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="WBTC" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">WBTC</div>
+            <div class="token-grid__price mono-num" data-field="price">$84,495.78</div>
+        </div>
+        <span class="token-grid__change text-danger" data-field="change">
+            -13.3%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/2zMMhcVQEXDtdE6vsFS7S7D5oUodfJHE8vd1gnBouauv"
+       class="token-grid__item"
+       data-mint="2zMMhcVQEXDtdE6vsFS7S7D5oUodfJHE8vd1gnBouauv"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Farweave.net%2FBW67hICaKGd2_wamSB0IQq-x7Xwtmr2oJj1WnWGJRHU&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="PENGU" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">PENGU</div>
+            <div class="token-grid__price mono-num" data-field="price">$0.0088</div>
+        </div>
+        <span class="token-grid__change text-danger" data-field="change">
+            -7.9%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/27G8MtK7VtTcCHkpASjSDdkWWYfoqT6ggEuKidVJidD4"
+       class="token-grid__item"
+       data-mint="27G8MtK7VtTcCHkpASjSDdkWWYfoqT6ggEuKidVJidD4"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fstatic.jup.ag%2Fjlp%2Ficon.png&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="JLP" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">JLP</div>
+            <div class="token-grid__price mono-num" data-field="price">$4.83</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +0.4%
+        </span>
+    </a>
+    </div>
+                        <div class="ssr-tab-footer">
+                            <a href="/tokens">View all Volume →</a>
+                        </div>
+                    </div>
+                                    <div role="tabpanel"
+                         id="ssr-tab-panel-traders"
+                         class="ssr-tab-panel"
+                         data-ssr-panel="traders"
+                         hidden>
+                        <div class="token-grid" style="--grid-cols: 4;">
+        <a href="https://solanacompass.com/tokens/EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+       class="token-grid__item"
+       data-mint="EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsolana-labs%2Ftoken-list%2Fmain%2Fassets%2Fmainnet%2FEPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v%2Flogo.png&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="USDC" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">USDC</div>
+            <div class="token-grid__price mono-num" data-field="price">$1.00</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +0.4%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB"
+       class="token-grid__item"
+       data-mint="Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsolana-labs%2Ftoken-list%2Fmain%2Fassets%2Fmainnet%2FEs9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB%2Flogo.svg&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="USDT" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">USDT</div>
+            <div class="token-grid__price mono-num" data-field="price">$1.00</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +0.1%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/CASHx9KJUStyftLFWGvEVf59SGeG9sh5FfcnZMVPCASH"
+       class="token-grid__item"
+       data-mint="CASHx9KJUStyftLFWGvEVf59SGeG9sh5FfcnZMVPCASH"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Ftoken-metadata.bridge.xyz%2Fimages%2Fcash.png&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="CASH" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">CASH</div>
+            <div class="token-grid__price mono-num" data-field="price">$1.00</div>
+        </div>
+        <span class="token-grid__change text-danger" data-field="change">
+            0.0%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/A7bdiYdS5GjqGFtxf17ppRHtDKPkkRqbKtR27dxvQXaS"
+       class="token-grid__item"
+       data-mint="A7bdiYdS5GjqGFtxf17ppRHtDKPkkRqbKtR27dxvQXaS"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Farweave.net%2FQSYqnmB7NYlB7n1R6rz935Y07dlRK0tIuKe2mof5Sho&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="ZEC" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">ZEC</div>
+            <div class="token-grid__price mono-num" data-field="price">$1,282.43</div>
+        </div>
+        <span class="token-grid__change text-danger" data-field="change">
+            -9.8%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx"
+       class="token-grid__item"
+       data-mint="6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fgateway.irys.xyz%2Fem5twmyoeTJw9eZDj25xoKbBjHYhbeXYCcZ55o23Ztg&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="STONK" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">STONK</div>
+            <div class="token-grid__price mono-num" data-field="price">$0.23</div>
+        </div>
+        <span class="token-grid__change text-danger" data-field="change">
+            -11.3%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/CARDSccUMFKoPRZxt5vt3ksUbxEFEcnZ3H2pd3dKxYjp"
+       class="token-grid__item"
+       data-mint="CARDSccUMFKoPRZxt5vt3ksUbxEFEcnZ3H2pd3dKxYjp"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fgateway.irys.xyz%2F2wrjAk4pYAACF3siDHAxt7yJY7kHgt57TZAkbgecKHMR&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="CARDS" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">CARDS</div>
+            <div class="token-grid__price mono-num" data-field="price">$0.25</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +30.2%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/EWgq2xUb6eVCApeQombkPxd6uFjM8j9zRUXFS9MjKTiv"
+       class="token-grid__item"
+       data-mint="EWgq2xUb6eVCApeQombkPxd6uFjM8j9zRUXFS9MjKTiv"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fipfs.io%2Fipfs%2Fbafkreiavheosnf6r25hpr2ar2fjunzxpgnj2qb7j7pqiyssrlcpgguylxu&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="CTO" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">CTO</div>
+            <div class="token-grid__price mono-num" data-field="price">$0.0002</div>
+        </div>
+        <span class="token-grid__change text-danger" data-field="change">
+            -29.2%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/53gTSW4WFgrRHgQCtf5CyXgrEBNyNWHobYBAhqQJpump"
+       class="token-grid__item"
+       data-mint="53gTSW4WFgrRHgQCtf5CyXgrEBNyNWHobYBAhqQJpump"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fipfs.io%2Fipfs%2Fbafybeidmrefpkedvnalmixb3rgz56s7j525fu72kgegad6guo7d4ofdqpa&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="SARP" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">SARP</div>
+            <div class="token-grid__price mono-num" data-field="price">$0.0003</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +17.0%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/DEW9dSN6QpWyNthphCpMmAbZP1Q4cEKR9xQXAri98WDP"
+       class="token-grid__item"
+       data-mint="DEW9dSN6QpWyNthphCpMmAbZP1Q4cEKR9xQXAri98WDP"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Faxiomtrading.sfo3.cdn.digitaloceanspaces.com%2F7ovByu4CKE2ogdbYTRx8o9z1XarkNMA3hXyxThWamoon.webp&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="SI" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">SI</div>
+            <div class="token-grid__price mono-num" data-field="price">$0.04</div>
+        </div>
+        <span class="token-grid__change text-danger" data-field="change">
+            -37.6%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/DJTu7vi8norVzdVAffgvb39VP7wjKeTsgaMBJrzfxvoF"
+       class="token-grid__item"
+       data-mint="DJTu7vi8norVzdVAffgvb39VP7wjKeTsgaMBJrzfxvoF"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fbackpack.exchange%2Fapi%2Fstock-logo%2FDJT&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="DJT" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">DJT</div>
+            <div class="token-grid__price mono-num" data-field="price">$8.91</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +6.3%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263"
+       class="token-grid__item"
+       data-mint="DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Farweave.net%2FhQiPZOsRZXGXBJd_82PhVdlM_hACsT_q6wqwf5cSY7I&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="Bonk" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">Bonk</div>
+            <div class="token-grid__price mono-num" data-field="price">$0.000004</div>
+        </div>
+        <span class="token-grid__change text-danger" data-field="change">
+            -5.0%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/EL6Urf21PoPesMrbYSRc1yqqHjhk6DGUR63VZDmmpump"
+       class="token-grid__item"
+       data-mint="EL6Urf21PoPesMrbYSRc1yqqHjhk6DGUR63VZDmmpump"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fipfs.io%2Fipfs%2Fbafkreidinpk3xyxnhlt3bnd3yz3cdgec7i47b7gbrsdv7uvgvuy2zphbwu&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="WEPE" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">WEPE</div>
+            <div class="token-grid__price mono-num" data-field="price">$0.0066</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +77.1%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/A3MNEUT56HhQdbuaacaPjw4cihGNaW1cSjfEaJpepump"
+       class="token-grid__item"
+       data-mint="A3MNEUT56HhQdbuaacaPjw4cihGNaW1cSjfEaJpepump"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fipfs.io%2Fipfs%2Fbafybeihq7suabcnciwa3p4zqi3xnm3ssc5xu3wc6w73dq764onzbdqroxe&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="CROW" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">CROW</div>
+            <div class="token-grid__price mono-num" data-field="price">$0.0099</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +432.0%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/CbcyNo7m1amFWqEQm2m4PLv1UNvpcL3C1Ujm6AkzpKoU"
+       class="token-grid__item"
+       data-mint="CbcyNo7m1amFWqEQm2m4PLv1UNvpcL3C1Ujm6AkzpKoU"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Faxiomtrading-v2.axiom-cdn.io%2FF9e81iQnWSgZPvJFhygTLSwDPyFpmSQu8dxvPJNjXbiQ.webp&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="e/acc" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">e/acc</div>
+            <div class="token-grid__price mono-num" data-field="price">$0.02</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +20.6%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/Edpcd9aYh6BVRKV5hYrgnEuJ3MHAFcdnHtSL9yvopump"
+       class="token-grid__item"
+       data-mint="Edpcd9aYh6BVRKV5hYrgnEuJ3MHAFcdnHtSL9yvopump"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fipfs.io%2Fipfs%2Fbafybeieuehcgj3ll52wagalofwbrvhvparwxmttd7xdawrgvvlsf6qwkl4&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="Pinata" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">Pinata</div>
+            <div class="token-grid__price mono-num" data-field="price">$0.0003</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +31.4%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/BPxxfRCXkUVhig4HS1Lh7kZqV6SPJhzfEk4x6fVBjPCy"
+       class="token-grid__item"
+       data-mint="BPxxfRCXkUVhig4HS1Lh7kZqV6SPJhzfEk4x6fVBjPCy"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Ftrek-labs.github.io%2Fheart-metadata%2Fbp%2Fbp.png&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="BP" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">BP</div>
+            <div class="token-grid__price mono-num" data-field="price">$1.17</div>
+        </div>
+        <span class="token-grid__change text-danger" data-field="change">
+            -9.4%
+        </span>
+    </a>
+    </div>
+                        <div class="ssr-tab-footer">
+                            <a href="/tokens/traders">View all Traders →</a>
+                        </div>
+                    </div>
+                                    <div role="tabpanel"
+                         id="ssr-tab-panel-stocks"
+                         class="ssr-tab-panel"
+                         data-ssr-panel="stocks"
+                         hidden>
+                        <div class="token-grid" style="--grid-cols: 4;">
+        <a href="https://solanacompass.com/tokens/nvidia"
+       class="token-grid__item"
+       data-mint="Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fxstocks-metadata.backed.fi%2Flogos%2Ftokens%2FNVDAx.png&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="NVDAx" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">NVDA</div>
+            <div class="token-grid__price mono-num" data-field="price">$234.46</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +4.6%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/spacex"
+       class="token-grid__item"
+       data-mint="Xs3oZwbHvqis4NYcf4YKWmEia2eC84wSiVrcYcTqpH8"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fxstocks-metadata.backed.fi%2Flogos%2Ftokens%2FSPCXx.png&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="SPCXx" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">SPCX</div>
+            <div class="token-grid__price mono-num" data-field="price">$158.90</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +7.5%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/microsoft"
+       class="token-grid__item"
+       data-mint="XspzcW1PRtgf6Wj92HCiZdjzKCyFekVD8P5Ueh3dRMX"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fxstocks-metadata.backed.fi%2Flogos%2Ftokens%2FMSFTx.png&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="MSFTx" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">MSFT</div>
+            <div class="token-grid__price mono-num" data-field="price">$520.12</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +4.1%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/circle"
+       class="token-grid__item"
+       data-mint="XsueG8BtpquVJX9LVLLEGuViXUungE6WmK5YZ3p3bd1"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fxstocks-metadata.backed.fi%2Flogos%2Ftokens%2FCRCLx.png&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="CRCLx" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">CRCL</div>
+            <div class="token-grid__price mono-num" data-field="price">$81.66</div>
+        </div>
+        <span class="token-grid__change text-danger" data-field="change">
+            -12.1%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/roundhill-memory-etf"
+       class="token-grid__item"
+       data-mint="DRAMjSWR7HRfJKjRkvQWYL2bcaejaVhuxEcjf4pAY4Cw"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fbackpack.exchange%2Fapi%2Fstock-logo%2FDRAM&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="DRAM" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">DRAM</div>
+            <div class="token-grid__price mono-num" data-field="price">$61.69</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +1.9%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/micron"
+       class="token-grid__item"
+       data-mint="MUxEsUKSMACyw5fZf68wxf5FLnZVhtU9CwH8uNNGay1"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fbackpack.exchange%2Fapi%2Fstock-logo%2FMU&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="MU" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">MU</div>
+            <div class="token-grid__price mono-num" data-field="price">$1,073.03</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +0.1%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/sk-hynix"
+       class="token-grid__item"
+       data-mint="SKHYhSjuRWHgikq8eRKbtBbpABgJSkd7ytQV14i9EQ3"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fbackpack.exchange%2Fapi%2Fstock-logo%2FSKHY&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="SKHY" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">SKHY</div>
+            <div class="token-grid__price mono-num" data-field="price">$194.12</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +4.8%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/microstrategy"
+       class="token-grid__item"
+       data-mint="XsP7xzNPvEHS1m6qfanPUGjNmdnmsLKEoNAnHjdxxyZ"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fxstocks-metadata.backed.fi%2Flogos%2Ftokens%2FMSTRx.png&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="MSTRx" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">MSTR</div>
+            <div class="token-grid__price mono-num" data-field="price">$160.53</div>
+        </div>
+        <span class="token-grid__change text-danger" data-field="change">
+            -0.8%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/openai"
+       class="token-grid__item"
+       data-mint="oPAiAikWTaFj9RYoRFD35ccfwhnMcB3ThgBZRHSkjTZ"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fcdn.tesseralab.co%2Ftessera%2Ftokenicon_T-OpenAI.svg&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="tOpenAI" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">OPENAI</div>
+            <div class="token-grid__price mono-num" data-field="price">$1,778.45</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +71.6%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/amc-entertainment"
+       class="token-grid__item"
+       data-mint="AMC1qwR9KhiyrQBRPrxnfo4JfMeMZqEBvt5tgTytNNoc"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fbackpack.exchange%2Fapi%2Fstock-logo%2FAMC&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="AMC" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">AMC</div>
+            <div class="token-grid__price mono-num" data-field="price">$2.77</div>
+        </div>
+        <span class="token-grid__change text-danger" data-field="change">
+            -4.0%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/coinbase"
+       class="token-grid__item"
+       data-mint="Xs7ZdzSHLU9ftNJsii5fCeJhoRWSC32SQGzGQtePxNu"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fxstocks-metadata.backed.fi%2Flogos%2Ftokens%2FCOINx.png&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="COINx" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">COIN</div>
+            <div class="token-grid__price mono-num" data-field="price">$183.24</div>
+        </div>
+        <span class="token-grid__change text-danger" data-field="change">
+            -7.7%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/meta"
+       class="token-grid__item"
+       data-mint="Xsa62P5mvPszXL1krVUnU5ar38bBSVcWAB6fmPCo5Zu"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fxstocks-metadata.backed.fi%2Flogos%2Ftokens%2FMETAx.png&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="METAx" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">META</div>
+            <div class="token-grid__price mono-num" data-field="price">$729.29</div>
+        </div>
+        <span class="token-grid__change text-danger" data-field="change">
+            -6.4%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/robinhood"
+       class="token-grid__item"
+       data-mint="XsvNBAYkrDRNhA7wPHQfX3ZUXZyZLdnCQDfHZ56bzpg"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fxstocks-metadata.backed.fi%2Flogos%2Ftokens%2FHOODx.png&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="HOODx" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">HOOD</div>
+            <div class="token-grid__price mono-num" data-field="price">$112.53</div>
+        </div>
+        <span class="token-grid__change text-danger" data-field="change">
+            -6.7%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/sandisk"
+       class="token-grid__item"
+       data-mint="SNDKbwMUQvZhnLnxLduradgLHG5KrPuKwpnrkkGRhfH"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fbackpack.exchange%2Fapi%2Fstock-logo%2FSNDK&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="SNDK" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">SNDK</div>
+            <div class="token-grid__price mono-num" data-field="price">$1,726.14</div>
+        </div>
+        <span class="token-grid__change text-danger" data-field="change">
+            -1.9%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/hims-and-hers-health"
+       class="token-grid__item"
+       data-mint="HiMSSzzwkZkrXJ4PGVJRdtfLaANeAztjjcgk5Dxe7Lwx"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fbackpack.exchange%2Fapi%2Fstock-logo%2FHIMS&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="HIMS" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">HIMS</div>
+            <div class="token-grid__price mono-num" data-field="price">$29.01</div>
+        </div>
+        <span class="token-grid__change text-danger" data-field="change">
+            -1.0%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/gamestop"
+       class="token-grid__item"
+       data-mint="Xsf9mBktVB9BSU5kf4nHxPq5hCBJ2j2ui3ecFGxPRGc"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fxstocks-metadata.backed.fi%2Flogos%2Ftokens%2FGMEx.png&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="GMEx" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">GME</div>
+            <div class="token-grid__price mono-num" data-field="price">$25.07</div>
+        </div>
+        <span class="token-grid__change text-danger" data-field="change">
+            -1.1%
+        </span>
+    </a>
+    </div>
+                        <div class="ssr-tab-footer">
+                            <a href="/tokens/category/stocks">View all Stocks →</a>
+                        </div>
+                    </div>
+                                    <div role="tabpanel"
+                         id="ssr-tab-panel-rising"
+                         class="ssr-tab-panel"
+                         data-ssr-panel="rising"
+                         hidden>
+                        <div class="token-grid" style="--grid-cols: 4;">
+        <a href="https://solanacompass.com/tokens/4z7secBe41i5Svtotp4k2FsjMVV6xykEVnrD4kdFpump"
+       class="token-grid__item"
+       data-mint="4z7secBe41i5Svtotp4k2FsjMVV6xykEVnrD4kdFpump"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fipfs.io%2Fipfs%2FQmPKiNpsC2qHNxNbzJhQiMf1wenyoQQDvw5vK1xDGQj4Nu&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="Trenches" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">Trenches</div>
+            <div class="token-grid__price mono-num" data-field="price">$0.000020</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +11.0%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/GKjAe1bQXXLoEitJYSuyw6qt97tTVoKkGEgWPEo6pump"
+       class="token-grid__item"
+       data-mint="GKjAe1bQXXLoEitJYSuyw6qt97tTVoKkGEgWPEo6pump"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fipfs.io%2Fipfs%2FQmSC4WdJHQnZh3n3dMvPPKy84ytEcfSPVfftQKsQEnr1v8&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="Clippy" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">Clippy</div>
+            <div class="token-grid__price mono-num" data-field="price">$0.000050</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +4.7%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/8TSUhXRhpEFtUVfDFAQdYCwgp2mEbs2jQk7tAYc1pump"
+       class="token-grid__item"
+       data-mint="8TSUhXRhpEFtUVfDFAQdYCwgp2mEbs2jQk7tAYc1pump"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Faxiomtrading.sfo3.cdn.digitaloceanspaces.com%2F6RpHDAnvE8dnafESJMNhcx6FvkPeknufb56oqv8Cpump.webp&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="HUSKY" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">HUSKY</div>
+            <div class="token-grid__price mono-num" data-field="price">$0.000008</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +29.6%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/53rZTtfGghxqdd6qTeDdfS8MBqg2CTyQeLW1LHCRpump"
+       class="token-grid__item"
+       data-mint="53rZTtfGghxqdd6qTeDdfS8MBqg2CTyQeLW1LHCRpump"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fdesperate-moccasin-minnow.myfilebase.com%2Fipfs%2FQmYCK5NHjrTq4tR9AaQn8oQAwdaou94YqGgAC6WDNMm6Jr&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="Pigeon" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">Pigeon</div>
+            <div class="token-grid__price mono-num" data-field="price">$0.000019</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +171.0%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/B89Hd5Juz7JP2dxCZXFJWk4tMTcbw7feDhuWGb3kq5qE"
+       class="token-grid__item"
+       data-mint="B89Hd5Juz7JP2dxCZXFJWk4tMTcbw7feDhuWGb3kq5qE"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Farweave.net%2FwkIX4fP71Bu1C7IpdY8D2zZsgLTVBlVQ62RSlo-9MrY&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="NC" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">NC</div>
+            <div class="token-grid__price mono-num" data-field="price">$0.0009</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +20.8%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/6PSprCuW4u2aUPkMs4QP6oZ1JwAt2eF4yyCPwPKGBAGS"
+       class="token-grid__item"
+       data-mint="6PSprCuW4u2aUPkMs4QP6oZ1JwAt2eF4yyCPwPKGBAGS"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Faxiomtrading-v2.axiom-cdn.io%2FAz4cTsicZn88CauLPAmDsfD4FTqkzGQvGLwq5byMesXF.webp&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="TSUKI" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">TSUKI</div>
+            <div class="token-grid__price mono-num" data-field="price">$0.000004</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +20.8%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/6Sf8vj1Ah1qAengWyaYEwfgtcuhV3drEhrF6h8KTmszX"
+       class="token-grid__item"
+       data-mint="6Sf8vj1Ah1qAengWyaYEwfgtcuhV3drEhrF6h8KTmszX"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Faliejsbgzjyeuiupbpss.supabase.co%2Fstorage%2Fv1%2Fobject%2Fpublic%2Fcoin-media%2F6Sf8vj1Ah1qAengWyaYEwfgtcuhV3drEhrF6h8KTmszX%2Fimage-74093233a1f5105d.jpg&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="SOL" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">SOL</div>
+            <div class="token-grid__price mono-num" data-field="price">$0.000006</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +45.7%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/BBEuXn2iMJojebUERJ5tnNhcbWP9FdXDXHz6CmQ9MsmP"
+       class="token-grid__item"
+       data-mint="BBEuXn2iMJojebUERJ5tnNhcbWP9FdXDXHz6CmQ9MsmP"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fipfs.io%2Fipfs%2Fbafybeiavx7yltkeph3elwecink324hofty576gpvarzpa3em6jkuilld5y&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="FASTFI" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">FASTFI</div>
+            <div class="token-grid__price mono-num" data-field="price">$0.000011</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +220.9%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/GWDAwqnTrrcLnxf49Mc1DHB7oEY7gQw2tbiRrqqee4N1"
+       class="token-grid__item"
+       data-mint="GWDAwqnTrrcLnxf49Mc1DHB7oEY7gQw2tbiRrqqee4N1"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Faliejsbgzjyeuiupbpss.supabase.co%2Fstorage%2Fv1%2Fobject%2Fpublic%2Fcoin-media%2FGWDAwqnTrrcLnxf49Mc1DHB7oEY7gQw2tbiRrqqee4N1%2Fimage-19509e38a292c439.jpg&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="AI" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">AI</div>
+            <div class="token-grid__price mono-num" data-field="price">$0.000022</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +441.4%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/EBzwQbhMdkU541M6HHisGp81zBNGeijrnvHW9XgL9FrE"
+       class="token-grid__item"
+       data-mint="EBzwQbhMdkU541M6HHisGp81zBNGeijrnvHW9XgL9FrE"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Faxiomtrading-v2.axiom-cdn.io%2FFJ471rNK1GcnoD8GWFNWaZFjcacM7QiWekXLbuh6o2T5.webp&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="P(DOOM)" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">P(DOOM)</div>
+            <div class="token-grid__price mono-num" data-field="price">$0.000016</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +119.8%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/27XBAh4TmAcpvr7UfV17D4Uma6NLtGwUeYuorFTEQsbk"
+       class="token-grid__item"
+       data-mint="27XBAh4TmAcpvr7UfV17D4Uma6NLtGwUeYuorFTEQsbk"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Faxiomtrading-v2.axiom-cdn.io%2FJBxvss1xXYPULHMgotgn4uuAa9L4kV7bjbt2HtLVw22u.webp&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="FIX6900" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">FIX6900</div>
+            <div class="token-grid__price mono-num" data-field="price">$0.000004</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +12.5%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/9qUTeFNXFh35YmdtayeniRUr8o31rXYzMK3Jv5Zypump"
+       class="token-grid__item"
+       data-mint="9qUTeFNXFh35YmdtayeniRUr8o31rXYzMK3Jv5Zypump"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fipfs.io%2Fipfs%2Fbafkreifzweflm7a5afspfo7csyump3z7mybifuz7hj2tu6jsqtxgwwo7wi&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="limit" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">limit</div>
+            <div class="token-grid__price mono-num" data-field="price">$0.000007</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +72.3%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/7eMJmn1bYWSQEwxAX7CyngBzGNGu1cT582asKxxRpump"
+       class="token-grid__item"
+       data-mint="7eMJmn1bYWSQEwxAX7CyngBzGNGu1cT582asKxxRpump"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fipfs.io%2Fipfs%2Fbafkreibpaybhq5nkk7lvy3tacarmjejlggzzkr4bztexy6errp775nlgjy&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="CLIPPY" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">CLIPPY</div>
+            <div class="token-grid__price mono-num" data-field="price">$0.000046</div>
+        </div>
+        <span class="token-grid__change text-danger" data-field="change">
+            -0.1%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/5kcJz9yt7y2xdYccwnkU2mDS3x8zBNQiYtPk6DPWBiZr"
+       class="token-grid__item"
+       data-mint="5kcJz9yt7y2xdYccwnkU2mDS3x8zBNQiYtPk6DPWBiZr"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Faxiomtrading-v2.axiom-cdn.io%2FCSrwNk6B1DwWCHRMsaoDVUfD5bBMQCJPY72ZG3Nnpump.webp&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="Franklin" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">Franklin</div>
+            <div class="token-grid__price mono-num" data-field="price">$0.000050</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +491.7%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/9txCZaqYaQ62nFVcEWhosWx3vTMcJMFP5YYXQ5yhBAGS"
+       class="token-grid__item"
+       data-mint="9txCZaqYaQ62nFVcEWhosWx3vTMcJMFP5YYXQ5yhBAGS"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Faxiomtrading.sfo3.cdn.digitaloceanspaces.com%2FXfT3UadhUVu8usQAFZPzK3C8RfKXfNUTz68XVfhpump.webp&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="LIFE" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">LIFE</div>
+            <div class="token-grid__price mono-num" data-field="price">$0.0002</div>
+        </div>
+        <span class="token-grid__change text-success" data-field="change">
+            +42.1%
+        </span>
+    </a>
+        <a href="https://solanacompass.com/tokens/2Xvyi5Z8639p7yymVc8AiaRuNNRLfbbPcp7oozcApump"
+       class="token-grid__item"
+       data-mint="2Xvyi5Z8639p7yymVc8AiaRuNNRLfbbPcp7oozcApump"
+       data-live-flash>
+                    <img src="https://wsrv.nl/?url=https%3A%2F%2Fapi.vortexdeployer.com%2Fimage%2Fba10364f-659c-46e6-9ed0-fd7b58d72c7e.webp&amp;w=32&amp;h=32&amp;dpr=2&amp;quality=80&amp;output=webp" alt="PLAY" class="token-grid__logo" loading="lazy">
+                <div class="token-grid__info">
+            <div class="token-grid__symbol">PLAY</div>
+            <div class="token-grid__price mono-num" data-field="price">$0.000003</div>
+        </div>
+        <span class="token-grid__change text-danger" data-field="change">
+            -47.2%
+        </span>
+    </a>
+    </div>
+                        <div class="ssr-tab-footer">
+                            <a href="/tokens/rising">View all Rising →</a>
+                        </div>
+                    </div>
+                            </div>
+        </div>
+    </div>
+</div>
+                            </main>
+
+            <!-- Footer with columns for submenus -->
+            <footer class="footer">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-6 col-sm-12">
+                            <h3>Solana Compass 🧭</h3>
+                            <p class="lead">Solana Compass has been operating a validator and helping build the Solana
+                                ecosystem since September 2021</p>
+                            <p class="small text-muted">
+                                Please note that all content is provided for information only and does not constitute a
+                                recommendation or financial advice. This site is community run and not affiliated with
+                                Solana Labs or Foundation.
+                            </p>
+                            <a href="https://solresearch.institute" target="_blank" rel="noopener">
+                                <img src="/sri-badge.svg" alt="Sol Research Institute" class="img-fluid" loading="lazy">
+                            </a>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-12">
+                            <h5 class="footer-title">Staking With Solana Compass</h5>
+                            <ul class="list-unstyled">
+                                <li><a href="/staking">Compass Validator</a></li>
+                                <li><a href="/validators">Solana Validators</a></li>
+                                <li><a href="/staking/liquid-staking">Liquid Staking</a></li>
+                                <li><a href="/stake-pools">Explore stake pools</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 col-sm-12">
+                            <h5 class="footer-title">Solana Statistics</h5>
+                            <ul class="list-unstyled">
+                                <li aria-haspopup="true"><a class="docs-link rounded active"
+                                                            href="https://solanacompass.com/">Solana Performance +
+                                        TPS</a></li>
+                                <li aria-haspopup="true"><a class="docs-link rounded active"
+                                                            href="https://solanacompass.com/statistics/decentralization">Solana
+                                        Decentralization Dashboard</a></li>
+                                <li aria-haspopup="true"><a class="docs-link rounded active"
+                                                            href="https://solanacompass.com/blocks" rel="nofollow">Solana
+                                        Block Summary Explorer</a></li>
+                                <li aria-haspopup="true"><a class="docs-link rounded active"
+                                                            href="https://solanacompass.com/statistics/fees">Solana Fee
+                                        Tracker</a></li>
+                                
+                                                                <li aria-haspopup="true"><a class="docs-link rounded active"
+                                                            href="/tools/solana-token-account-rent-reclaim">Solana Rent Reclaim</a></li>
+                                                                                                <li aria-haspopup="true"><a class="docs-link rounded active"
+                                                            href="/tools/create-solana-token">Create Solana Token</a></li>
+                                                                <li aria-haspopup="true"><a class="docs-link rounded active"
+                                                            href="https://solanacompass.com/statistics/staking">Solana
+                                        Staking Statistics</a></li>
+                                <li aria-haspopup="true"><a class="docs-link rounded active"
+                                                            href="https://solanacompass.com/tokenomics" rel="nofollow">Solana
+                                        Tokenomics</a></li>
+                                <li aria-haspopup="true"><a class="docs-link rounded active"
+                                                            href="/docs/api">API Documentation</a></li>
+                               <li aria-haspopup="true"><a class="docs-link rounded active"
+                                                            href="/skills">Solana Openclaw Agent Skill</a></li>
+
+                            </ul>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 col-sm-12">
+                            <h5 class="footer-title">About</h5>
+                            <ul class="list-unstyled">
+                                <li><a href="/author/solana-compass">About the publisher</a></li>
+                                <li><a href="/editorial-standards">Editorial standards</a></li>
+                                <li><a href="/press">Solana Compass in the press</a></li>
+                                <li><a href="/news">Solana News</a></li>
+                                <li><a href="https://x.com/solanacompass" target="_blank" rel="noopener">X / Twitter</a></li>
+                                <li><a href="https://github.com/solanaguide" target="_blank" rel="noopener">GitHub</a></li>
+                            </ul>
+                        </div>
+
+                    </div>
+
+                </div>
+            </footer>
+        </div>
+
+
+            </div>
+        </div>
+    <script async data-id="100961864" src="/ca35b5249987a8.js"></script>
+    <noscript><p><img alt="Clicky" width="1" height="1" src="//in.getclicky.com/100961864ns.gif" /></p></noscript>
+
+    <!-- Twitter universal website tag code -->
+    <script>
+        !function(e,t,n,s,u,a){e.twq||(s=e.twq=function(){s.exe?s.exe.apply(s,arguments):s.queue.push(arguments);
+        },s.version='1.1',s.queue=[],u=t.createElement(n),u.async=!0,u.src='//static.ads-twitter.com/uwt.js',
+            a=t.getElementsByTagName(n)[0],a.parentNode.insertBefore(u,a))}(window,document,'script');
+        // Insert Twitter Pixel ID and Standard Event data below
+        twq('init','o7do9');
+        twq('track','PageView');
+    </script>
+    <script src="/js/horizontal-menu/horizontal-menu.js"></script>
+
+
+
+<style>
+/* Live price flash animations — used by TokenWidget and LivePriceUpdater */
+.live-flash-up { animation: live-pulse-green 0.8s ease-out; }
+.live-flash-down { animation: live-pulse-red 0.8s ease-out; }
+@keyframes  live-pulse-green {
+    0% { background-color: rgba(38, 166, 154, 0.25); }
+    100% { background-color: transparent; }
+}
+@keyframes  live-pulse-red {
+    0% { background-color: rgba(239, 83, 80, 0.25); }
+    100% { background-color: transparent; }
+}
+</style>
+
+</body>
+</html>

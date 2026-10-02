@@ -1,0 +1,317 @@
+<!doctype HTML>
+<html lang="en">
+	<head>
+		<title>SIMD-0123 | Vote</title>
+		<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="apple-touch-icon" type="image/png" href="/favicon.png?v=2" />
+<link rel="stylesheet" type="text/css" href="/style.css?v=52" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
+<script src="https://unpkg.com/@solana/spl-token@0.1/lib/index.iife.min.js"></script>
+<script src="https://solpay.solblaze.org/bn.js"></script>
+<script src="https://solpay.solblaze.org/sdk.js?v=59"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="/notification.css" />
+<script src="/notify.js"></script>	</head>
+	<body>
+		<nav>
+	<a class="nav-logo-container-responsive" href="/">
+		<img class="nav-logo" src="/logo.png">
+	</a>
+	<a class="nav-logo-container-mobile" href="javascript:toggleNav();">
+		<img class="nav-logo" src="/menu.jpeg">
+	</a>
+	<div class="nav-links-container nav-links-container-responsive">
+		<a class="nav-link" href="/">Home</a>
+		<!-- <a class="nav-link nav-link-active" href="/0123/vote">SIMD-0123 Voting</a>
+		<a class="nav-link" href="/0228/vote">SIMD-0228 Voting</a> -->
+		<a class="nav-link" href="/0326/vote">SIMD-0326 Voting</a>
+		<a class="nav-link" href="https://solblaze.org">SolBlaze</a>
+	</div>
+			<div class="btn top-right-button" id="top_right_button" onclick="connectWallet();"><i class="fas fa-wallet"></i> <span>Connect Wallet</span></div>
+	</nav>
+	<script type="text/javascript" src="/wallet.js?v=56" defer></script>
+<script>
+	function toggleNav() {
+		if([...document.querySelector(".nav-links-container-responsive").classList].includes("nav-links-container-active")) {
+			document.querySelector(".nav-links-container-responsive").classList.remove("nav-links-container-active");
+		} else {
+			document.querySelector(".nav-links-container-responsive").classList.add("nav-links-container-active")
+		}
+	}
+</script>		<main class="main-lower">
+			<div class="main-home">
+				<h1 class="title">Vote</h1>
+				<div class="create-container">
+					<p class="small-description">
+						Proposal outcome: <span id="proposal-status">Passed</span><br>
+						Total Yes Votes: <span id="yes-votes-count">160,254,899,404,160,713</span> (<span id="yes-votes-percent">74.91</span>% / 66.67%)<br>
+						Total No Votes: <span id="no-votes-count">53,663,820,927,507,988</span> (<span id="no-votes-percent">25.08</span>%)<br>
+						Total Abstain Votes: <span id="abstain-votes-count">2,586,661,597,230,866</span><br>
+						Total Votes Cast: <span id="total-votes-count">216,505,381,928,899,567</span> (<span id="total-votes-percent">57.11</span>% / 33%)<br>
+						Your Available Votes: <span id="your-available-votes">--</span>
+					</p>
+					<h3 class="input-title">Yes</h3>
+					<input class="create-input" type="number" min="0" id="yes" value="0" oninput="checkBounds(this);" />
+					<p class="small-description max-btn" onclick="useMax('#yes');">Max</p>
+					<h3 class="input-title">No</h3>
+					<input class="create-input" type="number" min="0" id="no" value="0" oninput="checkBounds(this);" style="margin-top: 0;" />
+					<p class="small-description max-btn" onclick="useMax('#no');">Max</p>
+					<h3 class="input-title">Abstain</h3>
+					<input class="create-input" type="number" min="0" id="abstain" value="0" oninput="checkBounds(this);" style="margin-top: 0;" />
+					<p class="small-description max-btn" onclick="useMax('#abstain');">Max</p>
+					<div class="btn vote-btn" id="vote_btn" onclick="vote();"><i class="fas fa-wallet"></i> <span>Connect Wallet</span></div>
+					<p class="small-description">
+						Resources:<br>
+						- <a href="https://github.com/jstarry/solana-improvement-documents/blob/block-fee-distribution/proposals/0123-block-revenue-distribution.md" target="_blank">Proposal</a><br>
+						- <a href="https://forum.solana.com/t/proposal-for-an-in-protocol-distribution-of-block-rewards-to-stakers/3295" target="_blank">Forum</a><br>
+					</p>
+				</div>
+			</div>
+			<script>
+				window.wallet = null;
+				let maxVotes = 0;
+
+				// const network = SOLPay.networks.mainnet.GENESYSGO;
+				// const network = "https://try-rpc.mainnet.solana.blockdaemon.tech";
+				// const network = "https://free.rpcpool.com";
+				// const networkPrimary = "https://solblaze.sentries.io/e91eab07";
+				const networkPrimary = "https://elsey-j47fun-fast-mainnet.helius-rpc.com";
+				// const networkBackup = "https://solana-mainnet.g.alchemy.com/v2/BU4v6M9YuVTDDHwE0n4HAQb83B82J8sB";
+				const networkBackup = "https://elsey-j47fun-fast-mainnet.helius-rpc.com";
+				const networkLastResort = SOLPay.networks.mainnet.SOLANA;
+				let networkInfo;
+				let connected = "";
+
+				const VOTE_TOKEN = "s1233un3oMnNWo4EuKsEjtV7QtXfimhybHMQP7GLPwM";
+				const VOTE_TOKEN_SUPPLY = new BN(379050125089013001n);
+				const YES_ADDRESS = "YESsimd123111111111111111111111111111111111";
+				const NO_ADDRESS = "nosimd1231111111111111111111111111111111111";
+				const ABSTAIN_ADDRESS = "ABSTA1Nsimd12311111111111111111111111111111";
+				const PASS_THRESHOLD = 2/3;
+				const QUORUM_THRESHOLD = 0.33;
+
+				function checkBounds(e) {
+					if(isNaN(parseFloat(e.value))) {
+						e.value = "";
+					} else if(!isNaN(parseFloat(e.max)) && parseFloat(e.value) > parseFloat(e.max)) {
+						e.value = e.max;
+					} else if(!isNaN(parseFloat(e.min)) && parseFloat(e.value) < parseFloat(e.min)) {
+						e.value = e.min;
+					}
+				}
+
+				function connectNetwork(type = "mainnet-beta") {
+					return new Promise(async (resolve, reject) => {
+						if(connected != type) {
+							if(type == "devnet") {
+								networkInfo = await SOLPay.connectNetwork(SOLPay.networks.devnet.SOLANA);
+							} else if(type == "testnet") {
+								networkInfo = await SOLPay.connectNetwork(SOLPay.networks.testnet.SOLANA);
+							} else {
+								try {
+									console.log("Connecting to primary network");
+									networkInfo = await SOLPay.connectNetwork(networkPrimary);
+									await SOLPay.getAccountInfo("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA");
+								} catch(err) {
+									try {
+										console.log("Primary network failed, switching to backup");
+										networkInfo = await SOLPay.connectNetwork(networkBackup);
+										await SOLPay.getAccountInfo("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA");
+									} catch(err) {
+										console.log("Backup network failed, switching to last resort");
+										networkInfo = await SOLPay.connectNetwork(networkLastResort);
+									}
+								}
+							}
+							connected = type;
+						}
+						resolve(networkInfo);
+					});
+				}
+
+				async function updateStats() {
+					return false;
+					await connectNetwork();
+					let yesVotes = await SOLPay.getTokenBalance(VOTE_TOKEN, YES_ADDRESS);
+					let yesVotesBN = new BN(yesVotes.token.balance.uiAmountString);
+					let noVotes = await SOLPay.getTokenBalance(VOTE_TOKEN, NO_ADDRESS);
+					let noVotesBN = new BN(noVotes.token.balance.uiAmountString);
+					let abstainVotes = await SOLPay.getTokenBalance(VOTE_TOKEN, ABSTAIN_ADDRESS);
+					let abstainVotesBN = new BN(abstainVotes.token.balance.uiAmountString);
+					document.querySelector("#yes-votes-count").innerHTML = formatLongNumber(yesVotes.token.balance.uiAmountString);
+					document.querySelector("#no-votes-count").innerHTML = formatLongNumber(noVotes.token.balance.uiAmountString);
+					document.querySelector("#abstain-votes-count").innerHTML = formatLongNumber(abstainVotes.token.balance.uiAmountString);
+					if(yesVotes.token.balance.uiAmountString == "0" && noVotes.token.balance.uiAmountString == "0") {
+						document.querySelector("#yes-votes-percent").innerHTML = "0.00";
+						document.querySelector("#no-votes-percent").innerHTML = "0.00";
+					} else {
+						document.querySelector("#yes-votes-percent").innerHTML = (Math.round(yesVotesBN.mul(new BN(10000)).div(yesVotesBN.add(noVotesBN)).toNumber()) / 100).toFixed(2);
+						document.querySelector("#no-votes-percent").innerHTML = (Math.round(noVotesBN.mul(new BN(10000)).div(yesVotesBN.add(noVotesBN)).toNumber()) / 100).toFixed(2);
+					}
+					let totalVotesBN = yesVotesBN.add(noVotesBN).add(abstainVotesBN);
+					document.querySelector("#total-votes-count").innerHTML = formatLongNumber(totalVotesBN.toString());
+					if(VOTE_TOKEN_SUPPLY.toString() == "0") {
+						document.querySelector("#total-votes-percent").innerHTML = "0.00";
+					} else {
+						document.querySelector("#total-votes-percent").innerHTML = (Math.round(totalVotesBN.mul(new BN(10000)).div(VOTE_TOKEN_SUPPLY).toNumber()) / 100).toFixed(2);
+					}
+					let passPercentage = yesVotesBN.mul(new BN(10000)).div(yesVotesBN.add(noVotesBN)).toNumber() / 10000;
+					let quorumPercentage = totalVotesBN.mul(new BN(10000)).div(VOTE_TOKEN_SUPPLY).toNumber() / 10000;
+					if(quorumPercentage < QUORUM_THRESHOLD) {
+						document.querySelector("#proposal-status").innerHTML = "Not Meeting Quorum";
+					} else if(passPercentage < PASS_THRESHOLD) {
+						document.querySelector("#proposal-status").innerHTML = "Failing";
+					} else {
+						document.querySelector("#proposal-status").innerHTML = "Passing";
+					}
+				}
+				updateStats();
+
+				setInterval(() => {
+					updateStats();
+				}, 60000);
+
+				function formatLongNumber(str) {
+					str = str.toString();
+					let separator = (1000).toLocaleString()[1];
+					let formatted = "";
+					let digit = 0;
+					for(let i = str.length - 1; i >= 0; i--) {
+						formatted = str[i] + formatted;
+						digit++;
+						if(digit % 3 == 0 & i != 0) {
+							formatted = "," + formatted;
+						}
+					}
+					return formatted;
+				}
+
+				async function updateYourVotes() {
+					await connectNetwork();
+					let yourVotes = await SOLPay.getTokenBalance(VOTE_TOKEN);
+					maxVotes = parseInt(yourVotes.token.balance.uiAmountString);
+					document.querySelector("#your-available-votes").innerHTML = formatLongNumber(yourVotes.token.balance.uiAmountString);
+				}
+
+				window.onWalletConnected = async function(w) {
+					updateYourVotes();
+				}
+
+				window.onWalletDisconnected = function(w) {
+					document.querySelector("#your-available-votes").innerHTML = "--";
+					maxVotes = 0;
+				}
+
+				function useMax(id) {
+					updateYourVotes();
+					document.querySelector(id).value = maxVotes;
+				}
+
+				let voting = false;
+				function vote() {
+					return new Promise(async (resolve, reject) => {
+						if(wallet == null) {
+							connectWallet();
+						} else {
+							updateWallet();
+							let yesVotes = parseInt(document.querySelector("#yes").value);
+							let noVotes = parseInt(document.querySelector("#no").value);
+							let abstainVotes = parseInt(document.querySelector("#abstain").value);
+							if(isNaN(yesVotes) || isNaN(noVotes) || isNaN(abstainVotes)) {
+								showError("Missing required fields.");
+								resolve();
+							} else if(!voting) {
+								voting = true;
+								let oldVoteHTML = document.querySelector("#vote_btn").innerHTML;
+								document.querySelector("#vote_btn").innerHTML = "Loading...";
+								try {
+									let transfers = [];
+									let votes = [];
+									let votesFormatted = [];
+									if(yesVotes > 0) {
+										transfers.push({
+											type: "spl_token_transfer",
+											data: {
+												token_address: VOTE_TOKEN,
+												address: YES_ADDRESS,
+												amount: yesVotes
+											}
+										});
+										votes.push(`${yesVotes} for yes`);
+										votesFormatted.push(`${formatLongNumber(yesVotes)} for yes`);
+									}
+									if(noVotes > 0) {
+										transfers.push({
+											type: "spl_token_transfer",
+											data: {
+												token_address: VOTE_TOKEN,
+												address: NO_ADDRESS,
+												amount: noVotes
+											}
+										});
+										votes.push(`${noVotes} for no`);
+										votesFormatted.push(`${formatLongNumber(noVotes)} for no`);
+									}
+									if(abstainVotes > 0) {
+										transfers.push({
+											type: "spl_token_transfer",
+											data: {
+												token_address: VOTE_TOKEN,
+												address: ABSTAIN_ADDRESS,
+												amount: abstainVotes
+											}
+										});
+										votes.push(`${abstainVotes} for abstain`);
+										votesFormatted.push(`${formatLongNumber(abstainVotes)} for abstain`);
+									}
+									let options = {
+										memo: "Voted on SIMD-0123 through SolBlaze: " + votes.join(", ")
+									}
+									await connectNetwork();
+									SOLPay.signTransaction(transfers, options).then(async (signed) => {
+										SOLPay.broadcastSerializedTransaction(signed.serialized_transaction).then(async (transaction) => {
+											showModal("Successfully voted!", `Your vote on SIMD-0123 has been recorded, thanks for participating in Solana governance!`, [{
+												text: "Share on Twitter",
+												onclick: `window.open('https://twitter.com/intent/tweet?text=${encodeURIComponent(`I just voted on the SIMD-0123 proposal through SolBlaze! Here's how I cast my votes: ${votesFormatted.join(", ")}`).replaceAll("'", "%27")}&url=${encodeURIComponent("https://simd.solblaze.org/0123/vote")}&via=solblaze_org', '_blank');`,
+												type: "primary"
+											}, {
+												text: "View on SolanaFM",
+												onclick: `window.open('https://solana.fm/tx/${transaction.signature}', '_blank')`,
+												type: "secondary"
+											}, {
+												text: "Close",
+												onclick: "hideModal(this);",
+												type: "secondary"
+											}]);
+											document.querySelector("#vote_btn").innerHTML = oldVoteHTML;
+											document.querySelector("#yes").value = "0";
+											document.querySelector("#no").value = "0";
+											document.querySelector("#abstain").value = "0";
+											updateYourVotes();
+											updateStats();
+											voting = false;
+											resolve();
+										});
+									}).catch((err) => {
+										showError(err);
+										document.querySelector("#vote_btn").innerHTML = oldVoteHTML;
+										voting = false;
+										resolve();
+									});
+								} catch(err) {
+									console.error(err);
+									showError("Unable to cast votes, please try again.");
+									document.querySelector("#vote_btn").innerHTML = oldVoteHTML;
+									voting = false;
+									resolve();
+								}
+							}
+							
+						}
+					});
+				}
+			</script>
+		</main>
+	</body>
+</html>

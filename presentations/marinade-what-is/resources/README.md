@@ -130,6 +130,41 @@ Public sources for the "What is Marinade" talk. HTML copies have scripts strippe
 | pages/api-scoring-openapi.json | https://scoring.marinade.finance/docs.json | 2026-10-02 | SAM scores and stake targets |
 | pages/api-recipes-openapi.json | https://recipes-api.marinade.finance/openapi.json | 2026-10-02 | Recipe payout runs |
 | pages/github-marinade-public-repos.json | https://api.github.com/orgs/marinade-finance/repos?type=public | 2026-10-02 | Public repos, archived flag |
+| pages/ecosystem-solana-upgrades.html | https://solana.com/upgrades | 2026-10-02 | Agave 4.1-4.4 upgrade list and status |
+| pages/ecosystem-solana-upgrades-alpenglow.html | https://solana.com/upgrades/alpenglow | 2026-10-02 | Alpenglow: Votor, Rotor, vote txs removed, ~150 ms finality |
+| pages/ecosystem-solana-upgrades-100m-cu-blocks.html | https://solana.com/upgrades/100m-cu-blocks | 2026-10-02 | Block limit 60M to 100M CUs, 29 Jul 2026, epoch 1009 |
+| pages/ecosystem-simd-0096-priority-fee-to-validator.md | https://github.com/solana-foundation/solana-improvement-documents/blob/main/proposals/0096-reward-collected-priority-fee-in-entirety.md | 2026-10-02 | 100% priority fee to leader, status Activated |
+| pages/ecosystem-simd-0123-block-revenue-distribution.md | https://github.com/solana-foundation/solana-improvement-documents/blob/main/proposals/0123-block-revenue-distribution.md | 2026-10-02 | In-protocol block revenue sharing with stakers |
+| pages/ecosystem-simd-0286-block-limit-100m.md | https://github.com/solana-foundation/solana-improvement-documents/blob/main/proposals/0286-raise-block-limits-to-100M.md | 2026-10-02 | 100M CU proposal by Jito Labs, 12M per-account cap |
+| pages/ecosystem-agave-feature-gate-tracker.html | https://github.com/anza-xyz/agave/wiki/Feature-Gate-Tracker-Schedule | 2026-10-02 | Pending mainnet features; Alpenglow (SIMD-0326) not yet active |
+| pages/ecosystem-xroot-simd-0123-status.html | https://app.xroot.dev/upgrades/simd-0123-block-revenue-sharing | 2026-10-02 | SIMD-0123 not queued on any cluster |
+| pages/ecosystem-cryptoticker-alpenglow-no-mainnet-sep28.html | https://cryptoticker.io/en/solana-alpenglow-mainnet-date-missed/ | 2026-10-02 | Alpenglow on testnet 22 Sep 2026, no mainnet date |
+| pages/ecosystem-helius-bam.html | https://www.helius.dev/blog/block-assembly-marketplace-bam | 2026-10-02 | BAM design: TEE nodes, plugins, attestations, risks |
+| pages/ecosystem-helius-constellation-mcp.html | https://www.helius.dev/blog/constellation | 2026-10-02 | Multiple concurrent proposers (Constellation) |
+| pages/ecosystem-solanacompass-bam-preconfirmations.html | https://solanacompass.com/news/jito-bam-preconfirmations-go-live-on-solana-covering-34-of-network-stake | 2026-10-02 | BAM 34.1% stake, 383 of 665 validators, 9 Sep 2026 |
+| pages/ecosystem-solanacompass-jito-q2-2026.html | https://solanacompass.com/news/jito-q2-2026-protocol-revenue-falls-45-to-128m-as-bam-reaches-33-of-solana-stake | 2026-10-02 | Jito Q2 2026: tips $9.9M, JitoSOL 9.86M SOL, BAM 33% |
+| pages/ecosystem-solanacompass-stake-pools.html | https://solanacompass.com/stake-pools | 2026-10-02 | Liquid staking 13.47% of staked SOL |
+| pages/ecosystem-syndica-onchain-april-2026.html | https://blog.syndica.io/deep-dive-solana-onchain-activity-april-2026/ | 2026-10-02 | Client and scheduler stake share, revenue per block, Apr 2026 |
+| pages/ecosystem-figment-q2-2026-validator-report.html | https://www.figment.io/insights/figments-q2-2026-solana-validator-report/ | 2026-10-02 | Q2 2026 reward rate 6.24%, SIMD-0123 outlook |
+| pages/ecosystem-blockworks-block-building-wars.html | https://blockworks.com/newsletter/0xresearch/issue/post_f3a5adde-8a8f-4803-bbc6-827f51659331 | 2026-10-02 | Jito vs Harmonic dispute, late packing, Jan 2026 |
+| pages/ecosystem-blockrazor-paladin-bam-harmonic.html | https://blockrazor.io/blog/20260206solanaBlockConstruction/ | 2026-10-02 | Paladin vs BAM vs Harmonic comparison, Feb 2026 |
+| pages/ecosystem-arxiv-no-place-to-hide-sandwich.html | https://arxiv.org/abs/2609.28115 | 2026-10-02 | 28M Solana sandwiches Jul 2023 - Jun 2026 |
+| pages/ecosystem-solanafloor-sfdp-5pct.html | https://solanafloor.com/news/solana-validator-independence-grows | 2026-10-02 | SFDP stake 11% to 5%, validator break-even |
+| pages/ecosystem-bsol-etf.html | https://bsoletf.com/ | 2026-10-02 | BSOL 11.18M SOL, 100% staked, 30 Sep 2026 |
+| pages/ecosystem-chainspect-nakamoto.html | https://chainspect.app/dashboard/decentralization | 2026-10-02 | Solana Nakamoto coefficient 18, 672 validators |
+| pages/verify-blockworks-solana-q2-2026-thr.md | https://x.com/Blockworks/article/2079204785425670413 (text via api.fxtwitter.com) | 2026-10-02 | Q2 2026 REV $51.0M split, stakers $487M, >98% issuance, Jito tips to stakers $8.2M |
+| pages/verify-arxiv-2609-28115.html | https://arxiv.org/html/2609.28115v1 | 2026-10-02 | 28,042,725 Solana sandwiches by 8,631 bots, $345.2M net, Jul 2023 - Jun 2026 |
+| pages/verify-solanacompass-bam-preconfirmations.html | https://solanacompass.com/news/jito-bam-preconfirmations-go-live-on-solana-covering-34-of-network-stake | 2026-10-02 | BAM 34.1% stake, 383 of 665 validators, 9 Sep 2026 (per SolanaFloor) |
+| pages/verify-solanafloor-bam-live-mainnet.html | https://solanafloor.com/news/jito-s-bam-live-on-mainnet-but-more-block-builders-are-coming | 2026-10-02 | BAM on mainnet 25 Sep 2025 |
+| pages/verify-syndica-onchain-april-2026.html | https://blog.syndica.io/deep-dive-solana-onchain-activity-april-2026/ | 2026-10-02 | Client 86/11/3 and scheduler stake share, Apr 2026 |
+| pages/verify-solanacompass-firedancer-project.html | https://solanacompass.com/projects/firedancer | 2026-10-02 | Full Firedancer 11.64% of stake, 57 of 698 validators, 10 Aug 2026 |
+| pages/verify-solanacompass-alpenglow-testnet.html | https://solanacompass.com/news/alpenglow-activates-on-solana-testnet-as-frankendancer-era-ends-agave-v44-schedule-targets-november-9-mainnet-activation | 2026-10-02 | Alpenglow on testnet Sep 2026, no mainnet date, Frankendancer ends |
+| pages/verify-solana-upgrades-alpenglow.html | https://solana.com/upgrades/alpenglow | 2026-10-02 | ~150 ms target finality, mainnet not activated |
+| pages/verify-solana-upgrades-100m-cu-blocks.html | https://solana.com/upgrades/100m-cu-blocks | 2026-10-02 | 100M CU blocks 29 Jul 2026; 60M since Jul 2025 |
+| pages/verify-xroot-simd-0123-status.html | https://app.xroot.dev/upgrades/simd-0123-block-revenue-sharing | 2026-10-02 | SIMD-0123 not queued on any cluster |
+| pages/verify-solblaze-simd-0123-vote.html | https://simd.solblaze.org/0123/vote | 2026-10-02 | SIMD-0123 vote passed, 74.91% yes |
+| pages/verify-blockworks-0xresearch-block-building-wars.html | https://blockworks.com/newsletter/0xresearch/issue/post_f3a5adde-8a8f-4803-bbc6-827f51659331 | 2026-10-02 | Jito vs Harmonic late-packing dispute, 8 Jan 2026 |
+| pages/verify-mainnet-rpc-feature-gates-nakamoto.md | https://api.mainnet-beta.solana.com (getMultipleAccounts, getVoteAccounts) | 2026-10-02 | Feature activation dates (SIMD-0096/0256/0286), Alpenglow and SIMD-0123 inactive, Nakamoto 18 |
 
 ## Images
 
