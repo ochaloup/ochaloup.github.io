@@ -86,26 +86,28 @@ Three parts, reordered 2026-10-02 (second round): Marinade introduction, then th
 1. **Cover.** "Marinade staking and the Solana ecosystem", subtitle "Building blocks for your next *build*".
 2. **Who talks to you.** One bio line, plus the Build Station sidetrack callout with 🥳.
 3. **Marinade: a bootstrapped DAO.** The octopus NFT picture, the MNDE crest bobbing beside it, "Funds raised: $0".
-4. **Five years on one chain.** Timeline, a flipping Solana coin, and product-mix bars that grow in.
-5. **What Marinade brings to Solana.** Metrics, then three mechanisms: spread stake, validators pay up front, a market for stake.
-6. **Staking is Solana's base yield layer. Marinade routes it.** The four blocks drop in as bricks, staking at the base.
+4. **Five years on one chain.** Timeline, a flipping Solana coin, product-mix bars that grow in.
+5. **What Marinade brings to Solana.** Metrics, then four cards: spread stake, protected rewards, instant exit, a market for stake.
 
-**Part 2, the Solana staking space** (to be written, see "Solana staking space" below)
+**Part 2, the Solana staking space** (numbers verified, see "Solana staking space" below)
 
-7. **Who orders the block?**
-8. **Where the money goes.**
+6. **Section break, "Solana staking, *today*".** Label "Zoom out", painting p-security.jpg, one muted line: who orders the block, who gets paid, and what changes next.
+7. **Who orders the block?** Transactions stream into three builder lanes (Jito BAM, Harmonic, Rakurai and others), then into the leader's block, where a sandwich pulses. Foot: the arXiv sandwich count.
+8. **Where the money goes.** Two same-scale bars: $487M to stakers (over 98% issuance) and $51.0M network revenue split three ways. Punch: SAM bids are how validators share block revenue with stakers today. Foot: Blockworks.
+9. **Clients, builders and what comes next.** Stake-share bar by client and builder (Syndica, Apr 2026), then 100M-compute-unit blocks, Alpenglow, SIMD-0123.
 
-**Part 3, the building blocks** (unchanged for now, more pictures are the next step)
+**Part 3, the building blocks**
 
-9. **Block 1.** "Two ways in": Marinade Liquid and Marinade Native.
-10. **Block 1.** "Validators compete for the stake": bond, bid, win, protect, with the bid ladder behind.
-11. **Block 1.** "Getting out without waiting": Instant Unstake.
-12. **Block 2, DeFi.** "mSOL is a building block".
-13. **Block 3, data.** "Public data on every validator".
-14. **Block 3, infrastructure.** "Knowing the ecosystem", with gears behind.
-15. **Block 4, DAO.** "MNDE runs the DAO".
-16. **Pick your block.**
-17. **Closing.** "Build on top".
+10. **Staking is Solana's base yield layer. Marinade routes it.** The four bricks drop in. Opens this part, right before the blocks.
+11. **Block 1.** "Two ways in": Marinade Liquid and Marinade Native.
+12. **Block 1.** "Validators compete for the stake", with the bid ladder behind.
+13. **Block 1.** "Getting out without waiting": Instant Unstake.
+14. **Block 2, DeFi.** "mSOL is a building block".
+15. **Block 3, data.** "Public data on every validator".
+16. **Block 3, infrastructure.** "Knowing the ecosystem", with gears behind.
+17. **Block 4, DAO.** "MNDE runs the DAO".
+18. **Pick your block.** Five rows, the fifth is "Your own".
+19. **Closing.** "Build on top".
 
 Removed: "Staking in one slide", because it carried little information.
 
@@ -141,6 +143,23 @@ Facts, with dates:
 | Disputes | Jito accuses Harmonic of late packing. Harmonic disputes Jito's scoring | Blockworks 0xResearch, 8 Jan 2026 | high |
 | Alpenglow | New consensus. Votor on testnet 22 Sep 2026, not on mainnet. Votes stop being transactions, finality target about 150 ms | solana.com/upgrades/alpenglow | high |
 | Decentralization | Nakamoto coefficient 18 (was 31 in Mar 2023) | chainspect, 2 Oct 2026 | medium, validator counts disagree |
+
+**Verified 2026-10-02** by a second pass against primary text, with copies saved as `resources/pages/verify-*`:
+
+- **Blockworks REV $51.0M (priority $30.8M, Jito tips $9.9M, base and vote $10.3M) and stakers $487M, over 98% issuance, Jito tips $8.2M:** quoted verbatim from the Blockworks Research Solana Q2 2026 Token Holder Report, 20 Jul 2026. The X article was read through api.fxtwitter.com.
+  - REV includes vote fees, which validators pay.
+  - Blockworks' staker revenue excludes priority fees.
+  - All figures are USD.
+- **Sandwiches:** 28,042,725 attacks by 8,631 bots, 1 Jul 2023 to 30 Jun 2026, $345.2M net. Source: arXiv 2609.28115, "No Place to Hide", Table 3. It counts attacks on protected order flow only, so it is a lower bound.
+- **Clients, April 2026:** Agave 86%, Frankendancer 11%, Firedancer 3%. Schedulers: Jito 36%, JitoBAM 28%, Harmonic 18%, Rakurai 2%, vanilla 2%. Source: blog.syndica.io, 29 May 2026. Newer: full Firedancer 11.64% on 10 Aug 2026 (Solana Compass, citing wenfiredancer.com). Search snippets that said "14–26%" did not trace to a source.
+- **Feature gates:**
+  - SIMD-0096 active since 12 Feb 2025 (epoch 741).
+  - SIMD-0123 has no feature account on mainnet. It passed its vote with 74.9% yes.
+  - 100M CU since 29 Jul 2026 (epoch 1009).
+  - All checked on mainnet RPC.
+- **Alpenglow:** not activated on mainnet. Testnet is active. The solana.com page is stale ("Q3 2026").
+- **Nakamoto coefficient:** 18 across about 680 vote accounts, mainnet RPC, epoch 1047.
+- **BAM:** 34.1% of stake comes from Solana Compass citing SolanaFloor, so it is second-hand. The 25 Sep 2025 mainnet date comes from SolanaFloor. The Jito page returned 403.
 
 Neutrality rule: the research also has LST size rankings. They stay off the slides, because the room would read them as a comparison with competitors.
 
@@ -272,4 +291,21 @@ Kept off the slides:
   - The middle card became "Shared stack", so the word Realms does not repeat.
 - **2026-10-02, round 2** "Pick your block" now covers all four blocks as rows. Each row has the brick colour and illustration as its bullet, and the rows pop in.
 - **2026-10-02, round 2** The closing link points to Realms v2 (`v2.realms.today/dao/899YG3…`), not the v1 `app.realms.today`.
+- **2026-10-02, round 3** The timeline's FTX line was dropped, because it did not belong on a builder slide.
+- **2026-10-02, round 3** "What Marinade brings" has four cards: Spread stake, Protected rewards (PSR), Instant exit, A market for stake. "Validators pay up front" was dropped, because it brought nothing to Solana by itself.
+- **2026-10-02, round 3** The ecosystem part has three slides. Companies are named. LST comparisons are completely off the slides. Every number on them carries a small source line.
+- **2026-10-02, round 3** Where Marinade fits in the ecosystem part is one punch line on "Where the money goes": priority fees stay with the validator, and SAM bids are how validators share block revenue with stakers today. It is pending Ondra's approval.
+- **2026-10-02, round 3** The Marinade Borrow card left the DeFi block. Borrow routes to Kamino and Jupiter Lend, so it is not a block for builders. Replaced by "Priced onchain" (mSOL price readable by any program). The DeFi ask is now "find, and mine, a non-obvious mSOL yield source".
+- **2026-10-02, round 3** "Pick your block" uses the team's own idea list:
+  - Telegram bot for staking actions and alerts.
+  - A non-obvious mSOL yield source.
+  - Enrich Explore (sandwich report, validator and stake grouping, validator issues).
+  - A governance UI.
+  - The "third-party frontend volume share" idea is left out. It is the referral model, and the referral program is paused.
+- **2026-10-02, round 3** "Pick your block" has a fifth row, per Ondra:
+  - "Your own": "Surprise us. If it stands on Solana staking, it counts."
+  - It uses a rose brick with the press-kit open-armed chef.
+  - The brick lands last and keeps bobbing, as the invitation.
+  - The rows shrank from 112px to 92px icons so five fit above the rail.
+- **2026-10-02, round 3** The four-block map moved to open Part 3, right before the block slides. The ecosystem part got an art section break, "Solana staking, *today*", using the previously unused p-security.jpg.
 - **2026-10-02, round 2** The timeline bars show product shares, not totals. The totals fell from 11.0M SOL (2023) to 7.7M (2026), and the slide's point is the mix.

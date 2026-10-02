@@ -155,22 +155,40 @@ Do not promise APY, never.
 
 ---
 
-<!-- .slide: -->
+<!-- .slide: data-background-image="images/brand-art/p-security.jpg" class="art vcenter center-text" -->
 
-## Staking is Solana's base yield layer. Marinade routes it.
+<div class="label">Zoom out</div>
 
-<div class="blocks">
-<div class="blk b-defi"><img src="images/illo/wallet-dark.svg" alt=""><div><h3>DeFi</h3><p>mSOL as collateral and liquidity</p></div></div>
-<div class="blk b-data"><img src="images/illo/chart-dark.svg" alt=""><div><h3>Data</h3><p>Public data on every validator</p></div></div>
-<div class="blk b-dao"><img src="images/illo/mnde-diamond-dark.svg" alt=""><div><h3>DAO</h3><p>MNDE holders govern</p></div></div>
-<div class="blk b-base"><img src="images/illo/coin-box-dark.svg" alt=""><div><h3>Staking</h3><p>Marinade Liquid, Marinade Native, and an auction where validators compete for stake</p></div></div>
-</div>
+# Solana staking, <span class="accent">today</span>
+
+<p class="note">Who orders the block, who gets paid, and what changes next</p>
 
 Note:
-THE MAP OF THE REST OF THE TALK. The blocks drop in one by one: staking first, because everything else stands on it.
-The one sentence to remember: staking is Solana's base yield layer, and Marinade routes it. mSOL is the liquid version of that stake. MNDE runs the DAO. And every validator decision is backed by data anybody can read.
-Name the four, say "we come back to each", and move on.
-DO NOT call Marinade "a staking protocol". It is a platform that puts SOL to work, self-custodial, no lockups.
+SECTION BREAK. Thirty seconds of context before the blocks: the room builds on Solana, so give them the map of the fight their staking build will live in.
+Say it as a question: Marinade routes stake, but what is happening around it right now?
+
+---
+
+<!-- .slide: -->
+
+<div class="label">The Solana staking space</div>
+
+## Where the money goes
+
+<div class="money">
+<div class="money-row"><div class="money-lbl"><strong>$487M</strong>earned by stakers</div><div class="money-track" style="display:block"><div class="mix-bar big" style="width:100%"><span class="m-issue" style="width:98.3%">Issuance, over 98%</span><span class="m-tips" style="width:1.7%"></span></div></div></div>
+<div class="money-row"><div class="money-lbl"><strong>$51.0M</strong>network revenue</div><div class="money-track"><div class="mix-bar big" style="width:10.5%"><span class="m-prio" style="width:60.4%"></span><span class="m-tips" style="width:19.4%"></span><span class="m-base" style="width:20.2%"></span></div><span>= priority fees $30.8M + Jito tips $9.9M + base and vote fees $10.3M</span></div></div>
+</div>
+
+<div class="mix-legend"><span><i class="m-issue"></i>Issuance</span><span><i class="m-prio"></i>Priority fees</span><span><i class="m-tips"></i>Jito tips</span><span><i class="m-base"></i>Base and vote fees</span></div>
+
+<p class="slide-foot">Q2 2026, USD, same scale. Source: Blockworks Research, Solana Q2 2026 Token Holder Report, 20 Jul 2026.</p>
+
+Note:
+THE PICTURE: two bars on the same scale. Stakers earned $487M in Q2 2026. The whole network's fee revenue was $51M. Almost all staker income is issuance, new SOL from inflation.
+THE SMALL BAR, read it out: priority fees $30.8M, Jito tips $9.9M, base and vote fees $10.3M. That small bar is what the whole ordering fight from the last slide is about.
+WHO KEEPS IT: since 12 Feb 2025 (SIMD-0096) the block leader keeps 100% of priority fees. SIMD-0123 would share block revenue with stakers. It passed a vote in March 2025 with 74.9% yes, and it is still not active on mainnet. Blockworks now expects it alongside Alpenglow.
+PRECISION, if asked: "network revenue" is Blockworks' REV, and it includes vote fees, which validators pay. Staker revenue in their report leaves out priority fees, because validators share those outside the protocol. The $8.2M sliver on the top bar is Jito tips that reached stakers. All numbers are USD, quoted verbatim from the report text saved in resources/pages/verify-blockworks-solana-q2-2026-thr.md.
 
 ---
 
@@ -188,13 +206,74 @@ DO NOT call Marinade "a staking protocol". It is a platform that puts SOL to wor
 <div>No public mempool, so block builders compete for the order flow.</div>
 </div>
 
+<p class="slide-foot">28M sandwich attacks on protected transactions by 8,631 bots, Jul 2023 to Jun 2026. Source: Heimbach et al., arXiv 2609.28115.</p>
+
 Note:
 THE FIGHT IN ONE SENTENCE: who decides the order of transactions in a Solana block, and who keeps the money that ordering earns.
 ONE LEADER: every slot has one leader validator. It alone picks which transactions go in and in what order.
 MEV: maximal extractable value, the profit from choosing order, inclusion or exclusion. Arbitrage and liquidations are the harmless kind. A sandwich is the harmful kind: buy just before your swap, sell just after, and you pay the difference.
 WHY BUILDERS: Solana has no public mempool, so ordering runs through side channels. Jito's bundles and tips, and now competing block builders: Jito BAM, Harmonic, Rakurai. They plug into the validator client and compete on revenue per block, fairness and speed.
 WHERE MARINADE FITS, one line: the stake auction only admits validators that are not on the sandwich blacklist, so stake itself becomes the lever against harmful MEV.
-[NUMBERS PENDING VERIFICATION]
+THE SANDWICH NUMBER, precisely: 28,042,725 attacks by 8,631 persistent bots on "protected order flow" transactions, 1 Jul 2023 to 30 Jun 2026, $345M net profit ($383M gross). Paper: "No Place to Hide", Heimbach, Solmaz, Öz, Ferreira Torres, arXiv 2609.28115, 23 Sep 2026. It is a lower bound for all Solana sandwiches, not the total.
+
+---
+
+<!-- .slide: -->
+
+<div class="label">The Solana staking space</div>
+
+## Clients, builders and what comes next
+
+<div class="mix-bar big clients"><span class="c-jito" style="width:36%">Jito 36%</span><span class="c-bam" style="width:28%">Jito BAM 28%</span><span class="c-harmonic" style="width:18%">Harmonic 18%</span><span class="c-rakurai" style="width:2%"></span><span class="c-vanilla" style="width:2%"></span><span class="c-frank" style="width:11%">11%</span><span class="c-fire" style="width:3%"></span></div>
+
+<div class="mix-legend wrap"><span><i class="c-jito"></i>Agave with Jito</span><span><i class="c-bam"></i>Agave with Jito BAM</span><span><i class="c-harmonic"></i>Agave with Harmonic</span><span><i class="c-rakurai"></i>Rakurai 2%</span><span><i class="c-vanilla"></i>Plain Agave 2%</span><span><i class="c-frank"></i>Frankendancer 11%</span><span><i class="c-fire"></i>Firedancer 3%</span></div>
+
+<div class="grid-3" style="margin-top:64px">
+<div class="card">
+<h3>Bigger blocks</h3>
+<p>100M compute units per block since 29 Jul 2026.</p>
+</div>
+<div class="card">
+<h3>Alpenglow</h3>
+<p>New consensus. Votes no longer land onchain, finality in about 150 ms.</p>
+</div>
+<div class="card">
+<h3>Revenue sharing</h3>
+<p>SIMD-0123 passed a vote in 2025. Still not live.</p>
+</div>
+</div>
+
+<p class="slide-foot">Bar: share of stake by client and block builder, April 2026, Syndica. Upgrades: solana.com/upgrades, October 2026.</p>
+
+Note:
+THE BAR IS THE CLIENT FIGHT. In April 2026, 86% of stake ran Agave-family code, Anza's client, in different builds: Jito 36%, Jito BAM 28%, Harmonic 18%, Rakurai and plain Agave 2% each. Frankendancer 11%, full Firedancer 3%.
+WHY IT MATTERS: one codebase under almost all stake is a resilience risk, and most ordering runs through one company. Firedancer is Jump's independent client, written from scratch. Newer figure: full Firedancer on 11.64% of stake on 10 Aug 2026 (Solana Compass, citing wenfiredancer.com). Use it only out loud, the bar is the April snapshot.
+JITO BAM, the Block Assembly Marketplace: ordering moves into trusted hardware (TEE) nodes, with plugins for apps. On mainnet since 25 Sep 2025 (SolanaFloor). 34.1% of stake on 383 of 665 validators by 9 Sep 2026 (Solana Compass, citing SolanaFloor).
+THE FIGHT, fairly: Jito accuses Harmonic of "late packing", stuffing transactions at the end of the slot. Harmonic's team disputes Jito's scoring. Blockworks 0xResearch, 8 Jan 2026. Do not take a side.
+WHAT COMES NEXT:
+BIGGER BLOCKS: 60M compute units since July 2025 (SIMD-0256), 100M since 29 Jul 2026 (SIMD-0286, epoch 1009). More room per block changes what ordering is worth.
+ALPENGLOW: votes stop being transactions, finality target about 150 ms, down from 12.8 s. Live on testnet, not activated on mainnet, no announced date. The solana.com page still says Q3 2026, which has passed.
+REVENUE SHARING: SIMD-0123, from the previous slide.
+DECENTRALIZATION, if asked: Nakamoto coefficient 18 across about 680 validators, counted from mainnet RPC on 2 Oct 2026. Per vote account, so per operator it may be lower.
+
+---
+
+<!-- .slide: -->
+
+## Staking is Solana's base yield layer. Marinade routes it.
+
+<div class="blocks">
+<div class="blk b-defi"><img src="images/illo/wallet-dark.svg" alt=""><div><h3>DeFi</h3><p>mSOL as collateral and liquidity</p></div></div>
+<div class="blk b-data"><img src="images/illo/chart-dark.svg" alt=""><div><h3>Data</h3><p>Public data on every validator</p></div></div>
+<div class="blk b-dao"><img src="images/illo/mnde-diamond-dark.svg" alt=""><div><h3>DAO</h3><p>MNDE holders govern</p></div></div>
+<div class="blk b-base"><img src="images/illo/coin-box-dark.svg" alt=""><div><h3>Staking</h3><p>Marinade Liquid, Marinade Native, and an auction where validators compete for stake</p></div></div>
+</div>
+
+Note:
+THE MAP OF THE REST OF THE TALK. The blocks drop in one by one: staking first, because everything else stands on it.
+The one sentence to remember: staking is Solana's base yield layer, and Marinade routes it. mSOL is the liquid version of that stake. MNDE runs the DAO. And every validator decision is backed by data anybody can read.
+Name the four, say "we come back to each", and move on.
+DO NOT call Marinade "a staking protocol". It is a platform that puts SOL to work, self-custodial, no lockups.
 
 ---
 
@@ -291,24 +370,24 @@ Leaves the question: fine, that is staking. What gets built on top?
 <p>Lending markets, pools and wallets across Solana take <span class="token">mSOL</span>.</p>
 </div>
 <div class="card">
-<h3>Marinade Borrow</h3>
-<p>Borrow against mSOL, routed to Kamino or Jupiter Lend.</p>
+<h3>Priced onchain</h3>
+<p>mSOL price is total staked SOL over mSOL supply. Any program can read it, no oracle needed.</p>
 </div>
 <div class="card">
 <h3>Rewards, reshaped</h3>
-<p>Recipes pays staking rewards in another token. USDC Vault puts stablecoins to work.</p>
+<p>Recipes pays staking rewards in another token, with public run data.</p>
 </div>
 </div>
 
-<p class="slide-foot">Build here: integrate mSOL, compare venues with the APY API, track Recipes payouts.</p>
+<p class="slide-foot">Build here: find, and mine, a non-obvious mSOL yield source.</p>
 
 Note:
-THE POINT: staking yield is the base, and everything else stacks on it.
+THE POINT: staking yield is the base, and everything else stacks on it. Every card is something a builder can use, not a product to sell.
 COLLATERAL: mSOL is accepted across Solana DeFi, Kamino, Orca, Drift, Meteora, Jupiter and more, plus wallets and exchanges. Say "across Solana DeFi" rather than reading a list.
-BORROW: borrow against mSOL, the router picks Kamino or Jupiter Lend. Check its status on the day, the blog calls it a first step.
-RECIPES: principal stays in SOL, rewards paid in USDG, USDC, BTC and others. Public data at recipes-api.marinade.finance.
-USDC VAULT: a Kamino Earn vault curated by RockawayX.
-THE GAPS a builder could fill: a yield comparator across mSOL venues, a Recipes payout and tax ledger, a portfolio tracker that finds every Native position.
+PRICED ONCHAIN: the mSOL price comes from the Marinade state account, total staked SOL over mSOL supply. Anybody can compute it in a program or a client. marinade-ts-sdk and the Anchor IDL give the layout.
+RECIPES: principal stays in SOL, rewards paid in USDG, USDC, BTC and others. Run data is public at recipes-api.marinade.finance.
+THE ASK: find, and mine, a non-obvious mSOL yield source. The APY API (apy.marinade.finance) gives the baseline to beat.
+NOT ON THIS SLIDE ON PURPOSE: Marinade Borrow and the USDC Vault. Both route to Kamino and Jupiter Lend, so they are products, not blocks a builder plugs into.
 Do not mention the referral program. It has been paused since May 2026.
 
 ---
@@ -419,10 +498,11 @@ THE GAP: the open-source governance UI, now under Mythic-Project, has been idle 
 ## Pick your block
 
 <div class="pick">
-<div><span class="pick-icon b-base"><img src="images/illo/coin-box-dark.svg" alt=""></span><strong>Staking</strong><span>Bond health alerts, a SAM bid simulator, a Rust client from the IDLs.</span></div>
-<div><span class="pick-icon b-defi"><img src="images/illo/wallet-dark.svg" alt=""></span><strong>DeFi</strong><span>Integrate mSOL, compare yield venues, track Recipes payouts.</span></div>
-<div><span class="pick-icon b-data"><img src="images/illo/chart-dark.svg" alt=""></span><strong>Data</strong><span>Validator pages, widgets and bots on the open APIs.</span></div>
-<div><span class="pick-icon b-dao"><img src="images/illo/mnde-diamond-dark.svg" alt=""></span><strong>DAO</strong><span>A Realms UI people want to use, a veMNDE voting-power viewer.</span></div>
+<div><span class="pick-icon b-base"><img src="images/illo/coin-box-dark.svg" alt=""></span><strong>Staking</strong><span>A Telegram bot for staking actions, monitoring and alerts.</span></div>
+<div><span class="pick-icon b-defi"><img src="images/illo/wallet-dark.svg" alt=""></span><strong>DeFi</strong><span>Find, and mine, a non-obvious mSOL yield source.</span></div>
+<div><span class="pick-icon b-data"><img src="images/illo/chart-dark.svg" alt=""></span><strong>Data</strong><span>Enrich Explore: a sandwich report, validator and stake grouping, better validator issues.</span></div>
+<div><span class="pick-icon b-dao"><img src="images/illo/mnde-diamond-dark.svg" alt=""></span><strong>DAO</strong><span>A governance UI people want to use.</span></div>
+<div><span class="pick-icon b-own"><img src="images/illo/chef-welcome-dark.svg" alt=""></span><strong>Your own</strong><span>Surprise us. If it stands on Solana staking, it counts.</span></div>
 </div>
 
 <p class="slide-foot">SDKs on npm, IDLs and APIs on docs.marinade.finance, code on github.com/marinade-finance.</p>
@@ -430,6 +510,12 @@ THE GAP: the open-source governance UI, now under Mythic-Project, has been idle 
 Note:
 THE ASK, and the whole rail is lit: all four blocks are covered. The rows pop in one by one, same colours as the bricks on the map slide.
 Say Ondra's line: staking is Solana's base yield layer, Marinade routes it. mSOL as the liquid version, MNDE to manage the DAO, and public data on every validator. Pick whichever part you want to improve.
+The ideas are the team's own list, not invented for the slide.
+STAKING: a Telegram bot, or similar, for Marinade actions, monitoring and notifications. The validators, bonds and APY APIs feed it.
+DEFI: find, and mine, a non-obvious mSOL yield source.
+DATA: enrich Explore (app.marinade.finance/explore, the validator explorer). A Solana sandwich report, validator and stake grouping by network, provider and country, and better detection of validator issues.
+DAO: a governance UI. The open-source Realms UI has been idle since February 2026.
+YOUR OWN: the fifth brick is empty on purpose. Any idea that stands on Solana staking qualifies for the sidetrack, the four above are a menu, not a fence.
 One sentence per row, then close with the sidetrack: $3,000 at Build Station for the best staking-focused build.
 
 ---

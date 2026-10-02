@@ -2428,18 +2428,131 @@ html.reveal-print .reveal .slides section.vcenter {
 	}
 }
 
+/* ---- money and client bars ---------------------------------------------- */
+/* Same-scale horizontal bars, so the size gap between rows is the message. */
+.reveal .money {
+	display: flex;
+	flex-direction: column;
+	gap: 44px;
+}
+
+.reveal .money-row {
+	display: grid;
+	grid-template-columns: 430px 1fr;
+	align-items: center;
+	gap: 36px;
+}
+
+.reveal .money-lbl {
+	font-size: var(--mn-body-sm);
+	color: var(--mn-fg-muted);
+	line-height: 1.2;
+}
+
+.reveal .money-lbl strong {
+	display: block;
+	font-size: var(--mn-h2);
+	color: var(--mn-fg-strong);
+	font-weight: 600;
+}
+
+.reveal .money-track {
+	display: flex;
+	align-items: center;
+	gap: 28px;
+	font-size: var(--mn-body-sm);
+	color: var(--mn-fg);
+}
+
+.reveal .mix-bar.big {
+	height: 96px;
+	border-radius: 12px;
+	flex: none;
+}
+
+.reveal .mix-bar.big span {
+	display: flex;
+	align-items: center;
+	padding-left: 24px;
+	font-size: var(--mn-body-sm);
+	font-weight: 600;
+	color: var(--mn-dark);
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.reveal .m-issue {
+	background: var(--mn-light-teal);
+}
+
+.reveal .m-prio {
+	background: var(--mn-cat-indigo);
+}
+
+.reveal .m-tips {
+	background: var(--mn-cat-coral);
+}
+
+.reveal .m-base {
+	background: var(--mn-cat-lavender);
+}
+
+.reveal .c-jito {
+	background: var(--mn-brand-teal);
+}
+
+.reveal .c-bam {
+	background: var(--mn-light-teal);
+}
+
+.reveal .c-harmonic {
+	background: var(--mn-cat-indigo);
+}
+
+.reveal .c-rakurai {
+	background: var(--mn-cat-lavender);
+}
+
+.reveal .c-vanilla {
+	background: var(--mn-muted-teal);
+}
+
+.reveal .c-frank {
+	background: var(--mn-cat-coral);
+}
+
+.reveal .c-fire {
+	background: var(--mn-cat-rose);
+}
+
+.reveal .mix-bar.big.clients {
+	width: 100%;
+	height: 80px;
+}
+
+.reveal .mix-legend.wrap {
+	flex-wrap: wrap;
+	row-gap: 12px;
+	font-size: var(--mn-body-sm);
+	color: var(--mn-fg);
+}
+
+.reveal section.present .money-row:nth-child(2) .mix-bar {
+	animation-delay: 0.8s;
+}
+
 /* ---- pick your block ---------------------------------------------------- */
 /* The summary: one row per block, the brick colour as the bullet. Rows pop in. */
 .reveal .pick {
 	display: flex;
 	flex-direction: column;
-	gap: 26px;
+	gap: 18px;
 	max-width: 1500px;
 }
 
 .reveal .pick > div {
 	display: grid;
-	grid-template-columns: 112px 220px 1fr;
+	grid-template-columns: 92px 240px 1fr;
 	align-items: center;
 	gap: 32px;
 	font-size: var(--mn-body-sm);
@@ -2454,15 +2567,15 @@ html.reveal-print .reveal .slides section.vcenter {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 112px;
-	height: 112px;
-	border-radius: 18px;
-	box-shadow: 0 8px 0 rgba(0, 0, 0, 0.28);
+	width: 92px;
+	height: 92px;
+	border-radius: 16px;
+	box-shadow: 0 7px 0 rgba(0, 0, 0, 0.28);
 }
 
 .reveal .pick-icon img {
-	width: 76px;
-	height: 76px;
+	width: 64px;
+	height: 64px;
 	margin: 0;
 	object-fit: contain;
 }
@@ -2497,6 +2610,19 @@ html.reveal-print .reveal .slides section.vcenter {
 
 .reveal section.present .pick > div:nth-child(4) {
 	animation-delay: 1.05s;
+}
+
+.reveal .pick-icon.b-own {
+	background: var(--mn-cat-rose);
+}
+
+/* The open brick lands last and keeps wobbling: it is the invitation. */
+.reveal section.present .pick > div:nth-child(5) {
+	animation-delay: 1.6s;
+}
+
+.reveal section.present .pick > div:nth-child(5) .pick-icon {
+	animation: illo-bob 2.8s ease-in-out 2.2s infinite;
 }
 
 @keyframes pick-pop {
