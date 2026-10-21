@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Draw Steel — Quick Reference</title>
+  <style>
+    :root {
+      --ink: #f6ecd2;
+      --muted: #cbbd9e;
+      --gold: #e7b85a;
+      --red: #a93832;
+      --panel: rgba(20, 23, 29, .90);
+      --line: rgba(231, 184, 90, .28);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font: 16px/1.6 system-ui, -apple-system, Segoe UI, sans-serif;
+      background:
+        linear-gradient(rgba(7, 10, 16, .62), rgba(7, 10, 16, .92)),
+        radial-gradient(circle at 72% 12%, rgba(220, 91, 52, .55), transparent 28%),
+        linear-gradient(145deg, #26364a 0 24%, #141923 48%, #281719 74%, #080a0e 100%);
+      background-attachment: fixed;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .32;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='700' viewBox='0 0 1200 700'%3E%3Cpath fill='%23000000' d='M0 585 110 450l74 75 115-185 120 155 90-120 82 104 137-240 168 237 93-122 111 153 120-102v295H0Z'/%3E%3Cpath fill='%23000000' opacity='.6' d='M0 635 152 515l83 70 105-84 135 104 143-125 122 114 123-85 137 104 100-70 100 60v97H0Z'/%3E%3C/svg%3E");
+      background-position: center bottom;
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+    header, main, footer { position: relative; z-index: 1; }
+    header { max-width: 1100px; margin: auto; padding: 72px 24px 30px; }
+    .eyebrow { color: var(--gold); letter-spacing: .2em; text-transform: uppercase; font-weight: 800; font-size: .78rem; }
+    h1, h2, h3 { font-family: Georgia, serif; line-height: 1.15; }
+    h1 { margin: .25rem 0 .5rem; font-size: clamp(2.6rem, 8vw, 5.8rem); text-shadow: 0 4px 24px #000; }
+    h2 { margin: 0 0 1rem; font-size: 1.75rem; color: var(--gold); }
+    h3 { margin: 0 0 .4rem; font-size: 1.12rem; }
+    header p { max-width: 700px; color: var(--muted); font-size: 1.08rem; }
+    nav { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+    nav a { color: var(--ink); text-decoration: none; border: 1px solid var(--line); background: rgba(15,18,24,.7); padding: 7px 12px; border-radius: 999px; }
+    nav a:hover { border-color: var(--gold); }
+    main { max-width: 1100px; margin: auto; padding: 0 24px 72px; }
+    section { margin-top: 22px; padding: 24px; background: var(--panel); border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 18px 55px rgba(0,0,0,.26); backdrop-filter: blur(8px); }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+    .card { padding: 15px; background: rgba(255,255,255,.035); border-left: 3px solid var(--red); border-radius: 8px; }
+    .card p { margin: 0; color: var(--muted); }
+    .tag { display: inline-block; min-width: 2rem; padding: 1px 7px; margin-right: 6px; border-radius: 5px; color: #17120b; background: var(--gold); font-weight: 900; text-align: center; }
+    table { width: 100%; border-collapse: collapse; overflow: hidden; }
+    th, td { padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.1); text-align: left; vertical-align: top; }
+    th { color: var(--gold); }
+    code { color: #ffe1a3; background: rgba(0,0,0,.28); padding: 2px 5px; border-radius: 4px; }
+    .callout { margin-top: 15px; padding: 14px 16px; border: 1px solid rgba(231,184,90,.5); background: rgba(231,184,90,.08); border-radius: 10px; }
+    .small { color: var(--muted); font-size: .91rem; }
+    ul { padding-left: 1.2rem; }
+    footer { max-width: 1100px; margin: auto; padding: 0 24px 40px; color: var(--muted); font-size: .86rem; }
+    @media (max-width: 600px) { header { padding-top: 42px; } section { padding: 18px; } th, td { padding: 8px; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="eyebrow">Player quick reference</div>
+    <h1>Draw Steel</h1>
+    <p>A compact reminder of the rules that are easiest to confuse. This is a learning aid, not a replacement for the rulebook.</p>
+    <nav>
+      <a href="#rolls">Rolls</a><a href="#characteristics">Characteristics</a><a href="#turn">Your Turn</a>
+      <a href="#potency">Potency</a><a href="#ancestries">Ancestries</a><a href="#classes">Classes</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="rolls">
+      <h2>Rolls: the important distinction</h2>
+      <div class="grid">
+        <article class="card">
+          <h3>Power roll</h3>
+          <p>The general <strong>2d10</strong> roll. Add the stated characteristic and modifiers, then find the tier: <code>≤11</code>, <code>12–16</code>, or <code>17+</code>.</p>
+        </article>
+        <article class="card">
+          <h3>Ability roll</h3>
+          <p>A <strong>power roll made for an ability</strong>, usually an attack or special power. Even tier 1 normally does something useful; the tier determines its impact.</p>
+        </article>
+        <article class="card">
+          <h3>Test</h3>
+          <p>A <strong>power roll made to overcome an uncertain task</strong>: climb, sneak, persuade, investigate, and so on. The Director sets the characteristic and difficulty.</p>
+        </article>
+        <article class="card">
+          <h3>Saving throw</h3>
+          <p>A separate <strong>1d10</strong> roll, normally made at the end of your turn against an effect marked <code>(save ends)</code>. <strong>6–10 succeeds</strong>; <strong>1–5 fails</strong>.</p>
+        </article>
+      </div>
+      <div class="callout"><strong>Therefore:</strong> “+1 bonus to saving throws” changes only the d10 saving throw. It does not modify power rolls, ability rolls, or tests. A +1 saving-throw bonus makes an unmodified roll of 5 succeed because its total becomes 6.</div>
+      <table aria-label="Roll comparison">
+        <thead><tr><th>Name</th><th>Dice</th><th>Add characteristic?</th><th>Typical use</th></tr></thead>
+        <tbody>
+          <tr><td>Power roll</td><td>2d10</td><td>Usually</td><td>Umbrella system for ability rolls and tests</td></tr>
+          <tr><td>Ability roll</td><td>2d10</td><td>As stated by ability</td><td>Determine an ability’s tier and impact</td></tr>
+          <tr><td>Test</td><td>2d10</td><td>Yes; chosen by Director</td><td>Resolve a risky or uncertain task</td></tr>
+          <tr><td>Saving throw</td><td>1d10</td><td>No</td><td>End one <code>(save ends)</code> effect</td></tr>
+        </tbody>
+      </table>
+      <p class="small"><strong>Edges and banes</strong> apply to power rolls. One edge is +2; one bane is −2. A double edge raises the result by one tier; a double bane lowers it by one tier. Saving throws use bonuses only when a rule explicitly grants one.</p>
+    </section>
+
+    <section id="characteristics">
+      <h2>The five characteristics</h2>
+      <div class="grid">
+        <article class="card"><h3><span class="tag">M</span>Might</h3><p>Strength, toughness, physical power.</p></article>
+        <article class="card"><h3><span class="tag">A</span>Agility</h3><p>Speed, coordination, reflexes, precision.</p></article>
+        <article class="card"><h3><span class="tag">R</span>Reason</h3><p>Logic, memory, analysis, learned knowledge.</p></article>
+        <article class="card"><h3><span class="tag">I</span>Intuition</h3><p>Awareness, instinct, empathy, reading situations.</p></article>
+        <article class="card"><h3><span class="tag">P</span>Presence</h3><p>Confidence, force of personality, influence.</p></article>
+      </div>
+    </section>
+
+    <section id="turn">
+      <h2>Your normal turn</h2>
+      <div class="grid">
+        <article class="card"><h3>1 main action</h3><p>Usually a signature or heroic ability, a free strike, Charge, Defend, Heal, or another main action.</p></article>
+        <article class="card"><h3>1 maneuver</h3><p>For example Catch Breath, Aid Attack, Grab, Knockback, or a class ability labelled Maneuver.</p></article>
+        <article class="card"><h3>1 move action</h3><p>Usually Advance or Disengage. Movement can normally be divided around your other actions.</p></article>
+      </div>
+      <div class="callout">A <strong>free strike</strong> is a basic attack, not an automatically additional attack. A <strong>signature ability</strong> is an at-will special ability and usually takes your main action. Another effect can explicitly grant an extra free strike or signature ability.</div>
+    </section>
+
+    <section id="potency">
+      <h2>Potency</h2>
+      <p>Potency determines whether a target resists an additional effect. Read <code>M &lt; 2, bleeding</code> as: “If the target’s Might is lower than 2, they become bleeding.” There is no extra roll.</p>
+      <table aria-label="Potency example">
+        <thead><tr><th>Target Might</th><th><code>M &lt; 2</code></th><th>Result</th></tr></thead>
+        <tbody><tr><td>0 or 1</td><td>True</td><td>Effect applies</td></tr><tr><td>2 or more</td><td>False</td><td>Target resists</td></tr></tbody>
+      </table>
+      <p class="small">Spend 2 surges to increase potency by 1 against one target: <code>M &lt; 2</code> becomes <code>M &lt; 3</code>. Potency can’t be increased by more than 1 using surges.</p>
+    </section>
+
+    <section id="ancestries">
+      <h2>Ancestries</h2>
+      <p>Devil · Dragon Knight · Dwarf · Hakaan · High Elf · Human · Memonek · Orc · Polder · Revenant · Time Raider · Wode Elf</p>
+    </section>
+
+    <section id="classes">
+      <h2>Classes</h2>
+      <div class="grid">
+        <article class="card"><h3>Beastheart</h3><p>Fights beside a wild companion.</p></article>
+        <article class="card"><h3>Censor</h3><p>Divine warrior who judges and locks down foes.</p></article>
+        <article class="card"><h3>Conduit</h3><p>Divine support, healing, blessings, and curses.</p></article>
+        <article class="card"><h3>Elementalist</h3><p>Controls elemental magic, areas, and terrain.</p></article>
+        <article class="card"><h3>Fury</h3><p>Powerful martial combatant driven by ferocity.</p></article>
+        <article class="card"><h3>Null</h3><p>Disciplined supernatural counter and controller.</p></article>
+        <article class="card"><h3>Shadow</h3><p>Mobile infiltrator and precise damage dealer.</p></article>
+        <article class="card"><h3>Summoner</h3><p>Commands minions and calls forth a champion.</p></article>
+        <article class="card"><h3>Tactician</h3><p>Directs allies and creates coordinated attacks.</p></article>
+        <article class="card"><h3>Talent</h3><p>Wields powerful and potentially dangerous psionics.</p></article>
+        <article class="card"><h3>Troubadour</h3><p>Uses performance, drama, and swordplay to inspire.</p></article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Personal quick reference based on Draw Steel: Heroes (printing 1.01b) and the current Steel Compendium. Draw Steel © MCDM Productions, LLC. This unofficial learning aid is not affiliated with MCDM.
+  </footer>
+</body>
+</html>
