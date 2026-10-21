@@ -1,4 +1,5 @@
-# Downloaded source pages carry GitBook {% %} tags that break the Liquid build.
+# Keep generated dependencies and downloaded source pages out of Liquid rendering.
 exclude:
   - node_modules
+  - "**/node_modules"
   - presentations/marinade-what-is/resources
