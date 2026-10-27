@@ -59,6 +59,14 @@
     code { color: #ffe1a3; background: rgba(0,0,0,.28); padding: 2px 5px; border-radius: 4px; }
     .callout { margin-top: 15px; padding: 14px 16px; border: 1px solid rgba(231,184,90,.5); background: rgba(231,184,90,.08); border-radius: 10px; }
     .small { color: var(--muted); font-size: .91rem; }
+    .scroll { overflow-x: auto; }
+    .class-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
+    .class-card { padding: 18px; background: rgba(255,255,255,.035); border: 1px solid rgba(255,255,255,.09); border-top: 3px solid var(--gold); border-radius: 10px; }
+    .class-card h3 { font-size: 1.35rem; color: var(--gold); }
+    .class-card dl { display: grid; grid-template-columns: 7.8rem 1fr; gap: 6px 10px; margin: 12px 0 0; }
+    .class-card dt { color: var(--muted); font-weight: 700; }
+    .class-card dd { margin: 0; }
+    .resource-name { color: #ffe1a3; font-weight: 800; }
     ul { padding-left: 1.2rem; }
     footer { max-width: 1100px; margin: auto; padding: 0 24px 40px; color: var(--muted); font-size: .86rem; }
     @media (max-width: 600px) { header { padding-top: 42px; } section { padding: 18px; } th, td { padding: 8px; } }
@@ -71,7 +79,7 @@
     <p>A compact reminder of the rules that are easiest to confuse. This is a learning aid, not a replacement for the rulebook.</p>
     <nav>
       <a href="#rolls">Rolls</a><a href="#characteristics">Characteristics</a><a href="#turn">Your Turn</a>
-      <a href="#potency">Potency</a><a href="#ancestries">Ancestries</a><a href="#classes">Classes</a>
+      <a href="#potency">Potency</a><a href="#ancestries">Ancestries</a><a href="#resources">Resources</a><a href="#classes">Classes</a><a href="#stamina">Stamina</a>
     </nav>
   </header>
 
@@ -145,21 +153,96 @@
       <p>Devil · Dragon Knight · Dwarf · Hakaan · High Elf · Human · Memonek · Orc · Polder · Revenant · Time Raider · Wode Elf</p>
     </section>
 
+    <section id="resources">
+      <h2>Metacurrencies and expendable resources</h2>
+      <div class="grid">
+        <article class="card"><h3>Heroic resources</h3><p>Each class has its own currency—such as essence, wrath, or drama—which pays for heroic abilities. In combat you normally begin with an amount equal to your <strong>Victories</strong>, gain more each turn and from class triggers, and lose it when the encounter ends.</p></article>
+        <article class="card"><h3>Surges</h3><p>Temporary personal boosts. Spend a surge when dealing rolled damage to add damage equal to your highest characteristic (maximum 3 surges on one instance), or spend 2 to increase an ability’s potency by 1 against one target. Unspent surges disappear after combat.</p></article>
+        <article class="card"><h3>Victories</h3><p>The group earns Victories by overcoming encounters. They measure momentum between respites and determine how much heroic resource you have when combat begins. A respite converts accumulated Victories into advancement progress and resets them.</p></article>
+        <article class="card"><h3>Hero tokens</h3><p>A shared hero resource used to help the group when things go badly. The party gains them from rules such as a hero obtaining a tier-1 result on a test, and spends them on the options listed in the Hero Tokens rule.</p></article>
+        <article class="card"><h3>Malice</h3><p>The Director’s encounter currency, not a hero resource. The Director gains and spends it to power monster abilities and encounter effects. This is why some class features react when a Malice ability is used.</p></article>
+        <article class="card"><h3>Recoveries</h3><p>Your limited reserve of healing, rather than a heroic resource. Spending one normally restores your Recovery Value. Catch Breath and many healing abilities allow a creature to spend a Recovery.</p></article>
+      </div>
+      <h3 style="margin-top:1.4rem">Class heroic resources at 1st level</h3>
+      <div class="scroll"><table aria-label="Class heroic resources">
+        <thead><tr><th>Class</th><th>Resource</th><th>Start of combat</th><th>Start of turn</th><th>Other common 1st-level gains</th></tr></thead>
+        <tbody>
+          <tr><td>Beastheart</td><td class="resource-name">Ferocity</td><td>Victories</td><td>1d3</td><td>Your bond and companion features create additional opportunities; check the chosen companion and wild nature.</td></tr>
+          <tr><td>Censor</td><td class="resource-name">Wrath</td><td>Victories</td><td>+2</td><td>First each round when your judged creature damages you, and when you damage it: +1 each.</td></tr>
+          <tr><td>Conduit</td><td class="resource-name">Piety</td><td>Victories</td><td>Gain 1d3; optionally pray before rolling</td><td>Praying adds +1/+1/+2 Piety on a roll of 1/2/3. A 1 also deals unavoidable psychic damage to you; a 3 activates one chosen domain’s prayer effect. Your two domains also each provide a specific once-per-encounter trigger that grants 2 Piety.</td></tr>
+          <tr><td>Elementalist</td><td class="resource-name">Essence</td><td>Victories</td><td>+2</td><td>First each round when you or a creature within 10 takes non-untyped, non-holy damage: +1.</td></tr>
+          <tr><td>Fury</td><td class="resource-name">Ferocity</td><td>Victories</td><td>1d3</td><td>First each round you take damage: +1. First time you become winded or dying in the encounter: +1d3.</td></tr>
+          <tr><td>Null</td><td class="resource-name">Discipline</td><td>Victories</td><td>+2</td><td>First each round an enemy in your Null Field uses a main action: +1; first Director Malice ability each round: +1.</td></tr>
+          <tr><td>Shadow</td><td class="resource-name">Insight</td><td>Victories</td><td>1d3</td><td>First each round you deal damage incorporating one or more surges: +1.</td></tr>
+          <tr><td>Summoner</td><td class="resource-name">Essence</td><td>Victories</td><td>+2</td><td>Mostly spent to call and command stronger minions; other gains come from class features.</td></tr>
+          <tr><td>Tactician</td><td class="resource-name">Focus</td><td>Victories</td><td>+2</td><td>First each round you or an ally damages your marked target: +1; first ally within 10 uses a heroic ability: +1.</td></tr>
+          <tr><td>Talent</td><td class="resource-name">Clarity</td><td>Victories</td><td>1d3</td><td>First each round a creature is force moved: +1. Clarity can become negative, causing strain and damage.</td></tr>
+          <tr><td>Troubadour</td><td class="resource-name">Drama</td><td>Victories</td><td>1d3</td><td>Gained from dramatic events: coordinated hero abilities, a hero becoming winded, a natural 19–20 in line of effect, or a hero dying.</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small">Unless a feature says otherwise, remaining class heroic resource is lost at encounter end. Outside combat, heroic abilities can generally be used without spending the resource, but the same ability cannot be reused until you gain a Victory or finish a respite.</p>
+    </section>
+
     <section id="classes">
       <h2>Classes</h2>
-      <div class="grid">
-        <article class="card"><h3>Beastheart</h3><p>Fights beside a wild companion.</p></article>
-        <article class="card"><h3>Censor</h3><p>Divine warrior who judges and locks down foes.</p></article>
-        <article class="card"><h3>Conduit</h3><p>Divine support, healing, blessings, and curses.</p></article>
-        <article class="card"><h3>Elementalist</h3><p>Controls elemental magic, areas, and terrain.</p></article>
-        <article class="card"><h3>Fury</h3><p>Powerful martial combatant driven by ferocity.</p></article>
-        <article class="card"><h3>Null</h3><p>Disciplined supernatural counter and controller.</p></article>
-        <article class="card"><h3>Shadow</h3><p>Mobile infiltrator and precise damage dealer.</p></article>
-        <article class="card"><h3>Summoner</h3><p>Commands minions and calls forth a champion.</p></article>
-        <article class="card"><h3>Tactician</h3><p>Directs allies and creates coordinated attacks.</p></article>
-        <article class="card"><h3>Talent</h3><p>Wields powerful and potentially dangerous psionics.</p></article>
-        <article class="card"><h3>Troubadour</h3><p>Uses performance, drama, and swordplay to inspire.</p></article>
+      <p>For an array, assign its numbers in any order to the characteristics not already fixed by the class.</p>
+      <div class="class-grid">
+        <article class="class-card"><h3>Beastheart</h3><p>Fights beside a wild companion. A master class recommended for players already comfortable with the rules.</p><dl><dt>Starts with</dt><dd>Might 2, Intuition 2</dd><dt>Other array</dt><dd>2, −1, −1 · or 1, 1, −1 · or 1, 0, 0</dd><dt>Potency</dt><dd>Might −2 / Might −1 / Might</dd><dt>Stamina</dt><dd>21 at 1st; +12 per higher level</dd><dt>Recoveries</dt><dd>12</dd><dt>Resource</dt><dd>Ferocity</dd></dl></article>
+        <article class="class-card"><h3>Censor</h3><p>Divine warrior who judges a dangerous enemy and prevents foes from escaping justice.</p><dl><dt>Starts with</dt><dd>Might 2, Presence 2</dd><dt>Other array</dt><dd>2, −1, −1 · or 1, 1, −1 · or 1, 0, 0</dd><dt>Potency</dt><dd>Presence −2 / Presence −1 / Presence</dd><dt>Stamina</dt><dd>21 at 1st; +9 per higher level</dd><dt>Recoveries</dt><dd>12</dd><dt>Resource</dt><dd>Wrath</dd></dl></article>
+        <article class="class-card"><h3>Conduit</h3><p>Divine support hero using healing, blessings, curses, and powers granted through domains.</p><dl><dt>Starts with</dt><dd>Intuition 2</dd><dt>Other array</dt><dd>2, 2, −1, −1 · or 2, 1, 1, −1 · or 2, 1, 0, 0 · or 1, 1, 1, 0</dd><dt>Potency</dt><dd>Intuition −2 / Intuition −1 / Intuition</dd><dt>Stamina</dt><dd>18 at 1st; +6 per higher level</dd><dt>Recoveries</dt><dd>8</dd><dt>Resource</dt><dd>Piety</dd></dl></article>
+        <article class="class-card"><h3>Elementalist</h3><p>Magic controller who manipulates elements, areas, terrain, movement, and persistent spells.</p><dl><dt>Starts with</dt><dd>Reason 2</dd><dt>Other array</dt><dd>2, 2, −1, −1 · or 2, 1, 1, −1 · or 2, 1, 0, 0 · or 1, 1, 1, 0</dd><dt>Potency</dt><dd>Reason −2 / Reason −1 / Reason</dd><dt>Stamina</dt><dd>18 at 1st; +6 per higher level</dd><dt>Recoveries</dt><dd>8</dd><dt>Resource</dt><dd>Essence</dd></dl></article>
+        <article class="class-card"><h3>Fury</h3><p>Durable martial hero who becomes more dangerous as battle builds their ferocity.</p><dl><dt>Starts with</dt><dd>Might 2, Agility 2</dd><dt>Other array</dt><dd>2, −1, −1 · or 1, 1, −1 · or 1, 0, 0</dd><dt>Potency</dt><dd>Might −2 / Might −1 / Might</dd><dt>Stamina</dt><dd>21 at 1st; +9 per higher level</dd><dt>Recoveries</dt><dd>10</dd><dt>Resource</dt><dd>Ferocity</dd></dl></article>
+        <article class="class-card"><h3>Null</h3><p>Disciplined supernatural warrior who suppresses enemies and controls nearby space.</p><dl><dt>Starts with</dt><dd>Agility 2, Intuition 2</dd><dt>Other array</dt><dd>2, −1, −1 · or 1, 1, −1 · or 1, 0, 0</dd><dt>Potency</dt><dd>Intuition −2 / Intuition −1 / Intuition</dd><dt>Stamina</dt><dd>21 at 1st; +9 per higher level</dd><dt>Recoveries</dt><dd>10</dd><dt>Resource</dt><dd>Discipline</dd></dl></article>
+        <article class="class-card"><h3>Shadow</h3><p>Highly skilled infiltrator with mobility, concealment, and precise burst damage.</p><dl><dt>Starts with</dt><dd>Agility 2</dd><dt>Other array</dt><dd>2, 2, −1, −1 · or 2, 1, 1, −1 · or 2, 1, 0, 0 · or 1, 1, 1, 0</dd><dt>Potency</dt><dd>Agility −2 / Agility −1 / Agility</dd><dt>Stamina</dt><dd>18 at 1st; +6 per higher level</dd><dt>Recoveries</dt><dd>8</dd><dt>Resource</dt><dd>Insight</dd></dl></article>
+        <article class="class-card"><h3>Summoner</h3><p>Calls minions and eventually champions to occupy the battlefield. A rules-heavy master class.</p><dl><dt>Starts with</dt><dd>Reason 2</dd><dt>Other array</dt><dd>2, 2, −1, −1 · or 2, 1, 1, −1 · or 2, 1, 0, 0 · or 1, 1, 1, 0</dd><dt>Potency</dt><dd>Reason −2 / Reason −1 / Reason</dd><dt>Stamina</dt><dd>15 at 1st; +6 per higher level</dd><dt>Recoveries</dt><dd>8</dd><dt>Resource</dt><dd>Essence</dd></dl></article>
+        <article class="class-card"><h3>Tactician</h3><p>Martial leader who marks enemies, directs allies, and creates coordinated attacks.</p><dl><dt>Starts with</dt><dd>Might 2, Reason 2</dd><dt>Other array</dt><dd>2, −1, −1 · or 1, 1, −1 · or 1, 0, 0</dd><dt>Potency</dt><dd>Reason −2 / Reason −1 / Reason</dd><dt>Stamina</dt><dd>21 at 1st; +9 per higher level</dd><dt>Recoveries</dt><dd>10</dd><dt>Resource</dt><dd>Focus</dd></dl></article>
+        <article class="class-card"><h3>Talent</h3><p>Psionic hero who bends matter and minds, but can push clarity below zero and become strained.</p><dl><dt>Starts with</dt><dd>Reason 2, Presence 2</dd><dt>Other array</dt><dd>2, −1, −1 · or 1, 1, −1 · or 1, 0, 0</dd><dt>Potency</dt><dd>Reason −2 / Reason −1 / Reason</dd><dt>Stamina</dt><dd>18 at 1st; +6 per higher level</dd><dt>Recoveries</dt><dd>8</dd><dt>Resource</dt><dd>Clarity</dd></dl></article>
+        <article class="class-card"><h3>Troubadour</h3><p>Mobile performer and support hero who turns dramatic battlefield events into power.</p><dl><dt>Starts with</dt><dd>Agility 2, Presence 2</dd><dt>Other array</dt><dd>2, −1, −1 · or 1, 1, −1 · or 1, 0, 0</dd><dt>Potency</dt><dd>Presence −2 / Presence −1 / Presence</dd><dt>Stamina</dt><dd>18 at 1st; +6 per higher level</dd><dt>Recoveries</dt><dd>8</dd><dt>Resource</dt><dd>Drama</dd></dl></article>
       </div>
+    </section>
+
+    <section id="stamina">
+      <h2>Rules reference: Stamina &amp; Recoveries</h2>
+      <div class="grid">
+        <article class="card"><h3>Stamina maximum</h3><p>Your normal upper limit. Damage lowers current Stamina; healing cannot raise it above the maximum. Some effects can temporarily reduce the maximum itself.</p></article>
+        <article class="card"><h3>Recovery Value</h3><p><strong>One-third of maximum Stamina, rounded down.</strong> Spending one Recovery normally restores this much Stamina. The number of Recoveries you have comes mainly from your class.</p></article>
+        <article class="card"><h3>Winded Value</h3><p><strong>Half of maximum Stamina.</strong> At or below that value, you are <strong>winded</strong>. Winded has no automatic penalty by itself, but many abilities become stronger or weaker against a winded creature.</p></article>
+        <article class="card"><h3>Death threshold</h3><p>You die when your Stamina reaches the <strong>negative of your winded value</strong>. There are no death saving throws. Ordinary healing cannot revive a dead hero.</p></article>
+      </div>
+
+      <h3 style="margin-top:1.4rem">When can I spend a Recovery?</h3>
+      <div class="scroll"><table aria-label="Spending Recoveries">
+        <thead><tr><th>Situation</th><th>How it works</th></tr></thead>
+        <tbody>
+          <tr><td>In combat, not dying</td><td>Use the <strong>Catch Breath maneuver</strong>: spend 1 Recovery and regain Stamina equal to your Recovery Value.</td></tr>
+          <tr><td>In combat, dying</td><td>You cannot use Catch Breath yourself. An ally’s ability or another effect can still let you spend a Recovery. You remain able to act while dying.</td></tr>
+          <tr><td>Outside combat</td><td>Spend as many remaining Recoveries as you wish, without using an action—even while dying.</td></tr>
+          <tr><td>Special abilities</td><td>Some abilities let you or an ally spend a Recovery, add extra healing, permit multiple Recoveries, or restore Stamina without spending one. Follow the ability’s text.</td></tr>
+          <tr><td>After a respite</td><td>A completed 24-hour respite restores all Stamina and all spent Recoveries. Normal overnight sleep is not automatically a respite.</td></tr>
+        </tbody>
+      </table></div>
+
+      <h3 style="margin-top:1.4rem">The Stamina states</h3>
+      <div class="scroll"><table aria-label="Stamina states">
+        <thead><tr><th>Current Stamina</th><th>State</th><th>What it means</th></tr></thead>
+        <tbody>
+          <tr><td>Above winded value</td><td>Healthy</td><td>No special Stamina state.</td></tr>
+          <tr><td>Winded value or lower, but above 0</td><td><strong>Winded</strong></td><td>No inherent penalty. Everyone can recognize that a creature is winded, and abilities can interact with this state.</td></tr>
+          <tr><td>0 or lower, but above the death threshold</td><td><strong>Dying</strong></td><td>You can still act, but cannot Catch Breath. You are also bleeding, and this dying-caused bleeding cannot be removed until you stop dying.</td></tr>
+          <tr><td>Negative winded value or lower</td><td><strong>Dead</strong></td><td>Only a special powerful effect or item can bring you back.</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="callout"><strong>Example—maximum Stamina 18:</strong> Recovery Value is 6; winded value is 9. At 9 through 1 Stamina you are winded. At 0 through −8 you are dying. At −9 you die. If you are at −5 and an ally lets you spend a Recovery, you regain 6 Stamina and rise to 1—so you are no longer dying, though you remain winded.</div>
+
+      <h3 style="margin-top:1.4rem">Temporary Stamina</h3>
+      <ul>
+        <li>Damage removes temporary Stamina before normal Stamina.</li>
+        <li>Temporary Stamina does not change your maximum, Recovery Value, winded value, or whether you are winded, dying, or dead.</li>
+        <li>Multiple grants do not add together: keep the higher amount.</li>
+        <li>Regaining ordinary Stamina does not restore temporary Stamina.</li>
+      </ul>
+      <p class="small"><strong>Quick memory:</strong> one-third heals you; one-half means winded; zero means dying; negative one-half means dead.</p>
     </section>
   </main>
 
