@@ -419,6 +419,7 @@ async function parseAndDeserializeEvent(
     )
   }
 
+  const program = await getProgramInfo(new Map(), connection, programId)
   let output = ''
   output += '<h4>Parsed:</h4>'
   for (let line of data.split('\n')) {
@@ -465,14 +466,14 @@ async function parseAndDeserializeEvent(
       }
     }
 
+    const parsed = explorerKitParsed ?? {
+      name: undefined,
+      data: 'Failed to load and parse',
+    }
     output +=
       '<p><pre><code>' +
       YAML.stringify(
-        explorerKitParsed ?? {
-          programId,
-          name: undefined,
-          data: 'Failed to load and parse',
-        },
+        { programId, program, name: parsed.name, data: parsed.data },
         replacer,
       ).trimEnd() +
       '</code></pre></p>'
