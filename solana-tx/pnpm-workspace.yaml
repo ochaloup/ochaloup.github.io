@@ -1,5 +1,6 @@
-onlyBuiltDependencies:
-  - bigint-buffer
-  - bufferutil
-  - unrs-resolver
-  - utf-8-validate
+allowBuilds:
+  '@parcel/watcher': false
+  bigint-buffer: true
+  bufferutil: true
+  unrs-resolver: true
+  utf-8-validate: true

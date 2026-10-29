@@ -5,6 +5,8 @@
  * @license  MIT
  */
 
+/*! Axios v1.21.0 Copyright (c) 2026 Matt Zabriskie and contributors */
+
 /*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
 
 /*! noble-curves - MIT License (c) 2022 Paul Miller (paulmillr.com) */

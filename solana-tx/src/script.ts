@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any, no-await-in-loop, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access, no-param-reassign, sonarjs/no-duplicate-string, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access, no-param-reassign, sonarjs/no-duplicate-string, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call */
 
 import { decodeIdlAccount } from '@coral-xyz/anchor/dist/cjs/idl'
 import { utf8 } from '@coral-xyz/anchor/dist/cjs/utils/bytes'
@@ -13,11 +13,11 @@ import {
 import {
   Connection,
   Keypair,
-  Message,
   MessageV0,
   PublicKey,
   Transaction,
   TransactionInstruction,
+  TransactionMessage,
   VersionedMessage,
   VersionedTransaction,
 } from '@solana/web3.js'
@@ -258,7 +258,10 @@ async function parseAndDeserializeTransaction(
   try {
     connection = new Connection(cluster, COMMITMENT)
   } catch (e) {
-    return doLogError('Failed to connect to cluster: ' + cluster, e.message)
+    return doLogError(
+      'Failed to connect to cluster: ' + cluster,
+      (e as Error).message,
+    )
   }
 
   // Let's check if the input string is URI encoded, if so then decode it
@@ -266,7 +269,7 @@ async function parseAndDeserializeTransaction(
 
   // --- Is it base58 data, maybe a transaction signature?
   {
-    let decoded: Buffer
+    let decoded: Buffer | undefined
     try {
       decoded = decode58(data)
       console.log('Decoded base58 length: ' + decoded.length)
@@ -278,27 +281,25 @@ async function parseAndDeserializeTransaction(
         if (decoded.length === 64) {
           const transactionResponse = await connection.getTransaction(data, {
             commitment: COMMITMENT,
-            maxSupportedTransactionVersion: 0,
+            maxSupportedTransactionVersion: 1,
           })
           if (transactionResponse) {
             const msg = transactionResponse.transaction.message
             const accountsMeta = parseTransactionAccounts(
               msg,
-              transactionResponse.meta.loadedAddresses,
+              transactionResponse.meta?.loadedAddresses,
             )
             const instructions = msg.compiledInstructions.map(ix =>
               compiledInstructionToInstruction(ix, accountsMeta),
             )
             const innerInstructions = (
               transactionResponse.meta?.innerInstructions ?? []
-            ).map(
-              (group: CompiledInnerInstruction): InnerInstructionGroup => ({
-                index: group.index,
-                instructions: group.instructions.map(ix =>
-                  compiledInstructionToInstruction(ix, accountsMeta),
-                ),
-              }),
-            )
+            ).map((group: CompiledInnerInstruction): InnerInstructionGroup => ({
+              index: group.index,
+              instructions: group.instructions.map(ix =>
+                compiledInstructionToInstruction(ix, accountsMeta),
+              ),
+            }))
             parsedData = {
               txData: msg,
               type: 'from-chain',
@@ -318,7 +319,10 @@ async function parseAndDeserializeTransaction(
       try {
         if (!parsedData || !parsedData.instructions.length) {
           // maybe the base58 input is directly the transaction message
-          const decodedInstructions = decodeIfTransaction(decoded)
+          const decodedInstructions = await decodeIfTransaction(
+            decoded,
+            connection,
+          )
           parsedData = { ...decodedInstructions, connection }
         }
       } catch (e) {
@@ -335,7 +339,7 @@ async function parseAndDeserializeTransaction(
     try {
       const decoded: Buffer = decode64(data)
       console.log('Decoded base64 length: ' + decoded.length)
-      const decodedInstructions = decodeIfTransaction(decoded)
+      const decodedInstructions = await decodeIfTransaction(decoded, connection)
       parsedData = { ...decodedInstructions, connection }
     } catch (e) {
       console.log(
@@ -376,7 +380,7 @@ async function parseAndDeserializeTransaction(
       console.error(YAML.stringify(parsedData.txData, replacer).trimEnd())
       return doLogError(
         'Failed to process deserialized transaction data.',
-        e.message,
+        (e as Error).message,
       )
     }
   }
@@ -402,7 +406,10 @@ async function parseAndDeserializeEvent(
   try {
     connection = new Connection(cluster, COMMITMENT)
   } catch (e) {
-    return doLogError('Failed to connect to cluster: ' + cluster, e.message)
+    return doLogError(
+      'Failed to connect to cluster: ' + cluster,
+      (e as Error).message,
+    )
   }
 
   let output = ''
@@ -421,8 +428,7 @@ async function parseAndDeserializeEvent(
     if (programDataIndex >= 0) {
       line = line.substring(programDataIndex + 'Program data:'.length).trim()
     }
-    let explorerKitParsed: ExplorerKitData
-    let failedParsing = false
+    let explorerKitParsed: ExplorerKitData | undefined
     try {
       console.log(
         `Parsing event data with Explorer Kit for program: ${programId}`,
@@ -434,10 +440,9 @@ async function parseAndDeserializeEvent(
       })
     } catch (e) {
       console.error('Failed to parse event data with Explorer Kit', e)
-      failedParsing = true
     }
 
-    if (explorerKitParsed.name === undefined || failedParsing) {
+    if (explorerKitParsed?.name === undefined) {
       const cpiEvent = parseAsTransactionCpiData(line)
       console.log(
         "Failed to get parsed event, let's check if the data could be Anchor CPI event",
@@ -455,7 +460,14 @@ async function parseAndDeserializeEvent(
 
     output +=
       '<p><pre><code>' +
-      YAML.stringify(explorerKitParsed, replacer).trimEnd() +
+      YAML.stringify(
+        explorerKitParsed ?? {
+          programId,
+          name: undefined,
+          data: 'Failed to load and parse',
+        },
+        replacer,
+      ).trimEnd() +
       '</code></pre></p>'
   }
 
@@ -507,66 +519,57 @@ function decodeIfUriEncoded(str: string): string {
   return str
 }
 
-function decodeIfTransaction(data: Buffer): {
+const MESSAGE_DECODERS: [string, (data: Buffer) => VersionedMessage][] = [
+  ['transaction', data => VersionedTransaction.deserialize(data).message],
+  ['transaction message', data => VersionedMessage.deserialize(data)],
+]
+
+async function decodeIfTransaction(
+  data: Buffer,
+  connection: Connection,
+): Promise<{
   type: TransactionType
-  txData: Message | VersionedMessage
+  txData: VersionedMessage
   instructions: TransactionInstruction[]
-} {
-  try {
-    const tx = Transaction.from(data)
-    const instructions = tx.instructions
-    if (instructions.length === 0) {
-      throw new Error('No instructions found in legacy transaction')
+}> {
+  for (const [kind, decode] of MESSAGE_DECODERS) {
+    let vMsg: VersionedMessage
+    try {
+      vMsg = decode(data)
+    } catch (e) {
+      console.log(`Not a ${kind}: ` + (e as Error).message)
+      continue
     }
-    return { type: 'legacy', txData: tx.compileMessage(), instructions }
-  } catch (e) {
-    console.log('Not a legacy transaction: ' + (e as Error).message)
-  }
-  try {
-    const msg = Message.from(data)
-    const accountsMeta = parseTransactionAccounts(msg, undefined)
-    const instructions = msg.instructions.map(ix =>
-      compiledInstructionToInstruction(ix, accountsMeta),
-    )
-    if (instructions.length === 0) {
-      throw new Error('No instructions found in legacy transaction message')
+    if (vMsg.compiledInstructions.length === 0) {
+      console.log(`No instructions found in ${kind}`)
+      continue
     }
-    return { type: 'legacy', txData: msg, instructions }
-  } catch (e) {
-    console.log('Not a legacy transaction message: ' + (e as Error).message)
-  }
-  try {
-    const versionedTransaction = VersionedTransaction.deserialize(data)
-    const vsMsg = versionedTransaction.message
-    const instructions = decompileVersionedMessage(vsMsg)
-    if (instructions.length === 0) {
-      throw new Error('No instructions found in versioned transaction')
+    return {
+      type: vMsg.version === 'legacy' ? 'legacy' : 'versioned',
+      txData: vMsg,
+      instructions: await decompileVersionedMessage(vMsg, connection),
     }
-    return { type: 'versioned', txData: vsMsg, instructions }
-  } catch (e) {
-    console.log('Not a versioned transaction: ' + (e as Error).message)
-  }
-  try {
-    const vMsg = VersionedMessage.deserialize(data)
-    const instructions = decompileVersionedMessage(vMsg)
-    if (instructions.length === 0) {
-      throw new Error('No instructions found in versioned transaction message')
-    }
-    return { type: 'versioned', txData: vMsg, instructions }
-  } catch (e) {
-    console.log('Not a versioned transaction message: ' + (e as Error).message)
   }
   throw new Error('Data is not a valid transaction message')
 }
 
-function decompileVersionedMessage(
+async function decompileVersionedMessage(
   vMsg: VersionedMessage,
-): TransactionInstruction[] {
-  const accountsMeta = parseTransactionAccounts(vMsg, undefined) // TODO: is undefined correct here?
-  const instructions = vMsg.compiledInstructions.map(ix =>
-    compiledInstructionToInstruction(ix, accountsMeta),
+  connection: Connection,
+): Promise<TransactionInstruction[]> {
+  const addressLookupTableAccounts = await Promise.all(
+    vMsg.addressTableLookups.map(async ({ accountKey }) => {
+      const { value } = await connection.getAddressLookupTable(accountKey)
+      if (!value) {
+        throw new Error(
+          `Address lookup table ${accountKey.toBase58()} not found at ${connection.rpcEndpoint}`,
+        )
+      }
+      return value
+    }),
   )
-  return instructions
+  return TransactionMessage.decompile(vMsg, { addressLookupTableAccounts })
+    .instructions
 }
 
 function doLogError(message: string, whatever?: any): string {
@@ -737,7 +740,7 @@ function programMetadataIdlAddress(programAddress: PublicKey): PublicKey {
   const seed = Buffer.alloc(16)
   seed.write('idl', 0, 'utf-8')
   const [pda] = PublicKey.findProgramAddressSync(
-    [programAddress.toBuffer(), Buffer.alloc(32), seed],
+    [programAddress.toBuffer(), seed],
     PROGRAM_METADATA_PROGRAM_ID,
   )
   return pda
@@ -935,7 +938,7 @@ export async function parseEventByExplorerKit({
   try {
     const slot = await connection.getSlot(COMMITMENT)
     const anchorIdl = await getAnchorIdl(connection, new PublicKey(programId))
-    let repoMap = undefined
+    let repoMap: Map<string, any> | undefined = undefined
     if (anchorIdl !== null) {
       repoMap = addIdlToMap(new Map(), programId, anchorIdl, 0)
     }

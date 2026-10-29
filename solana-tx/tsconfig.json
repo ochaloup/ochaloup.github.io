@@ -6,13 +6,10 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "noImplicitAny": false,
+    "strictNullChecks": true,
     "noEmitOnError": true,
     "removeComments": false,
-    "sourceMap": true,
-    "baseUrl": "./",
-    "paths": {
-      "crypto": ["node_modules/crypto-js"]
-    }
+    "sourceMap": true
   },
   "exclude": ["node_modules"],
   "include": ["package.json", "src/*"]
