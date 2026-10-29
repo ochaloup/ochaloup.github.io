@@ -35,8 +35,13 @@ import { inflate } from 'pako'
 import YAML from 'yaml'
 
 import splGovernanceIdl from './idl/gov.json'
-import { decodeProgramMetadata, programMetadataAddress } from './programInfo'
+import {
+  decodeProgramMetadata,
+  getProgramInfo,
+  programMetadataAddress,
+} from './programInfo'
 
+import type { ProgramInfo, ProgramInfoCache } from './programInfo'
 import type { InstructionData } from '@solana/spl-governance'
 import type { CompiledInnerInstruction } from '@solana/web3.js'
 import type { ParserOutput } from '@solanafm/explorer-kit'
@@ -73,6 +78,7 @@ type EventContext = {
 
 type ExplorerKitData = {
   programId: string
+  program?: ProgramInfo
   name: string | undefined
   data: any
 }
@@ -654,7 +660,9 @@ async function doLogTransactionContext(
   output += '<h4>Parsed:</h4>'
   output +=
     '<p><pre><code>' +
-    YAML.stringify(parsedExplorerKit, replacer).trimEnd() +
+    YAML.stringify(parsedExplorerKit, replacer, {
+      aliasDuplicateObjects: false,
+    }).trimEnd() +
     '</code></pre></p>'
 
   // --- LOGS
@@ -860,6 +868,7 @@ export async function parseTransactionByExplorerKit(
   context: TransactionContext,
 ): Promise<ExplorerKitTransactionData[]> {
   const result: ExplorerKitTransactionData[] = []
+  const programInfoCache: ProgramInfoCache = new Map()
   let ixNumber = 0
   let slot
   try {
@@ -890,8 +899,14 @@ export async function parseTransactionByExplorerKit(
           context.connection,
           slot,
         )
+        const innerProgramId = innerIx.programId.toBase58()
         parsedInner.push({
-          programId: innerIx.programId.toBase58(),
+          programId: innerProgramId,
+          program: await getProgramInfo(
+            programInfoCache,
+            context.connection,
+            innerProgramId,
+          ),
           name: innerParsed.name,
           data: innerParsed.data,
         })
@@ -900,6 +915,11 @@ export async function parseTransactionByExplorerKit(
 
     result.push({
       programId,
+      program: await getProgramInfo(
+        programInfoCache,
+        context.connection,
+        programId,
+      ),
       ixNumber,
       name: parsed.name,
       data: parsed.data,
