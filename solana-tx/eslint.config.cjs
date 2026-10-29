@@ -9,4 +9,10 @@ module.exports = [
       'no-console': 'off',
     },
   },
+  {
+    files: ['**/*.test.ts'],
+    rules: {
+      '@typescript-eslint/no-floating-promises': 'off',
+    },
+  },
 ]

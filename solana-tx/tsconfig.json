@@ -7,6 +7,7 @@
     "skipLibCheck": true,
     "noImplicitAny": false,
     "strictNullChecks": true,
+    "rewriteRelativeImportExtensions": true,
     "noEmitOnError": true,
     "removeComments": false,
     "sourceMap": true

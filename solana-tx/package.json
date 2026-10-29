@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test src/*.test.ts",
     "_hack": "pnpm _hack1 && pnpm _hack2 && pnpm _hack3 && pnpm _hack4",
     "_hack1": "cp './node_modules/.pnpm/@solanafm+utils@1.1.0/node_modules/dayjs/plugin/relativeTime.js' './node_modules/.pnpm/@solanafm+utils@1.1.0/node_modules/dayjs/esm/plugin/relativeTime'",
     "_hack2": "cp './node_modules/.pnpm/@solanafm+utils@1.1.0/node_modules/dayjs/plugin/relativeTime.js' './node_modules/dayjs/plugin/relativeTime'",
