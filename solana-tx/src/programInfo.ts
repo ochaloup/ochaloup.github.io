@@ -1,6 +1,6 @@
 import { PublicKey } from '@solana/web3.js'
 import base58 from 'bs58'
-import { inflate } from 'pako'
+import { Inflate } from 'pako'
 
 import type { AccountInfo, Connection } from '@solana/web3.js'
 
@@ -20,11 +20,15 @@ const SECTION_HEADER_LENGTH = 64
 const ELF_MAGIC = '\x7fELF'
 const PMP_METADATA_DISCRIMINATOR = 2
 const PMP_DATA_OFFSET = 96
+const PMP_ENCODING_NONE = 0
 const PMP_ENCODING_BASE58 = 2
 const PMP_ENCODING_BASE64 = 3
 const PMP_DATA_SOURCE_EXTERNAL = 2
+const MAX_INFLATED_LENGTH = 10 * 1024 * 1024
 const OTTERSEC_STATUS_URL = 'https://verify.osec.io/status/'
 const OTTERSEC_TIMEOUT_MS = 5000
+const MAINNET_GENESIS_HASH = '5eykt4UsFv8P8NJdTREpY1vzqKqZKvdpKuc147dw2N9d'
+const mainnetChecks = new WeakMap<Connection, Promise<boolean>>()
 const OTTERSEC_FIELDS = [
   ['repo_url', 'repoUrl'],
   ['commit', 'commit'],
@@ -184,6 +188,24 @@ export function programMetadataAddress(
   return pda
 }
 
+function inflateCapped(data: Uint8Array): Uint8Array {
+  const inflator = new Inflate()
+  const chunks: Uint8Array[] = []
+  let size = 0
+  inflator.onData = chunk => {
+    size += chunk.length
+    if (size > MAX_INFLATED_LENGTH) {
+      throw new Error(`Inflated data exceeds ${MAX_INFLATED_LENGTH} bytes`)
+    }
+    chunks.push(chunk)
+  }
+  inflator.push(data, true)
+  if (inflator.err) {
+    throw new Error(inflator.msg)
+  }
+  return Buffer.concat(chunks)
+}
+
 export function decodeProgramMetadata(data: Uint8Array): string | undefined {
   const buf = toBuffer(data)
   if (buf.length <= PMP_DATA_OFFSET || buf[0] !== PMP_METADATA_DISCRIMINATOR) {
@@ -202,10 +224,13 @@ export function decodeProgramMetadata(data: Uint8Array): string | undefined {
   }
   if (buf[84] === 1 || buf[84] === 2) {
     try {
-      payload = inflate(payload)
+      payload = inflateCapped(payload)
     } catch {
       return undefined
     }
+  }
+  if (buf[83] === PMP_ENCODING_NONE) {
+    return toBuffer(payload).toString('hex')
   }
   if (buf[83] === PMP_ENCODING_BASE58) {
     return base58.encode(payload)
@@ -269,19 +294,21 @@ export function composeProgramInfo({
   verifiedBuild,
 }: ProgramInfoParts): ProgramInfo {
   const { name, ...securityFields } = securityTxt ?? {}
-  const info = {
-    name,
+  const onChain = {
     loader,
     programData,
     upgradeAuthority: deploy?.upgradeAuthority,
     lastDeploySlot: deploy?.lastDeploySlot,
+  }
+  // first spread fixes the key order, the second keeps security.txt from overriding on-chain facts
+  return {
+    name,
+    ...onChain,
     ...securityFields,
+    ...onChain,
     metadata,
     verifiedBuild,
   }
-  return Object.fromEntries(
-    Object.entries(info).filter(([, value]) => value !== undefined),
-  ) as ProgramInfo
 }
 
 export function fetchSlice(
@@ -333,21 +360,41 @@ export async function fetchRodata(
   return body?.data
 }
 
-export async function fetchVerifiedBuild(
+function isMainnet(connection: Connection): Promise<boolean> {
+  let check = mainnetChecks.get(connection)
+  if (check === undefined) {
+    check = connection
+      .getGenesisHash()
+      .then(hash => hash === MAINNET_GENESIS_HASH)
+    mainnetChecks.set(connection, check)
+  }
+  return check
+}
+
+async function loadVerifiedBuild(
+  connection: Connection,
   programId: string,
 ): Promise<VerifiedBuild | undefined> {
-  try {
-    const res = await fetch(OTTERSEC_STATUS_URL + programId, {
-      signal: AbortSignal.timeout(OTTERSEC_TIMEOUT_MS),
-    })
-    if (!res.ok) {
-      return undefined
-    }
-    return toVerifiedBuild(await res.json())
-  } catch (e) {
-    console.warn(`Cannot load OtterSec verified build of ${programId}`, e)
+  if (!(await isMainnet(connection))) {
     return undefined
   }
+  const res = await fetch(OTTERSEC_STATUS_URL + programId, {
+    signal: AbortSignal.timeout(OTTERSEC_TIMEOUT_MS),
+  })
+  return res.ok ? toVerifiedBuild(await res.json()) : undefined
+}
+
+/**
+ * OtterSec verifies mainnet deployments only, so other clusters get no status.
+ */
+export function fetchVerifiedBuild(
+  connection: Connection,
+  programId: string,
+): Promise<VerifiedBuild | undefined> {
+  return orUndefined(
+    loadVerifiedBuild(connection, programId),
+    `OtterSec verified build of ${programId}`,
+  )
 }
 
 async function orUndefined<T>(
@@ -434,7 +481,7 @@ async function fetchUpgradeableParts(
   const [programDataParts, metadata, verifiedBuild] = await Promise.all([
     fetchProgramDataParts(connection, new PublicKey(programData)),
     fetchMetadata(connection, program),
-    fetchVerifiedBuild(program.toBase58()),
+    fetchVerifiedBuild(connection, program.toBase58()),
   ])
   return { loader, programData, ...programDataParts, metadata, verifiedBuild }
 }
@@ -452,7 +499,7 @@ async function fetchLoaderV4Parts(
       data.subarray(LOADER_V4_ELF_OFFSET),
     ),
     fetchMetadata(connection, program),
-    fetchVerifiedBuild(program.toBase58()),
+    fetchVerifiedBuild(connection, program.toBase58()),
   ])
   return {
     loader: LOADER_V4_ID,

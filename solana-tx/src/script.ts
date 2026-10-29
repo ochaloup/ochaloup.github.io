@@ -419,7 +419,7 @@ async function parseAndDeserializeEvent(
     )
   }
 
-  const program = await getProgramInfo(new Map(), connection, programId)
+  const program = getProgramInfo(new Map(), connection, programId)
   let output = ''
   output += '<h4>Parsed:</h4>'
   for (let line of data.split('\n')) {
@@ -472,10 +472,17 @@ async function parseAndDeserializeEvent(
     }
     output +=
       '<p><pre><code>' +
-      YAML.stringify(
-        { programId, program, name: parsed.name, data: parsed.data },
-        replacer,
-      ).trimEnd() +
+      escapeHtml(
+        YAML.stringify(
+          {
+            programId,
+            program: await program,
+            name: parsed.name,
+            data: parsed.data,
+          },
+          replacer,
+        ).trimEnd(),
+      ) +
       '</code></pre></p>'
   }
 
@@ -580,6 +587,13 @@ async function decompileVersionedMessage(
     .instructions
 }
 
+function escapeHtml(text: string): string {
+  return text
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+}
+
 function doLogError(message: string, whatever?: any): string {
   let errOutput = '<b style="color:red;">' + message + '</b>'
   if (whatever) {
@@ -646,7 +660,7 @@ async function doLogTransactionContext(
   output += `<h4>Transaction ${context.type} (YAML format):</h4>`
   output +=
     '<p><pre><code>' +
-    YAML.stringify(context.txData, replacer).trimEnd() +
+    escapeHtml(YAML.stringify(context.txData, replacer).trimEnd()) +
     '</code></pre></p>'
 
   // For non-chain paths, try simulation to get logs
@@ -661,16 +675,20 @@ async function doLogTransactionContext(
   output += '<h4>Parsed:</h4>'
   output +=
     '<p><pre><code>' +
-    YAML.stringify(parsedExplorerKit, replacer, {
-      aliasDuplicateObjects: false,
-    }).trimEnd() +
+    escapeHtml(
+      YAML.stringify(parsedExplorerKit, replacer, {
+        aliasDuplicateObjects: false,
+      }).trimEnd(),
+    ) +
     '</code></pre></p>'
 
   // --- LOGS
   if (context.logMessages && context.logMessages.length > 0) {
     output += '<h4>Logs:</h4>'
     output +=
-      '<p><pre><code>' + context.logMessages.join('\n') + '</code></pre></p>'
+      '<p><pre><code>' +
+      escapeHtml(context.logMessages.join('\n')) +
+      '</code></pre></p>'
   }
 
   return output
@@ -766,9 +784,12 @@ export async function getAnchorIdl(
   // Try new format: Program Metadata program (Anchor 0.31+)
   const pmpAddress = programMetadataAddress(programAddress, 'idl')
   const pmpInfo = await connection.getAccountInfo(pmpAddress)
-  const idlString = pmpInfo && decodeProgramMetadata(pmpInfo.data)
-  if (idlString) {
+  if (pmpInfo !== null) {
     try {
+      const idlString = decodeProgramMetadata(pmpInfo.data)
+      if (idlString === undefined) {
+        throw new Error('Program Metadata account data cannot be decoded')
+      }
       console.debug('Anchor IDL found (PMP format):', pmpAddress.toBase58())
       return JSON.parse(idlString)
     } catch (e) {
@@ -870,6 +891,16 @@ export async function parseTransactionByExplorerKit(
 ): Promise<ExplorerKitTransactionData[]> {
   const result: ExplorerKitTransactionData[] = []
   const programInfoCache: ProgramInfoCache = new Map()
+  for (const ix of [
+    ...context.instructions,
+    ...(context.innerInstructions ?? []).flatMap(g => g.instructions),
+  ]) {
+    void getProgramInfo(
+      programInfoCache,
+      context.connection,
+      ix.programId.toBase58(),
+    )
+  }
   let ixNumber = 0
   let slot
   try {

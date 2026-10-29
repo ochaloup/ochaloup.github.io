@@ -3,7 +3,7 @@ import { mock, test } from 'node:test'
 
 import { PublicKey } from '@solana/web3.js'
 import base58 from 'bs58'
-import { deflate } from 'pako'
+import { Deflate, deflate } from 'pako'
 
 import {
   BPF_LOADER_UPGRADEABLE_ID,
@@ -348,6 +348,35 @@ test('decodeProgramMetadata decodes compression and encodings', () => {
   )
 })
 
+test('decodeProgramMetadata shows Encoding.None as hex', () => {
+  const raw = Buffer.from([0, 1, 0xfe, 0xff])
+  assert.equal(
+    decodeProgramMetadata(pmpAccount(raw, { encoding: 0 })),
+    '0001feff',
+  )
+})
+
+test('decodeProgramMetadata stops inflating far above the ceiling', () => {
+  const deflator = new Deflate()
+  const chunk = Buffer.alloc(1024 * 1024)
+  for (let i = 0; i < 127; i++) {
+    deflator.push(chunk, false)
+  }
+  deflator.push(chunk, true)
+  const bomb = deflator.result
+  const heapBefore = process.memoryUsage().arrayBuffers
+  assert.equal(
+    decodeProgramMetadata(pmpAccount(bomb, { compression: 2 })),
+    undefined,
+  )
+  assert.ok(process.memoryUsage().arrayBuffers - heapBefore < 64 * 1024 * 1024)
+  const small = deflate(Buffer.alloc(1024 * 1024, 'a'))
+  assert.equal(
+    decodeProgramMetadata(pmpAccount(small, { compression: 2 }))?.length,
+    1024 * 1024,
+  )
+})
+
 test('decodeProgramMetadata rejects malformed accounts', () => {
   const json = Buffer.from('{"name":"X"}')
   assert.equal(
@@ -395,6 +424,10 @@ test('toVerifiedBuild maps OtterSec status', () => {
   assert.equal(toVerifiedBuild({ is_verified: 'yes' }), undefined)
 })
 
+function plain(value: unknown): unknown {
+  return JSON.parse(JSON.stringify(value)) as unknown
+}
+
 test('composeProgramInfo orders keys and drops missing parts', () => {
   const info = composeProgramInfo({
     loader: BPF_LOADER_UPGRADEABLE_ID,
@@ -415,18 +448,51 @@ test('composeProgramInfo orders keys and drops missing parts', () => {
     'verifiedBuild',
   ])
   assert.equal(info.upgradeAuthority, null)
-  assert.deepEqual(composeProgramInfo({ loader: LOADER_V4_ID }), {
+  assert.deepEqual(plain(composeProgramInfo({ loader: LOADER_V4_ID })), {
     loader: LOADER_V4_ID,
   })
 })
 
+test('composeProgramInfo keeps on-chain facts over security.txt', () => {
+  const info = composeProgramInfo({
+    loader: BPF_LOADER_UPGRADEABLE_ID,
+    programData: PROGRAM_DATA.toBase58(),
+    deploy: { lastDeploySlot: 1, upgradeAuthority: null },
+    securityTxt: {
+      name: 'X',
+      loader: 'FakeLoader',
+      programData: 'FakeData',
+      upgradeAuthority: 'FakeAuthority',
+      lastDeploySlot: '999',
+      metadata: 'FakeMetadata',
+      verifiedBuild: 'FakeBuild',
+      policy: 'https://x',
+    },
+  })
+  assert.deepEqual(plain(info), {
+    name: 'X',
+    loader: BPF_LOADER_UPGRADEABLE_ID,
+    programData: PROGRAM_DATA.toBase58(),
+    upgradeAuthority: null,
+    lastDeploySlot: 1,
+    policy: 'https://x',
+  })
+})
+
 type FakeAccount = { owner: string; data: Buffer }
+type FetchMock = { mock: { callCount: () => number } }
 type DataSlice = { offset: number; length: number }
 type Call = { pubkey: string; dataSlice?: DataSlice }
 
-function fakeConnection(accounts: Map<string, FakeAccount>) {
+const MAINNET_GENESIS_HASH = '5eykt4UsFv8P8NJdTREpY1vzqKqZKvdpKuc147dw2N9d'
+
+function fakeConnection(
+  accounts: Map<string, FakeAccount>,
+  genesisHash = MAINNET_GENESIS_HASH,
+) {
   const calls: Call[] = []
   const connection = {
+    getGenesisHash: () => Promise.resolve(genesisHash),
     getAccountInfo: (pubkey: PublicKey, config?: { dataSlice?: DataSlice }) => {
       const key = pubkey.toBase58()
       calls.push({ pubkey: key, dataSlice: config?.dataSlice })
@@ -530,7 +596,7 @@ test('getProgramInfo reads an upgradeable program with small slices', async t =>
     connection,
     UPGRADEABLE.toBase58(),
   )
-  assert.deepEqual(info, {
+  assert.deepEqual(plain(info), {
     name: 'Fixture',
     loader: BPF_LOADER_UPGRADEABLE_ID,
     programData: UPGRADEABLE_DATA.toBase58(),
@@ -554,17 +620,37 @@ test('getProgramInfo reads an upgradeable program with small slices', async t =>
   assert.ok(programDataCalls.every(c => (c.dataSlice?.length ?? 0) < 4096))
 })
 
+test('getProgramInfo skips OtterSec outside mainnet', async t => {
+  t.after(() => mock.restoreAll())
+  stubFetch(200, OTTERSEC_STATUS)
+  const { connection } = fakeConnection(
+    ACCOUNTS,
+    'EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG',
+  )
+  const info = await getProgramInfo(
+    new Map(),
+    connection,
+    UPGRADEABLE.toBase58(),
+  )
+  assert.equal(info?.verifiedBuild, undefined)
+  assert.equal(info?.name, 'Fixture')
+  assert.equal((globalThis.fetch as unknown as FetchMock).mock.callCount(), 0)
+})
+
 test('getProgramInfo reads a loader-v4 program from its own account', async t => {
   t.after(() => mock.restoreAll())
   stubFetch(404)
   const { connection, calls } = fakeConnection(ACCOUNTS)
-  assert.deepEqual(await getProgramInfo(new Map(), connection, V4.toBase58()), {
-    name: 'Fixture',
-    loader: LOADER_V4_ID,
-    upgradeAuthority: AUTHORITY.toBase58(),
-    lastDeploySlot: 7,
-    projectUrl: 'https://x',
-  })
+  assert.deepEqual(
+    plain(await getProgramInfo(new Map(), connection, V4.toBase58())),
+    {
+      name: 'Fixture',
+      loader: LOADER_V4_ID,
+      upgradeAuthority: AUTHORITY.toBase58(),
+      lastDeploySlot: 7,
+      projectUrl: 'https://x',
+    },
+  )
   assert.equal(calls.length, 5)
   assert.deepEqual(
     calls.filter(c => c.pubkey === V4.toBase58()).map(c => c.dataSlice?.offset),
@@ -583,7 +669,7 @@ test('getProgramInfo keeps deploy info without security.txt', async t => {
   stubFetch(404)
   const { connection, calls } = fakeConnection(ACCOUNTS)
   assert.deepEqual(
-    await getProgramInfo(new Map(), connection, NO_RODATA.toBase58()),
+    plain(await getProgramInfo(new Map(), connection, NO_RODATA.toBase58())),
     {
       loader: BPF_LOADER_UPGRADEABLE_ID,
       programData: NO_RODATA_DATA.toBase58(),
@@ -592,7 +678,7 @@ test('getProgramInfo keeps deploy info without security.txt', async t => {
   )
   assert.equal(calls.length, 5)
   assert.deepEqual(
-    await getProgramInfo(new Map(), connection, TRUNCATED.toBase58()),
+    plain(await getProgramInfo(new Map(), connection, TRUNCATED.toBase58())),
     {
       loader: BPF_LOADER_UPGRADEABLE_ID,
       programData: TRUNCATED_DATA.toBase58(),
@@ -606,7 +692,7 @@ test('getProgramInfo shows only the loader of other programs', async t => {
   stubFetch(404)
   const { connection, calls } = fakeConnection(ACCOUNTS)
   assert.deepEqual(
-    await getProgramInfo(new Map(), connection, TOKEN.toBase58()),
+    plain(await getProgramInfo(new Map(), connection, TOKEN.toBase58())),
     { loader: TOKEN_LOADER },
   )
   assert.equal(calls.length, 1)
