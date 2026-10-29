@@ -50,6 +50,7 @@ import type { IdlItem } from '@solanafm/explorer-kit-idls'
 const COMMITMENT = 'confirmed'
 const PROGRAM_INFO_LOADING = 'loading...'
 const PROGRAM_INFO_UNAVAILABLE = 'not available (see browser console)'
+const PROGRAM_INFO_DEADLINE_MS = 4000
 
 // Local IDL registry for programs not covered by Explorer Kit's API
 const LOCAL_IDL_REGISTRY: Map<string, any> = new Map([
@@ -731,6 +732,7 @@ async function attachProgramInfo(
   const infos = await getProgramInfos(
     connection,
     parsed.map(item => item.programId),
+    AbortSignal.timeout(PROGRAM_INFO_DEADLINE_MS),
   )
   for (const item of parsed) {
     item.program = infos.get(item.programId) ?? PROGRAM_INFO_UNAVAILABLE

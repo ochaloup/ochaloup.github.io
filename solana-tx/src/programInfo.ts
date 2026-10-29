@@ -28,6 +28,7 @@ const MAX_INFLATED_LENGTH = 10 * 1024 * 1024
 const OTTERSEC_STATUS_URL = 'https://verify.osec.io/status/'
 const OTTERSEC_TIMEOUT_MS = 5000
 const PROGRAM_INFO_CONCURRENCY = 1
+const MAX_MULTIPLE_ACCOUNTS = 100
 const MAINNET_GENESIS_HASH = '5eykt4UsFv8P8NJdTREpY1vzqKqZKvdpKuc147dw2N9d'
 const mainnetChecks = new WeakMap<Connection, Promise<boolean>>()
 const OTTERSEC_FIELDS = [
@@ -59,8 +60,6 @@ export type ProgramInfo = {
   metadata?: unknown
   verifiedBuild?: VerifiedBuild
 } & Record<string, unknown>
-
-export type ProgramInfoCache = Map<string, Promise<ProgramInfo | undefined>>
 
 type ProgramInfoParts = {
   loader: string
@@ -410,29 +409,52 @@ async function orUndefined<T>(
   }
 }
 
-async function fetchSecurityTxt(
-  connection: Connection,
-  account: PublicKey,
-  elfOffset: number,
-  elfHeader: Uint8Array,
-): Promise<Record<string, string> | undefined> {
-  const rodata = await orUndefined(
-    fetchRodata(connection, account, elfOffset, elfHeader),
-    `security.txt of ${account.toBase58()}`,
-  )
-  return rodata && parseSecurityTxt(rodata)
+async function untilDeadline<T>(
+  promise: Promise<T>,
+  deadline: AbortSignal,
+  what: string,
+): Promise<T | undefined> {
+  if (deadline.aborted) {
+    console.warn(`Skipped loading ${what}: deadline passed`)
+    return undefined
+  }
+  let onAbort = () => {}
+  const timedOut = new Promise<undefined>(resolve => {
+    onAbort = () => {
+      console.warn(`Timed out loading ${what}`)
+      resolve(undefined)
+    }
+    deadline.addEventListener('abort', onAbort, { once: true })
+  })
+  try {
+    return await Promise.race([orUndefined(promise, what), timedOut])
+  } finally {
+    deadline.removeEventListener('abort', onAbort)
+  }
 }
 
-async function fetchMetadata(
+async function fetchAccounts(
   connection: Connection,
-  program: PublicKey,
-): Promise<unknown> {
-  const account = await orUndefined(
-    connection.getAccountInfo(programMetadataAddress(program, 'security')),
-    `Program Metadata security of ${program.toBase58()}`,
+  keys: PublicKey[],
+  dataSlice?: { offset: number; length: number },
+): Promise<(AccountInfo<Buffer> | null)[]> {
+  const chunks: PublicKey[][] = []
+  for (let i = 0; i < keys.length; i += MAX_MULTIPLE_ACCOUNTS) {
+    chunks.push(keys.slice(i, i + MAX_MULTIPLE_ACCOUNTS))
+  }
+  const results = await Promise.all(
+    chunks.map(chunk =>
+      connection.getMultipleAccountsInfo(chunk, { dataSlice }),
+    ),
   )
-  const text = account && decodeProgramMetadata(account.data)
-  if (text === undefined || text === null) {
+  return results.flat()
+}
+
+function decodeMetadata(
+  account: AccountInfo<Buffer> | null | undefined,
+): unknown {
+  const text = account ? decodeProgramMetadata(account.data) : undefined
+  if (text === undefined) {
     return undefined
   }
   try {
@@ -442,142 +464,197 @@ async function fetchMetadata(
   }
 }
 
-async function fetchProgramDataParts(
-  connection: Connection,
-  programData: PublicKey,
-): Promise<Pick<ProgramInfoParts, 'deploy' | 'securityTxt'>> {
-  const head = await orUndefined(
-    fetchSlice(
-      connection,
-      programData,
-      0,
-      PROGRAM_DATA_ELF_OFFSET + ELF_HEADER_LENGTH,
-    ),
-    `programdata ${programData.toBase58()}`,
-  )
-  if (!head) {
-    return {}
-  }
-  return {
-    deploy: parseProgramDataHeader(head.data),
-    securityTxt: await fetchSecurityTxt(
-      connection,
-      programData,
-      PROGRAM_DATA_ELF_OFFSET,
-      head.data.subarray(PROGRAM_DATA_ELF_OFFSET),
-    ),
-  }
-}
+type ElfLocation = { account: PublicKey; offset: number; header: Uint8Array }
 
-async function fetchUpgradeableParts(
-  connection: Connection,
-  program: PublicKey,
-  data: Buffer,
-): Promise<ProgramInfoParts> {
-  const loader = BPF_LOADER_UPGRADEABLE_ID
-  const programData = parseProgramAccount(data)
-  if (programData === undefined) {
-    return { loader }
-  }
-  const [programDataParts, metadata, verifiedBuild] = await Promise.all([
-    fetchProgramDataParts(connection, new PublicKey(programData)),
-    fetchMetadata(connection, program),
-    fetchVerifiedBuild(connection, program.toBase58()),
-  ])
-  return { loader, programData, ...programDataParts, metadata, verifiedBuild }
-}
+type ProgramEntry = ProgramInfoParts & { id: string; elf?: ElfLocation }
 
-async function fetchLoaderV4Parts(
-  connection: Connection,
-  program: PublicKey,
-  data: Buffer,
-): Promise<ProgramInfoParts> {
-  const [securityTxt, metadata, verifiedBuild] = await Promise.all([
-    fetchSecurityTxt(
-      connection,
-      program,
-      LOADER_V4_ELF_OFFSET,
-      data.subarray(LOADER_V4_ELF_OFFSET),
-    ),
-    fetchMetadata(connection, program),
-    fetchVerifiedBuild(connection, program.toBase58()),
-  ])
-  return {
-    loader: LOADER_V4_ID,
-    deploy: parseLoaderV4Header(data),
-    securityTxt,
-    metadata,
-    verifiedBuild,
-  }
-}
-
-async function loadProgramInfo(
-  connection: Connection,
-  programId: string,
-): Promise<ProgramInfo | undefined> {
-  const program = new PublicKey(programId)
-  const account = await fetchSlice(
-    connection,
-    program,
-    0,
-    LOADER_V4_ELF_OFFSET + ELF_HEADER_LENGTH,
-  )
-  if (account === null) {
-    console.warn(`Program account ${programId} not found`)
-    return undefined
-  }
+function toEntry(
+  id: string,
+  account: AccountInfo<Buffer>,
+  metadata: unknown,
+): ProgramEntry {
   const loader = account.owner.toBase58()
-  if (loader === BPF_LOADER_UPGRADEABLE_ID) {
-    return composeProgramInfo(
-      await fetchUpgradeableParts(connection, program, account.data),
-    )
-  }
   if (loader === LOADER_V4_ID) {
-    return composeProgramInfo(
-      await fetchLoaderV4Parts(connection, program, account.data),
-    )
+    return {
+      id,
+      loader,
+      metadata,
+      deploy: parseLoaderV4Header(account.data),
+      elf: {
+        account: new PublicKey(id),
+        offset: LOADER_V4_ELF_OFFSET,
+        header: account.data.subarray(LOADER_V4_ELF_OFFSET),
+      },
+    }
   }
-  return composeProgramInfo({ loader })
+  if (loader === BPF_LOADER_UPGRADEABLE_ID) {
+    return {
+      id,
+      loader,
+      metadata,
+      programData: parseProgramAccount(account.data),
+    }
+  }
+  return { id, loader, metadata }
 }
 
-/**
- * Loads program info once per programId; the promise never rejects.
- */
-export function getProgramInfo(
-  cache: ProgramInfoCache,
+async function loadProgramDataHeaders(
   connection: Connection,
-  programId: string,
-): Promise<ProgramInfo | undefined> {
-  let info = cache.get(programId)
-  if (info === undefined) {
-    info = loadProgramInfo(connection, programId).catch((e: unknown) => {
-      console.warn(`Cannot load program info of ${programId}`, e)
-      return undefined
-    })
-    cache.set(programId, info)
+  entries: ProgramEntry[],
+  deadline: AbortSignal,
+): Promise<ProgramEntry[]> {
+  const upgradeable = entries.flatMap(entry =>
+    entry.programData === undefined
+      ? []
+      : [{ entry, key: new PublicKey(entry.programData) }],
+  )
+  if (upgradeable.length === 0) {
+    return entries
   }
-  return info
+  const headers = await untilDeadline(
+    fetchAccounts(
+      connection,
+      upgradeable.map(u => u.key),
+      { offset: 0, length: PROGRAM_DATA_ELF_OFFSET + ELF_HEADER_LENGTH },
+    ),
+    deadline,
+    'programdata headers',
+  )
+  const withHeaders = new Map<ProgramEntry, ProgramEntry>()
+  upgradeable.forEach(({ entry, key }, i) => {
+    const head = headers?.[i]
+    if (head) {
+      withHeaders.set(entry, {
+        ...entry,
+        deploy: parseProgramDataHeader(head.data),
+        elf: {
+          account: key,
+          offset: PROGRAM_DATA_ELF_OFFSET,
+          header: head.data.subarray(PROGRAM_DATA_ELF_OFFSET),
+        },
+      })
+    }
+  })
+  return entries.map(entry => withHeaders.get(entry) ?? entry)
+}
+
+async function loadSecurityTxts(
+  connection: Connection,
+  entries: ProgramEntry[],
+  deadline: AbortSignal,
+): Promise<Map<string, Record<string, string> | undefined>> {
+  const result = new Map<string, Record<string, string> | undefined>()
+  const queue = entries.flatMap(({ id, elf }) =>
+    elf === undefined ? [] : [{ id, elf }],
+  )
+  const worker = async () => {
+    for (let next = queue.shift(); next; next = queue.shift()) {
+      const { id, elf } = next
+      const rodata = await untilDeadline(
+        fetchRodata(connection, elf.account, elf.offset, elf.header),
+        deadline,
+        `security.txt of ${id}`,
+      )
+      result.set(id, rodata && parseSecurityTxt(rodata))
+    }
+  }
+  await Promise.all(Array.from({ length: PROGRAM_INFO_CONCURRENCY }, worker))
+  return result
+}
+
+async function loadVerifiedBuilds(
+  connection: Connection,
+  entries: ProgramEntry[],
+  deadline: AbortSignal,
+): Promise<Map<string, VerifiedBuild | undefined>> {
+  const ids = entries
+    .filter(
+      ({ loader }) =>
+        loader === BPF_LOADER_UPGRADEABLE_ID || loader === LOADER_V4_ID,
+    )
+    .map(({ id }) => id)
+  const builds = await Promise.all(
+    ids.map(id =>
+      untilDeadline(
+        fetchVerifiedBuild(connection, id),
+        deadline,
+        `OtterSec verified build of ${id}`,
+      ),
+    ),
+  )
+  return new Map(ids.map((id, i) => [id, builds[i]]))
 }
 
 /**
- * Loads program info of each distinct programId, at most `concurrency` programs at a time.
+ * Loads program info of each distinct programId with batched account reads.
+ * Whatever is not loaded when `deadline` aborts is left out; a program with no info maps to undefined.
  */
 export async function getProgramInfos(
   connection: Connection,
   programIds: string[],
-  concurrency = PROGRAM_INFO_CONCURRENCY,
+  deadline: AbortSignal,
 ): Promise<Map<string, ProgramInfo | undefined>> {
-  const cache: ProgramInfoCache = new Map()
-  const queue = [...new Set(programIds)]
-  const worker = async () => {
-    for (let id = queue.shift(); id !== undefined; id = queue.shift()) {
-      await getProgramInfo(cache, connection, id)
+  const ids = [...new Set(programIds)]
+  const infos = new Map<string, ProgramInfo | undefined>(
+    ids.map(id => [id, undefined]),
+  )
+  const programs = ids.flatMap(id => {
+    try {
+      return [{ id, key: new PublicKey(id) }]
+    } catch (e) {
+      console.warn(`Invalid program id ${id}`, e)
+      return []
     }
+  })
+  const keys = programs.map(p => p.key)
+  const [accounts, metadataAccounts] = await Promise.all([
+    untilDeadline(
+      fetchAccounts(connection, keys, {
+        offset: 0,
+        length: LOADER_V4_ELF_OFFSET + ELF_HEADER_LENGTH,
+      }),
+      deadline,
+      'program accounts',
+    ),
+    untilDeadline(
+      fetchAccounts(
+        connection,
+        keys.map(key => programMetadataAddress(key, 'security')),
+      ),
+      deadline,
+      'Program Metadata security accounts',
+    ),
+  ])
+  if (accounts === undefined) {
+    return infos
   }
-  await Promise.all(Array.from({ length: concurrency }, worker))
-  const infos = new Map<string, ProgramInfo | undefined>()
-  for (const [id, info] of cache) {
-    infos.set(id, await info)
+  const entries = programs.flatMap(({ id }, i) => {
+    const account = accounts[i]
+    if (account === null) {
+      console.warn(`Program account ${id} not found`)
+      return []
+    }
+    return [toEntry(id, account, decodeMetadata(metadataAccounts?.[i]))]
+  })
+  const [[withHeaders, securityTxts], verifiedBuilds] = await Promise.all([
+    loadProgramDataHeaders(connection, entries, deadline).then(
+      async loaded =>
+        [loaded, await loadSecurityTxts(connection, loaded, deadline)] as const,
+    ),
+    loadVerifiedBuilds(connection, entries, deadline),
+  ])
+  for (const entry of withHeaders) {
+    infos.set(
+      entry.id,
+      composeProgramInfo({
+        loader: entry.loader,
+        programData: entry.programData,
+        deploy: entry.deploy,
+        securityTxt: securityTxts.get(entry.id),
+        metadata: entry.metadata,
+        verifiedBuild: verifiedBuilds.get(entry.id),
+      }),
+    )
   }
   return infos
 }

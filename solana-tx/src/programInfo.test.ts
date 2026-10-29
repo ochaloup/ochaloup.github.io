@@ -11,7 +11,6 @@ import {
   composeProgramInfo,
   decodeProgramMetadata,
   findSection,
-  getProgramInfo,
   getProgramInfos,
   parseElfHeader,
   parseLoaderV4Header,
@@ -483,40 +482,79 @@ test('composeProgramInfo keeps on-chain facts over security.txt', () => {
 type FakeAccount = { owner: string; data: Buffer }
 type FetchMock = { mock: { callCount: () => number } }
 type DataSlice = { offset: number; length: number }
-type Call = { pubkey: string; dataSlice?: DataSlice }
+type Call = {
+  method: 'getAccountInfo' | 'getMultipleAccountsInfo'
+  pubkeys: string[]
+  dataSlice?: DataSlice
+}
 
 const MAINNET_GENESIS_HASH = '5eykt4UsFv8P8NJdTREpY1vzqKqZKvdpKuc147dw2N9d'
+const NO_DEADLINE = new AbortController().signal
+
+function sleep(ms: number): Promise<void> {
+  return new Promise(resolve => {
+    setTimeout(resolve, ms)
+  })
+}
 
 function fakeConnection(
   accounts: Map<string, FakeAccount>,
-  genesisHash = MAINNET_GENESIS_HASH,
+  { genesisHash = MAINNET_GENESIS_HASH, singleDelayMs = 0 } = {},
 ) {
   const calls: Call[] = []
+  const stats = { inFlight: 0, maxInFlight: 0 }
+  const read = (pubkey: PublicKey, dataSlice?: DataSlice) => {
+    const account = accounts.get(pubkey.toBase58())
+    if (account === undefined) {
+      return null
+    }
+    const data = dataSlice
+      ? account.data.subarray(
+          Math.min(dataSlice.offset, account.data.length),
+          dataSlice.offset + dataSlice.length,
+        )
+      : account.data
+    return {
+      owner: new PublicKey(account.owner),
+      data,
+      executable: false,
+      lamports: 0,
+    }
+  }
   const connection = {
     getGenesisHash: () => Promise.resolve(genesisHash),
-    getAccountInfo: (pubkey: PublicKey, config?: { dataSlice?: DataSlice }) => {
-      const key = pubkey.toBase58()
-      calls.push({ pubkey: key, dataSlice: config?.dataSlice })
-      const account = accounts.get(key)
-      if (account === undefined) {
-        return Promise.resolve(null)
-      }
-      const slice = config?.dataSlice
-      const data = slice
-        ? account.data.subarray(
-            Math.min(slice.offset, account.data.length),
-            slice.offset + slice.length,
-          )
-        : account.data
-      return Promise.resolve({
-        owner: new PublicKey(account.owner),
-        data,
-        executable: false,
-        lamports: 0,
+    getAccountInfo: async (
+      pubkey: PublicKey,
+      config?: { dataSlice?: DataSlice },
+    ) => {
+      calls.push({
+        method: 'getAccountInfo',
+        pubkeys: [pubkey.toBase58()],
+        dataSlice: config?.dataSlice,
       })
+      stats.inFlight++
+      stats.maxInFlight = Math.max(stats.maxInFlight, stats.inFlight)
+      await sleep(singleDelayMs)
+      stats.inFlight--
+      return read(pubkey, config?.dataSlice)
+    },
+    getMultipleAccountsInfo: (
+      pubkeys: PublicKey[],
+      config?: { dataSlice?: DataSlice },
+    ) => {
+      calls.push({
+        method: 'getMultipleAccountsInfo',
+        pubkeys: pubkeys.map(k => k.toBase58()),
+        dataSlice: config?.dataSlice,
+      })
+      return Promise.resolve(pubkeys.map(k => read(k, config?.dataSlice)))
     },
   } as unknown as Connection
-  return { connection, calls }
+  return { connection, calls, stats }
+}
+
+async function loadOne(connection: Connection, id: string) {
+  return (await getProgramInfos(connection, [id], NO_DEADLINE)).get(id)
 }
 
 function key(n: number): PublicKey {
@@ -588,16 +626,17 @@ const DEPLOYED = {
   lastDeploySlot: 433290841,
 }
 
-test('getProgramInfo reads an upgradeable program with small slices', async t => {
+function singleCalls(calls: Call[], account: PublicKey) {
+  return calls.filter(
+    c => c.method === 'getAccountInfo' && c.pubkeys[0] === account.toBase58(),
+  )
+}
+
+test('getProgramInfos reads an upgradeable program with small slices', async t => {
   t.after(() => mock.restoreAll())
   stubFetch(200, OTTERSEC_STATUS)
   const { connection, calls } = fakeConnection(ACCOUNTS)
-  const info = await getProgramInfo(
-    new Map(),
-    connection,
-    UPGRADEABLE.toBase58(),
-  )
-  assert.deepEqual(plain(info), {
+  assert.deepEqual(plain(await loadOne(connection, UPGRADEABLE.toBase58())), {
     name: 'Fixture',
     loader: BPF_LOADER_UPGRADEABLE_ID,
     programData: UPGRADEABLE_DATA.toBase58(),
@@ -608,165 +647,148 @@ test('getProgramInfo reads an upgradeable program with small slices', async t =>
   })
   assert.equal(calls.length, 6)
   assert.deepEqual(
-    calls.filter(c => c.dataSlice === undefined).map(c => c.pubkey),
-    [programMetadataAddress(UPGRADEABLE, 'security').toBase58()],
-  )
-  const programDataCalls = calls.filter(
-    c => c.pubkey === UPGRADEABLE_DATA.toBase58(),
+    calls.filter(c => c.dataSlice === undefined).map(c => c.pubkeys),
+    [[programMetadataAddress(UPGRADEABLE, 'security').toBase58()]],
   )
   assert.deepEqual(
-    programDataCalls.map(c => c.dataSlice?.offset),
+    calls
+      .filter(c => c.pubkeys.includes(UPGRADEABLE_DATA.toBase58()))
+      .map(c => c.dataSlice?.offset),
     [0, 45 + SHOFF, 45 + SHSTRTAB_OFFSET, 45 + RODATA_OFFSET],
   )
-  assert.ok(programDataCalls.every(c => (c.dataSlice?.length ?? 0) < 4096))
+  assert.ok(calls.every(c => (c.dataSlice?.length ?? 0) < 4096))
 })
 
-test('getProgramInfo skips OtterSec outside mainnet', async t => {
+test('getProgramInfos skips OtterSec outside mainnet', async t => {
   t.after(() => mock.restoreAll())
   stubFetch(200, OTTERSEC_STATUS)
-  const { connection } = fakeConnection(
-    ACCOUNTS,
-    'EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG',
-  )
-  const info = await getProgramInfo(
-    new Map(),
-    connection,
-    UPGRADEABLE.toBase58(),
-  )
+  const { connection } = fakeConnection(ACCOUNTS, {
+    genesisHash: 'EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG',
+  })
+  const info = await loadOne(connection, UPGRADEABLE.toBase58())
   assert.equal(info?.verifiedBuild, undefined)
   assert.equal(info?.name, 'Fixture')
   assert.equal((globalThis.fetch as unknown as FetchMock).mock.callCount(), 0)
 })
 
-test('getProgramInfo reads a loader-v4 program from its own account', async t => {
+test('getProgramInfos reads a loader-v4 program from its own account', async t => {
   t.after(() => mock.restoreAll())
   stubFetch(404)
   const { connection, calls } = fakeConnection(ACCOUNTS)
-  assert.deepEqual(
-    plain(await getProgramInfo(new Map(), connection, V4.toBase58())),
-    {
-      name: 'Fixture',
-      loader: LOADER_V4_ID,
-      upgradeAuthority: AUTHORITY.toBase58(),
-      lastDeploySlot: 7,
-      projectUrl: 'https://x',
-    },
-  )
+  assert.deepEqual(plain(await loadOne(connection, V4.toBase58())), {
+    name: 'Fixture',
+    loader: LOADER_V4_ID,
+    upgradeAuthority: AUTHORITY.toBase58(),
+    lastDeploySlot: 7,
+    projectUrl: 'https://x',
+  })
   assert.equal(calls.length, 5)
   assert.deepEqual(
-    calls.filter(c => c.pubkey === V4.toBase58()).map(c => c.dataSlice?.offset),
-    [0, 48 + SHOFF, 48 + SHSTRTAB_OFFSET, 48 + RODATA_OFFSET],
+    singleCalls(calls, V4).map(c => c.dataSlice?.offset),
+    [48 + SHOFF, 48 + SHSTRTAB_OFFSET, 48 + RODATA_OFFSET],
   )
-  const finalized = await getProgramInfo(
-    new Map(),
-    connection,
-    V4_FINAL.toBase58(),
-  )
+  const finalized = await loadOne(connection, V4_FINAL.toBase58())
   assert.equal(finalized?.upgradeAuthority, null)
 })
 
-test('getProgramInfo keeps deploy info without security.txt', async t => {
+test('getProgramInfos keeps deploy info without security.txt', async t => {
   t.after(() => mock.restoreAll())
   stubFetch(404)
   const { connection, calls } = fakeConnection(ACCOUNTS)
-  assert.deepEqual(
-    plain(await getProgramInfo(new Map(), connection, NO_RODATA.toBase58())),
-    {
-      loader: BPF_LOADER_UPGRADEABLE_ID,
-      programData: NO_RODATA_DATA.toBase58(),
-      ...DEPLOYED,
-    },
-  )
+  assert.deepEqual(plain(await loadOne(connection, NO_RODATA.toBase58())), {
+    loader: BPF_LOADER_UPGRADEABLE_ID,
+    programData: NO_RODATA_DATA.toBase58(),
+    ...DEPLOYED,
+  })
   assert.equal(calls.length, 5)
-  assert.deepEqual(
-    plain(await getProgramInfo(new Map(), connection, TRUNCATED.toBase58())),
-    {
-      loader: BPF_LOADER_UPGRADEABLE_ID,
-      programData: TRUNCATED_DATA.toBase58(),
-      ...DEPLOYED,
-    },
-  )
+  assert.deepEqual(plain(await loadOne(connection, TRUNCATED.toBase58())), {
+    loader: BPF_LOADER_UPGRADEABLE_ID,
+    programData: TRUNCATED_DATA.toBase58(),
+    ...DEPLOYED,
+  })
 })
 
-test('getProgramInfo shows only the loader of other programs', async t => {
+test('getProgramInfos shows only the loader of other programs', async t => {
   t.after(() => mock.restoreAll())
   stubFetch(404)
   const { connection, calls } = fakeConnection(ACCOUNTS)
-  assert.deepEqual(
-    plain(await getProgramInfo(new Map(), connection, TOKEN.toBase58())),
-    { loader: TOKEN_LOADER },
-  )
-  assert.equal(calls.length, 1)
+  assert.deepEqual(plain(await loadOne(connection, TOKEN.toBase58())), {
+    loader: TOKEN_LOADER,
+  })
+  assert.equal(calls.length, 2)
 })
 
-test('getProgramInfo caches per programId and never rejects', async t => {
+test('getProgramInfos batches account reads and walks one ELF at a time', async t => {
   t.after(() => mock.restoreAll())
   stubFetch(404)
-  const { connection, calls } = fakeConnection(ACCOUNTS)
-  const cache = new Map()
-  const first = getProgramInfo(cache, connection, UPGRADEABLE.toBase58())
-  const second = getProgramInfo(cache, connection, UPGRADEABLE.toBase58())
-  assert.equal(first, second)
-  await first
-  assert.equal(calls.length, 6)
-
-  assert.equal(
-    await getProgramInfo(new Map(), connection, key(42).toBase58()),
-    undefined,
-  )
-  assert.equal(
-    await getProgramInfo(new Map(), connection, 'not-a-key'),
-    undefined,
-  )
-  const failing = {
-    getAccountInfo: () => Promise.reject(new Error('rpc down')),
-  } as unknown as Connection
-  assert.equal(
-    await getProgramInfo(new Map(), failing, UPGRADEABLE.toBase58()),
-    undefined,
-  )
-})
-
-test('getProgramInfos loads each program once, two programs at a time', async t => {
-  t.after(() => mock.restoreAll())
-  stubFetch(404)
-  const { connection, calls } = fakeConnection(ACCOUNTS)
-  let inFlight = 0
-  let maxInFlight = 0
-  const slow = {
-    getGenesisHash: () => connection.getGenesisHash(),
-    getAccountInfo: async (
-      pubkey: PublicKey,
-      config?: { dataSlice?: DataSlice },
-    ) => {
-      const programRead = config?.dataSlice?.length === 112
-      if (programRead) {
-        inFlight++
-        maxInFlight = Math.max(maxInFlight, inFlight)
-      }
-      await new Promise(resolve => {
-        setTimeout(resolve, 5)
-      })
-      if (programRead) {
-        inFlight--
-      }
-      return connection.getAccountInfo(pubkey, config)
-    },
-  } as unknown as Connection
+  const { connection, calls, stats } = fakeConnection(ACCOUNTS, {
+    singleDelayMs: 5,
+  })
   const ids = [UPGRADEABLE, V4, TOKEN, NO_RODATA, UPGRADEABLE, key(42)].map(k =>
     k.toBase58(),
   )
-  const infos = await getProgramInfos(slow, ids, 2)
+  const infos = await getProgramInfos(
+    connection,
+    [...ids, 'not-a-key'],
+    NO_DEADLINE,
+  )
 
-  assert.equal(maxInFlight, 2)
-  assert.equal(infos.size, 5)
+  assert.equal(infos.size, 6)
   assert.equal(infos.get(UPGRADEABLE.toBase58())?.name, 'Fixture')
+  assert.equal(infos.get(V4.toBase58())?.name, 'Fixture')
   assert.deepEqual(plain(infos.get(TOKEN.toBase58())), { loader: TOKEN_LOADER })
   assert.equal(infos.get(key(42).toBase58()), undefined)
-  assert.equal(
-    calls.filter(
-      c => c.pubkey === UPGRADEABLE.toBase58() && c.dataSlice?.length === 112,
-    ).length,
-    1,
+  assert.equal(infos.get('not-a-key'), undefined)
+  const batches = calls.filter(c => c.method === 'getMultipleAccountsInfo')
+  assert.deepEqual(
+    batches.map(c => c.pubkeys.length),
+    [5, 5, 2],
   )
+  assert.deepEqual(batches[2].pubkeys, [
+    UPGRADEABLE_DATA.toBase58(),
+    NO_RODATA_DATA.toBase58(),
+  ])
+  assert.equal(stats.maxInFlight, 1)
+})
+
+test('getProgramInfos stops at the deadline and keeps what it has', async t => {
+  t.after(() => mock.restoreAll())
+  stubFetch(404)
+  const { connection } = fakeConnection(ACCOUNTS, { singleDelayMs: 300 })
+  const started = Date.now()
+  const info = (
+    await getProgramInfos(
+      connection,
+      [UPGRADEABLE.toBase58()],
+      AbortSignal.timeout(50),
+    )
+  ).get(UPGRADEABLE.toBase58())
+  assert.ok(Date.now() - started < 250)
+  assert.deepEqual(plain(info), {
+    loader: BPF_LOADER_UPGRADEABLE_ID,
+    programData: UPGRADEABLE_DATA.toBase58(),
+    ...DEPLOYED,
+    metadata: { name: 'Meta' },
+  })
+
+  const aborted = new AbortController()
+  aborted.abort()
+  const none = await getProgramInfos(
+    connection,
+    [UPGRADEABLE.toBase58()],
+    aborted.signal,
+  )
+  assert.equal(none.get(UPGRADEABLE.toBase58()), undefined)
+})
+
+test('getProgramInfos never rejects', async () => {
+  const failing = {
+    getMultipleAccountsInfo: () => Promise.reject(new Error('rpc down')),
+  } as unknown as Connection
+  const infos = await getProgramInfos(
+    failing,
+    [UPGRADEABLE.toBase58()],
+    NO_DEADLINE,
+  )
+  assert.equal(infos.get(UPGRADEABLE.toBase58()), undefined)
 })
