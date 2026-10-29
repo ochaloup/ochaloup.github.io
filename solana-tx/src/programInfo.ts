@@ -12,11 +12,18 @@ export const LOADER_V4_ELF_OFFSET = 48
 const LOADER_V4_FINALIZED = 2
 const SECURITY_TXT_BEGIN = '=======BEGIN SECURITY.TXT V1=======\0'
 const SECURITY_TXT_END = '=======END SECURITY.TXT V1=======\0'
+const ELF_HEADER_LENGTH = 64
+const SECTION_HEADER_LENGTH = 64
+const ELF_MAGIC = '\x7fELF'
 
 export type DeployInfo = {
   lastDeploySlot: number
   upgradeAuthority: string | null
 }
+
+export type ElfHeader = { shoff: number; shnum: number; shstrndx: number }
+
+export type SectionHeader = { nameOffset: number; offset: number; size: number }
 
 function toBuffer(data: Uint8Array): Buffer {
   return Buffer.from(data.buffer, data.byteOffset, data.byteLength)
@@ -62,6 +69,61 @@ export function parseLoaderV4Header(data: Uint8Array): DeployInfo | undefined {
         ? null
         : base58.encode(buf.subarray(8, 40)),
   }
+}
+
+export function parseElfHeader(data: Uint8Array): ElfHeader | undefined {
+  const buf = toBuffer(data)
+  if (
+    buf.length < ELF_HEADER_LENGTH ||
+    buf.toString('latin1', 0, 4) !== ELF_MAGIC ||
+    buf[4] !== 2 ||
+    buf[5] !== 1 ||
+    buf.readUInt16LE(0x3a) !== SECTION_HEADER_LENGTH
+  ) {
+    return undefined
+  }
+  const shnum = buf.readUInt16LE(0x3c)
+  const shstrndx = buf.readUInt16LE(0x3e)
+  if (shnum === 0 || shstrndx >= shnum) {
+    return undefined
+  }
+  return { shoff: Number(buf.readBigUInt64LE(0x28)), shnum, shstrndx }
+}
+
+export function parseSectionHeaders(
+  data: Uint8Array,
+  shnum: number,
+): SectionHeader[] | undefined {
+  const buf = toBuffer(data)
+  if (buf.length < shnum * SECTION_HEADER_LENGTH) {
+    return undefined
+  }
+  return Array.from({ length: shnum }, (_, i) => {
+    const at = i * SECTION_HEADER_LENGTH
+    return {
+      nameOffset: buf.readUInt32LE(at),
+      offset: Number(buf.readBigUInt64LE(at + 0x18)),
+      size: Number(buf.readBigUInt64LE(at + 0x20)),
+    }
+  })
+}
+
+export function findSection(
+  sections: SectionHeader[],
+  shstrtab: Uint8Array,
+  name: string,
+): SectionHeader | undefined {
+  const buf = toBuffer(shstrtab)
+  return sections.find(section => {
+    if (section.nameOffset >= buf.length) {
+      return false
+    }
+    const end = buf.indexOf(0, section.nameOffset)
+    return (
+      buf.toString('latin1', section.nameOffset, end < 0 ? buf.length : end) ===
+      name
+    )
+  })
 }
 
 export function parseSecurityTxt(
