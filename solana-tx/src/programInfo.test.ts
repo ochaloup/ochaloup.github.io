@@ -1,13 +1,17 @@
 import assert from 'node:assert/strict'
-import { test } from 'node:test'
+import { mock, test } from 'node:test'
 
 import { PublicKey } from '@solana/web3.js'
 import base58 from 'bs58'
 import { deflate } from 'pako'
 
 import {
+  BPF_LOADER_UPGRADEABLE_ID,
+  LOADER_V4_ID,
+  composeProgramInfo,
   decodeProgramMetadata,
   findSection,
+  getProgramInfo,
   parseElfHeader,
   parseLoaderV4Header,
   parseProgramAccount,
@@ -15,7 +19,10 @@ import {
   parseSectionHeaders,
   parseSecurityTxt,
   programMetadataAddress,
+  toVerifiedBuild,
 } from './programInfo.ts'
+
+import type { Connection } from '@solana/web3.js'
 
 const PROGRAM_DATA = new PublicKey(
   '4PQH9YmfuKrVyZaibkLYpJZPv2FPaybhq2GAuBcWMSBf',
@@ -361,6 +368,274 @@ test('parseLoaderV4Header rejects unknown status and short data', () => {
   assert.equal(parseLoaderV4Header(loaderV4Header(1, 3)), undefined)
   assert.equal(
     parseLoaderV4Header(loaderV4Header(1, 1).subarray(0, 47)),
+    undefined,
+  )
+})
+
+const OTTERSEC_STATUS = {
+  is_verified: true,
+  message: 'On chain program verified',
+  on_chain_hash: 'aa',
+  executable_hash: 'aa',
+  repo_url: 'https://github.com/x/y',
+  commit: '',
+  last_verified_at: '2024-01-26T07:53:47',
+  is_frozen: false,
+  is_closed: false,
+}
+
+test('toVerifiedBuild maps OtterSec status', () => {
+  assert.deepEqual(toVerifiedBuild(OTTERSEC_STATUS), {
+    isVerified: true,
+    repoUrl: 'https://github.com/x/y',
+    lastVerifiedAt: '2024-01-26T07:53:47',
+    message: 'On chain program verified',
+  })
+  assert.equal(toVerifiedBuild('nope'), undefined)
+  assert.equal(toVerifiedBuild({ is_verified: 'yes' }), undefined)
+})
+
+test('composeProgramInfo orders keys and drops missing parts', () => {
+  const info = composeProgramInfo({
+    loader: BPF_LOADER_UPGRADEABLE_ID,
+    programData: PROGRAM_DATA.toBase58(),
+    deploy: { lastDeploySlot: 1, upgradeAuthority: null },
+    securityTxt: { name: 'X', projectUrl: 'https://x' },
+    metadata: { name: 'M' },
+    verifiedBuild: { isVerified: false },
+  })
+  assert.deepEqual(Object.keys(info), [
+    'name',
+    'loader',
+    'programData',
+    'upgradeAuthority',
+    'lastDeploySlot',
+    'projectUrl',
+    'metadata',
+    'verifiedBuild',
+  ])
+  assert.equal(info.upgradeAuthority, null)
+  assert.deepEqual(composeProgramInfo({ loader: LOADER_V4_ID }), {
+    loader: LOADER_V4_ID,
+  })
+})
+
+type FakeAccount = { owner: string; data: Buffer }
+type DataSlice = { offset: number; length: number }
+type Call = { pubkey: string; dataSlice?: DataSlice }
+
+function fakeConnection(accounts: Map<string, FakeAccount>) {
+  const calls: Call[] = []
+  const connection = {
+    getAccountInfo: (pubkey: PublicKey, config?: { dataSlice?: DataSlice }) => {
+      const key = pubkey.toBase58()
+      calls.push({ pubkey: key, dataSlice: config?.dataSlice })
+      const account = accounts.get(key)
+      if (account === undefined) {
+        return Promise.resolve(null)
+      }
+      const slice = config?.dataSlice
+      const data = slice
+        ? account.data.subarray(
+            Math.min(slice.offset, account.data.length),
+            slice.offset + slice.length,
+          )
+        : account.data
+      return Promise.resolve({
+        owner: new PublicKey(account.owner),
+        data,
+        executable: false,
+        lamports: 0,
+      })
+    },
+  } as unknown as Connection
+  return { connection, calls }
+}
+
+function key(n: number): PublicKey {
+  return new PublicKey(Buffer.alloc(32, n))
+}
+
+function stubFetch(status: number, body: unknown = null) {
+  mock.method(globalThis, 'fetch', () =>
+    Promise.resolve(new Response(JSON.stringify(body), { status })),
+  )
+}
+
+const ELF = buildElf([FIXTURE_TEXT, FIXTURE_RODATA])
+const RODATA_OFFSET = 64 + 4096
+const SHSTRTAB_OFFSET = RODATA_OFFSET + FIXTURE_RODATA.body.length
+const SHOFF = SHSTRTAB_OFFSET + FIXTURE_SHSTRTAB_LENGTH
+const TOKEN_LOADER = 'BPFLoader2111111111111111111111111111111111'
+const UPGRADEABLE = key(1)
+const UPGRADEABLE_DATA = key(2)
+const V4 = key(3)
+const V4_FINAL = key(4)
+const NO_RODATA = key(5)
+const NO_RODATA_DATA = key(6)
+const TRUNCATED = key(7)
+const TRUNCATED_DATA = key(8)
+const TOKEN = key(9)
+
+function programAccount(programData: PublicKey): FakeAccount {
+  return {
+    owner: BPF_LOADER_UPGRADEABLE_ID,
+    data: Buffer.concat([u32le(2), programData.toBuffer()]),
+  }
+}
+
+function programDataAccount(elf: Buffer): FakeAccount {
+  return {
+    owner: BPF_LOADER_UPGRADEABLE_ID,
+    data: Buffer.concat([programDataHeader(1), elf]),
+  }
+}
+
+const ACCOUNTS = new Map<string, FakeAccount>([
+  [UPGRADEABLE.toBase58(), programAccount(UPGRADEABLE_DATA)],
+  [UPGRADEABLE_DATA.toBase58(), programDataAccount(ELF)],
+  [
+    programMetadataAddress(UPGRADEABLE, 'security').toBase58(),
+    {
+      owner: 'ProgM6JCCvbYkfKqJYHePx4xxSUSqJp7rh8Lyv7nk7S',
+      data: pmpAccount(Buffer.from('{"name":"Meta"}')),
+    },
+  ],
+  [
+    V4.toBase58(),
+    { owner: LOADER_V4_ID, data: Buffer.concat([loaderV4Header(7, 1), ELF]) },
+  ],
+  [
+    V4_FINAL.toBase58(),
+    { owner: LOADER_V4_ID, data: Buffer.concat([loaderV4Header(7, 2), ELF]) },
+  ],
+  [NO_RODATA.toBase58(), programAccount(NO_RODATA_DATA)],
+  [NO_RODATA_DATA.toBase58(), programDataAccount(buildElf([FIXTURE_TEXT]))],
+  [TRUNCATED.toBase58(), programAccount(TRUNCATED_DATA)],
+  [TRUNCATED_DATA.toBase58(), programDataAccount(ELF.subarray(0, SHOFF + 10))],
+  [TOKEN.toBase58(), { owner: TOKEN_LOADER, data: Buffer.alloc(10) }],
+])
+
+const DEPLOYED = {
+  upgradeAuthority: AUTHORITY.toBase58(),
+  lastDeploySlot: 433290841,
+}
+
+test('getProgramInfo reads an upgradeable program with small slices', async t => {
+  t.after(() => mock.restoreAll())
+  stubFetch(200, OTTERSEC_STATUS)
+  const { connection, calls } = fakeConnection(ACCOUNTS)
+  const info = await getProgramInfo(
+    new Map(),
+    connection,
+    UPGRADEABLE.toBase58(),
+  )
+  assert.deepEqual(info, {
+    name: 'Fixture',
+    loader: BPF_LOADER_UPGRADEABLE_ID,
+    programData: UPGRADEABLE_DATA.toBase58(),
+    ...DEPLOYED,
+    projectUrl: 'https://x',
+    metadata: { name: 'Meta' },
+    verifiedBuild: toVerifiedBuild(OTTERSEC_STATUS),
+  })
+  assert.equal(calls.length, 6)
+  assert.deepEqual(
+    calls.filter(c => c.dataSlice === undefined).map(c => c.pubkey),
+    [programMetadataAddress(UPGRADEABLE, 'security').toBase58()],
+  )
+  const programDataCalls = calls.filter(
+    c => c.pubkey === UPGRADEABLE_DATA.toBase58(),
+  )
+  assert.deepEqual(
+    programDataCalls.map(c => c.dataSlice?.offset),
+    [0, 45 + SHOFF, 45 + SHSTRTAB_OFFSET, 45 + RODATA_OFFSET],
+  )
+  assert.ok(programDataCalls.every(c => (c.dataSlice?.length ?? 0) < 4096))
+})
+
+test('getProgramInfo reads a loader-v4 program from its own account', async t => {
+  t.after(() => mock.restoreAll())
+  stubFetch(404)
+  const { connection, calls } = fakeConnection(ACCOUNTS)
+  assert.deepEqual(await getProgramInfo(new Map(), connection, V4.toBase58()), {
+    name: 'Fixture',
+    loader: LOADER_V4_ID,
+    upgradeAuthority: AUTHORITY.toBase58(),
+    lastDeploySlot: 7,
+    projectUrl: 'https://x',
+  })
+  assert.equal(calls.length, 5)
+  assert.deepEqual(
+    calls.filter(c => c.pubkey === V4.toBase58()).map(c => c.dataSlice?.offset),
+    [0, 48 + SHOFF, 48 + SHSTRTAB_OFFSET, 48 + RODATA_OFFSET],
+  )
+  const finalized = await getProgramInfo(
+    new Map(),
+    connection,
+    V4_FINAL.toBase58(),
+  )
+  assert.equal(finalized?.upgradeAuthority, null)
+})
+
+test('getProgramInfo keeps deploy info without security.txt', async t => {
+  t.after(() => mock.restoreAll())
+  stubFetch(404)
+  const { connection, calls } = fakeConnection(ACCOUNTS)
+  assert.deepEqual(
+    await getProgramInfo(new Map(), connection, NO_RODATA.toBase58()),
+    {
+      loader: BPF_LOADER_UPGRADEABLE_ID,
+      programData: NO_RODATA_DATA.toBase58(),
+      ...DEPLOYED,
+    },
+  )
+  assert.equal(calls.length, 5)
+  assert.deepEqual(
+    await getProgramInfo(new Map(), connection, TRUNCATED.toBase58()),
+    {
+      loader: BPF_LOADER_UPGRADEABLE_ID,
+      programData: TRUNCATED_DATA.toBase58(),
+      ...DEPLOYED,
+    },
+  )
+})
+
+test('getProgramInfo shows only the loader of other programs', async t => {
+  t.after(() => mock.restoreAll())
+  stubFetch(404)
+  const { connection, calls } = fakeConnection(ACCOUNTS)
+  assert.deepEqual(
+    await getProgramInfo(new Map(), connection, TOKEN.toBase58()),
+    { loader: TOKEN_LOADER },
+  )
+  assert.equal(calls.length, 1)
+})
+
+test('getProgramInfo caches per programId and never rejects', async t => {
+  t.after(() => mock.restoreAll())
+  stubFetch(404)
+  const { connection, calls } = fakeConnection(ACCOUNTS)
+  const cache = new Map()
+  const first = getProgramInfo(cache, connection, UPGRADEABLE.toBase58())
+  const second = getProgramInfo(cache, connection, UPGRADEABLE.toBase58())
+  assert.equal(first, second)
+  await first
+  assert.equal(calls.length, 6)
+
+  assert.equal(
+    await getProgramInfo(new Map(), connection, key(42).toBase58()),
+    undefined,
+  )
+  assert.equal(
+    await getProgramInfo(new Map(), connection, 'not-a-key'),
+    undefined,
+  )
+  const failing = {
+    getAccountInfo: () => Promise.reject(new Error('rpc down')),
+  } as unknown as Connection
+  assert.equal(
+    await getProgramInfo(new Map(), failing, UPGRADEABLE.toBase58()),
     undefined,
   )
 })

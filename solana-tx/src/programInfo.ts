@@ -2,6 +2,8 @@ import { PublicKey } from '@solana/web3.js'
 import base58 from 'bs58'
 import { inflate } from 'pako'
 
+import type { AccountInfo, Connection } from '@solana/web3.js'
+
 export const BPF_LOADER_UPGRADEABLE_ID =
   'BPFLoaderUpgradeab1e11111111111111111111111'
 export const LOADER_V4_ID = 'LoaderV411111111111111111111111111111111111'
@@ -21,10 +23,47 @@ const PMP_DATA_OFFSET = 96
 const PMP_ENCODING_BASE58 = 2
 const PMP_ENCODING_BASE64 = 3
 const PMP_DATA_SOURCE_EXTERNAL = 2
+const OTTERSEC_STATUS_URL = 'https://verify.osec.io/status/'
+const OTTERSEC_TIMEOUT_MS = 5000
+const OTTERSEC_FIELDS = [
+  ['repo_url', 'repoUrl'],
+  ['commit', 'commit'],
+  ['last_verified_at', 'lastVerifiedAt'],
+  ['message', 'message'],
+] as const
 
 export type DeployInfo = {
   lastDeploySlot: number
   upgradeAuthority: string | null
+}
+
+export type VerifiedBuild = {
+  isVerified: boolean
+  repoUrl?: string
+  commit?: string
+  lastVerifiedAt?: string
+  message?: string
+}
+
+export type ProgramInfo = {
+  name?: string
+  loader: string
+  programData?: string
+  upgradeAuthority?: string | null
+  lastDeploySlot?: number
+  metadata?: unknown
+  verifiedBuild?: VerifiedBuild
+} & Record<string, unknown>
+
+export type ProgramInfoCache = Map<string, Promise<ProgramInfo | undefined>>
+
+type ProgramInfoParts = {
+  loader: string
+  programData?: string
+  deploy?: DeployInfo
+  securityTxt?: Record<string, string>
+  metadata?: unknown
+  verifiedBuild?: VerifiedBuild
 }
 
 export type ElfHeader = { shoff: number; shnum: number; shstrndx: number }
@@ -200,4 +239,273 @@ export function parseSecurityTxt(
     fields[key] = parts[i + 1]
   }
   return fields
+}
+
+export function toVerifiedBuild(json: unknown): VerifiedBuild | undefined {
+  if (
+    typeof json !== 'object' ||
+    json === null ||
+    !('is_verified' in json) ||
+    typeof json.is_verified !== 'boolean'
+  ) {
+    return undefined
+  }
+  const result: VerifiedBuild = { isVerified: json.is_verified }
+  for (const [from, to] of OTTERSEC_FIELDS) {
+    const value: unknown = (json as Record<string, unknown>)[from]
+    if (typeof value === 'string' && value !== '') {
+      result[to] = value
+    }
+  }
+  return result
+}
+
+export function composeProgramInfo({
+  loader,
+  programData,
+  deploy,
+  securityTxt,
+  metadata,
+  verifiedBuild,
+}: ProgramInfoParts): ProgramInfo {
+  const { name, ...securityFields } = securityTxt ?? {}
+  const info = {
+    name,
+    loader,
+    programData,
+    upgradeAuthority: deploy?.upgradeAuthority,
+    lastDeploySlot: deploy?.lastDeploySlot,
+    ...securityFields,
+    metadata,
+    verifiedBuild,
+  }
+  return Object.fromEntries(
+    Object.entries(info).filter(([, value]) => value !== undefined),
+  ) as ProgramInfo
+}
+
+export function fetchSlice(
+  connection: Connection,
+  account: PublicKey,
+  offset: number,
+  length: number,
+): Promise<AccountInfo<Buffer> | null> {
+  return connection.getAccountInfo(account, { dataSlice: { offset, length } })
+}
+
+export async function fetchRodata(
+  connection: Connection,
+  account: PublicKey,
+  elfOffset: number,
+  elfHeader: Uint8Array,
+): Promise<Uint8Array | undefined> {
+  const elf = parseElfHeader(elfHeader)
+  if (!elf) {
+    return undefined
+  }
+  const table = await fetchSlice(
+    connection,
+    account,
+    elfOffset + elf.shoff,
+    elf.shnum * SECTION_HEADER_LENGTH,
+  )
+  const sections = table && parseSectionHeaders(table.data, elf.shnum)
+  if (!sections) {
+    return undefined
+  }
+  const strtab = sections[elf.shstrndx]
+  const shstrtab = await fetchSlice(
+    connection,
+    account,
+    elfOffset + strtab.offset,
+    strtab.size,
+  )
+  const rodata = shstrtab && findSection(sections, shstrtab.data, '.rodata')
+  if (!rodata) {
+    return undefined
+  }
+  const body = await fetchSlice(
+    connection,
+    account,
+    elfOffset + rodata.offset,
+    rodata.size,
+  )
+  return body?.data
+}
+
+export async function fetchVerifiedBuild(
+  programId: string,
+): Promise<VerifiedBuild | undefined> {
+  try {
+    const res = await fetch(OTTERSEC_STATUS_URL + programId, {
+      signal: AbortSignal.timeout(OTTERSEC_TIMEOUT_MS),
+    })
+    if (!res.ok) {
+      return undefined
+    }
+    return toVerifiedBuild(await res.json())
+  } catch (e) {
+    console.warn(`Cannot load OtterSec verified build of ${programId}`, e)
+    return undefined
+  }
+}
+
+async function orUndefined<T>(
+  promise: Promise<T>,
+  what: string,
+): Promise<T | undefined> {
+  try {
+    return await promise
+  } catch (e) {
+    console.warn(`Cannot load ${what}`, e)
+    return undefined
+  }
+}
+
+async function fetchSecurityTxt(
+  connection: Connection,
+  account: PublicKey,
+  elfOffset: number,
+  elfHeader: Uint8Array,
+): Promise<Record<string, string> | undefined> {
+  const rodata = await orUndefined(
+    fetchRodata(connection, account, elfOffset, elfHeader),
+    `security.txt of ${account.toBase58()}`,
+  )
+  return rodata && parseSecurityTxt(rodata)
+}
+
+async function fetchMetadata(
+  connection: Connection,
+  program: PublicKey,
+): Promise<unknown> {
+  const account = await orUndefined(
+    connection.getAccountInfo(programMetadataAddress(program, 'security')),
+    `Program Metadata security of ${program.toBase58()}`,
+  )
+  const text = account && decodeProgramMetadata(account.data)
+  if (text === undefined || text === null) {
+    return undefined
+  }
+  try {
+    return JSON.parse(text) as unknown
+  } catch {
+    return text
+  }
+}
+
+async function fetchProgramDataParts(
+  connection: Connection,
+  programData: PublicKey,
+): Promise<Pick<ProgramInfoParts, 'deploy' | 'securityTxt'>> {
+  const head = await orUndefined(
+    fetchSlice(
+      connection,
+      programData,
+      0,
+      PROGRAM_DATA_ELF_OFFSET + ELF_HEADER_LENGTH,
+    ),
+    `programdata ${programData.toBase58()}`,
+  )
+  if (!head) {
+    return {}
+  }
+  return {
+    deploy: parseProgramDataHeader(head.data),
+    securityTxt: await fetchSecurityTxt(
+      connection,
+      programData,
+      PROGRAM_DATA_ELF_OFFSET,
+      head.data.subarray(PROGRAM_DATA_ELF_OFFSET),
+    ),
+  }
+}
+
+async function fetchUpgradeableParts(
+  connection: Connection,
+  program: PublicKey,
+  data: Buffer,
+): Promise<ProgramInfoParts> {
+  const loader = BPF_LOADER_UPGRADEABLE_ID
+  const programData = parseProgramAccount(data)
+  if (programData === undefined) {
+    return { loader }
+  }
+  const [programDataParts, metadata, verifiedBuild] = await Promise.all([
+    fetchProgramDataParts(connection, new PublicKey(programData)),
+    fetchMetadata(connection, program),
+    fetchVerifiedBuild(program.toBase58()),
+  ])
+  return { loader, programData, ...programDataParts, metadata, verifiedBuild }
+}
+
+async function fetchLoaderV4Parts(
+  connection: Connection,
+  program: PublicKey,
+  data: Buffer,
+): Promise<ProgramInfoParts> {
+  const [securityTxt, metadata, verifiedBuild] = await Promise.all([
+    fetchSecurityTxt(
+      connection,
+      program,
+      LOADER_V4_ELF_OFFSET,
+      data.subarray(LOADER_V4_ELF_OFFSET),
+    ),
+    fetchMetadata(connection, program),
+    fetchVerifiedBuild(program.toBase58()),
+  ])
+  return {
+    loader: LOADER_V4_ID,
+    deploy: parseLoaderV4Header(data),
+    securityTxt,
+    metadata,
+    verifiedBuild,
+  }
+}
+
+async function loadProgramInfo(
+  connection: Connection,
+  programId: string,
+): Promise<ProgramInfo | undefined> {
+  const program = new PublicKey(programId)
+  const account = await fetchSlice(
+    connection,
+    program,
+    0,
+    LOADER_V4_ELF_OFFSET + ELF_HEADER_LENGTH,
+  )
+  if (account === null) {
+    return undefined
+  }
+  const loader = account.owner.toBase58()
+  if (loader === BPF_LOADER_UPGRADEABLE_ID) {
+    return composeProgramInfo(
+      await fetchUpgradeableParts(connection, program, account.data),
+    )
+  }
+  if (loader === LOADER_V4_ID) {
+    return composeProgramInfo(
+      await fetchLoaderV4Parts(connection, program, account.data),
+    )
+  }
+  return composeProgramInfo({ loader })
+}
+
+/**
+ * Loads program info once per programId; the promise never rejects.
+ */
+export function getProgramInfo(
+  cache: ProgramInfoCache,
+  connection: Connection,
+  programId: string,
+): Promise<ProgramInfo | undefined> {
+  let info = cache.get(programId)
+  if (info === undefined) {
+    info = loadProgramInfo(connection, programId).catch((e: unknown) => {
+      console.warn(`Cannot load program info of ${programId}`, e)
+      return undefined
+    })
+    cache.set(programId, info)
+  }
+  return info
 }
