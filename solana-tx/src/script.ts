@@ -35,6 +35,7 @@ import { inflate } from 'pako'
 import YAML from 'yaml'
 
 import splGovernanceIdl from './idl/gov.json'
+import { decodeProgramMetadata, programMetadataAddress } from './programInfo'
 
 import type { InstructionData } from '@solana/spl-governance'
 import type { CompiledInnerInstruction } from '@solana/web3.js'
@@ -731,21 +732,6 @@ export async function anchorIdlAddress(
   return seedAddress
 }
 
-// Solana Program Metadata program (new Anchor IDL storage, Nov 2025+)
-const PROGRAM_METADATA_PROGRAM_ID = new PublicKey(
-  'ProgM6JCCvbYkfKqJYHePx4xxSUSqJp7rh8Lyv7nk7S',
-)
-
-function programMetadataIdlAddress(programAddress: PublicKey): PublicKey {
-  const seed = Buffer.alloc(16)
-  seed.write('idl', 0, 'utf-8')
-  const [pda] = PublicKey.findProgramAddressSync(
-    [programAddress.toBuffer(), seed],
-    PROGRAM_METADATA_PROGRAM_ID,
-  )
-  return pda
-}
-
 export async function getAnchorIdl(
   connection: Connection,
   programAddress: PublicKey,
@@ -769,17 +755,11 @@ export async function getAnchorIdl(
   }
 
   // Try new format: Program Metadata program (Anchor 0.31+)
-  const pmpAddress = programMetadataIdlAddress(programAddress)
+  const pmpAddress = programMetadataAddress(programAddress, 'idl')
   const pmpInfo = await connection.getAccountInfo(pmpAddress)
-  if (pmpInfo !== null && pmpInfo.data.length > 96 && pmpInfo.data[0] === 2) {
+  const idlString = pmpInfo && decodeProgramMetadata(pmpInfo.data)
+  if (idlString) {
     try {
-      const compression = pmpInfo.data[84] // 0=none, 1=gzip, 2=zlib
-      const dataLength = pmpInfo.data.readUInt32LE(87)
-      let idlData: Buffer | Uint8Array = pmpInfo.data.slice(96, 96 + dataLength)
-      if (compression === 1 || compression === 2) {
-        idlData = inflate(idlData)
-      }
-      const idlString = Buffer.from(idlData).toString('utf-8')
       console.debug('Anchor IDL found (PMP format):', pmpAddress.toBase58())
       return JSON.parse(idlString)
     } catch (e) {

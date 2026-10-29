@@ -315,8 +315,7 @@ test('decodeProgramMetadata reads a mainnet security account', () => {
   const text = decodeProgramMetadata(SECURITY_PDA_DATA)
   assert.ok(text)
   const json: unknown = JSON.parse(text)
-  assert.equal(typeof json, 'object')
-  assert.ok(json !== null && 'name' in json)
+  assert.ok(typeof json === 'object' && json !== null && 'name' in json)
 })
 
 test('decodeProgramMetadata decodes compression and encodings', () => {

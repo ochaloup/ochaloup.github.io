@@ -23,18 +23,16 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /script\.ts$/,
+        loader: 'expose-loader',
+        options: {
+          exposes: ['scriptNamespace'],
+        },
+        exclude: /node_modules/,
+      },
+      {
         test: /\.ts$/,
-        use: [
-          {
-            loader: 'expose-loader',
-            options: {
-              exposes: ['scriptNamespace'],
-            },
-          },
-          {
-            loader: 'ts-loader',
-          },
-        ],
+        loader: 'ts-loader',
         exclude: /node_modules/,
       },
     ],
