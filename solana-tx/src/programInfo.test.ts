@@ -7,6 +7,7 @@ import {
   parseLoaderV4Header,
   parseProgramAccount,
   parseProgramDataHeader,
+  parseSecurityTxt,
 } from './programInfo.ts'
 
 const PROGRAM_DATA = new PublicKey(
@@ -37,6 +38,20 @@ function programDataHeader(authorityTag: number): Buffer {
 
 function loaderV4Header(slot: number, status: number): Buffer {
   return Buffer.concat([u64le(slot), AUTHORITY.toBuffer(), u64le(status)])
+}
+
+const SECURITY_TXT_BEGIN = Buffer.from('=======BEGIN SECURITY.TXT V1=======\0')
+const SECURITY_TXT_END = Buffer.from('=======END SECURITY.TXT V1=======\0')
+
+function securityTxtBody(fields: Record<string, string>): Buffer {
+  const body = Object.entries(fields)
+    .map(([key, value]) => `${key}\0${value}\0`)
+    .join('')
+  return Buffer.concat([
+    SECURITY_TXT_BEGIN,
+    Buffer.from(body),
+    SECURITY_TXT_END,
+  ])
 }
 
 test('parseProgramAccount reads the programdata address', () => {
@@ -94,6 +109,47 @@ test('parseLoaderV4Header reads slot and authority by status', () => {
     lastDeploySlot: 431987340,
     upgradeAuthority: null,
   })
+})
+
+test('parseSecurityTxt reads fields as camelCase', () => {
+  const data = Buffer.concat([
+    Buffer.alloc(100, 7),
+    securityTxtBody({
+      name: 'Marinade Liquid Staking',
+      project_url: 'https://marinade.finance',
+      source_code: 'https://github.com/marinade-finance/liquid-staking-program',
+      source_release: 'v2.1.0',
+      preferred_languages: 'en',
+    }),
+    Buffer.alloc(50, 7),
+  ])
+  assert.deepEqual(parseSecurityTxt(data), {
+    name: 'Marinade Liquid Staking',
+    projectUrl: 'https://marinade.finance',
+    sourceCode: 'https://github.com/marinade-finance/liquid-staking-program',
+    sourceRelease: 'v2.1.0',
+    preferredLanguages: 'en',
+  })
+})
+
+test('parseSecurityTxt drops a dangling key', () => {
+  const data = Buffer.concat([
+    SECURITY_TXT_BEGIN,
+    Buffer.from('name\0X\0policy\0'),
+    SECURITY_TXT_END,
+  ])
+  assert.deepEqual(parseSecurityTxt(data), { name: 'X' })
+})
+
+test('parseSecurityTxt rejects missing markers', () => {
+  assert.equal(parseSecurityTxt(Buffer.alloc(0)), undefined)
+  assert.equal(parseSecurityTxt(Buffer.alloc(100, 7)), undefined)
+  assert.equal(
+    parseSecurityTxt(
+      Buffer.concat([SECURITY_TXT_BEGIN, Buffer.from('name\0X\0')]),
+    ),
+    undefined,
+  )
 })
 
 test('parseLoaderV4Header rejects unknown status and short data', () => {

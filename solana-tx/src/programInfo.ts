@@ -10,6 +10,8 @@ export const PROGRAM_METADATA_PROGRAM_ID = new PublicKey(
 export const PROGRAM_DATA_ELF_OFFSET = 45
 export const LOADER_V4_ELF_OFFSET = 48
 const LOADER_V4_FINALIZED = 2
+const SECURITY_TXT_BEGIN = '=======BEGIN SECURITY.TXT V1=======\0'
+const SECURITY_TXT_END = '=======END SECURITY.TXT V1=======\0'
 
 export type DeployInfo = {
   lastDeploySlot: number
@@ -60,4 +62,29 @@ export function parseLoaderV4Header(data: Uint8Array): DeployInfo | undefined {
         ? null
         : base58.encode(buf.subarray(8, 40)),
   }
+}
+
+export function parseSecurityTxt(
+  data: Uint8Array,
+): Record<string, string> | undefined {
+  const buf = toBuffer(data)
+  const begin = buf.indexOf(SECURITY_TXT_BEGIN)
+  if (begin < 0) {
+    return undefined
+  }
+  const start = begin + SECURITY_TXT_BEGIN.length
+  const end = buf.indexOf(SECURITY_TXT_END, start)
+  if (end < 0) {
+    return undefined
+  }
+  const parts = buf.subarray(start, end).toString('utf-8').split('\0')
+  if (parts.at(-1) === '') {
+    parts.pop()
+  }
+  const fields: Record<string, string> = {}
+  for (let i = 0; i + 1 < parts.length; i += 2) {
+    const key = parts[i].replace(/_([a-z])/g, (_, c: string) => c.toUpperCase())
+    fields[key] = parts[i + 1]
+  }
+  return fields
 }
