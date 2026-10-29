@@ -37,16 +37,19 @@ import YAML from 'yaml'
 import splGovernanceIdl from './idl/gov.json'
 import {
   decodeProgramMetadata,
-  getProgramInfo,
+  getProgramInfos,
   programMetadataAddress,
 } from './programInfo'
 
-import type { ProgramInfo, ProgramInfoCache } from './programInfo'
+import type { ProgramInfo } from './programInfo'
 import type { InstructionData } from '@solana/spl-governance'
 import type { CompiledInnerInstruction } from '@solana/web3.js'
 import type { ParserOutput } from '@solanafm/explorer-kit'
+import type { IdlItem } from '@solanafm/explorer-kit-idls'
 
 const COMMITMENT = 'confirmed'
+const PROGRAM_INFO_LOADING = 'loading...'
+const PROGRAM_INFO_UNAVAILABLE = 'not available (see browser console)'
 
 // Local IDL registry for programs not covered by Explorer Kit's API
 const LOCAL_IDL_REGISTRY: Map<string, any> = new Map([
@@ -73,12 +76,14 @@ type TransactionContext = {
 type EventContext = {
   programId: string
   data: string
-  connection: Connection
+  idl: IdlItem | null
 }
+
+type IdlCache = Map<string, Promise<IdlItem | null>>
 
 type ExplorerKitData = {
   programId: string
-  program?: ProgramInfo
+  program?: ProgramInfo | string
   name: string | undefined
   data: any
 }
@@ -240,13 +245,19 @@ function processOutput(document: Document, outMessage: string): void {
 
 export async function deserializeTransaction(document: Document) {
   const { message, cluster } = processInput(document)
-  const messageParsed = await parseAndDeserializeTransaction(message, cluster)
+  const messageParsed = await parseAndDeserializeTransaction(
+    message,
+    cluster,
+    output => processOutput(document, output),
+  )
   processOutput(document, messageParsed)
 }
 
 export async function deserializeEvent(document: Document) {
   const { message: data, cluster } = processInput(document)
-  const output = await parseAndDeserializeEvent(document, cluster, data)
+  const output = await parseAndDeserializeEvent(document, cluster, data, out =>
+    processOutput(document, out),
+  )
   processOutput(document, output)
 }
 
@@ -255,6 +266,7 @@ export async function deserializeEvent(document: Document) {
 async function parseAndDeserializeTransaction(
   data: string,
   cluster: string,
+  onProgress: (output: string) => void,
 ): Promise<string> {
   let parsedData: TransactionContext | undefined = undefined
   if (!data || data.trim() === '') {
@@ -381,7 +393,7 @@ async function parseAndDeserializeTransaction(
     )
   } else {
     try {
-      return await doLogTransactionContext(parsedData)
+      return await doLogTransactionContext(parsedData, onProgress)
     } catch (e) {
       console.error(e)
       console.error(YAML.stringify(parsedData.txData, replacer).trimEnd())
@@ -397,6 +409,7 @@ async function parseAndDeserializeEvent(
   document: Document,
   cluster: string,
   data: string,
+  onProgress: (output: string) => void,
 ): Promise<string> {
   const programIdInput = document.getElementById(PROGRAM_ID_HTML_ELEMENT_ID)
   if (!programIdInput || !(programIdInput instanceof HTMLInputElement)) {
@@ -419,9 +432,12 @@ async function parseAndDeserializeEvent(
     )
   }
 
-  const program = getProgramInfo(new Map(), connection, programId)
-  let output = ''
-  output += '<h4>Parsed:</h4>'
+  const idl = await loadIdl(
+    connection,
+    programId,
+    await getSlotOrDefault(connection),
+  )
+  const parsedLines: ExplorerKitData[] = []
   for (let line of data.split('\n')) {
     line = line.trim()
     if (!line || line === '') {
@@ -441,9 +457,9 @@ async function parseAndDeserializeEvent(
       console.log(
         `Parsing event data with Explorer Kit for program: ${programId}`,
       )
-      explorerKitParsed = await parseEventByExplorerKit({
+      explorerKitParsed = parseEventByExplorerKit({
         data: line,
-        connection,
+        idl,
         programId,
       })
     } catch (e) {
@@ -458,9 +474,9 @@ async function parseAndDeserializeEvent(
         cpiEvent,
       )
       if (cpiEvent) {
-        explorerKitParsed = await parseEventByExplorerKit({
+        explorerKitParsed = parseEventByExplorerKit({
           data: cpiEvent,
-          connection,
+          idl,
           programId,
         })
       }
@@ -470,23 +486,27 @@ async function parseAndDeserializeEvent(
       name: undefined,
       data: 'Failed to load and parse',
     }
-    output +=
-      '<p><pre><code>' +
-      escapeHtml(
-        YAML.stringify(
-          {
-            programId,
-            program: await program,
-            name: parsed.name,
-            data: parsed.data,
-          },
-          replacer,
-        ).trimEnd(),
-      ) +
-      '</code></pre></p>'
+    parsedLines.push({
+      programId,
+      program: PROGRAM_INFO_LOADING,
+      name: parsed.name,
+      data: parsed.data,
+    })
   }
 
-  return output
+  const render = () =>
+    '<h4>Parsed:</h4>' +
+    parsedLines
+      .map(
+        parsed =>
+          '<p><pre><code>' +
+          escapeHtml(YAML.stringify(parsed, replacer).trimEnd()) +
+          '</code></pre></p>',
+      )
+      .join('')
+  onProgress(render())
+  await attachProgramInfo(parsedLines, connection)
+  return render()
 }
 
 /**
@@ -626,6 +646,7 @@ async function simulateForContext(
 
 async function doLogTransactionContext(
   context: TransactionContext,
+  onProgress: (output: string) => void,
 ): Promise<string> {
   console.log('Transaction type: ' + context.type)
   const { legacyBase64, version0Base64, version0Base58 } =
@@ -672,26 +693,48 @@ async function doLogTransactionContext(
   }
 
   const parsedExplorerKit = await parseTransactionByExplorerKit(context)
-  output += '<h4>Parsed:</h4>'
-  output +=
+  let logs = ''
+  if (context.logMessages && context.logMessages.length > 0) {
+    logs +=
+      '<h4>Logs:</h4>' +
+      '<p><pre><code>' +
+      escapeHtml(context.logMessages.join('\n')) +
+      '</code></pre></p>'
+  }
+  const render = () =>
+    output +
+    '<h4>Parsed:</h4>' +
     '<p><pre><code>' +
     escapeHtml(
       YAML.stringify(parsedExplorerKit, replacer, {
         aliasDuplicateObjects: false,
       }).trimEnd(),
     ) +
-    '</code></pre></p>'
+    '</code></pre></p>' +
+    logs
 
-  // --- LOGS
-  if (context.logMessages && context.logMessages.length > 0) {
-    output += '<h4>Logs:</h4>'
-    output +=
-      '<p><pre><code>' +
-      escapeHtml(context.logMessages.join('\n')) +
-      '</code></pre></p>'
+  onProgress(render())
+  await attachProgramInfo(
+    [
+      ...parsedExplorerKit,
+      ...parsedExplorerKit.flatMap(ix => ix.innerInstructions ?? []),
+    ],
+    context.connection,
+  )
+  return render()
+}
+
+async function attachProgramInfo(
+  parsed: ExplorerKitData[],
+  connection: Connection,
+): Promise<void> {
+  const infos = await getProgramInfos(
+    connection,
+    parsed.map(item => item.programId),
+  )
+  for (const item of parsed) {
+    item.program = infos.get(item.programId) ?? PROGRAM_INFO_UNAVAILABLE
   }
-
-  return output
 }
 
 function getHref(hostname: string, message: string) {
@@ -806,32 +849,74 @@ export async function getAnchorIdl(
   return null
 }
 
-async function parseOneInstruction(
-  ix: TransactionInstruction,
-  connection: Connection,
-  slot: number,
-): Promise<{ name: string | undefined; data: any }> {
-  const programId = ix.programId.toBase58()
+async function getSlotOrDefault(connection: Connection): Promise<number> {
   try {
-    const anchorIdl = await getAnchorIdl(connection, ix.programId)
-    let repoMap: Map<string, any> | undefined = undefined
+    return await connection.getSlot(COMMITMENT)
+  } catch {
+    const slot = 273_134_000 // slot at date: 2024-06-24
+    console.warn(
+      `Cannot get slot from cluster: ${connection.rpcEndpoint}, ` +
+        `using some recent slot ${slot} as default slot`,
+    )
+    return slot
+  }
+}
+
+async function loadIdl(
+  connection: Connection,
+  programId: string,
+  slot: number,
+): Promise<IdlItem | null> {
+  let repoMap: Map<string, any> | undefined = undefined
+  try {
+    const anchorIdl = await getAnchorIdl(connection, new PublicKey(programId))
     if (anchorIdl !== null) {
       repoMap = addIdlToMap(new Map(), programId, anchorIdl, 0)
     }
-    const localIdl = LOCAL_IDL_REGISTRY.get(programId)
-    if (localIdl) {
-      repoMap = addIdlToMap(repoMap ?? new Map(), programId, localIdl, 0)
-    }
-    const sfmIdlItem = await getProgramIdl(
-      programId,
-      { slotContext: slot },
-      repoMap,
+  } catch (e) {
+    console.warn(
+      `Cannot load anchor IDL for program: ${programId} from cluster: ${connection.rpcEndpoint}`,
+      e,
     )
-    if (sfmIdlItem) {
-      console.log(
-        `ExplorerKit found IDL for: ${programId} [${sfmIdlItem.idlType}]`,
-      )
-      const parser = new SolanaFMParser(sfmIdlItem, programId)
+  }
+  const localIdl = LOCAL_IDL_REGISTRY.get(programId)
+  if (localIdl) {
+    repoMap = addIdlToMap(repoMap ?? new Map(), programId, localIdl, 0)
+  }
+  try {
+    const idl = await getProgramIdl(programId, { slotContext: slot }, repoMap)
+    if (idl) {
+      console.log(`ExplorerKit found IDL for: ${programId} [${idl.idlType}]`)
+    }
+    return idl
+  } catch (e) {
+    console.warn(`Cannot load IDL for program: ${programId}`, e)
+    return null
+  }
+}
+
+function getIdl(
+  cache: IdlCache,
+  connection: Connection,
+  programId: string,
+  slot: number,
+): Promise<IdlItem | null> {
+  let idl = cache.get(programId)
+  if (idl === undefined) {
+    idl = loadIdl(connection, programId, slot)
+    cache.set(programId, idl)
+  }
+  return idl
+}
+
+function parseOneInstruction(
+  ix: TransactionInstruction,
+  idl: IdlItem | null,
+): { name: string | undefined; data: any } {
+  const programId = ix.programId.toBase58()
+  if (idl) {
+    try {
+      const parser = new SolanaFMParser(idl, programId)
       const instructionParser = parser.createParser(ParserType.INSTRUCTION)
       if (instructionParser && checkIfInstructionParser(instructionParser)) {
         const parsed = instructionParser.parseInstructions(
@@ -842,12 +927,12 @@ async function parseOneInstruction(
           return { name: parsed.name, data: parsed.data }
         }
       }
+    } catch (e) {
+      console.warn(
+        `Cannot parse instruction of program: ${programId} via SolanaFM parser`,
+        e,
+      )
     }
-  } catch (e) {
-    console.warn(
-      `Cannot parse instruction of program: ${programId} via SolanaFM parser`,
-      e,
-    )
   }
   // Fallback: detect Anchor built-in IDL management instructions (not in any IDL)
   const anchorIdlParsed = tryParseAnchorIdlInstruction(ix)
@@ -890,33 +975,17 @@ export async function parseTransactionByExplorerKit(
   context: TransactionContext,
 ): Promise<ExplorerKitTransactionData[]> {
   const result: ExplorerKitTransactionData[] = []
-  const programInfoCache: ProgramInfoCache = new Map()
-  for (const ix of [
-    ...context.instructions,
-    ...(context.innerInstructions ?? []).flatMap(g => g.instructions),
-  ]) {
-    void getProgramInfo(
-      programInfoCache,
-      context.connection,
-      ix.programId.toBase58(),
-    )
-  }
+  const idlCache: IdlCache = new Map()
+  const slot = await getSlotOrDefault(context.connection)
   let ixNumber = 0
-  let slot
-  try {
-    slot = await context.connection.getSlot(COMMITMENT)
-  } catch {
-    slot = 273_134_000 // slot at date: 2024-06-24
-    console.warn(
-      `Cannot get slot from cluster: ${context.connection.rpcEndpoint}, ` +
-        `using some recent slot ${slot} as default slot`,
-    )
-  }
 
   for (const ix of context.instructions) {
     ixNumber++
     const programId = ix.programId.toBase58()
-    const parsed = await parseOneInstruction(ix, context.connection, slot)
+    const parsed = parseOneInstruction(
+      ix,
+      await getIdl(idlCache, context.connection, programId, slot),
+    )
 
     // Parse inner CPI instructions for this top-level instruction
     const innerGroup = context.innerInstructions?.find(
@@ -926,19 +995,14 @@ export async function parseTransactionByExplorerKit(
     if (innerGroup && innerGroup.instructions.length > 0) {
       parsedInner = []
       for (const innerIx of innerGroup.instructions) {
-        const innerParsed = await parseOneInstruction(
-          innerIx,
-          context.connection,
-          slot,
-        )
         const innerProgramId = innerIx.programId.toBase58()
+        const innerParsed = parseOneInstruction(
+          innerIx,
+          await getIdl(idlCache, context.connection, innerProgramId, slot),
+        )
         parsedInner.push({
           programId: innerProgramId,
-          program: await getProgramInfo(
-            programInfoCache,
-            context.connection,
-            innerProgramId,
-          ),
+          program: PROGRAM_INFO_LOADING,
           name: innerParsed.name,
           data: innerParsed.data,
         })
@@ -947,11 +1011,7 @@ export async function parseTransactionByExplorerKit(
 
     result.push({
       programId,
-      program: await getProgramInfo(
-        programInfoCache,
-        context.connection,
-        programId,
-      ),
+      program: PROGRAM_INFO_LOADING,
       ixNumber,
       name: parsed.name,
       data: parsed.data,
@@ -961,34 +1021,15 @@ export async function parseTransactionByExplorerKit(
   return result
 }
 
-export async function parseEventByExplorerKit({
+export function parseEventByExplorerKit({
   programId,
   data,
-  connection,
-}: EventContext): Promise<ExplorerKitData> {
-  let sfmIdlItem
-  try {
-    const slot = await connection.getSlot(COMMITMENT)
-    const anchorIdl = await getAnchorIdl(connection, new PublicKey(programId))
-    let repoMap: Map<string, any> | undefined = undefined
-    if (anchorIdl !== null) {
-      repoMap = addIdlToMap(new Map(), programId, anchorIdl, 0)
-    }
-    sfmIdlItem = await getProgramIdl(programId, { slotContext: slot }, repoMap)
-  } catch {
-    console.warn(
-      `Cannot load data of anchor IDL for program: ${programId} from cluster: ${connection.rpcEndpoint}`,
-    )
-    sfmIdlItem = await getProgramIdl(programId)
-  }
-
+  idl,
+}: EventContext): ExplorerKitData {
   // Checks if SFMIdlItem is defined, if not you will not be able to initialize the parser layout
   let parsedEvent: ParserOutput | null = null
-  if (sfmIdlItem) {
-    console.log(
-      `ExplorerKit found IDL for: ${programId} [${sfmIdlItem.idlType}]`,
-    )
-    const parser = new SolanaFMParser(sfmIdlItem, programId)
+  if (idl) {
+    const parser = new SolanaFMParser(idl, programId)
     const eventParser = parser.createParser(ParserType.EVENT)
     if (eventParser && checkIfEventParser(eventParser)) {
       parsedEvent = eventParser.parseEvents(data)

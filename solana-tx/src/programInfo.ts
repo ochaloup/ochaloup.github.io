@@ -27,6 +27,7 @@ const PMP_DATA_SOURCE_EXTERNAL = 2
 const MAX_INFLATED_LENGTH = 10 * 1024 * 1024
 const OTTERSEC_STATUS_URL = 'https://verify.osec.io/status/'
 const OTTERSEC_TIMEOUT_MS = 5000
+const PROGRAM_INFO_CONCURRENCY = 1
 const MAINNET_GENESIS_HASH = '5eykt4UsFv8P8NJdTREpY1vzqKqZKvdpKuc147dw2N9d'
 const mainnetChecks = new WeakMap<Connection, Promise<boolean>>()
 const OTTERSEC_FIELDS = [
@@ -522,6 +523,7 @@ async function loadProgramInfo(
     LOADER_V4_ELF_OFFSET + ELF_HEADER_LENGTH,
   )
   if (account === null) {
+    console.warn(`Program account ${programId} not found`)
     return undefined
   }
   const loader = account.owner.toBase58()
@@ -555,4 +557,27 @@ export function getProgramInfo(
     cache.set(programId, info)
   }
   return info
+}
+
+/**
+ * Loads program info of each distinct programId, at most `concurrency` programs at a time.
+ */
+export async function getProgramInfos(
+  connection: Connection,
+  programIds: string[],
+  concurrency = PROGRAM_INFO_CONCURRENCY,
+): Promise<Map<string, ProgramInfo | undefined>> {
+  const cache: ProgramInfoCache = new Map()
+  const queue = [...new Set(programIds)]
+  const worker = async () => {
+    for (let id = queue.shift(); id !== undefined; id = queue.shift()) {
+      await getProgramInfo(cache, connection, id)
+    }
+  }
+  await Promise.all(Array.from({ length: concurrency }, worker))
+  const infos = new Map<string, ProgramInfo | undefined>()
+  for (const [id, info] of cache) {
+    infos.set(id, await info)
+  }
+  return infos
 }

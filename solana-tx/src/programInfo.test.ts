@@ -12,6 +12,7 @@ import {
   decodeProgramMetadata,
   findSection,
   getProgramInfo,
+  getProgramInfos,
   parseElfHeader,
   parseLoaderV4Header,
   parseProgramAccount,
@@ -723,5 +724,49 @@ test('getProgramInfo caches per programId and never rejects', async t => {
   assert.equal(
     await getProgramInfo(new Map(), failing, UPGRADEABLE.toBase58()),
     undefined,
+  )
+})
+
+test('getProgramInfos loads each program once, two programs at a time', async t => {
+  t.after(() => mock.restoreAll())
+  stubFetch(404)
+  const { connection, calls } = fakeConnection(ACCOUNTS)
+  let inFlight = 0
+  let maxInFlight = 0
+  const slow = {
+    getGenesisHash: () => connection.getGenesisHash(),
+    getAccountInfo: async (
+      pubkey: PublicKey,
+      config?: { dataSlice?: DataSlice },
+    ) => {
+      const programRead = config?.dataSlice?.length === 112
+      if (programRead) {
+        inFlight++
+        maxInFlight = Math.max(maxInFlight, inFlight)
+      }
+      await new Promise(resolve => {
+        setTimeout(resolve, 5)
+      })
+      if (programRead) {
+        inFlight--
+      }
+      return connection.getAccountInfo(pubkey, config)
+    },
+  } as unknown as Connection
+  const ids = [UPGRADEABLE, V4, TOKEN, NO_RODATA, UPGRADEABLE, key(42)].map(k =>
+    k.toBase58(),
+  )
+  const infos = await getProgramInfos(slow, ids, 2)
+
+  assert.equal(maxInFlight, 2)
+  assert.equal(infos.size, 5)
+  assert.equal(infos.get(UPGRADEABLE.toBase58())?.name, 'Fixture')
+  assert.deepEqual(plain(infos.get(TOKEN.toBase58())), { loader: TOKEN_LOADER })
+  assert.equal(infos.get(key(42).toBase58()), undefined)
+  assert.equal(
+    calls.filter(
+      c => c.pubkey === UPGRADEABLE.toBase58() && c.dataSlice?.length === 112,
+    ).length,
+    1,
   )
 })
