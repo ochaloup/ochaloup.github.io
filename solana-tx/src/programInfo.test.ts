@@ -2,8 +2,11 @@ import assert from 'node:assert/strict'
 import { test } from 'node:test'
 
 import { PublicKey } from '@solana/web3.js'
+import base58 from 'bs58'
+import { deflate } from 'pako'
 
 import {
+  decodeProgramMetadata,
   findSection,
   parseElfHeader,
   parseLoaderV4Header,
@@ -11,6 +14,7 @@ import {
   parseProgramDataHeader,
   parseSectionHeaders,
   parseSecurityTxt,
+  programMetadataAddress,
 } from './programInfo.ts'
 
 const PROGRAM_DATA = new PublicKey(
@@ -263,6 +267,95 @@ test('parseSectionHeaders and findSection handle truncated data', () => {
   assert.equal(parseSectionHeaders(Buffer.alloc(64 * 3 - 1), 3), undefined)
   const sections = [{ nameOffset: 100, offset: 0, size: 0 }]
   assert.equal(findSection(sections, Buffer.from('\0.rodata\0'), ''), undefined)
+})
+
+const SECURITY_PROGRAM = new PublicKey(
+  '4X79YRjz9KNMhdjdxXg2ZNTS3YnMGYdwJkBHnezMJwr3',
+)
+const SECURITY_PDA = '13Pko8Hbdp5ceaibfFw1BLRJZagXdHVhDWBhBGaXyFuG'
+const SECURITY_PDA_DATA = Buffer.from(
+  'AjRJb5BEycKIjrBuYiLzP6UeoS3HGC5DV0zCSfPAeYr8aUZW+aWnpon3XqnV65yqkYOIKBqoFVxs+2ulZ+5UxgMBAXNlY3VyaXR5AAAAAAAAAAABAgEA8QAAAAAAAAAAeJydkEFLAzEQhe/9FWHP7qZ43JOlCPakdC3iaZnNjmkkuxNmEqWI/91uokKvvQXm5X0f72ulVAVpdJFYqlZVD+AH4rm6WQ5CiQ32jB5BcDmDMShSG5ojk68/1s1ts74IGxpz8hhjkFZr6+IxDY2hSacgbkSS/0ct5GGGmj9BR0bUE7hZBybLMIm+hBVKYHxDZhz780+bwGLWxl/jQN6Z0zX8wdNQ+N399rDfPb8201hKFwEwMYPOCR+pFTSJXTzdlarG2j89ekcT+8T+ConSMcOUFzzkgHrsVJcTav+yadUmj6K2ZRT1VMaqVt8/0o+cKg==',
+  'base64',
+)
+
+function pmpAccount(
+  payload: Uint8Array,
+  {
+    encoding = 1,
+    compression = 0,
+    dataSource = 0,
+    dataLength = payload.length,
+  } = {},
+): Buffer {
+  const header = Buffer.alloc(96)
+  header[0] = 2
+  header.write('security', 67, 'utf-8')
+  header[83] = encoding
+  header[84] = compression
+  header[86] = dataSource
+  header.writeUInt32LE(dataLength, 87)
+  return Buffer.concat([header, payload])
+}
+
+test('programMetadataAddress derives the canonical PDA', () => {
+  assert.equal(
+    programMetadataAddress(
+      new PublicKey('ProgM6JCCvbYkfKqJYHePx4xxSUSqJp7rh8Lyv7nk7S'),
+      'idl',
+    ).toBase58(),
+    '9zzVPVwZojagC4mBCMrTi17Zu9KvXKoTvqnBL1vxYDyM',
+  )
+  assert.equal(
+    programMetadataAddress(SECURITY_PROGRAM, 'security').toBase58(),
+    SECURITY_PDA,
+  )
+})
+
+test('decodeProgramMetadata reads a mainnet security account', () => {
+  const text = decodeProgramMetadata(SECURITY_PDA_DATA)
+  assert.ok(text)
+  const json: unknown = JSON.parse(text)
+  assert.equal(typeof json, 'object')
+  assert.ok(json !== null && 'name' in json)
+})
+
+test('decodeProgramMetadata decodes compression and encodings', () => {
+  const json = '{"name":"X"}'
+  assert.equal(decodeProgramMetadata(pmpAccount(Buffer.from(json))), json)
+  assert.equal(
+    decodeProgramMetadata(pmpAccount(deflate(json), { compression: 2 })),
+    json,
+  )
+  const raw = Buffer.from([1, 2, 3, 250])
+  assert.equal(
+    decodeProgramMetadata(pmpAccount(raw, { encoding: 2 })),
+    base58.encode(raw),
+  )
+  assert.equal(
+    decodeProgramMetadata(pmpAccount(raw, { encoding: 3 })),
+    raw.toString('base64'),
+  )
+  const external = SECURITY_PROGRAM.toBuffer()
+  assert.equal(
+    decodeProgramMetadata(pmpAccount(external, { dataSource: 2 })),
+    SECURITY_PROGRAM.toBase58(),
+  )
+})
+
+test('decodeProgramMetadata rejects malformed accounts', () => {
+  const json = Buffer.from('{"name":"X"}')
+  assert.equal(
+    decodeProgramMetadata(pmpAccount(json, { dataLength: json.length + 1 })),
+    undefined,
+  )
+  const wrongDiscriminator = pmpAccount(json)
+  wrongDiscriminator[0] = 1
+  assert.equal(decodeProgramMetadata(wrongDiscriminator), undefined)
+  assert.equal(decodeProgramMetadata(pmpAccount(Buffer.alloc(0))), undefined)
+  assert.equal(
+    decodeProgramMetadata(pmpAccount(json, { compression: 2 })),
+    undefined,
+  )
 })
 
 test('parseLoaderV4Header rejects unknown status and short data', () => {

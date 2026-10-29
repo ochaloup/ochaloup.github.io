@@ -1,5 +1,6 @@
 import { PublicKey } from '@solana/web3.js'
 import base58 from 'bs58'
+import { inflate } from 'pako'
 
 export const BPF_LOADER_UPGRADEABLE_ID =
   'BPFLoaderUpgradeab1e11111111111111111111111'
@@ -15,6 +16,11 @@ const SECURITY_TXT_END = '=======END SECURITY.TXT V1=======\0'
 const ELF_HEADER_LENGTH = 64
 const SECTION_HEADER_LENGTH = 64
 const ELF_MAGIC = '\x7fELF'
+const PMP_METADATA_DISCRIMINATOR = 2
+const PMP_DATA_OFFSET = 96
+const PMP_ENCODING_BASE58 = 2
+const PMP_ENCODING_BASE64 = 3
+const PMP_DATA_SOURCE_EXTERNAL = 2
 
 export type DeployInfo = {
   lastDeploySlot: number
@@ -124,6 +130,51 @@ export function findSection(
       name
     )
   })
+}
+
+export function programMetadataAddress(
+  program: PublicKey,
+  seed: string,
+): PublicKey {
+  const seed16 = Buffer.alloc(16)
+  seed16.write(seed, 0, 'utf-8')
+  const [pda] = PublicKey.findProgramAddressSync(
+    [program.toBuffer(), seed16],
+    PROGRAM_METADATA_PROGRAM_ID,
+  )
+  return pda
+}
+
+export function decodeProgramMetadata(data: Uint8Array): string | undefined {
+  const buf = toBuffer(data)
+  if (buf.length <= PMP_DATA_OFFSET || buf[0] !== PMP_METADATA_DISCRIMINATOR) {
+    return undefined
+  }
+  const dataLength = buf.readUInt32LE(87)
+  if (PMP_DATA_OFFSET + dataLength > buf.length) {
+    return undefined
+  }
+  let payload: Uint8Array = buf.subarray(
+    PMP_DATA_OFFSET,
+    PMP_DATA_OFFSET + dataLength,
+  )
+  if (buf[86] === PMP_DATA_SOURCE_EXTERNAL) {
+    return base58.encode(payload.subarray(0, 32))
+  }
+  if (buf[84] === 1 || buf[84] === 2) {
+    try {
+      payload = inflate(payload)
+    } catch {
+      return undefined
+    }
+  }
+  if (buf[83] === PMP_ENCODING_BASE58) {
+    return base58.encode(payload)
+  }
+  if (buf[83] === PMP_ENCODING_BASE64) {
+    return toBuffer(payload).toString('base64')
+  }
+  return new TextDecoder().decode(payload)
 }
 
 export function parseSecurityTxt(
